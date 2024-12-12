@@ -39,7 +39,7 @@
       <template v-slot:content>
         <div v-if="isShowFilter" class="border-base radius-md mb-md padding-md">
           <ConditionGroup v-model="searchParam.rule" :attrList="attrList"></ConditionGroup>
-          <div style="text-align: right">
+          <div style="text-align: right" class="mt-md">
             <Button type="primary" @click="searchAlert(1)">搜索</Button>
           </div>
         </div>

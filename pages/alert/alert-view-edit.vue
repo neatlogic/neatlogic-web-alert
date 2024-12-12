@@ -10,7 +10,7 @@
               class="cursor"
               @click.native="toggleAttr(attr)"
             >
-              <span>{{ attr.text }}</span>
+              <span>{{ attr.label }}</span>
             </Tag>
             <Divider v-if="selectAttrList && selectAttrList.length > 0" orientation="left">已选属性</Divider>
             <draggable v-if="selectAttrList && selectAttrList.length > 0" handle=".tsfont-option-vertical" :list="alertViewData.config.attrList">
@@ -21,13 +21,13 @@
                 @on-close="toggleAttr(attr)"
               >
                 <span style="cursor: move" class="tsfont-option-vertical"></span>
-                <span>{{ attr.text }}</span>
+                <span>{{ attr.label }}</span>
               </Tag>
             </draggable>
           </div>
         </template>
         <template v-slot:condition>
-          <ConditionGroup v-if="isReady" v-model="alertViewData.config.rule" :attrList="conditionAttrList"></ConditionGroup>
+          <ConditionGroup v-if="isReady" v-model="alertViewData.config.rule" :attrList="attrList"></ConditionGroup>
         </template>
       </TsForm>
     </template>
@@ -125,13 +125,13 @@ export default {
       }
     },
     isAttrSelected(attr) {
-      return this.alertViewData.config.attrList.some(item => item === attr.value);
+      return this.alertViewData.config.attrList.some(item => item === attr.name);
     },
     toggleAttr(attr) {
       if (this.isAttrSelected(attr)) {
-        this.alertViewData.config.attrList = this.alertViewData.config.attrList.filter(item => item !== attr.value);
+        this.alertViewData.config.attrList = this.alertViewData.config.attrList.filter(item => item !== attr.name);
       } else {
-        this.alertViewData.config.attrList = [...this.alertViewData.config.attrList, attr.value];
+        this.alertViewData.config.attrList = [...this.alertViewData.config.attrList, attr.name];
       }
     },
     listAlertAttrList() {
@@ -145,7 +145,7 @@ export default {
     saveAlertView() {
       const form = this.$refs.form;
       if (form && form.valid()) {
-        console.log(JSON.stringify(this.alertViewData, null, 2));
+        //console.log(JSON.stringify(this.alertViewData, null, 2));
         this.$api.alert.alert.saveAlertView(this.alertViewData).then(res => {
           if (res.Status === 'OK') {
             this.close();
@@ -163,7 +163,7 @@ export default {
       const attrList = [];
       if (this.alertViewData.config.attrList) {
         this.alertViewData.config.attrList.forEach(item => {
-          const attr = this.attrList.find(i => i.value === item);
+          const attr = this.attrList.find(i => i.name === item);
           if (attr) {
             attrList.push(attr);
           }
@@ -175,11 +175,7 @@ export default {
       const attrList = [];
       this.selectAttrList &&
         this.selectAttrList.forEach(item => {
-          attrList.push({
-            name: item.value,
-            label: item.text,
-            expressionList: ['equal', 'notequal', 'like', 'notlike', 'is-null', 'is-not-null']
-          });
+          attrList.push(item);
         });
       return attrList;
     }
