@@ -18,16 +18,10 @@
             <span v-else class="text-grey">{{ $t('page.no') }}</span>
           </template>
           <template v-slot:fcu="{ row }">
-            <UserCard
-              :uuid="row.fcu"
-              :hideAvatar="true"
-            ></UserCard>
+            <UserCard :uuid="row.fcu" :hideAvatar="true"></UserCard>
           </template>
           <template v-slot:lcu="{ row }">
-            <UserCard
-              :uuid="row.lcu"
-              :hideAvatar="true"
-            ></UserCard>
+            <UserCard :uuid="row.lcu" :hideAvatar="true"></UserCard>
           </template>
           <template slot="action" slot-scope="{ row }">
             <div class="tstable-action">

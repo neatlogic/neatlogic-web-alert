@@ -1,5 +1,11 @@
 //api接口的出口
 import alerttype from './alerttype/alerttype.js';
+import alert from './alert/alert.js';
+import attrtype from './attrtype/attrtype.js';
+import alertlevel from './alertlevel/alertlevel.js';
 export default {
-  alerttype
+  alerttype,
+  alert,
+  attrtype,
+  alertlevel
 };
