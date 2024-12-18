@@ -1,19 +1,39 @@
 <template>
-  <span v-if="attr.type === 'datetime'">{{ value | formatDate }}</span>
-  <span v-else>{{ value }}</span>
+  <div v-if="attr.kind === 'const' && handlers[attr.name]">
+    <component
+      :is="handlers[attr.name]"
+      :row="row"
+      :value="value"
+      :attr="attr"
+      @toggleChildren="toggleChildren"
+    ></component>
+  </div>
+  <div v-else-if="attr.kind === 'attr' && handlers['attr_' + attr.type]">
+    <component
+      :is="handlers['attr_' + attr.type]"
+      :row="row"
+      :value="value"
+      :attr="attr"
+    ></component>
+  </div>
+  <div v-else>{{ value }}</div>
 </template>
 <script>
+import * as handlers from '@/commercial-module/alert/pages/alert/alert-attr/index.js';
 export default {
   name: '',
-  components: {},
+  components: {
+    ...handlers
+  },
   props: {
+    row: { type: Object }, //完整数据行
     type: { type: String }, //const或attr
     attr: { type: Object },
     value: { type: [String, Number, Object, Array] }
   },
   data() {
     return {
-      initData: null
+      handlers: handlers
     };
   },
   beforeCreate() {},
@@ -26,7 +46,11 @@ export default {
   deactivated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {},
+  methods: {
+    toggleChildren() {
+      this.$emit('toggleChildren', ...arguments);
+    }
+  },
   filter: {},
   computed: {},
   watch: {}

@@ -6,7 +6,8 @@
           <div class="action-item">
             <Dropdown placement="bottom-start" trigger="click">
               <div>
-                <span class="tsfont-blocklist"></span>
+                <span v-if="alertViewData">{{ alertViewData.label }}</span>
+                <span v-else>所有告警</span>
                 <span class="tsfont-drop-down"></span>
               </div>
               <DropdownMenu slot="list">
@@ -44,6 +45,7 @@
           </div>
         </div>
         <TsTable
+          v-if="finalTheadList && finalTheadList.length > 0"
           :multiple="true"
           v-bind="alertData"
           :theadList="finalTheadList"
@@ -53,7 +55,13 @@
           <template v-for="(thead, index) in finalTheadList" :slot="thead.key" slot-scope="{ row }">
             <div :key="index">
               <span v-if="thead.key.startsWith('const_')">
-                <AlertAttrViewer type="const" :attr="getAttrByName(thead.key)" :value="row[thead.key.replace('const_', '')]"></AlertAttrViewer>
+                <AlertAttrViewer
+                  type="const"
+                  :attr="getAttrByName(thead.key)"
+                  :row="row"
+                  :value="row[thead.key.replace('const_', '')]"
+                  @toggleChildren="toggleChildAlert"
+                ></AlertAttrViewer>
               </span>
               <span v-if="thead.key.startsWith('attr_') && row.attrObj">
                 <AlertAttrViewer
@@ -127,6 +135,19 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    toggleChildAlert(row) {
+      if (!row._loading) {
+        const index = this.alertData.tbodyList.findIndex(d => d.id === row.id);
+        if (index > -1) {
+          if (row['_expand']) {
+            this.$set(row, '_expand', false);
+            this.alertData.tbodyList = this.alertData.tbodyList.filter(d => !d['parents'] || !d['parents'].includes(row.id));
+          } else {
+            this.searchChildAlert(row, index);
+          }
+        }
+      }
+    },
     getViewByName() {
       if (this.searchParam.viewName) {
         this.$api.alert.alert.getAlertViewByName(this.searchParam.viewName).then(res => {
@@ -169,6 +190,33 @@ export default {
       }
       this.searchAlert(1);
     },
+    searchChildAlert(row, index) {
+      const searchParam = {};
+      searchParam.fromAlertId = row.id;
+      this.$set(row, '_loading', true);
+      this.$api.alert.alert
+        .searchAlert(searchParam)
+        .then(res => {
+          const dataList = res.Return.tbodyList;
+          dataList.forEach(d => {
+            d['_index'] = (row['_index'] || 0) + 1;
+            d['parents'] = [d.fromAlertId];
+            if (row['parents']) {
+              d['parents'].push(...row['parents']);
+            }
+          });
+          if (index < this.alertData.tbodyList.length - 1) {
+            this.alertData.tbodyList.splice(index + 1, 0, ...dataList);
+          } else {
+            this.alertData.tbodyList.push(...dataList);
+          }
+          console.log(this.alertData.tbodyList);
+          this.$set(row, '_expand', true);
+        })
+        .finally(() => {
+          this.$set(row, '_loading', false);
+        });
+    },
     searchAlert(currentPage) {
       if (currentPage) {
         this.searchParam.currentPage = currentPage;
@@ -183,7 +231,6 @@ export default {
         this.searchParam.mode = 'simple';
         this.searchParam.rule = this.alertViewData?.config?.rule;
       }
-      console.log(JSON.stringify(this.searchParam));
       this.$api.alert.alert.searchAlert(this.searchParam).then(res => {
         this.alertData = res.Return;
       });

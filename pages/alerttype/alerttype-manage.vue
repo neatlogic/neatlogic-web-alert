@@ -26,6 +26,7 @@
           <template slot="action" slot-scope="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
+                <li class="tsfont-lightning" @click="editAlertEvent(row)">{{ $t('page.event') }}</li>
                 <li class="tsfont-edit" @click="editAlertType(row)">{{ $t('page.edit') }}</li>
                 <li class="tsfont-trash-o" @click="delAlertType(row)">{{ $t('page.delete') }}</li>
               </ul>
@@ -87,6 +88,9 @@ export default {
         this.searchAlertType();
       }
     },
+    editAlertEvent(row) {
+      this.$router.push({ path: '/alertevent-manage/' + row.id });
+    },
     editAlertType(row) {
       if (row) {
         this.currentAlertTypeId = row.id;
@@ -112,10 +116,10 @@ export default {
     delAlertType(row) {
       this.$createDialog({
         title: this.$t('dialog.title.deleteconfirm'),
-        content: this.$t('dialog.content.deleteconfirm', {'target': this.$t('term.alert.alerttype')}),
+        content: this.$t('dialog.content.deleteconfirm', { target: this.$t('term.alert.alerttype') }),
         btnType: 'error',
         'on-ok': vnode => {
-          this.$api.alert.alerttype.deleteAlertType(row.id).then((res) => {
+          this.$api.alert.alerttype.deleteAlertType(row.id).then(res => {
             if (res.Status === 'OK') {
               this.$Message.success(this.$t('message.deletesuccess'));
               vnode.isShow = false;

@@ -3,9 +3,12 @@ import alerttype from './alerttype/alerttype.js';
 import alert from './alert/alert.js';
 import attrtype from './attrtype/attrtype.js';
 import alertlevel from './alertlevel/alertlevel.js';
+import alertevent from './alertevent/alertevent.js';
+
 export default {
   alerttype,
   alert,
   attrtype,
-  alertlevel
+  alertlevel,
+  alertevent
 };

@@ -13,14 +13,19 @@
               <span>{{ attr.label }}</span>
             </Tag>
             <Divider v-if="selectAttrList && selectAttrList.length > 0" orientation="left">已选属性</Divider>
-            <draggable v-if="selectAttrList && selectAttrList.length > 0" handle=".tsfont-option-vertical" :list="alertViewData.config.attrList">
+            <draggable
+              v-if="selectAttrList && selectAttrList.length > 0"
+              handle=".tsfont-option-vertical"
+              :list="alertViewData.config.attrList"
+              @end="onDragEnd"
+            >
               <Tag
                 v-for="(attr, index) in selectAttrList"
                 :key="index"
-                closable
+                :closable="attr.name !== 'const_title'"
                 @on-close="toggleAttr(attr)"
               >
-                <span style="cursor: move" class="tsfont-option-vertical"></span>
+                <span style="cursor: move" :class="{ 'tsfont-option-vertical': attr.name !== 'const_title' }"></span>
                 <span>{{ attr.label }}</span>
               </Tag>
             </draggable>
@@ -52,7 +57,7 @@ export default {
   data() {
     return {
       isReady: false,
-      alertViewData: { isActive: 1, config: { attrList: [], rule: {} } },
+      alertViewData: { isActive: 1, config: { attrList: ['const_title'], rule: {} } }, //默认必须选择标题，而且不能调整位置
       attrList: [],
       dialogConfig: {
         title: this.id
@@ -114,6 +119,10 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    onDragEnd(evt) {
+      //锁定const_title永远在第一位
+      this.alertViewData.config.attrList = ['const_title', ...this.alertViewData.config.attrList.filter(d => d !== 'const_title')];
+    },
     getViewById() {
       if (this.id) {
         this.$api.alert.alert.getAlertViewById(this.id).then(res => {

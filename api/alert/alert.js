@@ -18,6 +18,9 @@ const alert = {
   },
   listAlertView(params) {
     return axios.post('/api/rest/alert/alert/view/list', params);
+  },
+  getAlertById(id) {
+    return axios.post('/api/rest/alert/alert/get', { id: id });
   }
 };
 

@@ -6,6 +6,8 @@ const alertTypeManage = () => import('@/commercial-module/alert/pages/alerttype/
 const alertManage = () => import('@/commercial-module/alert/pages/alert/alert-manage.vue');
 const attrTypeManage = () => import('@/commercial-module/alert/pages/attrtype/attrtype-manage.vue');
 const alertLevelManage = () => import('@/commercial-module/alert/pages/alertlevel/alertlevel-manage.vue');
+const alertEventManage = () => import('@/commercial-module/alert/pages/alertevent/alertevent-manage.vue');
+
 let routerArr = [
   {
     path: '/',
@@ -46,17 +48,6 @@ let routerArr = [
     }
   },
   {
-    path: '/alerttype-manage',
-    name: 'alerttype-manage',
-    component: alertTypeManage,
-    meta: {
-      title: '告警类型管理',
-      ismenu: true,
-      type: 'alertmanage',
-      authority: 'ALERT_TYPE_MODIFY'
-    }
-  },
-  {
     path: '/alert-manage/:view?',
     name: 'alert-manage',
     component: alertManage,
@@ -65,6 +56,28 @@ let routerArr = [
       ismenu: true,
       type: 'alert',
       authority: 'ALERT_BASE'
+    }
+  },
+  {
+    path: '/alertevent-manage/:typeId?',
+    name: 'alertevent-manage',
+    component: alertEventManage,
+    meta: {
+      title: '告警事件管理',
+      ismenu: true,
+      type: 'alertmanage',
+      authority: 'ALERT_EVENT_MODIFY'
+    }
+  },
+  {
+    path: '/alerttype-manage',
+    name: 'alerttype-manage',
+    component: alertTypeManage,
+    meta: {
+      title: '告警类型管理',
+      ismenu: true,
+      type: 'alertmanage',
+      authority: 'ALERT_TYPE_MODIFY'
     }
   },
   {
