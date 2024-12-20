@@ -64,9 +64,9 @@ let routerArr = [
     component: alertEventManage,
     meta: {
       title: '告警事件管理',
-      ismenu: true,
+      ismenu: false,
       type: 'alertmanage',
-      authority: 'ALERT_EVENT_MODIFY'
+      authority: 'ALERT_TYPE_MODIFY'
     }
   },
   {

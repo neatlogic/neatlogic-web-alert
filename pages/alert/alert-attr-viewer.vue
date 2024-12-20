@@ -4,6 +4,8 @@
       :is="handlers[attr.name]"
       :row="row"
       :value="value"
+      :mode="mode"
+      :view="view"
       :attr="attr"
       @toggleChildren="toggleChildren"
     ></component>
@@ -12,6 +14,8 @@
     <component
       :is="handlers['attr_' + attr.type]"
       :row="row"
+      :mode="mode"
+      :view="view"
       :value="value"
       :attr="attr"
     ></component>
@@ -29,6 +33,8 @@ export default {
     row: { type: Object }, //完整数据行
     type: { type: String }, //const或attr
     attr: { type: Object },
+    view: { type: Object }, //视图
+    mode: { type: String }, //detail|list
     value: { type: [String, Number, Object, Array] }
   },
   data() {

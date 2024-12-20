@@ -10,8 +10,8 @@ const alert = {
   searchAlert(params) {
     return axios.post('/api/rest/alert/alert/search', params);
   },
-  listAlertAttrList() {
-    return axios.get('/api/rest/alert/alert/attr/list');
+  listAlertAttrList(params) {
+    return axios.post('/api/rest/alert/alert/attr/list', params);
   },
   saveAlertView(params) {
     return axios.post('/api/rest/alert/alert/view/save', params);
@@ -21,6 +21,9 @@ const alert = {
   },
   getAlertById(id) {
     return axios.post('/api/rest/alert/alert/get', { id: id });
+  },
+  getAlertOriginById(id) {
+    return axios.post('/api/rest/alert/alertorigin/get', { id: id });
   }
 };
 

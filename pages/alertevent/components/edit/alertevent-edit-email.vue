@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TsFormItem label="收件人">
+    <TsFormItem :labelPosition="isChild ? 'top' : 'right'" label="收件人">
       <UserSelect
         v-model="configLocal.toUserList"
         :multiple="true"
@@ -11,12 +11,15 @@
   </div>
 </template>
 <script>
+import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
+
 export default {
   name: '',
   components: {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')
   },
+  extends: AlertEventBase,
   props: {
     config: { type: Object }
   },

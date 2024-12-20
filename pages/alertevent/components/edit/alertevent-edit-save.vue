@@ -6,6 +6,7 @@
         :dataList="attrList"
         valueName="name"
         textName="label"
+        :value="configLocal.uniqueAttrList.map(d=>d.name)"
         @on-change="selectAttr"
       ></TsFormCheckbox>
       <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
@@ -14,7 +15,7 @@
   </div>
 </template>
 <script>
-import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/edit/alertevent-base.js';
+import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
 
 export default {
   name: '',

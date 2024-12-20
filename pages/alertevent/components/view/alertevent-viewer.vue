@@ -4,6 +4,7 @@
       :is="handlers[eventHandlerData.handler.toLowerCase() + '_eventhandler']"
       v-if="handlers[eventHandlerData.handler.toLowerCase() + '_eventhandler']"
       ref="pluginConfig"
+      :event="{ name: eventHandlerData.event, label: eventHandlerData.eventName }"
       :config="eventHandlerData.config"
     ></component>
     <div v-else>插件{{ eventHandlerData.handler }}不存在</div>

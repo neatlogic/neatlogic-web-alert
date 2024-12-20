@@ -12,18 +12,20 @@
           ></TsFormInput>
         </TsFormItem>
         <TsFormItem label="事件">
-          <span>{{ event }}</span>
+          <span>{{ event.label }}·{{ event.name }}</span>
         </TsFormItem>
         <TsFormItem label="插件">
-          <span>{{ plugin.label }}·{{ plugin.name }}</span>
+          <span v-if="plugin">{{ plugin.label }}·{{ plugin.name }}</span>
+          <span v-else-if="eventHandlerData">{{ eventHandlerData.handlerName }}·{{ eventHandlerData.handler }}</span>
         </TsFormItem>
         <TsFormItem label="是否激活">
           <TsFormSwitch v-model="eventHandlerData.isActive" :trueValue="1" :falseValue="0"></TsFormSwitch>
         </TsFormItem>
         <component
-          :is="handlers[plugin.name.toLowerCase() + '_eventhandler']"
-          v-if="handlers[plugin.name.toLowerCase() + '_eventhandler']"
+          :is="handlers[handlerName.toLowerCase() + '_eventhandler']"
+          v-if="handlerName && handlers[handlerName.toLowerCase() + '_eventhandler']"
           ref="pluginConfig"
+          :event="event"
           :config="eventHandlerData.config"
         ></component>
       </div>
@@ -47,7 +49,7 @@ export default {
   props: {
     id: { type: Number },
     plugin: { type: Object },
-    event: { type: String },
+    event: { type: Object },
     alertType: { type: Object }
   },
   data() {
@@ -87,7 +89,7 @@ export default {
         this.eventHandlerData = {
           uuid: this.$utils.setUuid(),
           name: this.plugin.label,
-          event: this.event,
+          event: this.event.name,
           alertType: this.alertType.id,
           handler: this.plugin.name,
           isActive: 1,
@@ -95,14 +97,14 @@ export default {
         };
       }
     },
-    save() {
+    async save() {
       let isValid = true;
       const txtName = this.$refs.txtName;
       const pluginConfig = this.$refs.pluginConfig;
       if (txtName && !txtName.valid()) {
         isValid = false;
       }
-      if (pluginConfig && !pluginConfig.valid()) {
+      if (pluginConfig && !await pluginConfig.valid()) {
         isValid = false;
       }
       if (isValid) {
@@ -117,7 +119,16 @@ export default {
     }
   },
   filter: {},
-  computed: {},
+  computed: {
+    handlerName() {
+      if (this.plugin) {
+        return this.plugin.name;
+      } else if (this.eventHandlerData) {
+        return this.eventHandlerData.handler;
+      }
+      return '';
+    }
+  },
   watch: {}
 };
 </script>

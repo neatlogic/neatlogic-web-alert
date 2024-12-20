@@ -1,5 +1,5 @@
 <template>
-  <div v-if="row" :style="{ 'margin-left': (row['_index'] || 0) * 18 + 'px' }">
+  <div v-if="mode === 'list' && row" :style="{ 'margin-left': (row['_index'] || 0) * 18 + 'px' }">
     <span
       v-if="row.childAlertCount"
       class="cursor text-href"
@@ -15,12 +15,14 @@
     <AlertView
       v-if="isShowAlert"
       :id="currentAlertId"
+      :view="view"
       @close="
         currentAlertId = null;
         isShowAlert = false;
       "
     ></AlertView>
   </div>
+  <div v-else-if="mode === 'detail' && row">{{ row.title }}</div>
 </template>
 <script>
 import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alert-attr-viewer-base.js';

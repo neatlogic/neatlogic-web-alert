@@ -3,7 +3,9 @@ export const AlertEventBase = {
   props: {
     level: { type: Number, default: 1 },
     config: { type: Object },
+    event: { type: Object },
     isChild: { type: Boolean, default: false }
+    
   },
   data() {
     return {
@@ -15,7 +17,7 @@ export const AlertEventBase = {
       //需要子类覆盖
       return this.configLocal;
     },
-    valid() {
+    async valid() {
       //需要子类覆盖
       return true;
     }

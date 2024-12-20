@@ -59,6 +59,7 @@
                   type="const"
                   :attr="getAttrByName(thead.key)"
                   :row="row"
+                  :view="alertViewData"
                   :value="row[thead.key.replace('const_', '')]"
                   @toggleChildren="toggleChildAlert"
                 ></AlertAttrViewer>
@@ -67,6 +68,7 @@
                 <AlertAttrViewer
                   v-if="row.attrObj[thead.key.replace('attr_', '')]"
                   type="attr"
+                  :view="alertViewData"
                   :attr="getAttrByName(thead.key)"
                   :value="row.attrObj[thead.key.replace('attr_', '')].value"
                 ></AlertAttrViewer>
@@ -210,7 +212,6 @@ export default {
           } else {
             this.alertData.tbodyList.push(...dataList);
           }
-          console.log(this.alertData.tbodyList);
           this.$set(row, '_expand', true);
         })
         .finally(() => {

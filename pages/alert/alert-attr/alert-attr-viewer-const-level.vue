@@ -1,6 +1,11 @@
 <template>
-  <div v-if="row.alertLevel">
-    <div :style="{ color: row.alertLevel.color }">{{ row.alertLevel.label }}</div>
+  <div>
+    <Badge
+      v-if="row.alertLevel"
+      class-name="level"
+      :style="{ '--color': row.alertLevel.color }"
+      :text="row.alertLevel.label"
+    ></Badge>
   </div>
 </template>
 <script>
@@ -30,4 +35,8 @@ export default {
   watch: {}
 };
 </script>
-<style lang="less"></style>
+<style lang="less" scoped>
+.level {
+  background: var(--color);
+}
+</style>

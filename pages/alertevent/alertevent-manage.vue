@@ -8,7 +8,9 @@
         <div v-if="alertTypeData" class="action-group">
           <div class="action-item">
             <span class="text-grey mr-xs">告警类型</span>
-            <span><b class="text-grey">{{ alertTypeData.label }}</b></span>
+            <span>
+              <b class="text-grey">{{ alertTypeData.label }}</b>
+            </span>
           </div>
         </div>
       </template>
@@ -23,17 +25,47 @@
             ></TabPane>
           </Tabs>
           <div v-if="currentEventData">
-            <div v-for="(eventhandler, index) in eventHandlerList" :key="index" class="border-base padding radius-md mb-md bg-op">
-              <div class="text-grey mb-md"><h3>{{ eventhandler.name }}</h3></div>
-              <div><AlertEventViewer :eventHandlerData="eventhandler"></AlertEventViewer></div>
-            </div>
-            <div class="border-base padding radius-md bg-op" style="text-align: center; border-style: dashed !important">
-              <Dropdown placement="bottom-start">
-                <a href="javascript:void(0)" class="tsfont-plus">添加插件</a>
-                <DropdownMenu slot="list">
-                  <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(plugin)">{{ plugin.label }}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+            <draggable
+              v-if="eventHandlerList && eventHandlerList.length > 0"
+              tag="div"
+              :list="eventHandlerList"
+              handle=".tsfont-drag"
+              group="root"
+              @change="changeAlertEventHandlerSort"
+            >
+              <div v-for="(eventhandler, index) in eventHandlerList" :key="index" class="event-grid">
+                <div style="text-align: center">
+                  <h3 class="text-grey tsfont-drag" style="cursor: move">{{ eventhandler.sort }}</h3>
+                </div>
+                <div class="border-base padding radius-md mb-md bg-op">
+                  <div class="text-grey mb-md">
+                    <h3>{{ eventhandler.name }}</h3>
+                  </div>
+                  <div><AlertEventViewer :eventHandlerData="eventhandler"></AlertEventViewer></div>
+                </div>
+                <div style="text-align: right">
+                  <Dropdown>
+                    <a href="javascript:void(0)" class="tsfont-option-horizontal">
+                    </a>
+                    <DropdownMenu slot="list">
+                      <DropdownItem @click.native="editAlertEventHandler(eventhandler)">{{ $t('page.edit') }}</DropdownItem>
+                      <DropdownItem @click.native="delAlertEventHandler(eventhandler)">{{ $t('page.delete') }}</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              </div>
+            </draggable>
+            <div class="event-grid">
+              <div style="text-align: center"><h3 class="text-grey">{{ eventHandlerList.length + 1 }}</h3></div>
+              <div class="border-base padding radius-md bg-op" style="text-align: center; border-style: dashed !important">
+                <Dropdown placement="bottom-start">
+                  <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget',{'target':$t('page.plugins')}) }}</a>
+                  <DropdownMenu slot="list">
+                    <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(plugin)">{{ plugin.label }}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+              <div></div>
             </div>
           </div>
         </div>
@@ -44,15 +76,18 @@
       :id="currentEventHandlerId"
       :plugin="currentPlugin"
       :alertType="alertTypeData"
-      :event="currentEventName"
+      :event="currentEventData"
       @close="closeAlertEventEdit"
     ></AlertEventEdit>
   </div>
 </template>
 <script>
+import draggable from 'vuedraggable';
+
 export default {
   name: '',
   components: {
+    draggable,
     AlertEventEdit: () => import('@/commercial-module/alert/pages/alertevent/alertevent-edit.vue'),
     AlertEventViewer: () => import('@/commercial-module/alert/pages/alertevent/components/view/alertevent-viewer.vue')
   },
@@ -66,7 +101,8 @@ export default {
       currentEventHandlerId: null,
       pluginList: [],
       alertTypeData: null,
-      typeId: null
+      typeId: null,
+      currentPlugin: null
     };
   },
   beforeCreate() {},
@@ -74,7 +110,6 @@ export default {
     this.typeId = this.$route.params.typeId && parseInt(this.$route.params.typeId);
     this.getAlertTypeById();
     this.listEvent();
-    this.listEventPlugin();
     //this.listEventHandler();
   },
   beforeMount() {},
@@ -86,6 +121,34 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    editAlertEventHandler(eventhandler) {
+      this.isEditEvent = true;
+      this.currentEventHandlerId = eventhandler.id;
+    },
+    delAlertEventHandler(eventhandler) {
+      this.$createDialog({
+        title: this.$t('dialog.title.deleteconfirm'),
+        content: this.$t('dialog.content.deleteconfirm', { target: this.$t('page.component') }),
+        btnType: 'error',
+        'on-ok': vnode => {
+          this.$api.alert.alertevent.deleteAlertEventHandler(eventhandler.id).then(res => {
+            if (res.Status === 'OK') {
+              this.$Message.success('操作成功');
+              this.listAlertEventHandler(this.currentEventName);
+              vnode.isShow = false;
+            }
+          });
+        }
+      });
+    },
+    changeAlertEventHandlerSort() {
+      this.$api.alert.alertevent.updateAlertEventHandlerSort({ idList: this.eventHandlerList.map(d => d.id) }).then(res => {
+        if (res.Status === 'OK') {
+          this.$Message.success('操作成功');
+          this.listAlertEventHandler(this.currentEventName);
+        }
+      });
+    },
     selectAlertType(type) {
       this.currentAlertType = type;
     },
@@ -100,8 +163,8 @@ export default {
       this.isEditEvent = true;
       this.currentPlugin = plugin;
     },
-    listEventPlugin() {
-      this.$api.alert.alertevent.listEventPlugin().then(res => {
+    listEventPlugin(eventName) {
+      this.$api.alert.alertevent.listEventPlugin({ eventName: eventName }).then(res => {
         this.pluginList = res.Return;
       });
     },
@@ -113,7 +176,7 @@ export default {
         }
       });
     },
-    listEventHandler(eventName) {
+    listAlertEventHandler(eventName) {
       this.$api.alert.alertevent.listAlertEventHandler({ event: eventName }).then(res => {
         this.eventHandlerList = res.Return;
       });
@@ -123,14 +186,9 @@ export default {
       this.currentEventHandlerId = null;
       this.currentPlugin = null;
       if (needRefresh && this.currentEventName) {
-        this.listEventHandler(this.currentEventName);
+        this.listAlertEventHandler(this.currentEventName);
       }
-    },
-    editAlertEvent(id) {
-      this.isEditEvent = true;
-      this.currentEventHandlerId = id;
-    },
-    deleteAlertEvent(id) {}
+    }
   },
   filter: {},
   computed: {
@@ -145,7 +203,8 @@ export default {
     currentEventName: {
       handler(val) {
         if (val) {
-          this.listEventHandler(val);
+          this.listAlertEventHandler(val);
+          this.listEventPlugin(val);
         } else {
           this.eventHandlerList = [];
         }
@@ -155,4 +214,9 @@ export default {
   }
 };
 </script>
-<style lang="less"></style>
+<style lang="less" scoped>
+.event-grid {
+  display: grid;
+  grid-template-columns: 60px auto 30px;
+}
+</style>

@@ -3,6 +3,7 @@ export const AlertEventBase = {
   props: {
     level: { type: Number, default: 1 },
     config: { type: Object },
+    event: { type: Object },
     isChild: { type: Boolean, default: false }
   },
   data() {

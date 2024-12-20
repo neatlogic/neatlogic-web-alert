@@ -1,8 +1,8 @@
 import axios from '@/resources/api/http.js';
 
 const alertevent = {
-  listEventPlugin() {
-    return axios.get('/api/rest/alert/event/plugin/list');
+  listEventPlugin(params) {
+    return axios.post('/api/rest/alert/event/plugin/list', params);
   },
   listAlertEvent() {
     return axios.get('/api/rest/alert/event/list');
@@ -10,11 +10,17 @@ const alertevent = {
   listAlertEventHandler(params) {
     return axios.post('/api/rest/alert/event/handler/list', params);
   },
+  updateAlertEventHandlerSort(params) {
+    return axios.post('/api/rest/alert/event/sort/update', params);
+  },
   getAlertEventHandlerById(id) {
     return axios.post('/api/rest/alert/event/handler/get', { id: id });
   },
   saveAlertEventHandler(params) {
     return axios.post('/api/rest/alert/event/handler/save', params);
+  },
+  deleteAlertEventHandler(id) {
+    return axios.post('/api/rest/alert/event/handler/delete', { id: id });
   }
 };
 
