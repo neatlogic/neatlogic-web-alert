@@ -1,8 +1,11 @@
 <template>
-  <div>{{ value | formatDate }}</div>
+  <div v-if="row.alertType">
+    {{ row.alertType.label }}
+  </div>
 </template>
 <script>
-import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alert-attr-viewer-base.js';
+import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';
+
 export default {
   name: '',
   components: {},

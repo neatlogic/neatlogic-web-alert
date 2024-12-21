@@ -1,11 +1,39 @@
 <template>
   <div>
-    <TsFormItem label="收件人" labelPosition="left" :labelWidth="60">
-      <UserCard
-        v-for="(user,index) in configLocal.toUserList"
+    <TsFormItem label="邮件标题" labelPosition="left" :labelWidth="70">
+      <div>{{ configLocal.title }}</div>
+    </TsFormItem>
+    <TsFormItem label="收件人" labelPosition="left" :labelWidth="70">
+      <div><UserCard
+        v-for="(user, index) in configLocal.toUserList"
         :key="index"
         :uuid="user"
-      ></UserCard>
+        class="mr-sm"
+      ></UserCard></div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.ccUserList && configLocal.ccUserList.length > 0"
+      label="抄送"
+      labelPosition="left"
+      :labelWidth="70"
+    >
+      <div><UserCard
+        v-for="(user, index) in configLocal.ccUserList"
+        :key="index"
+        :uuid="user"
+        class="mr-sm"
+      ></UserCard></div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.interval"
+      label="通知间隔"
+      labelPosition="left"
+      :labelWidth="70"
+    >
+      <span class="mr-xs text-grey">
+        <b>{{ configLocal.interval }}</b>
+      </span>
+      <span class="text-grey">分钟</span>
     </TsFormItem>
   </div>
 </template>
@@ -21,12 +49,10 @@ export default {
   extends: AlertEventBase,
   props: {},
   data() {
-    return {
-    };
+    return {};
   },
   beforeCreate() {},
-  async created() {
-  },
+  async created() {},
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -35,12 +61,10 @@ export default {
   deactivated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {
-  },
+  methods: {},
   filter: {},
   computed: {},
   watch: {}
 };
 </script>
-<style lang="less">
-</style>
+<style lang="less"></style>

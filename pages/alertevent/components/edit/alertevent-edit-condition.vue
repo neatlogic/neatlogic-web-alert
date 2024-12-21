@@ -92,7 +92,7 @@ export default {
       this.error = '';
     },
     listEventPlugin() {
-      this.$api.alert.alertevent.listEventPlugin({eventName: this.event.name}).then(res => {
+      this.$api.alert.alertevent.listEventPlugin({ eventName: this.event.name }).then(res => {
         this.pluginList = res.Return;
       });
     },
@@ -111,7 +111,7 @@ export default {
             this.error = '请选择插件';
           }
           const pluginConfig = this.$refs[`pluginConfig${i}`];
-          if (pluginConfig && !await pluginConfig[0].valid()) {
+          if (pluginConfig && !(await pluginConfig[0].valid())) {
             isValid = false;
           }
         }
@@ -148,6 +148,7 @@ export default {
 
   .del-handler {
     display: none;
+    z-index: 10;
     position: absolute;
     top: -8px;
     right: -8px;

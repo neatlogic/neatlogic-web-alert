@@ -1,8 +1,10 @@
 <template>
-  <div>number:{{ value }}</div>
+  <div v-if="value && value.length > 0">
+    <span v-for="(v,index) in value" :key="index" class="mr-xs">{{ v }}</span>
+  </div>
 </template>
 <script>
-import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alert-attr-viewer-base.js';
+import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';
 
 export default {
   name: '',

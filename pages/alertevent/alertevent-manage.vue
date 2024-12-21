@@ -26,7 +26,7 @@
           </Tabs>
           <div v-if="currentEventData">
             <draggable
-              v-if="eventHandlerList && eventHandlerList.length > 0"
+              v-if="isReady && eventHandlerList && eventHandlerList.length > 0"
               tag="div"
               :list="eventHandlerList"
               handle=".tsfont-drag"
@@ -44,7 +44,7 @@
                   <div><AlertEventViewer :eventHandlerData="eventhandler"></AlertEventViewer></div>
                 </div>
                 <div style="text-align: right">
-                  <Dropdown>
+                  <Dropdown :transfer="true">
                     <a href="javascript:void(0)" class="tsfont-option-horizontal">
                     </a>
                     <DropdownMenu slot="list">
@@ -58,7 +58,7 @@
             <div class="event-grid">
               <div style="text-align: center"><h3 class="text-grey">{{ eventHandlerList.length + 1 }}</h3></div>
               <div class="border-base padding radius-md bg-op" style="text-align: center; border-style: dashed !important">
-                <Dropdown placement="bottom-start">
+                <Dropdown placement="bottom-start" :transfer="true">
                   <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget',{'target':$t('page.plugins')}) }}</a>
                   <DropdownMenu slot="list">
                     <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(plugin)">{{ plugin.label }}</DropdownItem>
@@ -94,6 +94,7 @@ export default {
   props: {},
   data() {
     return {
+      isReady: true,
       isEditEvent: false,
       eventHandlerList: [],
       eventList: [],
@@ -177,8 +178,10 @@ export default {
       });
     },
     listAlertEventHandler(eventName) {
+      this.isReady = false;
       this.$api.alert.alertevent.listAlertEventHandler({ event: eventName }).then(res => {
         this.eventHandlerList = res.Return;
+        this.isReady = true;
       });
     },
     closeAlertEventEdit(needRefresh) {

@@ -1,10 +1,10 @@
 <template>
-  <div v-if="row.alertType">
-    {{ row.alertType.label }}
+  <div v-if="row.status">
+    {{ row.statusName }}
   </div>
 </template>
 <script>
-import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alert-attr-viewer-base.js';
+import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';
 
 export default {
   name: '',
