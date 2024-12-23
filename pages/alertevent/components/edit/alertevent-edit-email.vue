@@ -73,13 +73,23 @@
       ></UserSelect>
     </TsFormItem>
     <TsFormItem :labelPosition="isChild ? 'left' : 'right'" label="通知间隔">
-      <TsFormInput
-        v-model="configLocal.interval"
-        type="number"
-        :min="1"
-        border="border"
-      ></TsFormInput>
-      <div class="text-grey">若告警无人响应且未恢复，则每隔(?)分钟再进行通知</div>
+      <div class="grid">
+        <div>
+          <TsFormSelect
+            v-model="configLocal.statusList"
+            :multiple="true"
+            :transfer="true"
+            :dataList="statusList"
+          ></TsFormSelect>
+        </div>
+        <div><TsFormInput
+          v-model="configLocal.interval"
+          type="number"
+          :min="1"
+          border="border"
+        ></TsFormInput></div>
+      </div>
+      <div class="text-grey">当告警处于以上状态时，每隔(?)分钟再进行通知</div>
     </TsFormItem>
   </div>
 </template>
@@ -91,6 +101,7 @@ export default {
   name: '',
   directives: { clipboard },
   components: {
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     FreemarkerHelp: () => import('@/commercial-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror'),
@@ -104,7 +115,17 @@ export default {
   data() {
     return {
       configLocal: this.config || {},
-      attrList: []
+      attrList: [],
+      statusList: [
+        {
+          value: 'new',
+          text: '新告警'
+        },
+        { value: 'confirmed', text: '已确认' },
+        { value: 'proceessing', text: '处理中' },
+        { value: 'resolved', text: '已处理' },
+        { value: 'closed', text: '已关闭' }
+      ]
     };
   },
   beforeCreate() {},
@@ -157,4 +178,10 @@ export default {
   watch: {}
 };
 </script>
-<style lang="less"></style>
+<style lang="less" scoped>
+.grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 10px;
+}
+</style>

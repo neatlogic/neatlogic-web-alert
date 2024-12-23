@@ -25,6 +25,11 @@
             ></TabPane>
           </Tabs>
           <div v-if="currentEventData">
+            <div v-if="currentEventData.description" class="ml-lg mr-lg">
+              <div class="mb-xs text-grey"><h4>{{ $t('page.tip') }}</h4></div>
+              <div class="text-grey">{{ currentEventData.description }}</div>
+              <Divider></Divider>
+            </div>
             <draggable
               v-if="isReady && eventHandlerList && eventHandlerList.length > 0"
               tag="div"
@@ -45,8 +50,7 @@
                 </div>
                 <div style="text-align: right">
                   <Dropdown :transfer="true">
-                    <a href="javascript:void(0)" class="tsfont-option-horizontal">
-                    </a>
+                    <a href="javascript:void(0)" class="tsfont-option-horizontal"></a>
                     <DropdownMenu slot="list">
                       <DropdownItem @click.native="editAlertEventHandler(eventhandler)">{{ $t('page.edit') }}</DropdownItem>
                       <DropdownItem @click.native="delAlertEventHandler(eventhandler)">{{ $t('page.delete') }}</DropdownItem>
@@ -56,10 +60,12 @@
               </div>
             </draggable>
             <div class="event-grid">
-              <div style="text-align: center"><h3 class="text-grey">{{ eventHandlerList.length + 1 }}</h3></div>
+              <div style="text-align: center">
+                <h3 class="text-grey">{{ eventHandlerList.length + 1 }}</h3>
+              </div>
               <div class="border-base padding radius-md bg-op" style="text-align: center; border-style: dashed !important">
                 <Dropdown placement="bottom-start" :transfer="true">
-                  <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget',{'target':$t('page.plugins')}) }}</a>
+                  <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget', { target: $t('page.plugins') }) }}</a>
                   <DropdownMenu slot="list">
                     <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(plugin)">{{ plugin.label }}</DropdownItem>
                   </DropdownMenu>

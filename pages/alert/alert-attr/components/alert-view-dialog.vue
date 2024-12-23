@@ -3,7 +3,7 @@
     <template v-slot>
       <div>
         <Tabs value="info">
-          <TabPane label="告警详情" name="info">
+          <TabPane v-if="alertData" label="告警详情" name="info">
             <TsFormItem v-for="(attr, index) in attrList" :key="index" :label="attr.label">
               <span v-if="attr.kind === 'const'">
                 <AlertAttrViewer
@@ -15,9 +15,9 @@
                   :value="alertData[attr.name.replace('const_', '')]"
                 ></AlertAttrViewer>
               </span>
-              <span v-else-if="attr.kind === 'attr' && row.attrObj">
+              <span v-else-if="attr.kind === 'attr' && alertData.attrObj">
                 <AlertAttrViewer
-                  v-if="row.attrObj[attr.name.replace('attr_', '')]"
+                  v-if="alertData.attrObj[attr.name.replace('attr_', '')]"
                   type="attr"
                   :view="view"
                   mode="detail"
@@ -28,7 +28,7 @@
               </span>
             </TsFormItem>
           </TabPane>
-          <TabPane label="原始数据" name="origin">
+          <TabPane v-if="alertOriginData" label="原始数据" name="origin">
             <!--<TsFormItem label="状态">
               <span>{{ alertOriginData.statusText }}</span>
             </TsFormItem>-->
@@ -45,6 +45,9 @@
           </TabPane>
         </Tabs>
       </div>
+    </template>
+    <template v-slot:footer>
+      <Button @click="close()">{{ $t('page.close') }}</Button>
     </template>
   </TsDialog>
 </template>
@@ -74,10 +77,10 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {
+  async created() {
     this.listAlertAttrList();
-    this.getAlertById();
-    this.getAlertOriginalById();
+    await this.getAlertById();
+    await this.getAlertOriginalById();
   },
   beforeMount() {},
   mounted() {},
@@ -100,16 +103,16 @@ export default {
     close() {
       this.$emit('close');
     },
-    getAlertOriginalById() {
+    async getAlertOriginalById() {
       if (this.id) {
-        this.$api.alert.alert.getAlertOriginById(this.id).then(res => {
+        await this.$api.alert.alert.getAlertOriginById(this.id).then(res => {
           this.alertOriginData = res.Return;
         });
       }
     },
-    getAlertById() {
+    async getAlertById() {
       if (this.id) {
-        this.$api.alert.alert.getAlertById(this.id).then(res => {
+        await this.$api.alert.alert.getAlertById(this.id).then(res => {
           this.alertData = res.Return;
         });
       }
