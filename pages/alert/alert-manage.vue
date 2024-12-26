@@ -56,23 +56,30 @@
             <div :key="index">
               <span v-if="thead.key.startsWith('const_')">
                 <AlertAttrViewer
-                  type="const"
                   :attr="getAttrByName(thead.key)"
                   :row="row"
                   :view="alertViewData"
                   :value="row[thead.key.replace('const_', '')]"
                   @toggleChildren="toggleChildAlert"
+                  @refresh="searchAlert"
                 ></AlertAttrViewer>
               </span>
               <span v-if="thead.key.startsWith('attr_') && row.attrObj">
                 <AlertAttrViewer
                   v-if="row.attrObj[thead.key.replace('attr_', '')]"
-                  type="attr"
                   :view="alertViewData"
                   :attr="getAttrByName(thead.key)"
                   :value="row.attrObj[thead.key.replace('attr_', '')].value"
+                  @refresh="searchAlert"
                 ></AlertAttrViewer>
               </span>
+            </div>
+          </template>
+          <template v-slot:action="{ row }">
+            <div class="tstable-action">
+              <ul class="tstable-action-ul">
+                <li class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
+              </ul>
             </div>
           </template>
         </TsTable>
@@ -137,6 +144,7 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    deleteAlert(alert) {},
     toggleChildAlert(row) {
       if (!row._loading) {
         const index = this.alertData.tbodyList.findIndex(d => d.id === row.id);
@@ -246,7 +254,12 @@ export default {
   filter: {},
   computed: {
     finalTheadList() {
-      return this.alertData.theadList;
+      let list = [];
+      if (this.alertData && this.alertData.theadList) {
+        list = this.$utils.deepClone(this.alertData.theadList);
+        list.push({ key: 'action' });
+      }
+      return list;
     },
     conditionAttrList() {
       const attrList = [];

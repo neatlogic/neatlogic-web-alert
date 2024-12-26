@@ -24,9 +24,11 @@
               :name="event.name"
             ></TabPane>
           </Tabs>
-          <div v-if="currentEventData">
+          <div v-if="currentEventData" class="tab-container">
             <div v-if="currentEventData.description" class="ml-lg mr-lg">
-              <div class="mb-xs text-grey"><h4>{{ $t('page.tip') }}</h4></div>
+              <div class="mb-xs text-grey">
+                <h4>{{ $t('page.tip') }}</h4>
+              </div>
               <div class="text-grey">{{ currentEventData.description }}</div>
               <Divider></Divider>
             </div>
@@ -227,5 +229,9 @@ export default {
 .event-grid {
   display: grid;
   grid-template-columns: 60px auto 30px;
+}
+.tab-container {
+  height: calc(100vh - 170px);
+  overflow: auto;
 }
 </style>

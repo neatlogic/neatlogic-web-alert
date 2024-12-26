@@ -24,6 +24,15 @@ const alert = {
   },
   getAlertOriginById(id) {
     return axios.post('/api/rest/alert/alertorigin/get', { id: id });
+  },
+  handleAlert(params) {
+    return axios.post('/api/rest/alert/alert/handle', params);
+  },
+  searchAlertAudit(params) {
+    return axios.post('/api/rest/alert/audit/search', params);
+  },
+  searchAlertComment(params) {
+    return axios.post('/api/rest/alert/comment/search', params);
   }
 };
 

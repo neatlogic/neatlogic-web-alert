@@ -16,10 +16,7 @@
       v-if="isShowAlert"
       :id="currentAlertId"
       :view="view"
-      @close="
-        currentAlertId = null;
-        isShowAlert = false;
-      "
+      @close="close"
     ></AlertView>
   </div>
   <div v-else-if="mode === 'detail' && row">{{ row.title }}</div>
@@ -50,6 +47,13 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    close(needRefresh) {
+      this.currentAlertId = null;
+      this.isShowAlert = false;
+      if (needRefresh) {
+        this.$emit('refresh');
+      }
+    },
     getAlertDetail(row) {
       this.isShowAlert = true;
       this.currentAlertId = row.id;

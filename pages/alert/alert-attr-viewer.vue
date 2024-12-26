@@ -8,6 +8,7 @@
       :view="view"
       :attr="attr"
       @toggleChildren="toggleChildren"
+      @refresh="refresh"
     ></component>
   </div>
   <div v-else-if="attr.kind === 'attr' && handlers['attr_' + attr.type]">
@@ -18,6 +19,8 @@
       :view="view"
       :value="value"
       :attr="attr"
+      @toggleChildren="toggleChildren"
+      @refresh="refresh"
     ></component>
   </div>
   <div v-else>{{ value }}</div>
@@ -31,7 +34,6 @@ export default {
   },
   props: {
     row: { type: Object }, //完整数据行
-    type: { type: String }, //const或attr
     attr: { type: Object },
     view: { type: Object }, //视图
     mode: { type: String }, //detail|list
@@ -55,6 +57,9 @@ export default {
   methods: {
     toggleChildren() {
       this.$emit('toggleChildren', ...arguments);
+    },
+    refresh() {
+      this.$emit('refresh');
     }
   },
   filter: {},
