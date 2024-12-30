@@ -89,7 +89,7 @@
           border="border"
         ></TsFormInput></div>
       </div>
-      <div class="text-grey">当告警处于以上状态时，每隔(?)分钟再进行通知</div>
+      <div class="text-grey">当告警首次处于以上状态时，每隔(?)分钟再进行通知</div>
     </TsFormItem>
   </div>
 </template>

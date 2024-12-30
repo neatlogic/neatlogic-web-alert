@@ -86,6 +86,7 @@
       </template>
     </TsContain>
     <AlertViewEdit v-if="isViewEdit" :id="currentView && currentView.id" @close="closeAttrEdit"></AlertViewEdit>
+    <AlertDeleteDialog v-if="isDeleteShow && currentAlertId" :id="currentAlertId" @close="closeAlertDelete"></AlertDeleteDialog>
   </div>
 </template>
 <script>
@@ -96,7 +97,8 @@ export default {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
     AlertViewEdit: () => import('@/commercial-module/alert/pages/alert/alert-view-edit.vue'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
-    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue')
+    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
+    AlertDeleteDialog: () => import('@/commercial-module/alert/pages/alert/alert-delete-dialog.vue')
   },
   props: {},
   data() {
@@ -109,22 +111,9 @@ export default {
       searchParam: { mode: 'simple', rule: {} },
       alertData: {},
       rule: {},
-      alertViewList: []
-      /*theadList: [
-        {
-          key: 'selection'
-        },
-        { key: 'level', title: '告警级别' },
-        { key: 'title', title: '标题' },
-        { key: 'alertTime', title: '告警时间' },
-        { key: 'type', title: '类型' },
-        { key: 'status', title: '状态' },
-        { key: 'source', title: '来源' },
-        { key: 'alertCount', title: '告警次数' },
-        { key: 'entityType', title: '实体类型' },
-        { key: 'entityName', title: '实体名称' },
-        { key: 'ip', title: 'ip' }
-      ]*/
+      alertViewList: [],
+      isDeleteShow: false,
+      currentAlertId: null
     };
   },
   beforeCreate() {},
@@ -144,7 +133,17 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    deleteAlert(alert) {},
+    closeAlertDelete(needRefresh) {
+      this.isDeleteShow = false;
+      this.currentAlertId = null;
+      if (needRefresh) {
+        this.searchAlert();
+      }
+    },
+    deleteAlert(alert) {
+      this.isDeleteShow = true;
+      this.currentAlertId = alert.id;
+    },
     toggleChildAlert(row) {
       if (!row._loading) {
         const index = this.alertData.tbodyList.findIndex(d => d.id === row.id);

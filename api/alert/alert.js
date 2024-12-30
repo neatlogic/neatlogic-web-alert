@@ -2,37 +2,40 @@ import axios from '@/resources/api/http.js';
 
 const alert = {
   getAlertViewById(id) {
-    return axios.post('/api/rest/alert/alert/view/get', { id: id });
+    return axios.post('/api/rest/alert/view/get', { id: id });
   },
   getAlertViewByName(name) {
-    return axios.post('/api/rest/alert/alert/view/get', { name: name });
+    return axios.post('/api/rest/alert/view/get', { name: name });
   },
   searchAlert(params) {
-    return axios.post('/api/rest/alert/alert/search', params);
+    return axios.post('/api/rest/alert/search', params);
   },
   listAlertAttrList(params) {
-    return axios.post('/api/rest/alert/alert/attr/list', params);
+    return axios.post('/api/rest/alert/attr/list', params);
   },
   saveAlertView(params) {
-    return axios.post('/api/rest/alert/alert/view/save', params);
+    return axios.post('/api/rest/alert/view/save', params);
   },
   listAlertView(params) {
-    return axios.post('/api/rest/alert/alert/view/list', params);
+    return axios.post('/api/rest/alert/view/list', params);
   },
   getAlertById(id) {
-    return axios.post('/api/rest/alert/alert/get', { id: id });
+    return axios.post('/api/rest/alert/get', { id: id });
   },
   getAlertOriginById(id) {
     return axios.post('/api/rest/alert/alertorigin/get', { id: id });
   },
   handleAlert(params) {
-    return axios.post('/api/rest/alert/alert/handle', params);
+    return axios.post('/api/rest/alert/handle', params);
   },
   searchAlertAudit(params) {
     return axios.post('/api/rest/alert/audit/search', params);
   },
   searchAlertComment(params) {
     return axios.post('/api/rest/alert/comment/search', params);
+  },
+  deleteAlert(params) {
+    return axios.post('/api/rest/alert/delete', params);
   }
 };
 
