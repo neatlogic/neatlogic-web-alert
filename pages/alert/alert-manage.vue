@@ -48,7 +48,8 @@
           v-if="finalTheadList && finalTheadList.length > 0"
           :multiple="true"
           v-bind="alertData"
-          :theadList="finalTheadList"
+          keyName="id"
+          :theadList="[{ key: 'selection' }, ...finalTheadList, { key: 'action' }]"
           @changeCurrent="searchAlert"
           @changePageSize="changePageSize"
         >
@@ -255,8 +256,7 @@ export default {
     finalTheadList() {
       let list = [];
       if (this.alertData && this.alertData.theadList) {
-        list = this.$utils.deepClone(this.alertData.theadList);
-        list.push({ key: 'action' });
+        list = this.alertData.theadList;
       }
       return list;
     },

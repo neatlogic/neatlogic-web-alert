@@ -42,13 +42,15 @@
             >
               <div v-for="(eventhandler, index) in eventHandlerList" :key="index" class="event-grid">
                 <div style="text-align: center">
-                  <h3 class="text-grey tsfont-drag" style="cursor: move">{{ eventhandler.sort }}</h3>
+                  <h3 class="text-grey tsfont-drag" style="cursor: move">
+                    <span>{{ eventhandler.sort }}</span>
+                  </h3>
                 </div>
-                <div class="border-base padding radius-md mb-md bg-op">
-                  <div class="text-grey mb-md">
-                    <h3>{{ eventhandler.name }}</h3>
+                <div class="border-base padding-md radius-md mb-md bg-op">
+                  <div class="text-grey">
+                    <h3 class="cursor" :class="{ 'tsfont-drop-right': !isShowStep(eventhandler), 'tsfont-drop-down': isShowStep(eventhandler) }" @click="toggleStep(eventhandler)">{{ eventhandler.name }}</h3>
                   </div>
-                  <div><AlertEventViewer :eventHandlerData="eventhandler"></AlertEventViewer></div>
+                  <div v-if="isShowStep(eventhandler)" class="mt-md"><AlertEventViewer :eventHandlerData="eventhandler"></AlertEventViewer></div>
                 </div>
                 <div style="text-align: right">
                   <Dropdown :transfer="true">
@@ -111,7 +113,8 @@ export default {
       pluginList: [],
       alertTypeData: null,
       typeId: null,
-      currentPlugin: null
+      currentPlugin: null,
+      stepHideMap: {}
     };
   },
   beforeCreate() {},
@@ -130,6 +133,12 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    toggleStep(eventhandler) {
+      this.$set(this.stepHideMap, eventhandler.uuid, !this.stepHideMap[eventhandler.uuid]);
+    },
+    isShowStep(eventhandler) {
+      return !this.stepHideMap[eventhandler.uuid];
+    },
     editAlertEventHandler(eventhandler) {
       this.isEditEvent = true;
       this.currentEventHandlerId = eventhandler.id;
