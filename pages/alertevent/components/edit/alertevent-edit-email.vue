@@ -110,11 +110,9 @@ export default {
   },
   extends: AlertEventBase,
   props: {
-    config: { type: Object }
   },
   data() {
     return {
-      configLocal: this.config || {},
       attrList: [],
       statusList: [
         {

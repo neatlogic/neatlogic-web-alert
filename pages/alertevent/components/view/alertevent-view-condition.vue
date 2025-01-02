@@ -19,12 +19,12 @@
       ></ConditionGroup>
       <div class="mt-md">
         <div class="handler-container">
-          <Divider orientation="start"><h4 class="text-grey">{{ condition.handler.name }}</h4></Divider>
+          <Divider orientation="start"><h4 class="text-grey" :class="condition.handler.icon">{{ condition.handler.name }}</h4></Divider>
           <component
             :is="handlers && handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
             v-if="handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
             :ref="'pluginConfig' + index"
-            :config="condition.handler.config"
+            :handler="condition.handler"
             :event="event"
             :isChild="true"
             :level="level + 1"

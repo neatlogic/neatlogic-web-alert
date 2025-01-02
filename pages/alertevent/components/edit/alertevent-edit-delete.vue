@@ -23,7 +23,6 @@ export default {
   props: {},
   data() {
     return {
-      configLocal: this.$utils.deepClone(this.config) || { }
     };
   },
   beforeCreate() {},

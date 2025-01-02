@@ -23,7 +23,9 @@
               <Dropdown placement="bottom-start" :transfer="true">
                 <a href="javascript:void(0)" class="tsfont-plus">添加插件</a>
                 <DropdownMenu slot="list">
-                  <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(condition, plugin)">{{ plugin.label }}</DropdownItem>
+                  <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(condition, plugin)">
+                    <span :class="plugin.icon">{{ plugin.label }}</span>
+                  </DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -33,7 +35,7 @@
                 :is="handlers && handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
                 v-if="handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
                 :ref="'pluginConfig' + index"
-                :config="condition.handler.config"
+                :handler="condition.handler"
                 :event="event"
                 :isChild="true"
                 :level="level + 1"
@@ -58,7 +60,6 @@ export default {
   props: {},
   data() {
     return {
-      configLocal: this.$utils.deepClone(this.config) || { conditionList: [{ rule: null, handler: null }] },
       attrList: [],
       pluginList: [],
       error: '',
@@ -67,6 +68,9 @@ export default {
   },
   beforeCreate() {},
   async created() {
+    if (this.$utils.isEmpty(this.configLocal)) {
+      this.configLocal = { conditionList: [{ rule: null, handler: null }] };
+    }
     this.handlers = await import('@/commercial-module/alert/pages/alertevent/components/edit/index.js');
     this.listEventPlugin();
     this.listAlertAttrList();
@@ -86,6 +90,7 @@ export default {
         uuid: this.$utils.setUuid(),
         name: plugin.label,
         handler: plugin.name,
+        icon: plugin.icon,
         isActive: 1
       };
       this.$set(condition, 'handler', handlerData);

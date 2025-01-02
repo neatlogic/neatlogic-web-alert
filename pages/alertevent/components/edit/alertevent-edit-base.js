@@ -2,14 +2,14 @@ export const AlertEventBase = {
   components: {},
   props: {
     level: { type: Number, default: 1 },
-    config: { type: Object },
+    handler: {type: Object},
     event: { type: Object },
     isChild: { type: Boolean, default: false }
     
   },
   data() {
     return {
-      configLocal: this.$utils.deepClone(this.config) || {}
+      configLocal: this.$utils.deepClone(this.handler.config) || {}
     };
   },
   methods: {
@@ -23,5 +23,10 @@ export const AlertEventBase = {
     }
   },
   beforeDestroy() {},
-  watch: {}
+  watch: {},
+  computed: {
+    config() {
+      return this.handler.config;
+    }
+  }
 };

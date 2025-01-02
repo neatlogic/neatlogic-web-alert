@@ -27,12 +27,14 @@ export default {
   props: {},
   data() {
     return {
-      configLocal: this.$utils.deepClone(this.config) || { uniqueAttrList: [] },
       attrList: []
     };
   },
   beforeCreate() {},
   created() {
+    if (this.$utils.isEmpty(this.configLocal)) {
+      this.configLocal = { uniqueAttrList: [] };
+    }
     this.listAlertAttrList();
   },
   beforeMount() {},

@@ -26,7 +26,7 @@
           v-if="handlerName && handlers[handlerName.toLowerCase() + '_eventhandler']"
           ref="pluginConfig"
           :event="event"
-          :config="eventHandlerData.config"
+          :handler="eventHandlerData"
         ></component>
       </div>
     </template>

@@ -1,5 +1,6 @@
 export { default as const_level } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-const-level.vue';
 export { default as const_alertTime } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-const-alerttime.vue';
+export { default as const_updateTime } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-const-updatetime.vue';
 export { default as const_type } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-const-type.vue';
 export { default as const_title } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-const-title.vue';
 export { default as const_status } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-const-status.vue';
