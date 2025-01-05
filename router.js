@@ -7,6 +7,7 @@ const alertManage = () => import('@/commercial-module/alert/pages/alert/alert-ma
 const attrTypeManage = () => import('@/commercial-module/alert/pages/attrtype/attrtype-manage.vue');
 const alertLevelManage = () => import('@/commercial-module/alert/pages/alertlevel/alertlevel-manage.vue');
 const alertEventManage = () => import('@/commercial-module/alert/pages/alertevent/alertevent-manage.vue');
+const alertOriginManage = () => import('@/commercial-module/alert/pages/alert/alert-origin-manage.vue');
 
 let routerArr = [
   {
@@ -53,6 +54,17 @@ let routerArr = [
     component: alertManage,
     meta: {
       title: '告警列表',
+      ismenu: true,
+      type: 'alert',
+      authority: 'ALERT_BASE'
+    }
+  },
+  {
+    path: '/alert-origin-manage',
+    name: 'alert-origin-manage',
+    component: alertOriginManage,
+    meta: {
+      title: '接入记录',
       ismenu: true,
       type: 'alert',
       authority: 'ALERT_BASE'

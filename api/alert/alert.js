@@ -31,11 +31,17 @@ const alert = {
   searchAlertAudit(params) {
     return axios.post('/api/rest/alert/audit/search', params);
   },
+  searchAlertEventAudit(params) {
+    return axios.post('/api/rest/alert/event/audit/search', params);
+  },
   searchAlertComment(params) {
     return axios.post('/api/rest/alert/comment/search', params);
   },
   deleteAlert(params) {
     return axios.post('/api/rest/alert/delete', params);
+  },
+  searchOriginalAlert(params) {
+    return axios.post('/api/rest/alert/origin/search', params);
   }
 };
 

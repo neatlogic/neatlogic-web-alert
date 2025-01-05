@@ -1,8 +1,13 @@
 <template>
-  <div v-if="row.teamList && row.teamList.length > 0">
+  <div v-if="mode !== 'audit' && row.teamList && row.teamList.length > 0">
     <span v-for="(team, index) in row.teamList" :key="index" class="mr-xs">
       <Tag>{{ team.teamName }}</Tag>
     </span>
+  </div>
+  <div v-else-if="mode === 'audit' && teamList && teamList.length > 0">
+    <Tag v-for="(team, index) in teamList" :key="index">
+      {{ team.name }}
+    </Tag>
   </div>
 </template>
 <script>
@@ -13,10 +18,14 @@ export default {
   extends: AttrViewerBase,
   props: {},
   data() {
-    return {};
+    return {
+      teamList: []
+    };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getTeamByIdList();
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -25,7 +34,15 @@ export default {
   deactivated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {},
+  methods: {
+    getTeamByIdList() {
+      if (this.mode === 'audit' && this.value && this.value.length > 0) {
+        this.$api.framework.team.getTeamListByUuid({ teamUuidList: this.value }).then(res => {
+          this.teamList = res.Return.teamList;
+        });
+      }
+    }
+  },
   filter: {},
   computed: {},
   watch: {}

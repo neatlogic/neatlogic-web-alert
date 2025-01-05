@@ -1,7 +1,12 @@
 <template>
-  <div v-if="row.userList && row.userList.length > 0">
+  <div v-if="mode !== 'audit' && row.userList && row.userList.length > 0">
     <span v-for="(user, index) in row.userList" :key="index" class="mr-xs">
       <UserCard :uuid="user.userId" :hideAvatar="false"></UserCard>
+    </span>
+  </div>
+  <div v-else-if="mode === 'audit' && value && value.length > 0">
+    <span v-for="(user, index) in value" :key="index" class="mr-xs">
+      <UserCard :uuid="user" :hideAvatar="false"></UserCard>
     </span>
   </div>
 </template>

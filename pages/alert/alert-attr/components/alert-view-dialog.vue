@@ -3,7 +3,12 @@
     <template v-slot>
       <div>
         <Tabs v-model="currentTab" :animated="false">
-          <TabPane v-if="alertData" label="告警详情" name="info">
+          <TabPane
+            v-if="alertData"
+            label="告警详情"
+            name="info"
+            :index="1"
+          >
             <div v-if="currentTab === 'info'">
               <div class="attr-main">
                 <div v-for="(attr, index) in attrList" :key="index" class="attr-item">
@@ -34,7 +39,7 @@
                 </div>
               </div>
               <Divider></Divider>
-              <TsFormItem label="状态" labelPosition="left">
+              <TsFormItem v-if="hasRole" label="状态" labelPosition="left">
                 <div class="action-group">
                   <div class="action-item"><Badge :color="alertData.statusColor" :status="alertData.statusStatus" :text="alertData.statusName"></Badge></div>
                   <div class="action-item"><Divider style="padding: 0px; margin: 0px" type="vertical"></Divider></div>
@@ -48,46 +53,58 @@
                   </div>
                 </div>
               </TsFormItem>
+              <TsFormItem v-if="hasRole" label="转交处理人" labelPosition="left">
+                <div class="action-group">
+                  <div class="action-item"><UserSelect
+                    v-model="applyUserList"
+                    :width="400"
+                    :multiple="true"
+                    :transfer="true"
+                    :groupList="['user']"
+                  ></UserSelect></div>
+                  <div class="action-item">
+                    <TsFormRadio v-model="applyUserType" :dataList="applyType"></TsFormRadio>
+                  </div>
+                </div>
+              </TsFormItem>
+              <TsFormItem v-if="hasRole" label="转交处理组" labelPosition="left">
+                <div class="action-group">
+                  <div class="action-item"><UserSelect
+                    v-model="applyTeamList"
+                    :width="400"
+                    :multiple="true"
+                    :transfer="true"
+                    :groupList="['team']"
+                  ></UserSelect></div>
+                  <div class="action-item">
+                    <TsFormRadio v-model="applyTeamType" :dataList="applyType"></TsFormRadio>
+                  </div>
+                </div>
+              </TsFormItem>
               <TsFormItem label="评论" labelPosition="left">
                 <TsCkeditor v-model="comment"></TsCkeditor>
               </TsFormItem>
             </div>
           </TabPane>
-          <TabPane v-if="alertOriginData" label="原始数据" name="origin">
-            <div v-if="currentTab === 'origin'">
-              <!--<TsFormItem label="状态">
-              <span>{{ alertOriginData.statusText }}</span>
-            </TsFormItem>-->
-              <TsFormItem label="上报时间" labelPosition="left" :labelWidth="80">
-                <span>{{ alertOriginData.time | formatDate }}</span>
-              </TsFormItem>
-              <TsFormItem label="原始数据" labelPosition="left" :labelWidth="80">
-                <div class="radius-md"><JsonViewer boxed copyable :value="alertOriginData.content"></JsonViewer></div>
-              </TsFormItem>
-            </div>
+          <TabPane
+            label="原始数据"
+            name="origin"
+            :index="2"
+          >
+            <AlertOriginal v-if="currentTab === 'origin'" :alertData="alertData"></AlertOriginal>
           </TabPane>
-          <TabPane v-if="auditData && auditData.tbodyList && auditData.tbodyList.length > 0" label="操作记录" name="audit">
-            <TsTable
-              v-if="currentTab === 'audit'"
-              :theadList="auditHeaderList"
-              v-bind="auditData"
-              @changeCurrent="searchAlertAudit"
-            >
-              <template v-slot:attrName="{ row }">
-                {{ getAttrByName(row.attrName) && getAttrByName(row.attrName).label }}
-              </template>
-              <template v-slot:inputUser="{ row }">
-                <UserCard :uuid="row.inputUser" :hideAvatar="true"></UserCard>
-              </template>
-              <template v-slot:oldValue="{ row }">
-                <AlertAttrViewer mode="audit" :attr="getAttrByName(row.attrName)" :value="row.oldValueList"></AlertAttrViewer>
-              </template>
-              <template v-slot:newValue="{ row }">
-                <AlertAttrViewer mode="audit" :attr="getAttrByName(row.attrName)" :value="row.newValueList"></AlertAttrViewer>
-              </template>
-            </TsTable>
+          <TabPane label="操作记录" name="audit" :index="3">
+            <AlertViewAudit v-if="currentTab === 'audit'" :alertData="alertData" :attrList="attrList"></AlertViewAudit>
           </TabPane>
-          <TabPane v-if="commentData && commentData.tbodyList && commentData.tbodyList.length > 0" label="评论" name="comment">
+          <TabPane label="事件记录" name="eventaudit" :index="4">
+            <AlertViewEventAudit v-if="currentTab === 'eventaudit'" :alertData="alertData"></AlertViewEventAudit>
+          </TabPane>
+          <TabPane
+            v-if="commentData && commentData.tbodyList && commentData.tbodyList.length > 0"
+            :index="5"
+            label="评论"
+            name="comment"
+          >
             <Timeline>
               <TimelineItem v-for="(c, index) in commentData.tbodyList" :key="index">
                 <div class="time text-grey mb-md">{{ c.commentTime | formatDate }}</div>
@@ -144,13 +161,17 @@
 export default {
   name: '',
   components: {
+    AlertViewAudit: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-audit-list.vue'),
+    AlertViewEventAudit: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list.vue'),
     UserCard: () => import('@/resources/components/UserCard/UserCard.vue'),
-    JsonViewer: () => import('vue-json-viewer'),
+    AlertOriginal: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-original.vue'),
     TsCkeditor: () => import('@/resources/plugins/TsCkeditor/TsCkeditor.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
-    TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue')
+    //TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
+    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
+    UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue'),
+    TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio')
   },
   props: {
     id: { type: Number },
@@ -160,10 +181,10 @@ export default {
     return {
       currentTab: 'info',
       alertData: null,
-      alertOriginData: null,
+      
       dialogConfig: {
         title: '告警详情',
-        width: 'medium',
+        width: 'large',
         isShow: true,
         maskClose: true
       },
@@ -174,28 +195,25 @@ export default {
         { value: 'resolved', text: '已处理', color: '', status: '' },
         { value: 'closed', text: '已关闭', color: '', status: '' }
       ],
-      auditHeaderList: [
-        { key: 'inputTime', title: '操作时间', type: 'time' },
-        { key: 'inputUser', title: '操作用户' },
-        { key: 'inputFrom', title: '操作来源' },
-        { key: 'attrName', title: '属性' },
-        { key: 'oldValue', title: '操作前' },
-        { key: 'newValue', title: '操作后' }
-      ],
       attrList: [],
       selectedStatus: null,
       comment: null,
-      auditData: null,
       isChangeChildAlertStatus: 0,
-      commentData: null
+      commentData: null,
+      applyType: [
+        { value: 'append', text: '追加' },
+        { value: 'replace', text: '替换' }
+      ],
+      applyUserList: [],
+      applyTeamList: [],
+      applyUserType: 'append',
+      applyTeamType: 'append'
     };
   },
   beforeCreate() {},
   async created() {
     this.listAlertAttrList();
     await this.getAlertById();
-    await this.getAlertOriginalById();
-    await this.searchAlertAudit();
     await this.searchAlertComment();
   },
   beforeMount() {},
@@ -216,15 +234,6 @@ export default {
         this.commentData = res.Return;
       });
     },
-    async searchAlertAudit(currentPage) {
-      const param = { alertId: this.id };
-      if (currentPage) {
-        param.currentPage = currentPage;
-      }
-      await this.$api.alert.alert.searchAlertAudit(param).then(res => {
-        this.auditData = res.Return;
-      });
-    },
     changeStatus(status) {
       this.selectedStatus = this.selectedStatus === status.value ? null : status.value;
     },
@@ -240,13 +249,7 @@ export default {
     close(needRefresh) {
       this.$emit('close', needRefresh);
     },
-    async getAlertOriginalById() {
-      if (this.id) {
-        await this.$api.alert.alert.getAlertOriginById(this.id).then(res => {
-          this.alertOriginData = res.Return;
-        });
-      }
-    },
+    
     async getAlertById() {
       if (this.id) {
         await this.$api.alert.alert.getAlertById(this.id).then(res => {
@@ -262,6 +265,14 @@ export default {
       if (this.comment) {
         alertData.comment = this.comment;
       }
+      if (this.applyUserList && this.applyUserList.length > 0) {
+        alertData.applyUserList = this.applyUserList.map(d => d.replace('user#', ''));
+        alertData.applyUserType = this.applyUserType;
+      }
+      if (this.applyTeamList && this.applyTeamList.length > 0) {
+        alertData.applyTeamList = this.applyTeamList.map(d => d.replace('team#', ''));
+        alertData.applyTeamType = this.applyTeamType;
+      }
       alertData.isChangeChildAlertStatus = this.isChangeChildAlertStatus;
       this.$api.alert.alert.handleAlert(alertData).then(res => {
         if (res.Status === 'OK') {
@@ -269,17 +280,31 @@ export default {
           this.close(true);
         }
       });
-    },
-    getAttrByName(name) {
-      if (this.attrList) {
-        return this.attrList.find(d => d.name === name);
-      }
     }
   },
   filter: {},
   computed: {
     finalStatusList() {
       return this.statusList.filter(d => d.value !== this.alertData.status);
+    },
+    hasRole() {
+      if (this.alertData) {
+        const userInfo = this.$AuthUtils.getCurrentUser();
+        if (this.alertData.userList) {
+          if (this.alertData.userList.find(d => d.userId === userInfo.uuid)) {
+            return true;
+          }
+        }
+        if (this.alertData.teamList && userInfo.teamList) {
+          for (let i = 0; i < this.alertData.teamList.length; i++) {
+            const team = this.alertData.teamList[i];
+            if (userInfo.teamList.find(d => d.uuid === team.teamUuid)) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
     }
   },
   watch: {}
