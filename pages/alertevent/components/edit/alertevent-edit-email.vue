@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TsFormItem :required="true" label="标题" :labelPosition="isChild ? 'left' : 'right'">
+    <TsFormItem :required="true" label="标题" labelPosition="left">
       <TsFormInput
         ref="txtTitle"
         v-model="configLocal.title"
@@ -19,7 +19,7 @@
         >{{ attr.label }}</Tag>
       </div>
     </TsFormItem>
-    <TsFormItem :required="true" label="内容" :labelPosition="isChild ? 'left' : 'right'">
+    <TsFormItem :required="true" label="内容" labelPosition="left">
       <div>
         <div>
           <Poptip
@@ -54,7 +54,7 @@
         codeMode="html"
       ></TsCodemirror>
     </TsFormItem>
-    <TsFormItem :required="true" :labelPosition="isChild ? 'left' : 'right'" label="收件人">
+    <TsFormItem :required="true" labelPosition="left" label="收件人">
       <UserSelect
         ref="sltToUser"
         v-model="configLocal.toUserList"
@@ -64,7 +64,7 @@
         :groupList="['user']"
       ></UserSelect>
     </TsFormItem>
-    <TsFormItem :labelPosition="isChild ? 'left' : 'right'" label="抄送">
+    <TsFormItem labelPosition="left" label="抄送">
       <UserSelect
         v-model="configLocal.ccUserList"
         :multiple="true"
@@ -72,7 +72,7 @@
         :groupList="['user']"
       ></UserSelect>
     </TsFormItem>
-    <TsFormItem :labelPosition="isChild ? 'left' : 'right'" label="通知间隔">
+    <TsFormItem labelPosition="left" label="通知间隔">
       <div class="grid">
         <div>
           <TsFormSelect

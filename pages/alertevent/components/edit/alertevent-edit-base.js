@@ -2,10 +2,9 @@ export const AlertEventBase = {
   components: {},
   props: {
     level: { type: Number, default: 1 },
-    handler: {type: Object},
+    handler: { type: Object },
     event: { type: Object },
     isChild: { type: Boolean, default: false }
-    
   },
   data() {
     return {

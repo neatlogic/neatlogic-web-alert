@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TsFormItem label="唯一属性">
+    <TsFormItem label="唯一属性" :labelPosition="isChild?'top':'left'">
       <div class="text-grey">帮助：唯一属性值相同的告警将会收敛成一条告警</div>
       <TsFormCheckbox
         :dataList="attrList"

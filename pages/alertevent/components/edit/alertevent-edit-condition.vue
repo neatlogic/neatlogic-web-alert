@@ -1,6 +1,6 @@
 <template>
   <div>
-    <component :is="isChild ? 'div' : 'TsFormItem'" label="条件">
+    <component :is="isChild ? 'div' : 'TsFormItem'" label="条件" labelPosition="left">
       <div>
         <div
           v-for="(condition, index) in configLocal.conditionList"

@@ -26,7 +26,7 @@ export default {
     };
   },
   beforeCreate() {},
-  async created() {},
+  created() {},
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -37,7 +37,8 @@ export default {
   destroyed() {},
   methods: {},
   filter: {},
-  computed: {},
+  computed: {
+  },
   watch: {}
 };
 </script>

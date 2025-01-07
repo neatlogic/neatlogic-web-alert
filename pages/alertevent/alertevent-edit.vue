@@ -2,23 +2,23 @@
   <TsDialog v-bind="dialogConfig" @on-close="close()">
     <template v-slot>
       <div>
-        <TsFormItem :required="true" label="名称">
+        <TsFormItem :required="true" label="名称" labelPosition="left">
           <TsFormInput
             ref="txtName"
             v-model="eventHandlerData.name"
             border="border"
             :maxlength="50"
-            :validateList="['required']"
+            :validateList="[{ name: 'required', message: ' ' }]"
           ></TsFormInput>
         </TsFormItem>
-        <TsFormItem label="事件">
+        <TsFormItem label="事件" labelPosition="left">
           <span>{{ event.label }}·{{ event.name }}</span>
         </TsFormItem>
-        <TsFormItem label="插件">
+        <TsFormItem label="插件" labelPosition="left">
           <span v-if="plugin">{{ plugin.label }}·{{ plugin.name }}</span>
           <span v-else-if="eventHandlerData">{{ eventHandlerData.handlerName }}·{{ eventHandlerData.handler }}</span>
         </TsFormItem>
-        <TsFormItem label="是否激活">
+        <TsFormItem label="是否激活" labelPosition="left">
           <TsFormSwitch v-model="eventHandlerData.isActive" :trueValue="1" :falseValue="0"></TsFormSwitch>
         </TsFormItem>
         <component
@@ -104,7 +104,7 @@ export default {
       if (txtName && !txtName.valid()) {
         isValid = false;
       }
-      if (pluginConfig && !await pluginConfig.valid()) {
+      if (pluginConfig && !(await pluginConfig.valid())) {
         isValid = false;
       }
       if (isValid) {

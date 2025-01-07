@@ -62,6 +62,15 @@
         <span class="text-grey">分钟</span>
       </div>
     </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.hasOwnProperty('result')"
+      labelPosition="left"
+      :labelWidth="70"
+      label="发送结果"
+    >
+      <span v-if="configLocal.result" class="text-success">发送成功</span>
+      <span v-else class="text-error">发送失败，异常：{{ configLocal.error }}</span>
+    </TsFormItem>
   </div>
 </template>
 <script>

@@ -8,7 +8,7 @@ export const AlertEventBase = {
   },
   data() {
     return {
-      configLocal: this.$utils.deepClone(this.handler.config) || {}
+      configLocal: this.$utils.deepClone(this.handler.config || this.handler.result) || {}
     };
   },
   methods: {
@@ -25,7 +25,8 @@ export const AlertEventBase = {
   watch: {},
   computed: {
     config() {
-      return this.handler.config;
+      //如果是审计记录配置在result中
+      return this.handler.config || this.handler.result;
     }
   }
 };

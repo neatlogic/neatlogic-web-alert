@@ -17,9 +17,15 @@
         :level="level"
         :attrList="attrList"
       ></ConditionGroup>
-      <div class="mt-md">
+      <div v-if="condition.hasOwnProperty('result')" class="mt-md">
+        <span class="text-grey mr-sm"><b>判定结果</b></span>
+        <span :class="{ 'text-success': condition.result, 'text-error': !condition.result }">{{ condition.result }}</span>
+      </div>
+      <div v-if="condition.handler" class="mt-md">
         <div class="handler-container">
-          <Divider orientation="start"><h4 class="text-grey" :class="condition.handler.icon">{{ condition.handler.name }}</h4></Divider>
+          <Divider orientation="start">
+            <h4 class="text-grey" :class="condition.handler.icon">{{ condition.handler.name }}</h4>
+          </Divider>
           <component
             :is="handlers && handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
             v-if="handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
@@ -67,7 +73,7 @@ export default {
   destroyed() {},
   methods: {
     listEventPlugin() {
-      this.$api.alert.alertevent.listEventPlugin({eventName: this.event.name}).then(res => {
+      this.$api.alert.alertevent.listEventPlugin({ eventName: this.event.name }).then(res => {
         this.pluginList = res.Return;
       });
     },
@@ -82,5 +88,4 @@ export default {
   watch: {}
 };
 </script>
-<style lang="less">
-</style>
+<style lang="less"></style>
