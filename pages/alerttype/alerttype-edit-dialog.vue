@@ -2,6 +2,21 @@
   <TsDialog v-bind="dialogConfig" @on-ok="save()" @on-close="close()">
     <template v-slot>
       <TsForm ref="form" v-model="alertTypeData" :item-list="formConfig">
+        <template v-slot:attrTypeList>
+          <div>
+            <TsFormSelect
+              v-model="alertTypeData.attrTypeIdList"
+              dynamicUrl="/api/rest/alert/attrtype/search"
+              :params="{ isActive: 1 }"
+              rootName="tbodyList"
+              valueName="id"
+              textName="label"
+              :multiple="true"
+              transfer
+              border="border"
+            ></TsFormSelect>
+          </div>
+        </template>
         <template v-slot:fileId>
           <div class="text-grey">
             <div>帮助</div>
@@ -30,9 +45,11 @@
   </TsDialog>
 </template>
 <script>
+
 export default {
   name: '',
   components: {
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
     TsUpLoad: () => import('@/resources/components/UpLoad/UpLoad.vue')
   },
@@ -70,6 +87,10 @@ export default {
           trueValue: 1,
           falseValue: 0
         },
+        attrTypeList: {
+          label: '扩展属性',
+          type: 'slot'
+        },
         fileId: {
           label: this.$t('page.plugins'),
           type: 'slot'
@@ -78,8 +99,8 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {
-    this.getAlertTypeById();
+  async created() {
+    await this.getAlertTypeById();
   },
   beforeMount() {},
   mounted() {},
@@ -109,16 +130,27 @@ export default {
         this.$delete(this.alertTypeData, 'fileId');
       }
     },
-    getAlertTypeById() {
+    async getAlertTypeById() {
       if (this.id) {
-        this.$api.alert.alerttype.getAlertTypeById(this.id).then(res => {
+        await this.$api.alert.alerttype.getAlertTypeById(this.id).then(res => {
           this.alertTypeData = res.Return;
         });
+      }
+    },
+    isAttrSelected(attr) {
+      return this.alertTypeData.attrTypeList.some(item => item.id === attr.id);
+    },
+    toggleAttr(attr) {
+      if (this.isAttrSelected(attr)) {
+        this.alertTypeData.attrTypeList = this.alertTypeData.attrTypeList.filter(item => item.id !== attr.id);
+      } else {
+        this.alertTypeData.attrTypeList = [...this.alertTypeData.attrTypeList, attr];
       }
     }
   },
   filter: {},
-  computed: {},
+  computed: {
+  },
   watch: {}
 };
 </script>

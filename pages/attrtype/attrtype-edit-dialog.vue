@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      attrTypeData: {},
+      attrTypeData: { isActive: 1 },
       dialogConfig: {
         title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('page.attribute') }) : this.$t('dialog.title.addtarget', { target: this.$t('page.attribute') }),
         width: 'small',
@@ -47,7 +47,7 @@ export default {
           validateList: ['required'],
           dataList: [
             { value: 'number', text: '数字' },
-            { value: 'text', text: '字符串' },
+            { value: 'string', text: '字符串' },
             { value: 'datetime', text: '日期时间' },
             { value: 'jsonobj', text: 'json对象' },
             { value: 'jsonlist', text: 'json数组' }

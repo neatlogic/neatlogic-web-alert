@@ -25,8 +25,7 @@
                 'text-error': audit.status === 'failed',
                 'text-primary': audit.status === 'running'
               }"
-            >
-              {{ audit.statusName }}
+            >{{ audit.statusName }}
             </span>
           </div>
         </Col>
@@ -35,7 +34,7 @@
           <div class="item-content">{{ getTimeCost(audit.timeCost) }}</div>
         </Col>
       </TsRow>
-      <div v-if="audit.result && !hideChild[audit.id.toString()]">
+      <div v-if="audit.result && !hideChild[audit.id.toString()]" :style="{ 'padding-left': level * 10 + 'px' }">
         <AlertEventViewer :eventHandlerData="audit"></AlertEventViewer>
       </div>
       <div v-if="audit.childAuditList && audit.childAuditList.length > 0 && !hideChild[audit.id.toString()]">

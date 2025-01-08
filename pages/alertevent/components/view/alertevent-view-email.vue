@@ -69,7 +69,7 @@
       label="发送结果"
     >
       <span v-if="configLocal.result" class="text-success">发送成功</span>
-      <span v-else class="text-error">发送失败，异常：{{ configLocal.error }}</span>
+      <span v-else class="text-error">{{ configLocal.error }}</span>
     </TsFormItem>
   </div>
 </template>

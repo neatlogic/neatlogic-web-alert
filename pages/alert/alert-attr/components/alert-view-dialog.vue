@@ -11,7 +11,7 @@
           >
             <div v-if="currentTab === 'info'">
               <div class="attr-main">
-                <div v-for="(attr, index) in attrList" :key="index" class="attr-item">
+                <div v-for="(attr, index) in finalAttrList" :key="index" class="attr-item">
                   <div class="attr-title text-grey">{{ attr.label }}</div>
                   <div class="attr-content">
                     <span v-if="attr.kind === 'const'">
@@ -38,7 +38,7 @@
                   </div>
                 </div>
               </div>
-              <Divider></Divider>
+              <Divider v-if="hasRole"></Divider>
               <TsFormItem v-if="hasRole" label="状态" labelPosition="left">
                 <div class="action-group">
                   <div class="action-item"><Badge :color="alertData.statusColor" :status="alertData.statusStatus" :text="alertData.statusName"></Badge></div>
@@ -81,16 +81,12 @@
                   </div>
                 </div>
               </TsFormItem>
-              <TsFormItem label="评论" labelPosition="left">
+              <TsFormItem v-if="hasRole" label="评论" labelPosition="left">
                 <TsCkeditor v-model="comment"></TsCkeditor>
               </TsFormItem>
             </div>
           </TabPane>
-          <TabPane
-            label="原始数据"
-            name="origin"
-            :index="2"
-          >
+          <TabPane label="原始数据" name="origin" :index="2">
             <AlertOriginal v-if="currentTab === 'origin'" :alertData="alertData"></AlertOriginal>
           </TabPane>
           <TabPane label="操作记录" name="audit" :index="3">
@@ -150,7 +146,7 @@
         <div class="action-item">
           <Button @click="close()">{{ $t('page.close') }}</Button>
         </div>
-        <div v-if="currentTab === 'info'" class="action-item">
+        <div v-if="currentTab === 'info' && hasRole" class="action-item">
           <Button type="primary" @click="confirm()">{{ $t('page.confirm') }}</Button>
         </div>
       </div>
@@ -181,7 +177,7 @@ export default {
     return {
       currentTab: 'info',
       alertData: null,
-      
+      alertTypeData: null,
       dialogConfig: {
         title: '告警详情',
         width: 'large',
@@ -239,9 +235,6 @@ export default {
     },
     listAlertAttrList() {
       const param = {};
-      if (this.view) {
-        param.viewId = this.view.id;
-      }
       this.$api.alert.alert.listAlertAttrList(param).then(res => {
         this.attrList = res.Return;
       });
@@ -249,11 +242,19 @@ export default {
     close(needRefresh) {
       this.$emit('close', needRefresh);
     },
-    
+
     async getAlertById() {
       if (this.id) {
         await this.$api.alert.alert.getAlertById(this.id).then(res => {
           this.alertData = res.Return;
+          this.getAlertTypeById(this.alertData.type);
+        });
+      }
+    },
+    async getAlertTypeById(id) {
+      if (id) {
+        await this.$api.alert.alerttype.getAlertTypeById(id).then(res => {
+          this.alertTypeData = res.Return;
         });
       }
     },
@@ -305,6 +306,21 @@ export default {
         }
       }
       return false;
+    },
+    finalAttrList() {
+      const attrList = [];
+      if (this.attrList && this.attrList.length > 0 && this.alertTypeData) {
+        this.attrList.forEach(d => {
+          if (d.kind === 'const') {
+            attrList.push(d);
+          } else if (this.alertTypeData.attrTypeIdList && this.alertTypeData.attrTypeIdList.length > 0) {
+            if (this.alertTypeData.attrTypeIdList.includes(d.id)) {
+              attrList.push(d);
+            }
+          }
+        });
+      }
+      return attrList;
     }
   },
   watch: {}

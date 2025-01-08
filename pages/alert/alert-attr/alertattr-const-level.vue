@@ -10,7 +10,6 @@
 </template>
 <script>
 import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';
-
 export default {
   name: '',
   components: {},
@@ -36,7 +35,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.level {
-  background: var(--color);
+/deep/.level {
+  background: var(--color) !important;
 }
 </style>
