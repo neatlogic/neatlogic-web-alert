@@ -1,12 +1,17 @@
 <template>
   <div>
-    <div v-for="(audit, aindex) in auditList" :key="aindex" class="comment-grid mb-md">
+    <div
+      v-for="(audit, aindex) in auditList"
+      :key="aindex"
+      class="comment-grid"
+      :class="{ 'mt-md': aindex > 0 }"
+    >
       <TsRow>
         <Col span="8" :style="{ 'padding-left': level * 10 + 'px' }">
           <span
             v-if="audit.childAuditList && audit.childAuditList.length > 0"
             class="text-grey cursor"
-            :class="{ 'tsfont-drop-down': true }"
+            :class="{ 'tsfont-drop-down': !hideChild[audit.id], 'tsfont-drop-right': hideChild[audit.id] }"
             @click="toggleChild(audit.id.toString())"
           ></span>
           <span v-else class="text-grey tsfont-dot"></span>
@@ -25,7 +30,8 @@
                 'text-error': audit.status === 'failed',
                 'text-primary': audit.status === 'running'
               }"
-            >{{ audit.statusName }}
+            >
+              {{ audit.statusName }}
             </span>
           </div>
         </Col>
@@ -34,10 +40,10 @@
           <div class="item-content">{{ getTimeCost(audit.timeCost) }}</div>
         </Col>
       </TsRow>
-      <div v-if="audit.result && !hideChild[audit.id.toString()]" :style="{ 'padding-left': level * 10 + 'px' }">
-        <AlertEventViewer :eventHandlerData="audit"></AlertEventViewer>
+      <div v-if="audit.result && !hideChild[audit.id.toString()]" class="mt-md" :style="{ 'padding-left': level * 10 + 'px' }">
+        <AlertEventViewer :eventHandlerData="audit" :level="level" mode="audit"></AlertEventViewer>
       </div>
-      <div v-if="audit.childAuditList && audit.childAuditList.length > 0 && !hideChild[audit.id.toString()]">
+      <div v-if="audit.childAuditList && audit.childAuditList.length > 0 && !hideChild[audit.id.toString()]" class="mt-md">
         <AuditItem :level="level + 1" :auditList="audit.childAuditList"></AuditItem>
       </div>
     </div>

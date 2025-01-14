@@ -1,11 +1,13 @@
 <template>
-  <div>
+  <div :class="{ 'bg-grey': level % 2 === 0, 'bg-op': level % 2 !== 0 }" class="radius-md">
     <component
       :is="handlers[eventHandlerData.handler.toLowerCase() + '_eventhandler']"
       v-if="handlers[eventHandlerData.handler.toLowerCase() + '_eventhandler']"
       ref="pluginConfig"
       :event="{ name: eventHandlerData.event, label: eventHandlerData.eventName }"
       :handler="eventHandlerData"
+      :level="level"
+      :mode="mode"
     ></component>
     <div v-else>插件{{ eventHandlerData.handler }}不存在</div>
   </div>
@@ -18,6 +20,8 @@ export default {
     ...handlers
   },
   props: {
+    mode: { type: String, default: 'edit' }, //edit|audit
+    level: { type: Number, default: 0 },
     eventHandlerData: { type: Object }
   },
   data() {
@@ -37,8 +41,7 @@ export default {
   destroyed() {},
   methods: {},
   filter: {},
-  computed: {
-  },
+  computed: {},
   watch: {}
 };
 </script>

@@ -1,11 +1,20 @@
 <template>
-  <div>
-    <TsFormItem :required="true" label="分配给" :labelPosition="isChild ? 'left' : 'right'">
+  <div
+    class="radius-md cc"
+    :class="{
+      'padding-md': isChild,
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
+    <TsFormItem :required="true" label="分配给" labelPosition="left">
       <UserSelect
+        ref="userSelect"
         :value="userTeamList"
         :multiple="true"
         :transfer="true"
         :groupList="['user', 'team']"
+        :validateList="[{ name: 'required', message: ' ' }]"
         @on-change="setUserTeam"
       ></UserSelect>
       <div class="text-grey mt-md">帮助：可以同时分配给多个用户或分组，分配到的用户或分组下的用户均可以对告警进行处理</div>
@@ -37,6 +46,10 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    async valid() {
+      const isValid = this.$refs.userSelect.valid();
+      return isValid;
+    },
     setUserTeam(val) {
       this.configLocal.userIdList = [];
       this.configLocal.teamIdList = [];

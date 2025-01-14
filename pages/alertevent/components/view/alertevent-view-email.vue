@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div
+    class="radius-md padding-md"
+    :class="{
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
     <TsFormItem
       style="margin: 0px !important"
       label="标题"

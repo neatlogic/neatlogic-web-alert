@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div
+    class="padding-md radius-md"
+    :class="{
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
     <div v-if="configLocal.userIdList && configLocal.userIdList.length > 0">
       <Divider orientation="start">处理人</Divider>
       <div>

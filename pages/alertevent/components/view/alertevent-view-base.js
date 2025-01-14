@@ -1,6 +1,7 @@
 export const AlertEventBase = {
   components: {},
   props: {
+    mode: { type: String, default: 'edit' }, //edit|audit
     level: { type: Number, default: 1 },
     handler: { type: Object },
     event: { type: Object },

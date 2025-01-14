@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <div
+    class="radius-md cc"
+    :class="{
+      'padding-md': isChild,
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
     <TsFormItem :required="true" label="标题" labelPosition="left">
       <TsFormInput
         ref="txtTitle"
@@ -72,7 +79,7 @@
         :groupList="['user']"
       ></UserSelect>
     </TsFormItem>
-    <TsFormItem labelPosition="left" label="通知间隔">
+    <!--<TsFormItem labelPosition="left" label="通知间隔">
       <div class="grid">
         <div>
           <TsFormSelect
@@ -90,7 +97,7 @@
         ></TsFormInput></div>
       </div>
       <div class="text-grey">当告警首次处于以上状态时，每隔(?)分钟再进行通知</div>
-    </TsFormItem>
+    </TsFormItem>-->
   </div>
 </template>
 <script>
@@ -101,7 +108,7 @@ export default {
   name: '',
   directives: { clipboard },
   components: {
-    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
+    //TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     FreemarkerHelp: () => import('@/commercial-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror'),

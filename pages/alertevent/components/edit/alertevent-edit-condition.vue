@@ -1,16 +1,17 @@
 <template>
-  <div>
+  <div
+    class="radius-md cc"
+    :class="{
+      'padding-md': isChild,
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
     <component :is="isChild ? 'div' : 'TsFormItem'" label="条件" labelPosition="left">
       <div>
         <div
           v-for="(condition, index) in configLocal.conditionList"
           :key="index"
-          class="radius-md"
-          :class="{
-            padding: isChild,
-            'bg-op': level % 2 === 0,
-            'bg-grey': level % 2 !== 0
-          }"
         >
           <ConditionGroup
             v-model="condition.rule"
@@ -20,14 +21,17 @@
           ></ConditionGroup>
           <div class="mt-md">
             <div v-if="!condition.handler">
-              <Dropdown placement="bottom-start" :transfer="true">
-                <a href="javascript:void(0)" class="tsfont-plus">添加插件</a>
-                <DropdownMenu slot="list">
-                  <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(condition, plugin)">
-                    <span :class="plugin.icon">{{ plugin.label }}</span>
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+              <div v-if=" pluginList && pluginList.length > 0">
+                <Dropdown placement="bottom-start" :transfer="true">
+                  <a href="javascript:void(0)" class="tsfont-plus">添加插件</a>
+                  <DropdownMenu slot="list">
+                    <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(condition, plugin)">
+                      <span :class="plugin.icon">{{ plugin.label }}</span>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
+              <div v-else class="text-error">没有可用插件</div>
             </div>
             <div v-else class="handler-container">
               <div class="tsfont-close-s text-grey cursor del-handler" @click="$set(condition, 'handler', null)"></div>
@@ -97,7 +101,7 @@ export default {
       this.error = '';
     },
     listEventPlugin() {
-      this.$api.alert.alertevent.listEventPlugin({ eventName: this.event.name }).then(res => {
+      this.$api.alert.alertevent.listEventPlugin({ eventName: this.event.name, parentPlugin: this.handler.handler }).then(res => {
         this.pluginList = res.Return;
       });
     },

@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div
+    class="padding-md radius-md cc"
+    :class="{
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
     <div
       v-for="(condition, index) in configLocal.conditionList"
       :key="index"
-      class="padding-md radius-md"
-      :class="{
-        padding: isChild,
-        'bg-op': level % 2 === 0,
-        'bg-grey': level % 2 !== 0
-      }"
     >
       <ConditionGroup
         v-model="condition.rule"
@@ -32,6 +32,7 @@
             :ref="'pluginConfig' + index"
             :handler="condition.handler"
             :event="event"
+            :mode="mode"
             :isChild="true"
             :level="level + 1"
           ></component>
@@ -55,6 +56,7 @@ export default {
       attrList: [],
       pluginList: [],
       handlers: []
+      //AlertEventViewer: null
     };
   },
   beforeCreate() {},

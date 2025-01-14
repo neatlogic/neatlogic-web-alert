@@ -1,5 +1,12 @@
 <template>
-  <div>
+  <div
+    class="radius-md cc"
+    :class="{
+      'padding-md': isChild,
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
     <TsFormItem :required="true" label="删除子告警" :labelPosition="isChild ? 'left' : 'right'">
       <TsFormSwitch
         v-model="configLocal.isDeleteChildAlert"

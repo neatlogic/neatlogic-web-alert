@@ -1,5 +1,11 @@
 <template>
-  <div class="text-grey">
+  <div
+    class="padding-md radius-md cc"
+    :class="{
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
     <div v-if="configLocal.isDeleteChildAlert">
       同时删除父告警和子告警
     </div>

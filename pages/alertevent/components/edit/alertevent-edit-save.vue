@@ -1,12 +1,19 @@
 <template>
-  <div>
-    <TsFormItem label="唯一属性" :labelPosition="isChild?'top':'left'">
+  <div
+    class="radius-md cc"
+    :class="{
+      'padding-md': isChild,
+      'bg-grey': level % 2 !== 0,
+      'bg-op': level % 2 === 0
+    }"
+  >
+    <TsFormItem label="唯一属性" :labelPosition="isChild ? 'top' : 'left'">
       <div class="text-grey">帮助：唯一属性值相同的告警将会收敛成一条告警</div>
       <TsFormCheckbox
         :dataList="attrList"
         valueName="name"
         textName="label"
-        :value="configLocal.uniqueAttrList.map(d=>d.name)"
+        :value="configLocal.uniqueAttrList.map(d => d.name)"
         @on-change="selectAttr"
       ></TsFormCheckbox>
       <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
@@ -54,7 +61,6 @@ export default {
         this.attrList = res.Return;
       });
     }
-   
   },
   filter: {},
   computed: {},

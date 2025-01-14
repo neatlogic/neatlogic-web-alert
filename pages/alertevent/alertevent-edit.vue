@@ -25,6 +25,7 @@
           :is="handlers[handlerName.toLowerCase() + '_eventhandler']"
           v-if="handlerName && handlers[handlerName.toLowerCase() + '_eventhandler']"
           ref="pluginConfig"
+          :level="1"
           :event="event"
           :handler="eventHandlerData"
         ></component>
@@ -111,7 +112,6 @@ export default {
         if (pluginConfig) {
           this.eventHandlerData.config = pluginConfig.getConfig();
         }
-        console.log(JSON.stringify(this.eventHandlerData, null, 2));
         this.$api.alert.alertevent.saveAlertEventHandler(this.eventHandlerData).then(() => {
           this.close(true);
         });
