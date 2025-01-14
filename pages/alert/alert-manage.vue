@@ -79,6 +79,7 @@
           <template v-slot:action="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
+                <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
                 <li class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
               </ul>
             </div>
@@ -134,6 +135,9 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    toAlertDetail(row) {
+      window.open(HOME + '/alert.html#/alert-detail/' + row.id, '_blank');
+    },
     closeAlertDelete(needRefresh) {
       this.isDeleteShow = false;
       this.currentAlertId = null;

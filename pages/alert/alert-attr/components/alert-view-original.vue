@@ -1,10 +1,16 @@
 <template>
   <div v-if="alertOriginData">
-    <TsFormItem label="上报时间" labelPosition="left" :labelWidth="80">
+    <TsFormItem label="上报时间" labelPosition="left">
       <span>{{ alertOriginData.time | formatDate }}</span>
     </TsFormItem>
-    <TsFormItem label="原始数据" labelPosition="left" :labelWidth="80">
-      <div class="radius-md bg-op padding-md">{{ alertOriginData.content }}</div>
+    <TsFormItem label="原始数据" labelPosition="left">
+      <JsonViewer
+        v-if="isJson(alertOriginData.content)"
+        :expanded="true"
+        copyable
+        :value="JSON.parse(alertOriginData.content)"
+      ></JsonViewer>
+      <div v-else class="radius-md bg-op padding-md">{{ alertOriginData.content }}</div>
     </TsFormItem>
   </div>
 </template>
@@ -12,7 +18,8 @@
 export default {
   name: '',
   components: {
-    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    JsonViewer: () => import('vue-json-viewer')
   },
   props: {
     alertData: { type: Object }
@@ -41,6 +48,14 @@ export default {
           this.alertOriginData = res.Return;
         });
       }
+    },
+    isJson(content) {
+      try {
+        JSON.parse(content);
+        return true;
+      } catch (e) {
+        return false;
+      }
     }
   },
   filter: {},
@@ -48,4 +63,11 @@ export default {
   watch: {}
 };
 </script>
-<style lang="less"></style>
+<style lang="less" scoped>
+/deep/.jv-code {
+  padding: 0 !important;
+}
+/deep/.jv-container {
+  padding: 0 !important;
+}
+</style>

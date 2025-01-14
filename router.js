@@ -4,6 +4,7 @@ const noAuthority = () => import('@/views/pages/common/no-authority.vue');
 const welcome = () => import('@/views/pages/common/welcome.vue');
 const alertTypeManage = () => import('@/commercial-module/alert/pages/alerttype/alerttype-manage.vue');
 const alertManage = () => import('@/commercial-module/alert/pages/alert/alert-manage.vue');
+const alertDetail = () => import('@/commercial-module/alert/pages/alert/alert-detail.vue');
 const attrTypeManage = () => import('@/commercial-module/alert/pages/attrtype/attrtype-manage.vue');
 const alertLevelManage = () => import('@/commercial-module/alert/pages/alertlevel/alertlevel-manage.vue');
 const alertEventManage = () => import('@/commercial-module/alert/pages/alertevent/alertevent-manage.vue');
@@ -55,6 +56,17 @@ let routerArr = [
     meta: {
       title: '告警列表',
       ismenu: true,
+      type: 'alert',
+      authority: 'ALERT_BASE'
+    }
+  },
+  {
+    path: '/alert-detail/:id?',
+    name: 'alert-detail',
+    component: alertDetail,
+    meta: {
+      title: '告警详情',
+      ismenu: false,
       type: 'alert',
       authority: 'ALERT_BASE'
     }

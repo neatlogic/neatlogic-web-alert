@@ -43,7 +43,7 @@
               <div v-for="(eventhandler, index) in eventHandlerList" :key="index" class="event-grid">
                 <div style="text-align: center" class="pt-md">
                   <h3 class="text-grey tsfont-drag" style="cursor: move">
-                    <span>{{ eventhandler.sort }}</span>
+                    <span>{{ index + 1 }}</span>
                   </h3>
                 </div>
                 <div class="border-base padding-md radius-md mb-md bg-op">

@@ -27,7 +27,6 @@
               type="number"
               :width="100"
               :validateList="[{ name: 'required', message: ' ' }]"
-              border="border"
             ></TsFormInput>
           </div>
           <div class="action-item">分钟后执行</div>
@@ -37,7 +36,6 @@
             :min="0"
             type="number"
             :width="100"
-            border="border"
           ></TsFormInput></div>
           <div class="action-item">次</div>
           <div class="action-item">每次间隔</div>
@@ -46,7 +44,6 @@
             type="number"
             :min="0"
             :width="100"
-            border="border"
           ></TsFormInput></div>
           <div class="action-item">分钟</div>
         </div>
@@ -139,7 +136,6 @@ export default {
       this.error = '';
     },
     listEventPlugin() {
-      console.log(this.handler.handler);
       this.$api.alert.alertevent.listEventPlugin({ eventName: this.event.name, parentPlugin: this.handler.handler }).then(res => {
         this.pluginList = res.Return;
       });

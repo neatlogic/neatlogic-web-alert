@@ -1,17 +1,19 @@
 <template>
   <div v-if="mode === 'list' && row" :style="{ 'margin-left': (row['_index'] || 0) * 18 + 'px' }">
-    <span
-      v-if="row.childAlertCount"
-      class="cursor text-href"
-      :class="{ 'tsfont-drop-down': row['_expand'], 'tsfont-drop-right': !row['_expand'] }"
-      @click="$emit('toggleChildren', row)"
-    >
-      <span v-if="row.childAlertCount >= 100" class="text-error mr-xs superscript">99+</span>
-      <span v-else class="text-error mr-xs superscript">{{ row.childAlertCount }}</span>
-    </span>
-    <span>
-      <a @click="getAlertDetail(row)">{{ row.title }}</a>
-    </span>
+    <div :class="{ 'title-grid': row.childAlertCount }" style="width: 350px">
+      <div
+        v-if="row.childAlertCount"
+        class="cursor text-href"
+        :class="{ 'tsfont-drop-down': row['_expand'], 'tsfont-drop-right': !row['_expand'] }"
+        @click="$emit('toggleChildren', row)"
+      >
+        <span v-if="row.childAlertCount >= 100" class="text-error superscript">99+</span>
+        <span v-else class="text-error superscript">{{ row.childAlertCount }}</span>
+      </div>
+      <div class="overflow">
+        <a :title="row.title" @click="getAlertDetail(row)">{{ row.title }}</a>
+      </div>
+    </div>
     <AlertView
       v-if="isShowAlert"
       :id="currentAlertId"
@@ -65,6 +67,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.title-grid {
+  display: grid;
+  grid-template-columns: 30px auto;
+}
 .superscript {
   font-size: 0.7em; /* 设置字体大小为原字体的70% */
   vertical-align: super; /* 设置为上标 */

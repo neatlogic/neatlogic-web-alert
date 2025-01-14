@@ -3,11 +3,30 @@
     <div
       v-for="(audit, aindex) in auditList"
       :key="aindex"
-      class="comment-grid"
-      :class="{ 'mt-md': aindex > 0 }"
+      class="comment-grid radius-md padding-md"
+      :style="{ 'margin-left': level * 10 + 'px' }"
+      :class="{
+        'bg-grey': level % 2 !== 0,
+        'bg-op': level % 2 === 0,
+        'mt-md': aindex > 0
+      }"
     >
-      <TsRow>
-        <Col span="8" :style="{ 'padding-left': level * 10 + 'px' }">
+      <div>
+        <span
+          v-if="audit.childAuditList && audit.childAuditList.length > 0"
+          class="text-href cursor"
+          :class="{ 'tsfont-drop-down': !hideChild[audit.id], 'tsfont-drop-right': hideChild[audit.id] }"
+          @click="toggleChild(audit.id.toString())"
+        ></span>
+        <span v-else class="text-grey tsfont-dot"></span>
+        <span class="text-grey">{{ audit.handlerName }}</span>
+        <span class="text-grey ml-xs">{{ audit.startTime | formatDate }}({{ getTimeCost(audit.timeCost) }})</span>
+        <span class="ml-xs">
+          <Badge :type="audit.status === 'succeed' ? 'success' : audit.status === 'failed' ? 'error' : 'running'" :text="audit.statusName"></Badge>
+        </span>
+      </div>
+      <!--<TsRow>
+        <Col span="8">
           <span
             v-if="audit.childAuditList && audit.childAuditList.length > 0"
             class="text-grey cursor"
@@ -39,7 +58,7 @@
           <div class="item-title text-grey">耗时</div>
           <div class="item-content">{{ getTimeCost(audit.timeCost) }}</div>
         </Col>
-      </TsRow>
+      </TsRow>-->
       <div v-if="audit.result && !hideChild[audit.id.toString()]" class="mt-md" :style="{ 'padding-left': level * 10 + 'px' }">
         <AlertEventViewer :eventHandlerData="audit" :level="level" mode="audit"></AlertEventViewer>
       </div>
