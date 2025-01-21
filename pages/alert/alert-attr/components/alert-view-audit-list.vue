@@ -34,7 +34,7 @@ export default {
       auditHeaderList: [
         { key: 'inputTime', title: '操作时间', type: 'time' },
         { key: 'inputUser', title: '操作用户' },
-        { key: 'inputFrom', title: '操作来源' },
+        { key: 'inputFromName', title: '操作来源' },
         { key: 'attrName', title: '属性' },
         { key: 'oldValue', title: '操作前' },
         { key: 'newValue', title: '操作后' }

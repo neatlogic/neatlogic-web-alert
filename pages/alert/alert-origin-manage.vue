@@ -70,7 +70,7 @@ export default {
           key: 'type',
           title: '类型'
         },
-        { key: 'source', title: '来源' },
+        { key: 'sourceName', title: '来源' },
         { key: 'time', title: '时间', type: 'time' },
         { key: 'status', title: '处理状态' },
         { key: 'content', title: '内容' },

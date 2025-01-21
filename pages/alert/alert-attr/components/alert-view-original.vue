@@ -66,8 +66,10 @@ export default {
 <style lang="less" scoped>
 /deep/.jv-code {
   padding: 0 !important;
+  background: transparent !important;
 }
 /deep/.jv-container {
   padding: 0 !important;
+  background: transparent !important;
 }
 </style>
