@@ -32,9 +32,6 @@ export default {
   },
   beforeCreate() {},
   created() {
-    if (this.config) {
-      this.configLocal = this.$utils.deepClone(this.config);
-    }
   },
   beforeMount() {},
   mounted() {},
@@ -54,7 +51,19 @@ export default {
   },
   filter: {},
   computed: {},
-  watch: {}
+  watch: {
+    config: {
+      handler(val) {
+        if (val) {
+          this.configLocal = this.$utils.deepClone(val);
+        } else {
+          this.configLocal = {};
+        }
+      },
+      deep: true,
+      immediate: true
+    }
+  }
 };
 </script>
 <style lang="less"></style>
