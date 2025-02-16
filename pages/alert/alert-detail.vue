@@ -22,7 +22,7 @@
     </template>
     <template v-slot:topRight>
       <div class="action-group">
-        <div class="action-item">
+        <div v-if="hasRole" class="action-item">
           <Button type="primary" @click="confirm()">{{ $t('page.confirm') }}</Button>
         </div>
       </div>
@@ -62,7 +62,7 @@
                         mode="detail"
                         :row="alertData"
                         :attr="attr"
-                        :value="alertData.attrObj[attr.name.replace('attr_', '')].value"
+                        :value="alertData.attrObj[attr.name.replace('attr_', '')]"
                       ></AlertAttrViewer>
                     </span>
                   </div>

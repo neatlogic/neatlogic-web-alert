@@ -47,10 +47,10 @@ export default {
           validateList: ['required'],
           dataList: [
             { value: 'number', text: '数字' },
-            { value: 'string', text: '字符串' },
-            { value: 'datetime', text: '日期时间' },
-            { value: 'jsonobj', text: 'json对象' },
-            { value: 'jsonlist', text: 'json数组' }
+            { value: 'text', text: '字符串' },
+            { value: 'datetime', text: '日期时间' }
+            /*{ value: 'jsonobj', text: 'json对象' },
+            { value: 'jsonlist', text: 'json数组' }*/
           ]
         }
       }
