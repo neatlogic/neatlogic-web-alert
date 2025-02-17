@@ -32,7 +32,7 @@
                         mode="detail"
                         :row="alertData"
                         :attr="attr"
-                        :value="alertData.attrObj[attr.name.replace('attr_', '')].value"
+                        :value="alertData.attrObj[attr.name.replace('attr_', '')]"
                       ></AlertAttrViewer>
                     </span>
                   </div>

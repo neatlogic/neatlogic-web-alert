@@ -42,6 +42,9 @@ const alert = {
   },
   searchOriginalAlert(params) {
     return axios.post('/api/rest/alert/origin/search', params);
+  },
+  deleteAlertView(id) {
+    return axios.post('/api/rest/alert/view/delete', { id: id });
   }
 };
 

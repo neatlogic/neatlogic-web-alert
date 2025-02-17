@@ -74,7 +74,9 @@ export default {
           type: 'text',
           label: '唯一标识',
           maxlength: 50,
-          validateList: ['required', 'unique_ident']
+          readonly: !!this.id,
+          validateList: ['required', 'unique_ident'],
+          desc: '保存后不能修改'
         },
         label: {
           type: 'text',
@@ -148,8 +150,8 @@ export default {
         this.attrList = res.Return;
       });
     },
-    close() {
-      this.$emit('close');
+    close(needRefresh) {
+      this.$emit('close', needRefresh);
     },
     saveAlertView() {
       const form = this.$refs.form;
@@ -157,7 +159,7 @@ export default {
         //console.log(JSON.stringify(this.alertViewData, null, 2));
         this.$api.alert.alert.saveAlertView(this.alertViewData).then(res => {
           if (res.Status === 'OK') {
-            this.close();
+            this.close(true);
           }
         });
       }

@@ -18,6 +18,12 @@
                   @click.native="switchAlertView(view)"
                 >
                   <span v-auth="['ALERT_VIEW_MODIFY']" class="tsfont-edit mr-xs" @click.stop="editView(view)"></span>
+                  <span
+                    v-auth="['ALERT_VIEW_MODIFY']"
+                    :class="searchParam.viewName === view.name ? 'text-disabled' : ''"
+                    class="tsfont-trash-o mr-xs"
+                    @click.stop="deleteView(view)"
+                  ></span>
                   <span>{{ view.label }}</span>
                 </DropdownItem>
                 <DropdownItem v-auth="['ALERT_VIEW_MODIFY']" divided @click.native="editView()">
@@ -87,7 +93,7 @@
         </TsTable>
       </template>
     </TsContain>
-    <AlertViewEdit v-if="isViewEdit" :id="currentView && currentView.id" @close="closeAttrEdit"></AlertViewEdit>
+    <AlertViewEdit v-if="isViewEdit" :id="editViewId" @close="closeAttrEdit"></AlertViewEdit>
     <AlertDeleteDialog v-if="isDeleteShow && currentAlertId" :id="currentAlertId" @close="closeAlertDelete"></AlertDeleteDialog>
   </div>
 </template>
@@ -115,7 +121,8 @@ export default {
       rule: {},
       alertViewList: [],
       isDeleteShow: false,
-      currentAlertId: null
+      currentAlertId: null,
+      editViewId: null
     };
   },
   beforeCreate() {},
@@ -144,6 +151,7 @@ export default {
       if (needRefresh) {
         this.searchAlert();
       }
+      this.editViewId = null;
     },
     deleteAlert(alert) {
       this.isDeleteShow = true;
@@ -195,7 +203,26 @@ export default {
     editView(view) {
       this.isViewEdit = true;
       if (view) {
-        this.currentView = view;
+        this.editViewId = view.id;
+      } else {
+        this.editViewId = null;
+      }
+    },
+    deleteView(view) {
+      if (this.searchParam.viewName !== view.name) {
+        this.$createDialog({
+          title: this.$t('dialog.title.deletetarget', { target: this.$t('term.cmdb.view') }),
+          content: this.$t('dialog.content.deletetargetconfirm', { target: view.label }),
+          'on-ok': (vnode) => {
+            this.$api.alert.alert.deleteAlertView(view.id).then((res) => {
+              if (res.Status === 'OK') {
+                this.$Message.success(this.$t('message.deletesuccess'));
+                this.listAlertView();
+                vnode.isShow = false;
+              }
+            });
+          }
+        });
       }
     },
     changePageSize(pageSize) {
@@ -248,10 +275,13 @@ export default {
         this.alertData = res.Return;
       });
     },
-    closeAttrEdit() {
+    closeAttrEdit(needRefresh) {
       this.isViewEdit = false;
-      if (this.currentView && this.currentView.name === this.searchParam.viewName) {
-        this.searchAlert(1);
+      if (needRefresh) {
+        if (this.currentView && this.currentView.name === this.searchParam.viewName) {
+          this.searchAlert(1);
+        }
+        this.listAlertView();
       }
     }
   },
