@@ -76,7 +76,7 @@
                   v-if="row.attrObj[thead.key.replace('attr_', '')]"
                   :view="alertViewData"
                   :attr="getAttrByName(thead.key)"
-                  :value="row.attrObj[thead.key.replace('attr_', '')].value"
+                  :value="row.attrObj[thead.key.replace('attr_', '')]"
                   @refresh="searchAlert"
                 ></AlertAttrViewer>
               </span>

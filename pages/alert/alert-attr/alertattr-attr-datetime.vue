@@ -1,5 +1,5 @@
 <template>
-  <div>datetime:{{ value }}</div>
+  <div>{{ value }}</div>
 </template>
 <script>
 import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';
