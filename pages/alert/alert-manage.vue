@@ -37,7 +37,7 @@
       </template>
       <template v-slot:topRight>
         <div class="action-group">
-          <div class="action-item" :class="{ 'tsfont-drop-down': !isShowFilter, 'tsfont-drop-up': isShowFilter }" @click="isShowFilter = !isShowFilter">高级搜索</div>
+          <div class="action-item" :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }" @click="isShowFilter = !isShowFilter">{{ $t('page.advancesearch') }}</div>
           <div v-if="!isShowFilter" class="action-item">
             <InputSearcher v-model="searchParam.keyword" :width="400" @change="searchAlert(1)"></InputSearcher>
           </div>
