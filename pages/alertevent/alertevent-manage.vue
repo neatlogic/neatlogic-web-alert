@@ -198,7 +198,7 @@ export default {
     },
     listAlertEventHandler(eventName) {
       this.isReady = false;
-      this.$api.alert.alertevent.listAlertEventHandler({ event: eventName }).then(res => {
+      this.$api.alert.alertevent.listAlertEventHandler({ alertType: this.typeId, event: eventName }).then(res => {
         this.eventHandlerList = res.Return;
         this.isReady = true;
       });

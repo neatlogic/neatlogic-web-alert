@@ -28,7 +28,7 @@
                 </DropdownItem>
                 <DropdownItem v-auth="['ALERT_VIEW_MODIFY']" divided @click.native="editView()">
                   <span class="tsfont-plus mr-xs"></span>
-                  <span>添加视图</span>
+                  <span>{{ $t('dialog.title.addtarget', { target: $t('term.cmdb.view') }) }}</span>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -47,7 +47,7 @@
         <div v-if="isShowFilter" class="border-base radius-md mb-md padding-md">
           <ConditionGroup v-model="searchParam.rule" :attrList="attrList"></ConditionGroup>
           <div style="text-align: right" class="mt-md">
-            <Button type="primary" @click="searchAlert(1)">搜索</Button>
+            <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
           </div>
         </div>
         <TsTable
@@ -60,26 +60,44 @@
           @changePageSize="changePageSize"
         >
           <template v-for="(thead, index) in finalTheadList" :slot="thead.key" slot-scope="{ row }">
-            <div :key="index">
-              <span v-if="thead.key.startsWith('const_')">
-                <AlertAttrViewer
-                  :attr="getAttrByName(thead.key)"
-                  :row="row"
-                  :view="alertViewData"
-                  :value="row[thead.key.replace('const_', '')]"
-                  @toggleChildren="toggleChildAlert"
-                  @refresh="searchAlert"
-                ></AlertAttrViewer>
-              </span>
-              <span v-if="thead.key.startsWith('attr_') && row.attrObj">
-                <AlertAttrViewer
-                  v-if="row.attrObj[thead.key.replace('attr_', '')]"
-                  :view="alertViewData"
-                  :attr="getAttrByName(thead.key)"
-                  :value="row.attrObj[thead.key.replace('attr_', '')]"
-                  @refresh="searchAlert"
-                ></AlertAttrViewer>
-              </span>
+            <div v-if="thead.key === 'const_attrObj'" :key="index">
+              <div v-if="thead.attrList && thead.attrList.length > 0">
+                <template v-for="(extendattr, aindex) in thead.attrList">
+                  <div v-if="getAttrByName(extendattr) && row.attrObj && row.attrObj[extendattr.replace('attr_', '')]" :key="aindex">
+                    <Tag>
+                      <span class="text-grey mr-xs">{{ getAttrByName(extendattr).label }}</span>
+                      <span class="text-grey">
+                        <b><AlertAttrViewer
+                          v-if="row.attrObj[extendattr.replace('attr_', '')]"
+                          :view="alertViewData"
+                          :attr="getAttrByName(extendattr)"
+                          :value="row.attrObj[extendattr.replace('attr_', '')]"
+                          @refresh="searchAlert"
+                        ></AlertAttrViewer></b>
+                      </span>
+                    </Tag>
+                  </div>
+                </template>
+              </div>
+            </div>
+            <div v-else-if="thead.key.startsWith('const_')" :key="index">
+              <AlertAttrViewer
+                :attr="getAttrByName(thead.key)"
+                :row="row"
+                :view="alertViewData"
+                :value="row[thead.key.replace('const_', '')]"
+                @toggleChildren="toggleChildAlert"
+                @refresh="searchAlert"
+              ></AlertAttrViewer>
+            </div>
+            <div v-else-if="thead.key.startsWith('attr_') && row.attrObj" :key="index">
+              <AlertAttrViewer
+                v-if="row.attrObj[thead.key.replace('attr_', '')]"
+                :view="alertViewData"
+                :attr="getAttrByName(thead.key)"
+                :value="row.attrObj[thead.key.replace('attr_', '')]"
+                @refresh="searchAlert"
+              ></AlertAttrViewer>
             </div>
           </template>
           <template v-slot:action="{ row }">
@@ -184,7 +202,7 @@ export default {
       }
     },
     listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList().then(res => {
+      this.$api.alert.alert.listAlertAttrList(this.searchParam.viewName ? { viewName: this.searchParam.viewName } : {}).then(res => {
         this.attrList = res.Return;
       });
     },
@@ -213,8 +231,8 @@ export default {
         this.$createDialog({
           title: this.$t('dialog.title.deletetarget', { target: this.$t('term.cmdb.view') }),
           content: this.$t('dialog.content.deletetargetconfirm', { target: view.label }),
-          'on-ok': (vnode) => {
-            this.$api.alert.alert.deleteAlertView(view.id).then((res) => {
+          'on-ok': vnode => {
+            this.$api.alert.alert.deleteAlertView(view.id).then(res => {
               if (res.Status === 'OK') {
                 this.$Message.success(this.$t('message.deletesuccess'));
                 this.listAlertView();
@@ -310,4 +328,9 @@ export default {
   watch: {}
 };
 </script>
-<style lang="less"></style>
+<style lang="less" scoped>
+.attr-grid {
+  display: grid;
+  grid-template-columns: 80px auto;
+}
+</style>

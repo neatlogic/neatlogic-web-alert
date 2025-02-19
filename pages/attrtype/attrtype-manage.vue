@@ -17,6 +17,10 @@
             <span v-if="row.isActive" class="text-success">{{ $t('page.yes') }}</span>
             <span v-else class="text-grey">{{ $t('page.no') }}</span>
           </template>
+          <template v-slot:isNormal="{ row }">
+            <span v-if="row.isNormal" class="text-success">{{ $t('page.yes') }}</span>
+            <span v-else class="text-grey">{{ $t('page.no') }}</span>
+          </template>
           <template slot="action" slot-scope="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
@@ -50,6 +54,7 @@ export default {
         { key: 'label', title: this.$t('page.name') },
         { key: 'typeName', title: this.$t('page.type') },
         { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'isNormal', title: this.$t('term.alert.isnormalattr') },
         { key: 'action', title: '' }
       ]
     };

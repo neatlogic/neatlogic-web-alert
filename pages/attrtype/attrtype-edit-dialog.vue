@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      attrTypeData: { isActive: 1 },
+      attrTypeData: { isActive: 1, isNormal: 0 },
       dialogConfig: {
         title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('page.attribute') }) : this.$t('dialog.title.addtarget', { target: this.$t('page.attribute') }),
         width: 'small',
@@ -26,24 +26,32 @@ export default {
         name: {
           type: 'text',
           readonly: !!this.id,
-          label: '唯一标识',
+          label: this.$t('page.uniquekey'),
           maxlength: 50,
           validateList: ['required', 'unique_ident'],
           desc: '保存后不能修改'
         },
         label: {
           type: 'text',
-          label: '名称',
+          label: this.$t('page.name'),
           maxlength: 50,
           validateList: ['required']
         },
         isActive: {
           type: 'switch',
-          label: '是否激活'
+          label: this.$t('term.report.isactive'),
+          trueValue: 1,
+          falseValue: 0
+        },
+        isNormal: {
+          label: this.$t('term.alert.isnormalattr'),
+          type: 'switch',
+          trueValue: 1,
+          falseValue: 0
         },
         type: {
           type: 'radio',
-          label: '类型',
+          label: this.$t('page.type'),
           validateList: ['required'],
           dataList: [
             { value: 'number', text: '数字' },
@@ -83,7 +91,7 @@ export default {
       const form = this.$refs['form'];
       if (form && form.valid()) {
         this.$api.alert.attrtype.saveAttrType(this.attrTypeData).then(res => {
-          this.$Message.success('保存成功');
+          this.$Message.success(this.$t('message.savesuccess'));
           this.close(true);
         });
       }
