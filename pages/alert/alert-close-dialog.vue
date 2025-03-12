@@ -2,8 +2,8 @@
   <TsDialog v-bind="dialogConfig" @on-close="close()">
     <template v-slot>
       <div>
-        <div>{{ $t('dialog.content.deleteconfirm', { target: $t('term.alert.alert') }) }}</div>
-        <div class="mt-md"><Checkbox v-model="isDeleteChildAlert" :true-value="1" :false-value="0">同时删除子告警</Checkbox></div>
+        <div>是否确认关闭当前告警？</div>
+        <div class="mt-md"><Checkbox v-model="isCloseChildAlert" :true-value="1" :false-value="0">同时关闭子告警</Checkbox></div>
       </div>
     </template>
     <template v-slot:footer>
@@ -27,7 +27,7 @@ export default {
         maskClose: true,
         width: 'mini'
       },
-      isDeleteChildAlert: 0
+      isCloseChildAlert: 0
     };
   },
   beforeCreate() {},
@@ -45,8 +45,8 @@ export default {
       this.$emit('close', needRefresh);
     },
     confirm() {
-      this.$api.alert.alert.deleteAlert({ id: this.id, isDeleteChildAlert: this.isDeleteChildAlert }).then(() => {
-        this.$Message.success(this.$t('message.deletesuccess'));
+      this.$api.alert.alert.closeAlert({ id: this.id, isCloseChildAlert: this.isCloseChildAlert }).then(() => {
+        this.$Message.success(this.$t('term.alert.closesuccess'));
         this.close(true);
       });
     }

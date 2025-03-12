@@ -19,7 +19,7 @@
         <Tag
           v-for="(attr, index) in attrList"
           :key="index"
-          v-clipboard="'#{' + attr.name + '}'"
+          v-clipboard="'${DATA.' + attr.name + '}'"
           v-clipboard:success="clipboardSuc"
           class="cursor"
           @click.stop
@@ -78,6 +78,13 @@
         :transfer="true"
         :groupList="['user']"
       ></UserSelect>
+    </TsFormItem>
+    <TsFormItem label="通知间隔" labelPosition="left">
+      <TsFormInput
+        type="number"
+        border="border"
+      ></TsFormInput>
+      <div class="text-grey">帮助：此通知在通知间隔时间内只会通知一次</div>
     </TsFormItem>
     <!--<TsFormItem labelPosition="left" label="通知间隔">
       <div class="grid">

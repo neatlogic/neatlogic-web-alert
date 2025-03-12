@@ -11,6 +11,24 @@
         dynamicUrl="/api/rest/alert/alerttype/search"
         transfer
         border="border"
+        @on-change="changeAlertType"
+      ></TsFormSelect>
+    </TsFormItem>
+    <TsFormItem
+      v-if="currentAlertType && currentAlertType.adaptorList"
+      label="请选择接入转换"
+      :required="true"
+      labelPosition="top"
+    >
+      <TsFormSelect
+        ref="alertAdaptor"
+        v-model="configLocal.adaptor"
+        valueName="name"
+        textName="label"
+        :validateList="['required']"
+        transfer
+        :dataList="currentAlertType.adaptorList"
+        border="border"
       ></TsFormSelect>
     </TsFormItem>
   </div>
@@ -27,7 +45,8 @@ export default {
   },
   data() {
     return {
-      configLocal: {}
+      configLocal: {},
+      currentAlertType: {}
     };
   },
   beforeCreate() {},
@@ -42,8 +61,25 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getAlertTypeByName() {
+      if (this.configLocal.alertType) {
+        this.$api.alert.alerttype.getAlertTypeByName(this.configLocal.alertType).then(res => {
+          this.currentAlertType = res.Return;
+        });
+      }
+    },
+    changeAlertType(val, option, item) {
+      this.currentAlertType = item;
+    },
     valid() {
-      return this.$refs.alertType.valid();
+      let isValid = true;
+      if (!this.$refs.alertType.valid()) {
+        isValid = false;
+      }
+      if (!this.$refs.alertAdaptor.valid()) {
+        isValid = false;
+      }
+      return isValid;
     },
     getConfig() {
       return this.configLocal;
@@ -56,6 +92,7 @@ export default {
       handler(val) {
         if (val) {
           this.configLocal = this.$utils.deepClone(val);
+          this.getAlertTypeByName();
         } else {
           this.configLocal = {};
         }

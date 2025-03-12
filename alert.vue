@@ -2,7 +2,7 @@
   <div v-if="hasAuthorization" class="home" :class="{ 'menu-min': !showmenu }">
     <TopNav></TopNav>
     <LeftMenu :showmenu="showmenu" @menushow="menuToggle">
-      <!--<AlertMenu></AlertMenu>-->
+      <AlertMenu></AlertMenu>
     </LeftMenu>
     <div class="centermain">
       <div>
@@ -23,8 +23,8 @@ export default {
   components: {
     TopNav: () => import('@/views/components/topnav/topnav.vue'),
     LeftMenu: () => import('@/views/components/leftmenu/leftmenu.vue'),
-    LicenseValidator: () => import('@/views/components/license/license-validator.vue')
-    //AlertMenu: () => import('./leftmenu/alert-menu.vue')
+    LicenseValidator: () => import('@/views/components/license/license-validator.vue'),
+    AlertMenu: () => import('@/commercial-module/alert/pages/leftmenu/alert-menu.vue')
   },
   data() {
     return {

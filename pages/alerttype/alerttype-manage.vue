@@ -17,6 +17,12 @@
             <span v-if="row.isActive" class="text-success">{{ $t('page.yes') }}</span>
             <span v-else class="text-grey">{{ $t('page.no') }}</span>
           </template>
+          <template v-slot:adaptorList="{ row }">
+            <div v-if="row.adaptorList && row.adaptorList.length > 0">
+              <Tag v-for="(adaptor,index) in row.adaptorList" :key="index">{{ adaptor.name }}·{{ adaptor.label }}</Tag>
+            </div>
+            <div v-else class="text-grey">-</div>
+          </template>
           <template v-slot:fcu="{ row }">
             <UserCard :uuid="row.fcu" :hideAvatar="true"></UserCard>
           </template>
@@ -60,6 +66,7 @@ export default {
         },
         { key: 'label', title: '名称' },
         { key: 'isActive', title: '是否激活' },
+        {key: 'adaptorList', title: '接入转换插件'},
         { key: 'fcu', title: '创建人' },
         { key: 'fcd', title: '创建时间', type: 'time' },
         { key: 'lcu', title: '修改人' },

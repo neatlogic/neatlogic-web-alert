@@ -10,14 +10,17 @@ const alert = {
   searchAlert(params) {
     return axios.post('/api/rest/alert/search', params);
   },
+  searchAlertCount(params) {
+    return axios.post('/api/rest/alert/search/count', params);
+  },
   listAlertAttrList(params) {
     return axios.post('/api/rest/alert/attr/list', params);
   },
   saveAlertView(params) {
     return axios.post('/api/rest/alert/view/save', params);
   },
-  listAlertView(params) {
-    return axios.post('/api/rest/alert/view/list', params);
+  searchAlertView(params) {
+    return axios.post('/api/rest/alert/view/search', params);
   },
   getAlertById(id) {
     return axios.post('/api/rest/alert/get', { id: id });
@@ -39,6 +42,9 @@ const alert = {
   },
   deleteAlert(params) {
     return axios.post('/api/rest/alert/delete', params);
+  },
+  closeAlert(params) {
+    return axios.post('/api/rest/alert/close', params);
   },
   searchOriginalAlert(params) {
     return axios.post('/api/rest/alert/origin/search', params);

@@ -7,6 +7,9 @@ const alerttype = {
   getAlertTypeById(id) {
     return axios.post('/api/rest/alert/alerttype/get', { id: id });
   },
+  getAlertTypeByName(name) {
+    return axios.post('/api/rest/alert/alerttype/get', { name: name });
+  },
   saveAlertType(params) {
     return axios.post('/api/rest/alert/alerttype/save', params);
   },

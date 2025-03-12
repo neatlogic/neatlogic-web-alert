@@ -8,27 +8,14 @@
               <div>
                 <span v-if="alertViewData">{{ alertViewData.label }}</span>
                 <span v-else>所有告警</span>
-                <span class="tsfont-drop-down"></span>
+                <span v-if="alertViewData" class="tsfont-drop-down"></span>
               </div>
-              <DropdownMenu slot="list">
-                <DropdownItem
-                  v-for="(view, index) in alertViewList"
-                  :key="index"
-                  :selected="searchParam.viewName === view.name"
-                  @click.native="switchAlertView(view)"
-                >
-                  <span v-auth="['ALERT_VIEW_MODIFY']" class="tsfont-edit mr-xs" @click.stop="editView(view)"></span>
-                  <span
-                    v-auth="['ALERT_VIEW_MODIFY']"
-                    :class="searchParam.viewName === view.name ? 'text-disabled' : ''"
-                    class="tsfont-trash-o mr-xs"
-                    @click.stop="deleteView(view)"
-                  ></span>
-                  <span>{{ view.label }}</span>
+              <DropdownMenu v-if="alertViewData" slot="list" v-auth="['ALERT_VIEW_MODIFY']">
+                <DropdownItem>
+                  <span class="tsfont-edit" @click.stop="editView()">编辑视图</span>
                 </DropdownItem>
-                <DropdownItem v-auth="['ALERT_VIEW_MODIFY']" divided @click.native="editView()">
-                  <span class="tsfont-plus mr-xs"></span>
-                  <span>{{ $t('dialog.title.addtarget', { target: $t('term.cmdb.view') }) }}</span>
+                <DropdownItem>
+                  <span class="tsfont-trash-o" @click.stop="deleteView()">删除视图</span>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -104,6 +91,7 @@
             <div class="tstable-action">
               <ul class="tstable-action-ul">
                 <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
+                <li class="tsfont-close-o" @click="closeAlert(row)">{{ $t('page.close') }}</li>
                 <li class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
               </ul>
             </div>
@@ -111,8 +99,9 @@
         </TsTable>
       </template>
     </TsContain>
-    <AlertViewEdit v-if="isViewEdit" :id="editViewId" @close="closeAttrEdit"></AlertViewEdit>
+    <AlertViewEdit v-if="isViewEdit && alertViewData && alertViewData.id" :id="alertViewData.id" @close="closeViewEdit"></AlertViewEdit>
     <AlertDeleteDialog v-if="isDeleteShow && currentAlertId" :id="currentAlertId" @close="closeAlertDelete"></AlertDeleteDialog>
+    <AlertCloseDialog v-if="isCloseShow && currentAlertId" :id="currentAlertId" @close="closeAlertClose"></AlertCloseDialog>
   </div>
 </template>
 <script>
@@ -124,7 +113,8 @@ export default {
     AlertViewEdit: () => import('@/commercial-module/alert/pages/alert/alert-view-edit.vue'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
     AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
-    AlertDeleteDialog: () => import('@/commercial-module/alert/pages/alert/alert-delete-dialog.vue')
+    AlertDeleteDialog: () => import('@/commercial-module/alert/pages/alert/alert-delete-dialog.vue'),
+    AlertCloseDialog: () => import('@/commercial-module/alert/pages/alert/alert-close-dialog.vue')
   },
   props: {},
   data() {
@@ -139,8 +129,8 @@ export default {
       rule: {},
       alertViewList: [],
       isDeleteShow: false,
-      currentAlertId: null,
-      editViewId: null
+      isCloseShow: false,
+      currentAlertId: null
     };
   },
   beforeCreate() {},
@@ -148,7 +138,7 @@ export default {
     this.searchParam.viewName = this.$route.params['view'] || '';
     this.searchAlert();
     this.listAlertAttrList();
-    this.listAlertView();
+    //this.listAlertView();
     this.getViewByName();
   },
   beforeMount() {},
@@ -169,7 +159,17 @@ export default {
       if (needRefresh) {
         this.searchAlert();
       }
-      this.editViewId = null;
+    },
+    closeAlertClose(needRefresh) {
+      this.isCloseShow = false;
+      this.currentAlertId = null;
+      if (needRefresh) {
+        this.searchAlert();
+      }
+    },
+    closeAlert(alert) {
+      this.isCloseShow = true;
+      this.currentAlertId = alert.id;
     },
     deleteAlert(alert) {
       this.isDeleteShow = true;
@@ -218,30 +218,25 @@ export default {
         this.alertViewList = res.Return;
       });
     },
-    editView(view) {
+    editView() {
       this.isViewEdit = true;
-      if (view) {
-        this.editViewId = view.id;
-      } else {
-        this.editViewId = null;
-      }
+      console.log(this.alertViewData);
     },
-    deleteView(view) {
-      if (this.searchParam.viewName !== view.name) {
-        this.$createDialog({
-          title: this.$t('dialog.title.deletetarget', { target: this.$t('term.cmdb.view') }),
-          content: this.$t('dialog.content.deletetargetconfirm', { target: view.label }),
-          'on-ok': vnode => {
-            this.$api.alert.alert.deleteAlertView(view.id).then(res => {
-              if (res.Status === 'OK') {
-                this.$Message.success(this.$t('message.deletesuccess'));
-                this.listAlertView();
-                vnode.isShow = false;
-              }
-            });
-          }
-        });
-      }
+    deleteView() {
+      this.$createDialog({
+        title: this.$t('dialog.title.deletetarget', { target: this.$t('term.cmdb.view') }),
+        content: this.$t('dialog.content.deleteconfirm', {'target': this.$t('term.cmdb.view')}),
+        'on-ok': vnode => {
+          this.$api.alert.alert.deleteAlertView(this.alertViewData.id).then(res => {
+            if (res.Status === 'OK') {
+              this.$Message.success(this.$t('message.deletesuccess'));
+              //删除视图用del，菜单会根据action来判断是否更换当前视图
+              this.$store.commit('leftMenu/setAlertViewCount', 'del');
+              vnode.isShow = false;
+            }
+          });
+        }
+      });
     },
     changePageSize(pageSize) {
       if (pageSize) {
@@ -293,13 +288,10 @@ export default {
         this.alertData = res.Return;
       });
     },
-    closeAttrEdit(needRefresh) {
+    closeViewEdit(needRefresh) {
       this.isViewEdit = false;
       if (needRefresh) {
-        if (this.currentView && this.currentView.name === this.searchParam.viewName) {
-          this.searchAlert(1);
-        }
-        this.listAlertView();
+        this.searchAlert(1);
       }
     }
   },
