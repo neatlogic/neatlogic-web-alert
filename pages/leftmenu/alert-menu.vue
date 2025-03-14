@@ -2,17 +2,17 @@
   <div class="menu_link alert-menu-box">
     <div :class="{ grid: pageCount > 1 }">
       <ul>
-        <li v-auth="['ALERT_VIEW_MODIFY']" class="link">
+        <li v-if="$AuthUtils.hasRole(['ALERT_VIEW_MODIFY'])" class="link">
           <a class="tsfont-plus text-primary" @click="addView">
             <span class="text-primary">{{ $t('term.cmdb.view') }}</span>
           </a>
         </li>
         <li class="link alert-menu-link" :class="{ active: $isMenuActive('/alert-manage') }" @click="goTo('/alert-manage')">
           <a class="alert-menu-a" @click="goTo('/alert-manage')">
-            <span class="text-error mr-xs superscript">
+            <span class="alert-name overflow">所有告警</span>
+            <span class="text-error ml-xs superscript">
               <b>{{ alertCount > 99 ? '99+' : alertCount }}</b>
             </span>
-            <span class="alert-name overflow">所有告警</span>
           </a>
         </li>
         <li
@@ -22,10 +22,10 @@
           :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
         >
           <a class="alert-menu-a" @click="goTo('/alert-manage/' + view.name)">
-            <span class="text-error mr-xs superscript">
+            <span class="alert-name overflow">{{ view.label }}</span>
+            <span class="text-error ml-xs superscript">
               <b>{{ view.alertCount > 99 ? '99+' : view.alertCount }}</b>
             </span>
-            <span class="alert-name overflow">{{ view.label }}</span>
           </a>
         </li>
       </ul>
