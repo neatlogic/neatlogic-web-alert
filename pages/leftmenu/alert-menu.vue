@@ -10,7 +10,7 @@
         <li class="link alert-menu-link" :class="{ active: $isMenuActive('/alert-manage') }" @click="goTo('/alert-manage')">
           <a class="alert-menu-a" @click="goTo('/alert-manage')">
             <span class="alert-name overflow">所有告警</span>
-            <span class="text-error ml-xs superscript">
+            <span v-if="alertCount > 0" class="text-error ml-xs superscript">
               <b>{{ alertCount > 99 ? '99+' : alertCount }}</b>
             </span>
           </a>
@@ -23,7 +23,7 @@
         >
           <a class="alert-menu-a" @click="goTo('/alert-manage/' + view.name)">
             <span class="alert-name overflow">{{ view.label }}</span>
-            <span class="text-error ml-xs superscript">
+            <span v-if="alertCount > 0" class="text-error ml-xs superscript">
               <b>{{ view.alertCount > 99 ? '99+' : view.alertCount }}</b>
             </span>
           </a>

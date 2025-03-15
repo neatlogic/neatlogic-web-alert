@@ -13,52 +13,17 @@
     >
       <div>
         <span
-          v-if="audit.childAuditList && audit.childAuditList.length > 0"
           class="text-href cursor"
-          :class="{ 'tsfont-drop-down': !hideChild[audit.id], 'tsfont-drop-right': hideChild[audit.id] }"
-          @click="toggleChild(audit.id.toString())"
+          :class="{ 'tsfont-drop-down': !hideChild[audit.id.toString()], 'tsfont-drop-right': hideChild[audit.id.toString()] }"
+          @click="toggleChild(audit.id)"
         ></span>
-        <span v-else class="text-grey tsfont-dot"></span>
+        <!--<span v-else class="text-grey tsfont-dot"></span>-->
         <span class="text-grey">{{ audit.handlerName }}</span>
         <span class="text-grey ml-xs">{{ audit.startTime | formatDate }}({{ getTimeCost(audit.timeCost) }})</span>
         <span class="ml-xs">
-          <Badge :type="audit.status === 'succeed' ? 'success' : audit.status === 'failed' ? 'error' : 'running'" :text="audit.statusName"></Badge>
+          <Badge :type="getBadgeType(audit)" :text="audit.statusName"></Badge>
         </span>
       </div>
-      <!--<TsRow>
-        <Col span="8">
-          <span
-            v-if="audit.childAuditList && audit.childAuditList.length > 0"
-            class="text-grey cursor"
-            :class="{ 'tsfont-drop-down': !hideChild[audit.id], 'tsfont-drop-right': hideChild[audit.id] }"
-            @click="toggleChild(audit.id.toString())"
-          ></span>
-          <span v-else class="text-grey tsfont-dot"></span>
-          <span class="text-grey">{{ audit.startTime | formatDate }}</span>
-        </Col>
-        <Col span="6" class="item">
-          <div class="item-title text-grey">插件</div>
-          <div class="item-content">{{ audit.handlerName }}</div>
-        </Col>
-        <Col span="5" class="item">
-          <div class="item-title text-grey">状态</div>
-          <div class="item-content">
-            <span
-              :class="{
-                'text-success': audit.status === 'succeed',
-                'text-error': audit.status === 'failed',
-                'text-primary': audit.status === 'running'
-              }"
-            >
-              {{ audit.statusName }}
-            </span>
-          </div>
-        </Col>
-        <Col span="5" class="item">
-          <div class="item-title text-grey">耗时</div>
-          <div class="item-content">{{ getTimeCost(audit.timeCost) }}</div>
-        </Col>
-      </TsRow>-->
       <div v-if="audit.result && !hideChild[audit.id.toString()]" class="mt-md" :style="{ 'padding-left': level * 10 + 'px' }">
         <AlertEventViewer :eventHandlerData="audit" :level="level" mode="audit"></AlertEventViewer>
       </div>
@@ -85,7 +50,13 @@ export default {
     };
   },
   beforeCreate() {},
-  async created() {},
+  created() {
+    if (this.auditList && this.auditList.length > 0) {
+      this.auditList.forEach(audit => {
+        this.$set(this.hideChild, audit.id.toString(), true);
+      });
+    }
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -95,8 +66,19 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getBadgeType(audit) {
+      if (audit.status === 'succeed') {
+        return 'success';
+      } else if (audit.status === 'failed') {
+        return 'error';
+      } else if (audit.status === 'skipped') {
+        return 'warning';
+      } else {
+        return 'running';
+      }
+    },
     toggleChild(id) {
-      this.$set(this.hideChild, id, !this.hideChild[id]);
+      this.$set(this.hideChild, id.toString(), !this.hideChild[id.toString()]);
     },
     getTimeCost(ms) {
       const hours = Math.floor(ms / (1000 * 60 * 60));

@@ -13,7 +13,6 @@ export const AlertEventBase = {
   },
   methods: {
     getConfig() {
-      //需要子类覆盖
       return this.configLocal;
     },
     async valid() {

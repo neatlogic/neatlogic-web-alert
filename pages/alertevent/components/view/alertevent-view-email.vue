@@ -52,31 +52,37 @@
       ></UserCard></span>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.interval && configLocal.statusList && configLocal.statusList.length > 0"
+      v-if="configLocal.interval"
       style="margin: 0px !important"
       label="通知间隔"
       labelPosition="left"
       :labelWidth="70"
     >
-      <div v-if="configLocal.statusList && configLocal.statusList.length > 0">
-        <span class="mr-xs text-grey">告警状态为</span>
-        <Tag v-for="(status, index) in configLocal.statusList" :key="index">{{ getStatusName(status) }}</Tag>
-        <span class="mr-xs text-grey">通知间隔</span>
-        <span class="mr-xs text-grey">
+      <span>
+        <span class="mr-xs">
           <b>{{ configLocal.interval }}</b>
         </span>
         <span class="text-grey">分钟</span>
-      </div>
+      </span>
     </TsFormItem>
     <TsFormItem
       v-if="configLocal.hasOwnProperty('result')"
+      style="margin: 0px !important"
       labelPosition="left"
       :labelWidth="70"
-      label="发送结果"
+      label="结果"
     >
-      <span v-if="configLocal.result" class="text-success">发送成功</span>
-      <span v-else class="text-error">{{ configLocal.error }}</span>
+      <span v-if="configLocal.result === 'succeed'" class="text-success">发送成功</span>
+      <span v-else-if="configLocal.result === 'failed'" class="text-error">发送失败</span>
+      <span v-else-if="configLocal.result === 'skipped'" class="text-warning">跳过发送</span>
     </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.error"
+      style="margin: 0px !important"
+      labelPosition="left"
+      :labelWidth="70"
+      label="异常"
+    >  <span class="text-error">{{ configLocal.error }}</span></TsFormItem>
   </div>
 </template>
 <script>

@@ -81,10 +81,13 @@
     </TsFormItem>
     <TsFormItem label="通知间隔" labelPosition="left">
       <TsFormInput
+        v-model="configLocal.interval"
         type="number"
+        :min="1"
+        :step="1"
         border="border"
       ></TsFormInput>
-      <div class="text-grey">帮助：此通知在通知间隔时间内只会通知一次</div>
+      <div class="text-grey">帮助：此通知在通知间隔时间（?分钟）内只会通知一次</div>
     </TsFormItem>
     <!--<TsFormItem labelPosition="left" label="通知间隔">
       <div class="grid">
@@ -123,8 +126,7 @@ export default {
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')
   },
   extends: AlertEventBase,
-  props: {
-  },
+  props: {},
   data() {
     return {
       attrList: [],
@@ -172,13 +174,13 @@ export default {
       }
       return isValid;
     },
-    save() {
-      if (!this.valid()) return;
-      const data = this.$utils.clone(this.configLocal);
-      data.toUserList = data.toUserList.map(item => item.id).join(',');
-      data.ccUserList = data.ccUserList.map(item => item.id).join(',');
-      this.$emit('on-save', data);
-    },
+    // save() {
+    //   if (!this.valid()) return;
+    //   const data = this.$utils.clone(this.configLocal);
+    //   data.toUserList = data.toUserList.map(item => item.id).join(',');
+    //   data.ccUserList = data.ccUserList.map(item => item.id).join(',');
+    //   this.$emit('on-save', data);
+    // },
     listAlertAttrList() {
       this.$api.alert.alert.listAlertAttrList().then(res => {
         this.attrList = res.Return;
