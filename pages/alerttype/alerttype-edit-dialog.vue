@@ -2,7 +2,7 @@
   <TsDialog v-bind="dialogConfig" @on-ok="save()" @on-close="close()">
     <template v-slot>
       <TsForm ref="form" v-model="alertTypeData" :item-list="formConfig">
-        <template v-slot:attrTypeList>
+        <!--<template v-slot:attrTypeList>
           <div>
             <TsFormSelect
               v-model="alertTypeData.attrTypeIdList"
@@ -16,12 +16,11 @@
               border="border"
             ></TsFormSelect>
           </div>
-        </template>
+        </template>-->
         <template v-slot:fileId>
           <div>
             <div class="text-grey">
-              <div>帮助</div>
-              <div>不提供插件代表不转换告警内容，如果告警内容不符合标准规范，会被直接抛弃。每个告警类型都可以使用多个转换插件来满足不同的接入来源，每个接入来源都需要上传对应的转换插件。</div>
+              <div>帮助：不提供插件代表不转换告警内容，如果告警内容不符合标准规范，会被直接抛弃。每个告警类型都可以使用多个转换插件来满足不同的接入来源，每个接入来源都需要上传对应的转换插件。</div>
               <div>
                 转换插件的接口定义请到
                 <a href="https://gitee.com/neat-logic/neatlogic-alert-plugin-base" target="_blank">这里</a>
@@ -87,7 +86,7 @@
 export default {
   name: '',
   components: {
-    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
+    //TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
     TsUpLoad: () => import('@/resources/components/UpLoad/UpLoad.vue'),
@@ -136,10 +135,10 @@ export default {
           trueValue: 1,
           falseValue: 0
         },
-        attrTypeList: {
-          label: '扩展属性',
-          type: 'slot'
-        },
+        // attrTypeList: {
+        //   label: '扩展属性',
+        //   type: 'slot'
+        // },
         fileId: {
           label: '接入转换插件',
           type: 'slot'

@@ -11,10 +11,10 @@
             <span v-else-if="row.status === 'failed'" class="text-error">{{ $t('page.fail') }}</span>
           </template>
           <template v-slot:content="{ row }">
-            <div class="div-content" style="width: 500px">{{ row.content }}</div>
+            <div class="div-content">{{ row.content }}</div>
           </template>
           <template v-slot:error="{ row }">
-            <div v-if="row.error" class="text-error div-content" style="width: 400px">{{ row.error }}</div>
+            <div v-if="row.error" class="text-error div-content">{{ row.error }}</div>
             <span v-else>-</span>
           </template>
           <!--<template v-slot:action="{ row }">
@@ -70,6 +70,7 @@ export default {
           key: 'type',
           title: '类型'
         },
+        { key: 'adaptor', title: '适配器' },
         { key: 'sourceName', title: '来源' },
         { key: 'time', title: '时间', type: 'time' },
         { key: 'status', title: '处理状态' },

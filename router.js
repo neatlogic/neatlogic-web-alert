@@ -55,7 +55,7 @@ let routerArr = [
     component: alertManage,
     meta: {
       title: '告警列表',
-      ismenu: true,
+      ismenu: false,
       type: 'alert',
       authority: 'ALERT_BASE'
     }

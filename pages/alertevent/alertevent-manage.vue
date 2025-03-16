@@ -20,7 +20,7 @@
             <TabPane
               v-for="(event, index) in eventList"
               :key="index"
-              :label="event.label"
+              :label="getTabLabel(event)"
               :name="event.name"
             ></TabPane>
           </Tabs>
@@ -135,6 +135,28 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getTabLabel(event) {
+      return h => {
+        const returnList = [h('span', { class: 'mr-xs' }, event.label)];
+        let eventCount = 0;
+        if (this.alertTypeData && this.alertTypeData.alertEventHandlerList) {
+          this.alertTypeData.alertEventHandlerList.forEach(item => {
+            if (item.event === event.name) {
+              eventCount++;
+            }
+          });
+        }
+        if (eventCount > 0) {
+          returnList.push(h('Badge', {
+            props: {
+              type: 'info',
+              count: eventCount
+            }
+          }));
+        }
+        return h('div', returnList);
+      };
+    },
     toggleStep(eventhandler) {
       this.$set(this.stepHideMap, eventhandler.uuid, !this.stepHideMap[eventhandler.uuid]);
     },
