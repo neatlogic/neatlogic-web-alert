@@ -11,10 +11,26 @@
             <span v-else-if="row.status === 'failed'" class="text-error">{{ $t('page.fail') }}</span>
           </template>
           <template v-slot:content="{ row }">
-            <div class="div-content">{{ row.content }}</div>
+            <div v-if="row.highlightMap && row.highlightMap.content">
+              <div
+                v-for="(c, cindex) in row.highlightMap.content"
+                :key="cindex"
+                class="div-content text-grey"
+                v-html="c"
+              ></div>
+            </div>
+            <div v-else class="div-content text-grey">{{ row.content }}</div>
           </template>
           <template v-slot:error="{ row }">
-            <div v-if="row.error" class="text-error div-content">{{ row.error }}</div>
+            <div v-if="row.highlightMap && row.highlightMap.error">
+              <div
+                v-for="(c, cindex) in row.highlightMap.error"
+                :key="cindex"
+                class="div-content text-grey"
+                v-html="c"
+              ></div>
+            </div>
+            <div v-else-if="row.error" class="div-content text-grey">{{ row.error }}</div>
             <span v-else>-</span>
           </template>
           <!--<template v-slot:action="{ row }">
@@ -48,13 +64,28 @@ export default {
         searchList: [
           {
             type: 'radio',
-            label: '处理状态',
+            label: '状态',
             name: 'status',
             dataList: [
               { value: 'succeed', text: '成功' },
               { value: 'failed', text: '失败' }
             ]
           },
+          {
+            type: 'select',
+            label: '类型',
+            name: 'type',
+            transfer: true,
+            dynamicUrl: '/api/rest/alert/alerttype/search',
+            rootName: 'tbodyList',
+            valueName: 'name',
+            textName: 'label'
+          },
+          /*{
+            type: 'text',
+            label: '异常',
+            name: 'error'
+          },*/
           {
             type: 'datetimerange',
             name: 'timeRange',
@@ -112,5 +143,10 @@ export default {
   word-wrap: break-all;
   word-break: break-all;
   white-space: normal;
+}
+</style>
+<style lang="less">
+.highlight {
+  color: red;
 }
 </style>

@@ -182,6 +182,7 @@ export default {
         title: '告警详情',
         width: 'large',
         isShow: true,
+        type: 'slider',
         maskClose: true
       },
       statusList: [
