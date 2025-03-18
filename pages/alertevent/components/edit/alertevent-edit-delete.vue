@@ -7,7 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <TsFormItem :required="true" label="删除子告警" :labelPosition="isChild ? 'left' : 'right'">
+    <TsFormItem :required="true" label="删除子告警" labelPosition="left">
       <TsFormSwitch
         v-model="configLocal.isDeleteChildAlert"
         :trueValue="1"
