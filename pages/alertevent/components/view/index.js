@@ -1,6 +1,23 @@
-export { default as email_eventhandler } from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-email.vue';
-export { default as save_eventhandler } from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-save.vue';
-export { default as condition_eventhandler } from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-condition.vue';
-export { default as delete_eventhandler } from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-delete.vue';
-export { default as apply_eventhandler } from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-apply.vue';
-export { default as interval_eventhandler } from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-interval.vue';
+import ComponentManager from '@/resources/import/component-manager.js';
+
+import email_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-email.vue';
+import save_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-save.vue';
+import condition_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-condition.vue';
+import delete_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-delete.vue';
+import apply_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-apply.vue';
+import interval_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-interval.vue';
+
+// 获取动态组件
+const dynamicComponents = ComponentManager.getAlertEventHandlerViewComponent() || {};
+
+const allComponents = {
+  email_eventhandler,
+  save_eventhandler,
+  condition_eventhandler,
+  delete_eventhandler,
+  apply_eventhandler,
+  interval_eventhandler,
+  ...dynamicComponents // 把动态组件合并进来
+};
+
+export default allComponents;

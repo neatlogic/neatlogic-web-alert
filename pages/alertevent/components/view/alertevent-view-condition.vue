@@ -61,7 +61,8 @@ export default {
   },
   beforeCreate() {},
   async created() {
-    this.handlers = await import('@/commercial-module/alert/pages/alertevent/components/view/index.js');
+    const handlers = await import('@/commercial-module/alert/pages/alertevent/components/view/index.js');
+    this.handlers = handlers.default;
     this.listEventPlugin();
     this.listAlertAttrList();
   },

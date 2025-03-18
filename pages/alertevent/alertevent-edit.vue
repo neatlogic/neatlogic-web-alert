@@ -38,7 +38,7 @@
   </TsDialog>
 </template>
 <script>
-import * as handlers from '@/commercial-module/alert/pages/alertevent/components/edit/index.js';
+import handlers from '@/commercial-module/alert/pages/alertevent/components/edit/index.js';
 export default {
   name: '',
   components: {

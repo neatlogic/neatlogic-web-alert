@@ -75,7 +75,8 @@ export default {
     if (this.$utils.isEmpty(this.configLocal)) {
       this.configLocal = { conditionList: [{ rule: null, handler: null }] };
     }
-    this.handlers = await import('@/commercial-module/alert/pages/alertevent/components/edit/index.js');
+    const handlers = await import('@/commercial-module/alert/pages/alertevent/components/edit/index.js');
+    this.handlers = handlers.default;
     this.listEventPlugin();
     this.listAlertAttrList();
   },
