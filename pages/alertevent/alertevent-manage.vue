@@ -147,12 +147,14 @@ export default {
           });
         }
         if (eventCount > 0) {
-          returnList.push(h('Badge', {
-            props: {
-              type: 'info',
-              count: eventCount
-            }
-          }));
+          returnList.push(
+            h('Badge', {
+              props: {
+                type: 'info',
+                count: eventCount
+              }
+            })
+          );
         }
         return h('div', returnList);
       };
@@ -177,6 +179,7 @@ export default {
             if (res.Status === 'OK') {
               this.$Message.success('操作成功');
               this.listAlertEventHandler(this.currentEventName);
+              this.getAlertTypeById();
               vnode.isShow = false;
             }
           });
@@ -231,6 +234,7 @@ export default {
       this.currentPlugin = null;
       if (needRefresh && this.currentEventName) {
         this.listAlertEventHandler(this.currentEventName);
+        this.getAlertTypeById();
       }
     }
   },
