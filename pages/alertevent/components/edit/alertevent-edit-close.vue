@@ -7,8 +7,15 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <TsFormItem label="唯一键" labelPosition="left">
-      <div class="text-grey">帮助：唯一键值相同的告警将会收敛成一条告警</div>
+    <TsFormItem label="关闭方式" labelPosition="left">
+      <TsFormRadio
+        ref="closeType"
+        v-model="configLocal.closeType"
+        :validateList="[{ name: 'required', message: ' ' }]"
+        :dataList="typeList"
+      ></TsFormRadio>
+    </TsFormItem>
+    <TsFormItem v-if="configLocal.closeType==='uniquekey'" label="唯一属性" labelPosition="left">
       <TsFormCheckbox
         :dataList="attrList"
         valueName="name"
@@ -28,19 +35,27 @@ export default {
   name: '',
   components: {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox')
   },
   extends: AlertEventBase,
   props: {},
   data() {
     return {
+      typeList: [
+        { value: 'id', text: '仅关闭当前告警' },
+        { value: 'uniquekey', text: '关闭唯一键相同的所有告警' }
+      ],
       attrList: []
     };
   },
   beforeCreate() {},
   created() {
-    if (this.$utils.isEmpty(this.configLocal)) {
-      this.configLocal = { uniqueAttrList: [] };
+    if (!this.configLocal.closeType) {
+      this.configLocal.closeType = 'id';
+    }
+    if (!this.configLocal.uniqueAttrList) {
+      this.$set(this.configLocal, 'uniqueAttrList', []);
     }
     this.listAlertAttrList();
   },
@@ -53,6 +68,9 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    async valid() {
+      return this.$refs.closeType && this.$refs.closeType.valid();
+    },
     selectAttr(val, options) {
       this.$set(this.configLocal, 'uniqueAttrList', options);
     },

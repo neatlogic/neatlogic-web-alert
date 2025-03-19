@@ -132,7 +132,7 @@
     </template>
     <template v-slot:footer>
       <div class="action-group">
-        <div v-if="currentTab === 'info'" class="action-item">
+        <div v-if="currentTab === 'info' && hasRole" class="action-item">
           <TsFormSwitch
             v-if="alertData && alertData.childAlertCount"
             v-model="isChangeChildAlertStatus"

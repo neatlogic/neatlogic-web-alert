@@ -6,7 +6,7 @@
           <b>{{ getEventName(event.event) }}</b>
         </div>
         <div class="content">
-          <AuditItem :auditList="event.auditList"></AuditItem>
+          <AuditItem :auditList="event.auditList" :alertData="alertData"></AuditItem>
         </div>
       </TimelineItem>
     </Timeline>

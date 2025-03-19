@@ -8,6 +8,7 @@
       :handler="eventHandlerData"
       :level="level"
       :mode="mode"
+      :alertData="alertData"
     ></component>
     <div v-else>插件{{ eventHandlerData.handler }}不存在</div>
   </div>
@@ -22,7 +23,8 @@ export default {
   props: {
     mode: { type: String, default: 'edit' }, //edit|audit
     level: { type: Number, default: 0 },
-    eventHandlerData: { type: Object }
+    eventHandlerData: { type: Object },
+    alertData: { type: Object }
   },
   data() {
     return {

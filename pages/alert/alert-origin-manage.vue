@@ -33,17 +33,17 @@
             <div v-else-if="row.error" class="div-content text-grey">{{ row.error }}</div>
             <span v-else>-</span>
           </template>
-          <!--<template v-slot:action="{ row }">
+          <template v-slot:action="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
-                <li class="tsfont-edit">编辑</li>
-                <li class="tsfont-trash-o">删除</li>
+                <li class="tsfont-edit" @click="showAlertView(row)">{{ $t('page.detail') }}</li>
               </ul>
             </div>
-          </template>-->
+          </template>
         </TsTable>
       </template>
     </TsContain>
+    <AlertOriginView v-if="isShowView" :alertId="currentAlertId" @close="closeAlertView()"></AlertOriginView>
   </div>
 </template>
 <script>
@@ -51,13 +51,16 @@ export default {
   name: '',
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue')
+    CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
+    AlertOriginView: () => import('@/commercial-module/alert/pages/alert/alert-origin-view.vue')
   },
   props: {},
   data() {
     return {
       searchVal: {},
       searchParam: {},
+      isShowView: false,
+      currentAlertId: null,
       searchConfig: {
         search: true,
         labelPosition: 'left',
@@ -124,6 +127,14 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    showAlertView(alert) {
+      this.isShowView = true;
+      this.currentAlertId = alert.id;
+    },
+    closeAlertView() {
+      this.isShowView = false;
+      this.currentAlertId = null;
+    },
     searchAlertOrigin(currentPage) {
       if (currentPage) {
         this.searchParam.currentPage = currentPage;

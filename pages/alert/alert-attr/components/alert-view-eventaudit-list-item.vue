@@ -12,23 +12,23 @@
       }"
     >
       <div>
-        <span
-          class="text-href cursor"
-          :class="{ 'tsfont-drop-down': !hideChild[audit.id.toString()], 'tsfont-drop-right': hideChild[audit.id.toString()] }"
-          @click="toggleChild(audit.id)"
-        ></span>
-        <!--<span v-else class="text-grey tsfont-dot"></span>-->
-        <span class="text-grey">{{ audit.handlerName }}</span>
-        <span class="text-grey ml-xs">{{ audit.startTime | formatDate }}({{ getTimeCost(audit.timeCost) }})</span>
-        <span class="ml-xs">
+        <span class="text-href cursor" :class="{ 'tsfont-drop-down': !hideChild[audit.id.toString()], 'tsfont-drop-right': hideChild[audit.id.toString()] }" @click="toggleChild(audit.id)"></span>
+        <span class="mr-xs">
           <Badge :type="getBadgeType(audit)" :text="audit.statusName"></Badge>
         </span>
+        <span class="text-grey">{{ audit.handlerName }}</span>
+        <span class="text-grey ml-xs">{{ audit.startTime | formatDate }}（{{ getTimeCost(audit.timeCost) }}）</span>
       </div>
       <div v-if="audit.result && !hideChild[audit.id.toString()]" class="mt-md" :style="{ 'padding-left': level * 10 + 'px' }">
-        <AlertEventViewer :eventHandlerData="audit" :level="level" mode="audit"></AlertEventViewer>
+        <AlertEventViewer
+          :eventHandlerData="audit"
+          :level="level"
+          mode="audit"
+          :alertData="alertData"
+        ></AlertEventViewer>
       </div>
       <div v-if="audit.childAuditList && audit.childAuditList.length > 0 && !hideChild[audit.id.toString()]" class="mt-md">
-        <AuditItem :level="level + 1" :auditList="audit.childAuditList"></AuditItem>
+        <AuditItem :level="level + 1" :auditList="audit.childAuditList" :alertData="alertData"></AuditItem>
       </div>
     </div>
   </div>
@@ -42,7 +42,8 @@ export default {
   },
   props: {
     level: { type: Number, default: 0 },
-    auditList: { type: Array }
+    auditList: { type: Array },
+    alertData: { type: Object }
   },
   data() {
     return {
@@ -74,7 +75,7 @@ export default {
       } else if (audit.status === 'skipped') {
         return 'warning';
       } else {
-        return 'running';
+        return 'primary';
       }
     },
     toggleChild(id) {
@@ -108,9 +109,5 @@ export default {
 .item {
   display: grid;
   grid-template-columns: 50px auto;
-}
-.item-title {
-}
-.item-content {
 }
 </style>
