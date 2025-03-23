@@ -113,6 +113,7 @@ export default {
           this.eventHandlerData.config = pluginConfig.getConfig();
         }
         this.$api.alert.alertevent.saveAlertEventHandler(this.eventHandlerData).then(() => {
+          this.$Message.success(this.$t('message.savesuccess'));
           this.close(true);
         });
       }

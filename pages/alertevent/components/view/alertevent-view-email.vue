@@ -34,6 +34,7 @@
         v-for="(user, index) in configLocal.toUserList"
         :key="index"
         :uuid="user"
+        :initType="user.split('#')[0]"
         class="mr-sm"
       ></UserCard></div>
     </TsFormItem>
@@ -48,6 +49,7 @@
         v-for="(user, index) in configLocal.ccUserList"
         :key="index"
         :uuid="user"
+        :initType="user.split('#')[0]"
         class="mr-sm"
       ></UserCard></span>
     </TsFormItem>

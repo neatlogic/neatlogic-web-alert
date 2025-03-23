@@ -19,7 +19,7 @@
         <Tag
           v-for="(attr, index) in attrList"
           :key="index"
-          v-clipboard="'${DATA.' + attr.name + '}'"
+          v-clipboard="attr.freemarkerSnippet || '${DATA.' + attr.name + '}'"
           v-clipboard:success="clipboardSuc"
           class="cursor"
           @click.stop
@@ -47,7 +47,7 @@
           <Tag
             v-for="(attr, index) in attrList"
             :key="index"
-            v-clipboard="'${DATA.' + attr.name + '}'"
+            v-clipboard="attr.freemarkerSnippet || '${DATA.' + attr.name + '}'"
             v-clipboard:success="clipboardSuc"
             class="cursor"
             @click.stop
@@ -68,7 +68,7 @@
         :validateList="['required']"
         :multiple="true"
         :transfer="true"
-        :groupList="['user']"
+        :groupList="['alertUserType', 'user']"
       ></UserSelect>
     </TsFormItem>
     <TsFormItem labelPosition="left" label="抄送">
@@ -76,7 +76,7 @@
         v-model="configLocal.ccUserList"
         :multiple="true"
         :transfer="true"
-        :groupList="['user']"
+        :groupList="['alertUserType', 'user']"
       ></UserSelect>
     </TsFormItem>
     <TsFormItem label="通知间隔" labelPosition="left">
@@ -89,25 +89,6 @@
       ></TsFormInput>
       <div class="text-grey">帮助：此通知在通知间隔时间（?分钟）内只会通知一次</div>
     </TsFormItem>
-    <!--<TsFormItem labelPosition="left" label="通知间隔">
-      <div class="grid">
-        <div>
-          <TsFormSelect
-            v-model="configLocal.statusList"
-            :multiple="true"
-            :transfer="true"
-            :dataList="statusList"
-          ></TsFormSelect>
-        </div>
-        <div><TsFormInput
-          v-model="configLocal.interval"
-          type="number"
-          :min="1"
-          border="border"
-        ></TsFormInput></div>
-      </div>
-      <div class="text-grey">当告警首次处于以上状态时，每隔(?)分钟再进行通知</div>
-    </TsFormItem>-->
   </div>
 </template>
 <script>
@@ -118,7 +99,6 @@ export default {
   name: '',
   directives: { clipboard },
   components: {
-    //TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     FreemarkerHelp: () => import('@/commercial-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror'),
