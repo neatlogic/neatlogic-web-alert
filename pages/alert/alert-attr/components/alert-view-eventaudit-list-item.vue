@@ -27,6 +27,9 @@
           :alertData="alertData"
         ></AlertEventViewer>
       </div>
+      <div v-if="audit.error && !hideChild[audit.id.toString()]" class="mt-md text-error" :style="{ 'padding-left': level * 10 + 'px' }">
+        {{ audit.error }}
+      </div>
       <div v-if="audit.childAuditList && audit.childAuditList.length > 0 && !hideChild[audit.id.toString()]" class="mt-md">
         <AuditItem :level="level + 1" :auditList="audit.childAuditList" :alertData="alertData"></AuditItem>
       </div>
