@@ -19,7 +19,7 @@
                 v-html="c"
               ></div>
             </div>
-            <div v-else class="div-content text-grey">{{ row.content }}</div>
+            <div v-else class="div-content text-primary">{{ row.content }}</div>
           </template>
           <template v-slot:error="{ row }">
             <div v-if="row.highlightMap && row.highlightMap.error">
@@ -30,7 +30,7 @@
                 v-html="c"
               ></div>
             </div>
-            <div v-else-if="row.error" class="div-content text-grey">{{ row.error }}</div>
+            <div v-else-if="row.error" class="div-content text-error" style="max-width:500px;white-space:normal">{{ row.error }}</div>
             <span v-else>-</span>
           </template>
           <template v-slot:action="{ row }">

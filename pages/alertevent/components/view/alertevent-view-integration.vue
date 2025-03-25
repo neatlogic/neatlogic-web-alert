@@ -17,15 +17,50 @@
         {{ integrationData.name }}
       </span>
     </TsFormItem>
-    <TsFormItem v-if="integrationData && paramList.length > 0" label="参数映射" labelPosition="left">
-      <TsFormItem
-        v-for="(param, index) in paramList"
-        :key="index"
-        labelPosition="left"
-        :label="param.description || param.name"
-      >
-        <span>{{ getExpression(param.name) }}</span>
-      </TsFormItem>
+    <TsFormItem
+      v-if="integrationData && paramList.length > 0"
+      :labelWidth="90"
+      label="参数映射"
+      style="margin: 0px !important"
+      labelPosition="left"
+    >
+      <div>
+        <TsFormItem
+          v-for="(param, index) in paramList"
+          :key="index"
+          labelPosition="top"
+          :label="(param.description || param.name) + '(' + param.typeName + ')'"
+        >
+          <div style="line-height: 1">{{ getExpression(param.name) }}</div>
+        </TsFormItem>
+      </div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.result"
+      style="margin: 0px !important"
+      labelPosition="left"
+      :labelWidth="90"
+      label="状态"
+    >
+      <span :class="{ 'text-success': configLocal.result.status === 'succeed', 'text-error': configLocal.result.status === 'failed' }">{{ configLocal.result.status }}</span>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.result && configLocal.result.response"
+      style="margin: 0px !important"
+      labelPosition="left"
+      :labelWidth="90"
+      label="返回信息"
+    >
+      <div>{{ configLocal.result.response }}</div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.result && configLocal.result.error"
+      style="margin: 0px !important"
+      labelPosition="left"
+      :labelWidth="90"
+      label="异常"
+    >
+      <div class="text-error">{{ configLocal.result.error }}</div>
     </TsFormItem>
   </div>
 </template>

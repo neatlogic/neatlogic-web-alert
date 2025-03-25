@@ -68,14 +68,33 @@
             <div class="event-grid">
               <div style="text-align: center"></div>
               <div class="border-base padding radius-md bg-op" style="text-align: center; border-style: dashed !important">
-                <Dropdown placement="bottom-start" :transfer="true">
+                <Poptip
+                  trigger="hover"
+                  word-wrap
+                  transfer
+                  placement="top"
+                  width="400"
+                >
                   <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget', { target: $t('page.plugins') }) }}</a>
-                  <DropdownMenu slot="list">
-                    <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(plugin)">
-                      <span :class="plugin.icon">{{ plugin.label }}</span>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
+                  <div slot="content" class="api">
+                    <div
+                      v-for="(plugin, hindex) in pluginList"
+                      :key="hindex"
+                      @click="addPlugin(plugin)"
+                    >
+                      <div class="plugin-grid cursor padding-sm radius-sm plugin-item">
+                        <div><i class="fz20 text-primary" :class="plugin.icon"></i></div>
+                        <div>
+                          <span class="mr-sm">
+                            <b>{{ plugin.label }}</b>
+                          </span>
+                          <span class="text-grey">{{ plugin.description }}</span>
+                        </div>
+                      </div>
+                      <Divider v-if="hindex < pluginList.length - 1" style="margin: 0px"></Divider>
+                    </div>
+                  </div>
+                </Poptip>
               </div>
               <div></div>
             </div>
@@ -263,6 +282,8 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+@import '~@/resources/assets/css/variable.less';
+
 .event-grid {
   display: grid;
   grid-template-columns: 60px auto 30px;
@@ -270,5 +291,21 @@ export default {
 .tab-container {
   height: calc(100vh - 170px);
   overflow: auto;
+}
+.plugin-grid {
+  display: grid;
+  grid-template-columns: 40px auto;
+}
+.theme(@hover-color) {
+  .plugin-item:hover {
+    background-color: @hover-color;
+  }
+}
+html {
+  .theme(@default-info-bg-color);
+
+  &.theme-dark {
+    .theme(@dark-info-bg-color);
+  }
 }
 </style>

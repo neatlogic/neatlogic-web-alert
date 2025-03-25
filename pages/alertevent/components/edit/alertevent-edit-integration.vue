@@ -41,10 +41,11 @@
         <TsFormItem
           v-for="(param, index) in paramList"
           :key="index"
-          labelPosition="left"
-          :label="param.description || param.name"
+          labelPosition="top"
+          :label="(param.description || param.name) + '(' + param.typeName + ')'"
         >
           <TsFormInput
+            type="textarea"
             border="border"
             :value="getExpression(param.name)"
             @on-change="

@@ -22,14 +22,42 @@
           <div class="mt-md">
             <div v-if="!condition.handler">
               <div v-if=" pluginList && pluginList.length > 0">
-                <Dropdown placement="bottom-start" :transfer="true">
+                <!-- <Dropdown placement="bottom-start" :transfer="true">
                   <a href="javascript:void(0)" class="tsfont-plus">添加插件</a>
                   <DropdownMenu slot="list">
                     <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(condition, plugin)">
                       <span :class="plugin.icon">{{ plugin.label }}</span>
                     </DropdownItem>
                   </DropdownMenu>
-                </Dropdown>
+                </Dropdown> -->
+                <Poptip
+                  transfer
+                  trigger="hover"
+                  word-wrap
+                  placement="top"
+                  width="400"
+                >
+                  <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget', { target: $t('page.plugins') }) }}</a>
+                  <div slot="content" class="api">
+                    <div
+                      v-for="(plugin, hindex) in pluginList"
+                      :key="hindex"
+                      class="cursor"
+                      @click="addPlugin(condition, plugin)"
+                    >
+                      <div class="plugin-grid cursor padding-sm radius-sm plugin-item">
+                        <div><i class="fz20 text-primary" :class="plugin.icon"></i></div>
+                        <div>
+                          <span class="mr-sm">
+                            <b>{{ plugin.label }}</b>
+                          </span>
+                          <span class="text-grey">{{ plugin.description }}</span>
+                        </div>
+                      </div>
+                      <Divider v-if="hindex < pluginList.length - 1" style="margin: 0px"></Divider>
+                    </div>
+                  </div>
+                </Poptip>
               </div>
               <div v-else class="text-error">没有可用插件</div>
             </div>
@@ -146,6 +174,8 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+@import '~@/resources/assets/css/variable.less';
+
 .handler-container {
   position: relative;
   width: 100%;
@@ -163,6 +193,22 @@ export default {
     top: -8px;
     right: -8px;
     cursor: pointer;
+  }
+}
+.plugin-grid {
+  display: grid;
+  grid-template-columns: 40px auto;
+}
+.theme(@hover-color) {
+  .plugin-item:hover {
+    background-color: @hover-color;
+  }
+}
+html {
+  .theme(@default-info-bg-color);
+
+  &.theme-dark {
+    .theme(@dark-info-bg-color);
   }
 }
 </style>
