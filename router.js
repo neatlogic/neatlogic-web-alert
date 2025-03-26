@@ -9,6 +9,7 @@ const attrTypeManage = () => import('@/commercial-module/alert/pages/attrtype/at
 const alertLevelManage = () => import('@/commercial-module/alert/pages/alertlevel/alertlevel-manage.vue');
 const alertEventManage = () => import('@/commercial-module/alert/pages/alertevent/alertevent-manage.vue');
 const alertOriginManage = () => import('@/commercial-module/alert/pages/alert/alert-origin-manage.vue');
+const notifyTemplateManage = () => import('@/commercial-module/alert/pages/notifytemplate/notify-template-manage.vue');
 
 let routerArr = [
   {
@@ -125,7 +126,19 @@ let routerArr = [
       type: 'alertmanage',
       authority: 'ALERT_LEVEL_MODIFY'
     }
+  },
+  {
+    path: '/notify-template-manage',
+    name: 'notify-template-manage',
+    component: notifyTemplateManage,
+    meta: {
+      title: '通知模板管理',
+      ismenu: true,
+      type: 'alertmanage',
+      authority: 'ALERT_NOTIFY_TEMPLATE_MODIFY'
+    }
   }
+  
 ];
 
 export default routerArr;

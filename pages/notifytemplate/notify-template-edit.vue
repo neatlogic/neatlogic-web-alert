@@ -1,0 +1,133 @@
+<template>
+  <TsDialog v-bind="dialogConfig">
+    <template v-slot>
+      <div>
+        <TsForm ref="mainForm" v-model="notifyTemplateData" :item-list="formConfig">
+          <template v-slot:attr>
+            <div>
+              <span class="mr-xs text-grey">点击复制属性</span>
+              <Tag
+                v-for="(attr, index) in attrList"
+                :key="index"
+                v-clipboard="attr.freemarkerSnippet || '${DATA.' + attr.name + '}'"
+                v-clipboard:success="clipboardSuc"
+                class="cursor"
+                @click.stop
+              >{{ attr.label }}</Tag>
+            </div>
+          </template>
+        </TsForm>
+      </div>
+    </template>
+    <template v-slot:footer>
+      <Button @click="close()">{{ $t('page.cancel') }}</Button>
+      <Button type="primary" @click="save()">{{ $t('page.confirm') }}</Button>
+    </template>
+  </TsDialog>
+</template>
+<script>
+import clipboard from '@/resources/directives/clipboard.js';
+
+export default {
+  name: '',
+  directives: { clipboard },
+  components: {
+    TsForm: () => import('@/resources/plugins/TsForm/TsForm')
+  },
+  props: {
+    id: { type: Number }
+  },
+  data() {
+    return {
+      attrList: [],
+      formConfig: {
+        name: {
+          type: 'text',
+          label: this.$t('page.uniquekey'),
+          maxlength: 50,
+          validateList: ['required']
+        },
+        label: {
+          type: 'text',
+          label: this.$t('page.name'),
+          maxlength: 50,
+          validateList: ['required']
+        },
+        isActive: {
+          type: 'radio',
+          dataList: [
+            { value: 1, text: this.$t('page.yes') },
+            { value: 0, text: this.$t('page.no') }
+          ],
+          label: this.$t('term.report.isactive'),
+          trueValue: 1,
+          falseValue: 0
+        },
+        attr: { type: 'slot', label: '属性列表' },
+        title: {
+          type: 'textarea',
+          label: this.$t('page.title'),
+          desc: '有些应用场景不一定有标题，例如短信等'
+        },
+        content: {
+          type: 'textarea',
+          validateList: ['required'],
+          label: this.$t('page.content')
+        }
+      },
+      notifyTemplateData: { isActive: 1 },
+      dialogConfig: {
+        title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('page.template') }) : this.$t('dialog.title.addtarget', { target: this.$t('page.template') }),
+        type: 'modal',
+        isShow: true,
+        width: 'medium'
+      }
+    };
+  },
+  beforeCreate() {},
+  created() {
+    this.listAlertAttrList();
+    this.getNotifyTemplateById();
+  },
+  beforeMount() {},
+  mounted() {},
+  beforeUpdate() {},
+  updated() {},
+  activated() {},
+  deactivated() {},
+  beforeDestroy() {},
+  destroyed() {},
+  methods: {
+    close(needRefresh) {
+      this.$emit('close', needRefresh);
+    },
+    save() {
+      if (this.$refs.mainForm && this.$refs.mainForm.valid()) {
+        this.$api.alert.notifytemplate.saveNotifyTemplate(this.notifyTemplateData).then(res => {
+          this.$Message.success('保存成功');
+          this.close(true);
+        });
+      }
+    },
+    getNotifyTemplateById() {
+      if (this.id) {
+        this.$api.alert.notifytemplate.getNotifyTemplateById(this.id).then(res => {
+          this.notifyTemplateData = res.Return;
+        });
+      }
+    },
+    clipboardSuc() {
+      this.$Message.success(this.$t('message.copysuccess'));
+    },
+    listAlertAttrList() {
+      this.$api.alert.alert.listAlertAttrList().then(res => {
+        this.attrList = res.Return;
+      });
+    }
+  },
+  filter: {},
+  computed: {},
+  watch: {}
+};
+</script>
+<style lang="less"></style>
