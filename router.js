@@ -10,6 +10,7 @@ const alertLevelManage = () => import('@/commercial-module/alert/pages/alertleve
 const alertEventManage = () => import('@/commercial-module/alert/pages/alertevent/alertevent-manage.vue');
 const alertOriginManage = () => import('@/commercial-module/alert/pages/alert/alert-origin-manage.vue');
 const notifyTemplateManage = () => import('@/commercial-module/alert/pages/notifytemplate/notify-template-manage.vue');
+const statusManage = () => import('@/commercial-module/alert/pages/alertstatus/status-manage.vue');
 
 let routerArr = [
   {
@@ -79,6 +80,7 @@ let routerArr = [
     meta: {
       title: '接入记录',
       ismenu: true,
+      icon: 'tsfont-ipliebiao',
       type: 'alert',
       authority: 'ALERT_BASE'
     }
@@ -101,6 +103,7 @@ let routerArr = [
     meta: {
       title: '告警类型管理',
       ismenu: true,
+      icon: 'tsfont-k8s_service',
       type: 'alertmanage',
       authority: 'ALERT_TYPE_MODIFY'
     }
@@ -112,6 +115,7 @@ let routerArr = [
     meta: {
       title: '扩展属性管理',
       ismenu: true,
+      icon: 'tsfont-formstaticlist',
       type: 'alertmanage',
       authority: 'ALERT_ATTR_MODIFY'
     }
@@ -123,8 +127,21 @@ let routerArr = [
     meta: {
       title: '告警级别管理',
       ismenu: true,
+      icon: 'tsfont-chart-polyline',
       type: 'alertmanage',
       authority: 'ALERT_LEVEL_MODIFY'
+    }
+  },
+  {
+    path: '/status-manage',
+    name: 'status-manage',
+    component: statusManage,
+    meta: {
+      title: '告警状态管理',
+      ismenu: true,
+      icon: 'tsfont-heart-o',
+      type: 'alertmanage',
+      authority: 'ALERT_STATUS_MODIFY'
     }
   },
   {
@@ -134,11 +151,11 @@ let routerArr = [
     meta: {
       title: '通知模板管理',
       ismenu: true,
+      icon: 'tsfont-formtextarea',
       type: 'alertmanage',
       authority: 'ALERT_NOTIFY_TEMPLATE_MODIFY'
     }
   }
-  
 ];
 
 export default routerArr;

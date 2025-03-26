@@ -6,23 +6,38 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <div>
-      <div class="text-grey">帮助：唯一键值相同的告警将会收敛成一条告警</div>
-      <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
-      <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
-    </div>
-    <div v-if="configLocal.result">
-      <Divider orientation="left">创建结果</Divider>
+    <TsFormItem
+      v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0"
+      label="唯一键"
+      labelPosition="left"
+    >
       <div>
-        <span class="text-grey mr-xs">处理结果</span>
-        <span :class="{ 'text-success': configLocal.result.status === 'succeed', 'text-error': configLocal.result.status === 'failed' }">{{ configLocal.result.status }}</span>
-        <span v-if="configLocal.result.alertId" class="text-grey ml-sm mr-xs">告警</span>
-        <span v-if="configLocal.result.alertId" class="text-href" @click="showAlert(configLocal.result.alertId)">{{ configLocal.result.alertTitle }}</span>
-        <span v-if="configLocal.result.fromAlertId" class="text-grey ml-sm mr-xs">归并到告警</span>
-        <span v-if="configLocal.result.fromAlertId" class="text-href" @click="showAlert(configLocal.result.fromAlertId)">{{ configLocal.result.fromAlertTitle }}</span>
+        <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
       </div>
-      <AlertView v-if="isShowAlert" :id="currentAlertId" @close="isShowAlert = false"></AlertView>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.defaultStatus"
+      label="默认状态"
+      labelPosition="left"
+    >
+      <div v-if="statusData">
+        <Badge :color="statusData.color" :text="statusData.label"></Badge>
+      </div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.result"
+      label="处理结果"
+      style="margin: 0px !important"
+      labelPosition="left"
+    ><div>
+      <span :class="{ 'text-success': configLocal.result.status === 'succeed', 'text-error': configLocal.result.status === 'failed' }">{{ configLocal.result.status }}</span>
+      <span v-if="configLocal.result.alertId" class="text-grey ml-sm mr-xs">告警</span>
+      <span v-if="configLocal.result.alertId" class="text-href" @click="showAlert(configLocal.result.alertId)">{{ configLocal.result.alertTitle }}</span>
+      <span v-if="configLocal.result.fromAlertId" class="text-grey ml-sm mr-xs">归并到告警</span>
+      <span v-if="configLocal.result.fromAlertId" class="text-href" @click="showAlert(configLocal.result.fromAlertId)">{{ configLocal.result.fromAlertTitle }}</span>
     </div>
+    </TsFormItem>
+    <AlertView v-if="isShowAlert" :id="currentAlertId" @close="isShowAlert = false"></AlertView>
   </div>
 </template>
 <script>
@@ -31,18 +46,24 @@ import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/compo
 export default {
   name: '',
   components: {
-    AlertView: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue')
+    AlertView: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue'),
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },
   extends: AlertEventBase,
   props: {},
   data() {
     return {
       isShowAlert: false,
-      currentAlertId: null
+      currentAlertId: null,
+      statusData: null
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    if (this.configLocal.defaultStatus) {
+      this.getAlertStatus(this.configLocal.defaultStatus);
+    }
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -52,6 +73,11 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getAlertStatus(status) {
+      this.$api.alert.status.getAlertStatusByName(status).then(res => {
+        this.statusData = res.Return;
+      });
+    },
     showAlert(alertId) {
       this.isShowAlert = true;
       this.currentAlertId = alertId;

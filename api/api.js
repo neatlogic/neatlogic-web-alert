@@ -5,6 +5,7 @@ import attrtype from './attrtype/attrtype.js';
 import alertlevel from './alertlevel/alertlevel.js';
 import alertevent from './alertevent/alertevent.js';
 import notifytemplate from './alertnotifytemplate/alertnotifytemplate.js';
+import status from './alertstatus/alertstatus.js';
 
 export default {
   alerttype,
@@ -12,5 +13,6 @@ export default {
   attrtype,
   alertlevel,
   alertevent,
-  notifytemplate
+  notifytemplate,
+  status
 };

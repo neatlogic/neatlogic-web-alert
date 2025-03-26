@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasStatus">
-    <Badge :color="statusColor" :status="statusStatus" :text="statusName"></Badge>
+    <Badge :color="statusColor" :text="statusName"></Badge>
   </div>
 </template>
 <script>
@@ -13,17 +13,15 @@ export default {
   props: {},
   data() {
     return {
-      statusList: [
-        { value: 'new', text: '新告警', color: 'green', status: null },
-        { value: 'confirmed', text: '已确认', color: 'lime', status: null },
-        { value: 'processing', text: '处理中', color: null, status: 'processing' },
-        { value: 'resolved', text: '已处理', color: '#2db7f5', status: null },
-        { value: 'closed', text: '已关闭', color: null, status: 'default' }
-      ]
+      statusList: []
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    if (this.mode === 'audit') {
+      this.listAllStatus();
+    }
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -32,7 +30,13 @@ export default {
   deactivated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {},
+  methods: {
+    listAllStatus() {
+      this.$api.alert.status.listAlertStatus().then(res => {
+        this.statusList = res.Return;
+      });
+    }
+  },
   filter: {},
   computed: {
     hasStatus() {
@@ -50,7 +54,7 @@ export default {
         return this.row.statusColor;
       } else {
         if (this.value && this.value.length > 0) {
-          const s = this.statusList.find(d => d.value === this.value[0]);
+          const s = this.statusList.find(d => d.name === this.value[0]);
           if (s) {
             return s.color;
           }
@@ -58,25 +62,13 @@ export default {
       }
       return null;
     },
-    statusStatus() {
-      if (this.mode !== 'audit') {
-        return this.row.statusStatus;
-      } else {
-        if (this.value && this.value.length > 0) {
-          const s = this.statusList.find(d => d.value === this.value[0]);
-          if (s) {
-            return s.status;
-          }
-        }
-      }
-      return null;
-    },
+
     statusName() {
       if (this.mode !== 'audit') {
         return this.row.statusName;
       } else {
         if (this.value && this.value.length > 0) {
-          const s = this.statusList.find(d => d.value === this.value[0]);
+          const s = this.statusList.find(d => d.name === this.value[0]);
           if (s) {
             return s.text;
           }

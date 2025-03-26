@@ -19,6 +19,15 @@
       <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
       <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
     </TsFormItem>
+    <TsFormItem label="默认状态" labelPosition="left">
+      <div class="text-grey">帮助：告警事件创建时的默认状态</div>
+      <TsFormSelect
+        v-model="configLocal.defaultStatus"
+        :dataList="statusList"
+        valueName="name"
+        textName="label"
+      ></TsFormSelect>
+    </TsFormItem>
   </div>
 </template>
 <script>
@@ -28,13 +37,15 @@ export default {
   name: '',
   components: {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
-    TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox')
+    TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox'),
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
   },
   extends: AlertEventBase,
   props: {},
   data() {
     return {
-      attrList: []
+      attrList: [],
+      statusList: []
     };
   },
   beforeCreate() {},
@@ -42,6 +53,7 @@ export default {
     if (this.$utils.isEmpty(this.configLocal)) {
       this.configLocal = { uniqueAttrList: [] };
     }
+    this.listAllStatus();
     this.listAlertAttrList();
   },
   beforeMount() {},
@@ -53,6 +65,11 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    listAllStatus() {
+      this.$api.alert.status.listAlertStatus().then(res => {
+        this.statusList = res.Return;
+      });
+    },
     selectAttr(val, options) {
       this.$set(this.configLocal, 'uniqueAttrList', options);
     },

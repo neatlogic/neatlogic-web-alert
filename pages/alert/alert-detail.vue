@@ -71,15 +71,15 @@
               <Divider v-if="hasRole"></Divider>
               <TsFormItem v-if="hasRole" label="状态" labelPosition="left">
                 <div class="action-group">
-                  <div class="action-item"><Badge :color="alertData.statusColor" :status="alertData.statusStatus" :text="alertData.statusName"></Badge></div>
-                  <div class="action-item"><Divider style="padding: 0px; margin: 0px" type="vertical"></Divider></div>
-                  <div class="action-item">
+                  <div class="action-item"><Badge :color="alertData.statusColor" :text="alertData.statusName"></Badge></div>
+                  <div v-if="finalStatusList.length > 0" class="action-item"><Divider style="padding: 0px; margin: 0px" type="vertical"></Divider></div>
+                  <div v-if="finalStatusList.length > 0" class="action-item">
                     <Tag
                       v-for="(status, sindex) in finalStatusList"
                       :key="sindex"
-                      :color="status.value === selectedStatus ? 'primary' : 'default'"
+                      :color="status.name === selectedStatus ? 'primary' : 'default'"
                       @click.native="changeStatus(status)"
-                    >{{ status.text }}</Tag>
+                    >{{ status.label }}</Tag>
                   </div>
                 </div>
               </TsFormItem>
@@ -213,16 +213,11 @@ export default {
         maskClose: true
       },
       statusList: [
-        { value: 'new', text: '新告警', color: 'green', status: '' },
-        { value: 'confirmed', text: '已确认', color: '', status: '' },
-        { value: 'processing', text: '处理中', color: '', status: '' },
-        { value: 'resolved', text: '已处理', color: '', status: '' },
-        { value: 'closed', text: '已关闭', color: '', status: '' }
       ],
       attrList: [],
       selectedStatus: null,
       comment: null,
-      isChangeChildAlertStatus: 0,
+      isChangeChildAlertStatus: 1,
       commentData: null,
       applyType: [
         { value: 'append', text: '追加' },
@@ -237,6 +232,7 @@ export default {
   beforeCreate() {},
   async created() {
     this.id = this.$route.params.id;
+    this.listAllStatus();
     this.listAlertAttrList();
     await this.getAlertById();
     await this.searchAlertComment();
@@ -250,6 +246,11 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    listAllStatus() {
+      this.$api.alert.status.listAlertStatus().then(res => {
+        this.statusList = res.Return;
+      });
+    },
     getAttr(name) {
       if (this.attrList) {
         return this.attrList.find(d => d.name === name);
@@ -275,7 +276,7 @@ export default {
       });
     },
     changeStatus(status) {
-      this.selectedStatus = this.selectedStatus === status.value ? null : status.value;
+      this.selectedStatus = this.selectedStatus === status.name ? null : status.name;
     },
     listAlertAttrList() {
       const param = {};
@@ -330,10 +331,13 @@ export default {
   filter: {},
   computed: {
     finalStatusList() {
-      return this.statusList.filter(d => d.value !== this.alertData.status);
+      return this.statusList.filter(d => d.name !== this.alertData.status);
     },
     hasRole() {
       if (this.alertData) {
+        if (this.$AuthUtils.hasRole('ALERT_ADMIN')) {
+          return true;
+        }
         const userInfo = this.$AuthUtils.getCurrentUser();
         if (this.alertData.userList) {
           if (this.alertData.userList.find(d => d.userId === userInfo.uuid)) {

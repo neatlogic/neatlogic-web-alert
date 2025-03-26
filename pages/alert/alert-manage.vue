@@ -41,6 +41,7 @@
           v-if="finalTheadList && finalTheadList.length > 0"
           :multiple="true"
           v-bind="alertData"
+          :canResize="true"
           keyName="id"
           :theadList="[{ key: 'selection' }, ...finalTheadList, { key: 'action' }]"
           @changeCurrent="searchAlert"
