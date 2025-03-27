@@ -1,6 +1,6 @@
 <template>
   <div v-if="mode === 'list' && row" :style="{ 'margin-left': (row['_index'] || 0) * 31 + 'px' }">
-    <div :class="{ 'title-grid': row.childAlertCount }" style="width: 350px">
+    <div :class="{ 'title-grid': row.childAlertCount }" style="max-width: 350px">
       <div
         v-if="row.childAlertCount"
         class="cursor text-href"

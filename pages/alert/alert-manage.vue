@@ -24,9 +24,51 @@
       </template>
       <template v-slot:topRight>
         <div class="action-group">
-          <div class="action-item" :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }" @click="isShowFilter = !isShowFilter">{{ $t('page.advancesearch') }}</div>
+          <div class="action-item">
+            <Dropdown placement="bottom-start" trigger="click">
+              <span v-if="!searchParam.status">
+                <i class="tsfont-drop-down"></i>告警状态
+              </span>
+              <span v-else>
+                <i class="tsfont-drop-down"></i>{{ statusName }}
+              </span>
+              <DropdownMenu slot="list">
+                <DropdownItem
+                  v-for="(status, index) in statusList"
+                  :key="index"
+                  :selected="searchParam.status === status.name"
+                  @click.native="changeStatus(status)"
+                >{{ status.label }}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+          <div class="action-item">
+            <Dropdown placement="bottom-start" trigger="click">
+              <span v-if="!searchParam.updateTimeHour">
+                <i class="tsfont-drop-down"></i>告警时间
+              </span>
+              <span v-else>
+                <i class="tsfont-drop-down"></i>{{ updateTimeName }}
+              </span>
+              <DropdownMenu slot="list">
+                <DropdownItem :selected="searchParam.updateTimeHour === 1" @click.native="changeUpdateTime(1)">最近1小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 3" @click.native="changeUpdateTime(3)">最近3小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 24" @click.native="changeUpdateTime(24)">最近24小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 72" @click.native="changeUpdateTime(72)">最近3天</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 168" @click.native="changeUpdateTime(168)">最近1周</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+          <div class="action-item">
+            <InputSearcher v-model="searchParam.keyword" @change="searchAlert(1)"></InputSearcher>
+          </div>
           <div v-if="!isShowFilter" class="action-item">
-            <InputSearcher v-model="searchParam.keyword" :width="400" @change="searchAlert(1)"></InputSearcher>
+            <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
+          </div>
+          <div class="action-item" @click="isShowFilter = !isShowFilter">
+            <Button type="primary" ghost @click="searchAlert(1)">
+              <span :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }">{{ $t('page.advancesearch') }}</span>
+            </Button>
           </div>
         </div>
       </template>
@@ -125,19 +167,33 @@ export default {
       currentView: null,
       isViewEdit: false,
       attrList: [],
+      statusList: [],
       searchParam: { mode: 'simple', rule: {} },
       alertData: {},
       rule: {},
       alertViewList: [],
       isDeleteShow: false,
       isCloseShow: false,
-      currentAlertId: null
+      currentAlertId: null,
+      searchConfig: {
+        search: true,
+        labelPosition: 'top',
+        searchList: [
+          {
+            type: 'radio',
+            name: '告警时间',
+            dataList: [{}]
+          }
+        ]
+      },
+      searchVal: {}
     };
   },
   beforeCreate() {},
   async created() {
     this.searchParam.viewName = this.$route.params['view'] || '';
     this.searchAlert();
+    this.listAllStatus();
     this.listAlertAttrList();
     //this.listAlertView();
     this.getViewByName();
@@ -151,6 +207,27 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    listAllStatus() {
+      this.$api.alert.status.listAlertStatus().then(res => {
+        this.statusList = res.Return;
+      });
+    },
+    changeStatus(status) {
+      if (this.searchParam.status !== status.name) {
+        this.$set(this.searchParam, 'status', status.name);
+      } else {
+        this.$delete(this.searchParam, 'status');
+      }
+      this.searchAlert(1);
+    },
+    changeUpdateTime(time) {
+      if (this.searchParam.updateTimeHour !== time) {
+        this.$set(this.searchParam, 'updateTimeHour', time);
+      } else {
+        this.$delete(this.searchParam, 'updateTimeHour');
+      }
+      this.searchAlert(1);
+    },
     toAlertDetail(row) {
       window.open(HOME + '/alert.html#/alert-detail/' + row.id, '_blank');
     },
@@ -226,7 +303,7 @@ export default {
     deleteView() {
       this.$createDialog({
         title: this.$t('dialog.title.deletetarget', { target: this.$t('term.cmdb.view') }),
-        content: this.$t('dialog.content.deleteconfirm', {'target': this.$t('term.cmdb.view')}),
+        content: this.$t('dialog.content.deleteconfirm', { target: this.$t('term.cmdb.view') }),
         'on-ok': vnode => {
           this.$api.alert.alert.deleteAlertView(this.alertViewData.id).then(res => {
             if (res.Status === 'OK') {
@@ -279,7 +356,7 @@ export default {
       if (this.isShowFilter) {
         //高级搜索去掉关键字
         this.searchParam.mode = 'advanced';
-        this.searchParam.keyword = '';
+        //this.searchParam.keyword = '';
       } else {
         //普通搜索还原搜索条件
         this.searchParam.mode = 'simple';
@@ -298,6 +375,25 @@ export default {
   },
   filter: {},
   computed: {
+    statusName() {
+      if (this.searchParam.status && this.statusList && this.statusList.length > 0) {
+        const s = this.statusList.find(d => d.name === this.searchParam.status);
+        if (s) {
+          return s.label;
+        }
+      }
+      return null;
+    },
+    updateTimeName() {
+      if (this.searchParam.updateTimeHour) {
+        if (this.searchParam.updateTimeHour <= 24) {
+          return '最近' + this.searchParam.updateTimeHour + '小时';
+        } else {
+          return '最近' + this.searchParam.updateTimeHour / 24 + '天';
+        }
+      }
+      return null;
+    },
     finalTheadList() {
       let list = [];
       if (this.alertData && this.alertData.theadList) {

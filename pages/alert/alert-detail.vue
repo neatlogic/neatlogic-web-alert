@@ -212,8 +212,7 @@ export default {
         isShow: true,
         maskClose: true
       },
-      statusList: [
-      ],
+      statusList: [],
       attrList: [],
       selectedStatus: null,
       comment: null,
