@@ -17,17 +17,18 @@ export default {
   name: '',
   components: {},
   props: {
-    id: { type: Number }
+    id: { type: Number },
+    idList: { type: Array }
   },
   data() {
     return {
       dialogConfig: {
-        title: '删除确认',
+        title: this.$t('dialog.title.closecomfirm'),
         isShow: true,
         maskClose: true,
         width: 'mini'
       },
-      isCloseChildAlert: 0
+      isCloseChildAlert: 1
     };
   },
   beforeCreate() {},
@@ -45,7 +46,7 @@ export default {
       this.$emit('close', needRefresh);
     },
     confirm() {
-      this.$api.alert.alert.closeAlert({ id: this.id, isCloseChildAlert: this.isCloseChildAlert }).then(() => {
+      this.$api.alert.alert.closeAlert({ id: this.id, idList: this.idList, isCloseChildAlert: this.isCloseChildAlert }).then(() => {
         this.$Message.success(this.$t('term.alert.closesuccess'));
         this.close(true);
       });

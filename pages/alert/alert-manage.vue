@@ -20,6 +20,9 @@
               </DropdownMenu>
             </Dropdown>
           </div>
+          <div v-if="selectList && selectList.length > 0" class="action-item tsfont-close-o">
+            <span @click="closeAlerts()">关闭告警</span>
+          </div>
         </div>
       </template>
       <template v-slot:topRight>
@@ -27,10 +30,12 @@
           <div class="action-item">
             <Dropdown placement="bottom-start" trigger="click">
               <span v-if="!searchParam.status">
-                <i class="tsfont-drop-down"></i>告警状态
+                <i class="tsfont-drop-down"></i>
+                告警状态
               </span>
               <span v-else>
-                <i class="tsfont-drop-down"></i>{{ statusName }}
+                <i class="tsfont-drop-down"></i>
+                {{ statusName }}
               </span>
               <DropdownMenu slot="list">
                 <DropdownItem
@@ -45,17 +50,19 @@
           <div class="action-item">
             <Dropdown placement="bottom-start" trigger="click">
               <span v-if="!searchParam.updateTimeHour">
-                <i class="tsfont-drop-down"></i>告警时间
+                <i class="tsfont-drop-down"></i>
+                告警时间
               </span>
               <span v-else>
-                <i class="tsfont-drop-down"></i>{{ updateTimeName }}
+                <i class="tsfont-drop-down"></i>
+                {{ updateTimeName }}
               </span>
               <DropdownMenu slot="list">
-                <DropdownItem :selected="searchParam.updateTimeHour === 1" @click.native="changeUpdateTime(1)">最近1小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 3" @click.native="changeUpdateTime(3)">最近3小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 24" @click.native="changeUpdateTime(24)">最近24小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 72" @click.native="changeUpdateTime(72)">最近3天</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 168" @click.native="changeUpdateTime(168)">最近1周</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 1" @click.native="changeUpdateTime(1)">最近 1 小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 3" @click.native="changeUpdateTime(3)">最近 3 小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 24" @click.native="changeUpdateTime(24)">最近 24 小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 72" @click.native="changeUpdateTime(72)">最近 3 天</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 168" @click.native="changeUpdateTime(168)">最近 7 天</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -82,10 +89,12 @@
         <TsTable
           v-if="finalTheadList && finalTheadList.length > 0"
           :multiple="true"
+          :value="selectList"
           v-bind="alertData"
           :canResize="true"
           keyName="id"
           :theadList="[{ key: 'selection' }, ...finalTheadList, { key: 'action' }]"
+          @getSelected="getSelected"
           @changeCurrent="searchAlert"
           @changePageSize="changePageSize"
         >
@@ -144,7 +153,12 @@
     </TsContain>
     <AlertViewEdit v-if="isViewEdit && alertViewData && alertViewData.id" :id="alertViewData.id" @close="closeViewEdit"></AlertViewEdit>
     <AlertDeleteDialog v-if="isDeleteShow && currentAlertId" :id="currentAlertId" @close="closeAlertDelete"></AlertDeleteDialog>
-    <AlertCloseDialog v-if="isCloseShow && currentAlertId" :id="currentAlertId" @close="closeAlertClose"></AlertCloseDialog>
+    <AlertCloseDialog
+      v-if="isCloseShow"
+      :id="currentAlertId"
+      :idList="selectList"
+      @close="closeAlertClose"
+    ></AlertCloseDialog>
   </div>
 </template>
 <script>
@@ -175,18 +189,7 @@ export default {
       isDeleteShow: false,
       isCloseShow: false,
       currentAlertId: null,
-      searchConfig: {
-        search: true,
-        labelPosition: 'top',
-        searchList: [
-          {
-            type: 'radio',
-            name: '告警时间',
-            dataList: [{}]
-          }
-        ]
-      },
-      searchVal: {}
+      selectList: []
     };
   },
   beforeCreate() {},
@@ -207,6 +210,37 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    hasRole(alertData) {
+      if (alertData.isClose) {
+        return false;
+      }
+      if (this.$AuthUtils.hasRole('ALERT_ADMIN')) {
+        return true;
+      }
+      const userInfo = this.$AuthUtils.getCurrentUser();
+      if (alertData.userList) {
+        if (alertData.userList.find(d => d.userId === userInfo.uuid)) {
+          return true;
+        }
+      }
+      if (alertData.teamList && userInfo.teamList) {
+        for (let i = 0; i < alertData.teamList.length; i++) {
+          const team = alertData.teamList[i];
+          if (userInfo.teamList.find(d => d.uuid === team.teamUuid)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    },
+    closeAlerts() {
+      if (this.selectList && this.selectList.length > 0) {
+        this.isCloseShow = true;
+      }
+    },
+    getSelected(indexList, itemList) {
+      this.selectList = itemList.map(d => d.id);
+    },
     listAllStatus() {
       this.$api.alert.status.listAlertStatus().then(res => {
         this.statusList = res.Return;
@@ -243,11 +277,13 @@ export default {
       this.currentAlertId = null;
       if (needRefresh) {
         this.searchAlert();
+        this.selectList = [];
       }
     },
     closeAlert(alert) {
       this.isCloseShow = true;
       this.currentAlertId = alert.id;
+      this.selectList = [];
     },
     deleteAlert(alert) {
       this.isDeleteShow = true;
@@ -336,6 +372,9 @@ export default {
             if (row['parents']) {
               d['parents'].push(...row['parents']);
             }
+            if (!this.hasRole(d)) {
+              d.isDisabled = true;
+            }
           });
           if (index < this.alertData.tbodyList.length - 1) {
             this.alertData.tbodyList.splice(index + 1, 0, ...dataList);
@@ -364,6 +403,11 @@ export default {
       }
       this.$api.alert.alert.searchAlert(this.searchParam).then(res => {
         this.alertData = res.Return;
+        this.alertData.tbodyList.forEach(item => {
+          if (!this.hasRole(item)) {
+            item.isDisabled = true;
+          }
+        });
       });
     },
     closeViewEdit(needRefresh) {
@@ -387,9 +431,9 @@ export default {
     updateTimeName() {
       if (this.searchParam.updateTimeHour) {
         if (this.searchParam.updateTimeHour <= 24) {
-          return '最近' + this.searchParam.updateTimeHour + '小时';
+          return '最近 ' + this.searchParam.updateTimeHour + ' 小时';
         } else {
-          return '最近' + this.searchParam.updateTimeHour / 24 + '天';
+          return '最近 ' + this.searchParam.updateTimeHour / 24 + ' 天';
         }
       }
       return null;

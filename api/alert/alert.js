@@ -51,6 +51,9 @@ const alert = {
   },
   deleteAlertView(id) {
     return axios.post('/api/rest/alert/view/delete', { id: id });
+  },
+  closeAlerts(idList) {
+    return axios.post('/api/rest/alert/close', { idList: idList });
   }
 };
 
