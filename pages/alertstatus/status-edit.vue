@@ -1,5 +1,5 @@
 <template>
-  <TsDialog v-bind="dialogConfig">
+  <TsDialog v-bind="dialogConfig" @on-close="close()">
     <template v-slot>
       <TsForm ref="form" v-model="statusData" :item-list="formConfig">
         <template v-slot:color>

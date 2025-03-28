@@ -82,6 +82,7 @@ export default {
             this.$api.alert.status.deleteAlertStatus(status.name).then(res => {
               this.$Message.success(this.$t('message.deletesuccess'));
               vnode.isShow = false;
+              this.listAlertStatus();
             });
           }
         });
