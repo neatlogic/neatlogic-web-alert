@@ -1,6 +1,6 @@
 <template>
   <div v-if="hasStatus">
-    <Badge :color="statusColor" :text="statusName"></Badge>
+    <Badge style="white-space: nowrap" :color="statusColor" :text="statusName"></Badge>
   </div>
 </template>
 <script>
