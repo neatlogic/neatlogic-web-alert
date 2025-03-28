@@ -15,11 +15,11 @@
       </div>
       <div v-else class="text-grey">-</div>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.result && configLocal.result.status" label="处理结果" labelPosition="left">
-      <span :class="{ 'text-success': configLocal.result.status === 'succeed', 'text-error': configLocal.result.status === 'failed' }">{{ configLocal.result.status }}</span>
+    <TsFormItem v-if="handler.status" label="处理结果" labelPosition="left">
+      <span :class="{ 'text-success': handler.status === 'succeed', 'text-error': handler.status === 'failed' }">{{ handler.statusName }}</span>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.result && configLocal.result.closeCount" label="关闭数量" labelPosition="left">
-      <span class="text-grey">关闭了</span><span class="mr-xs ml-xs"><b>{{ configLocal.result.closeCount }}</b></span><span class="text-grey">个告警</span>
+    <TsFormItem v-if="handler.result" label="关闭数量" labelPosition="left">
+      <span class="text-grey">关闭了</span><span class="mr-xs ml-xs"><b>{{ handler.result.closeCount }}</b></span><span class="text-grey">个告警</span>
     </TsFormItem>
   </div>
 </template>

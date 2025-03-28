@@ -10,7 +10,6 @@
       style="margin: 0px !important"
       label="标题"
       labelPosition="left"
-      :labelWidth="70"
     >
       <span>{{ configLocal.title }}</span>
     </TsFormItem>
@@ -19,7 +18,6 @@
       style="margin: 0px !important"
       label="内容"
       labelPosition="left"
-      :labelWidth="70"
     >
       <span class="text-grey">{{ configLocal.content }}</span>
     </TsFormItem>
@@ -28,7 +26,6 @@
       style="margin: 0px !important"
       label="收件人"
       labelPosition="left"
-      :labelWidth="70"
     >
       <div><UserCard
         v-for="(user, index) in configLocal.toUserList"
@@ -43,7 +40,6 @@
       style="margin: 0px !important"
       label="抄送"
       labelPosition="left"
-      :labelWidth="70"
     >
       <span><UserCard
         v-for="(user, index) in configLocal.ccUserList"
@@ -58,7 +54,6 @@
       style="margin: 0px !important"
       label="通知间隔"
       labelPosition="left"
-      :labelWidth="70"
     >
       <span>
         <span class="mr-xs">
@@ -68,23 +63,28 @@
       </span>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.hasOwnProperty('result')"
+      v-if="handler.status"
       style="margin: 0px !important"
       labelPosition="left"
-      :labelWidth="70"
-      label="结果"
+      label="发送结果"
     >
-      <span v-if="configLocal.result === 'succeed'" class="text-success">发送成功</span>
-      <span v-else-if="configLocal.result === 'failed'" class="text-error">发送失败</span>
-      <span v-else-if="configLocal.result === 'skipped'" class="text-warning">跳过发送</span>
+      <span
+        :class="{
+          'text-success': handler.status === 'succeed',
+          'text-error': handler.status === 'failed',
+          'text-warning': handler.status === 'skipped'
+        }"
+      >{{ handler.statusName }}
+      </span>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.error"
+      v-if="handler.error"
       style="margin: 0px !important"
       labelPosition="left"
-      :labelWidth="70"
       label="异常"
-    >  <span class="text-error">{{ configLocal.error }}</span></TsFormItem>
+    >
+      <span class="text-error">{{ handler.error }}</span>
+    </TsFormItem>
   </div>
 </template>
 <script>

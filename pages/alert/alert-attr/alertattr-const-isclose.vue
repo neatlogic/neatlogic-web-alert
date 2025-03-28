@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span v-if="value === 1" class="text-success">{{ $t('page.yes') }}</span>
+    <span v-if="isClose === 1" class="text-success">{{ $t('page.yes') }}</span>
     <span v-else class="text-error">{{ $t('page.no') }}</span>
   </div>
 </template>
@@ -26,7 +26,18 @@ export default {
   destroyed() {},
   methods: {},
   filter: {},
-  computed: {},
+  computed: {
+    isClose() {
+      if (this.mode !== 'audit') {
+        return this.row.isClose;
+      } else {
+        if (this.value && this.value.length > 0) {
+          return this.value[0];
+        }
+      }
+      return null;
+    }
+  },
   watch: {}
 };
 </script>

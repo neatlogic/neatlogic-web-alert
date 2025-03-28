@@ -36,31 +36,45 @@
       </div>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.result"
+      v-if="configLocal.interval"
+      style="margin: 0px !important"
+      label="调用间隔"
+      labelPosition="left"
+      :labelWidth="90"
+    >
+      <span>
+        <span class="mr-xs">
+          <b>{{ configLocal.interval }}</b>
+        </span>
+        <span class="text-grey">分钟</span>
+      </span>
+    </TsFormItem>
+    <TsFormItem
+      v-if="handler.result"
       style="margin: 0px !important"
       labelPosition="left"
       :labelWidth="90"
-      label="状态"
+      label="调用结果"
     >
-      <span :class="{ 'text-success': configLocal.result.status === 'succeed', 'text-error': configLocal.result.status === 'failed' }">{{ configLocal.result.status }}</span>
+      <span :class="{ 'text-success': handler.status === 'succeed', 'text-error': handler.status === 'failed' }">{{ handler.statusName }}</span>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.result && configLocal.result.response"
+      v-if="handler.result && handler.result.response"
       style="margin: 0px !important"
       labelPosition="left"
       :labelWidth="90"
       label="返回信息"
     >
-      <div>{{ configLocal.result.response }}</div>
+      <div>{{ handler.result.response }}</div>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.result && configLocal.result.error"
+      v-if="handler.error"
       style="margin: 0px !important"
       labelPosition="left"
       :labelWidth="90"
       label="异常"
     >
-      <div class="text-error">{{ configLocal.result.error }}</div>
+      <div class="text-error">{{ handler.error }}</div>
     </TsFormItem>
   </div>
 </template>

@@ -24,8 +24,8 @@ export default {
   data() {
     return {
       auditList: [],
-      eventList: [],
-      currentPage: 1
+      eventList: []
+      //currentPage: 1
     };
   },
   beforeCreate() {},
@@ -54,15 +54,15 @@ export default {
         this.eventList = res.Return;
       });
     },
-    searchAlertEventAudit(currentPage) {
+    searchAlertEventAudit() {
       const param = { alertId: this.alertData.id };
-      if (currentPage) {
+      /*if (currentPage) {
         param.currentPage = currentPage;
-      }
+      }*/
       this.$api.alert.alert.searchAlertEventAudit(param).then(res => {
         if (res.Return && res.Return.length > 0) {
-          this.auditList.push(...res.Return);
-          this.currentPage = currentPage;
+          this.auditList = res.Return;
+          //this.currentPage = currentPage;
         }
       });
     }

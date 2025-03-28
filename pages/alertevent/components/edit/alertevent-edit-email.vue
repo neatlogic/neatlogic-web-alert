@@ -7,13 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <TsFormItem :required="true" label="标题" labelPosition="left">
-      <TsFormInput
-        ref="txtTitle"
-        v-model="configLocal.title"
-        :validateList="['required']"
-        border="border"
-      ></TsFormInput>
+    <TsFormItem label="可选属性" labelPosition="left">
       <div>
         <span class="mr-xs text-grey">点击复制属性</span>
         <Tag
@@ -25,6 +19,14 @@
           @click.stop
         >{{ attr.label }}</Tag>
       </div>
+    </TsFormItem>
+    <TsFormItem :required="true" label="标题" labelPosition="left">
+      <TsFormInput
+        ref="txtTitle"
+        v-model="configLocal.title"
+        :validateList="['required']"
+        border="border"
+      ></TsFormInput>
     </TsFormItem>
     <TsFormItem :required="true" label="内容" labelPosition="left">
       <div>
@@ -41,17 +43,6 @@
               <FreemarkerHelp></FreemarkerHelp>
             </div>
           </Poptip>
-        </div>
-        <div>
-          <span class="mr-xs text-grey">点击复制属性</span>
-          <Tag
-            v-for="(attr, index) in attrList"
-            :key="index"
-            v-clipboard="attr.freemarkerSnippet || '${DATA.' + attr.name + '}'"
-            v-clipboard:success="clipboardSuc"
-            class="cursor"
-            @click.stop
-          >{{ attr.label }}</Tag>
         </div>
       </div>
       <TsCodemirror
@@ -87,7 +78,7 @@
         :step="1"
         border="border"
       ></TsFormInput>
-      <div class="text-grey">帮助：此通知在通知间隔时间（?分钟）内只会通知一次</div>
+      <div class="text-grey">帮助：在通知间隔时间（?分钟）内只会通知一次</div>
     </TsFormItem>
   </div>
 </template>

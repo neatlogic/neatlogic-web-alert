@@ -7,7 +7,7 @@
     }"
   >
     <div
-      v-for="(condition, index) in configLocal.conditionList"
+      v-for="(condition, index) in conditionList"
       :key="index"
     >
       <ConditionGroup
@@ -87,7 +87,15 @@ export default {
     }
   },
   filter: {},
-  computed: {},
+  computed: {
+    conditionList() {
+      if (this.mode === 'audit') {
+        return this.handler.result.conditionList;
+      } else {
+        return this.configLocal.conditionList; 
+      }
+    }
+  },
   watch: {}
 };
 </script>

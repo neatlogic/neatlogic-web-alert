@@ -63,6 +63,16 @@
         </TsFormItem>
       </div>
     </TsFormItem>
+    <TsFormItem label="调用间隔" labelPosition="left">
+      <TsFormInput
+        v-model="configLocal.interval"
+        type="number"
+        :min="1"
+        :step="1"
+        border="border"
+      ></TsFormInput>
+      <div class="text-grey">帮助：在调用间隔时间（?分钟）内只会调用一次</div>
+    </TsFormItem>
   </div>
 </template>
 <script>

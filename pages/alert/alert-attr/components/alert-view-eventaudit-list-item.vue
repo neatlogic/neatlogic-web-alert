@@ -19,7 +19,7 @@
         <span class="text-grey">{{ audit.handlerName }}</span>
         <span class="text-grey ml-xs">{{ audit.startTime | formatDate }}（{{ getTimeCost(audit.timeCost) }}）</span>
       </div>
-      <div v-if="audit.result && !hideChild[audit.id.toString()]" class="mt-md" :style="{ 'padding-left': level * 10 + 'px' }">
+      <div v-if="audit && !hideChild[audit.id.toString()]" class="mt-md" :style="{ 'padding-left': level * 10 + 'px' }">
         <AlertEventViewer
           :eventHandlerData="audit"
           :level="level"

@@ -49,14 +49,6 @@
         </div>
         <div v-if="!interval.handler">
           <div v-if="pluginList && pluginList.length > 0" class="mt-md padding-xs bg-info-grey radius-md" style="text-align: center">
-            <!--<Dropdown placement="bottom-start" :transfer="true">
-              <a href="javascript:void(0)" class="tsfont-plus">添加插件</a>
-              <DropdownMenu slot="list">
-                <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(interval, plugin)">
-                  <span :class="plugin.icon">{{ plugin.label }}</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>-->
             <Poptip
               transfer
               trigger="hover"

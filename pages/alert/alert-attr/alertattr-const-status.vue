@@ -70,7 +70,7 @@ export default {
         if (this.value && this.value.length > 0) {
           const s = this.statusList.find(d => d.name === this.value[0]);
           if (s) {
-            return s.text;
+            return s.label;
           }
         }
       }

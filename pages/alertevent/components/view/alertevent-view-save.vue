@@ -8,6 +8,7 @@
   >
     <TsFormItem
       v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0"
+      style="margin: 0px !important"
       label="唯一键"
       labelPosition="left"
     >
@@ -17,6 +18,7 @@
     </TsFormItem>
     <TsFormItem
       v-if="configLocal.defaultStatus"
+      style="margin: 0px !important"
       label="默认状态"
       labelPosition="left"
     >
@@ -25,17 +27,37 @@
       </div>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.result"
+      v-if="handler.status"
+      style="margin: 0px !important"
       label="处理结果"
+      labelPosition="left"
+    >
+      <div>
+        <span
+          :class="{
+            'text-success': handler.status === 'succeed',
+            'text-error': handler.status === 'failed'
+          }"
+        >
+          {{ handler.statusName }}
+        </span>
+      </div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="handler.result && handler.result.alertId"
       style="margin: 0px !important"
       labelPosition="left"
-    ><div>
-      <span :class="{ 'text-success': configLocal.result.status === 'succeed', 'text-error': configLocal.result.status === 'failed' }">{{ configLocal.result.status }}</span>
-      <span v-if="configLocal.result.alertId" class="text-grey ml-sm mr-xs">告警</span>
-      <span v-if="configLocal.result.alertId" class="text-href" @click="showAlert(configLocal.result.alertId)">{{ configLocal.result.alertTitle }}</span>
-      <span v-if="configLocal.result.fromAlertId" class="text-grey ml-sm mr-xs">归并到告警</span>
-      <span v-if="configLocal.result.fromAlertId" class="text-href" @click="showAlert(configLocal.result.fromAlertId)">{{ configLocal.result.fromAlertTitle }}</span>
-    </div>
+      label="创建告警"
+    >
+      <span class="text-href" @click="showAlert(handler.result.alertId)">{{ handler.result.alertTitle }}</span>
+    </TsFormItem>
+    <TsFormItem
+      v-if="handler.result && handler.result.fromAlertId"
+      style="margin: 0px !important"
+      labelPosition="left"
+      label="归并到告警"
+    >
+      <span class="text-href" @click="showAlert(handler.result.fromAlertId)">{{ handler.result.fromAlertTitle }}</span>
     </TsFormItem>
     <AlertView v-if="isShowAlert" :id="currentAlertId" @close="isShowAlert = false"></AlertView>
   </div>

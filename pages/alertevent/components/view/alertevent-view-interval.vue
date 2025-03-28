@@ -34,18 +34,18 @@
         </div>
       </div>
     </div>
-    <div v-else-if="mode === 'audit'">
-      <div v-if="configLocal.nextStartTime" class="action-group">
+    <div v-else-if="mode === 'audit' && handler.result">
+      <div v-if="handler.result.nextStartTime" class="action-group">
         <div class="action-item text-grey">下次执行时间</div>
         <div class="action-item">
-          {{ configLocal.nextStartTime | formatDate }}
+          {{ handler.result.nextStartTime | formatDate }}
         </div>
         <div class="action-item text-grey">需执行</div>
-        <div class="action-item">{{ configLocal.leftExecuteCount }}</div>
+        <div class="action-item">{{ handler.result.leftExecuteCount }}</div>
         <div class="action-item text-grey">次</div>
-        <div v-if="configLocal.intervalMinute" class="action-item text-grey">每次间隔</div>
-        <div v-if="configLocal.intervalMinute" class="action-item">{{ configLocal.intervalMinute }}</div>
-        <div v-if="configLocal.intervalMinute" class="action-item text-grey">分钟</div>
+        <div v-if="handler.result.intervalMinute" class="action-item text-grey">每次间隔</div>
+        <div v-if="handler.result.intervalMinute" class="action-item">{{ handler.result.intervalMinute }}</div>
+        <div v-if="handler.result.intervalMinute" class="action-item text-grey">分钟</div>
       </div>
       <div v-else class="text-grey">定时作业已经全部执行完毕</div>
     </div>
