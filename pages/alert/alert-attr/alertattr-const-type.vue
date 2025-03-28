@@ -1,5 +1,5 @@
 <template>
-  <div v-if="row.alertType">
+  <div v-if="row.alertType" class="overflow">
     {{ row.alertType.label }}
   </div>
 </template>
