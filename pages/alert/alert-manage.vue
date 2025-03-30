@@ -20,6 +20,23 @@
               </DropdownMenu>
             </Dropdown>
           </div>
+          <div class="action-item">
+            <TsFormSwitch
+              v-model="isAutoRefresh"
+              trueText="自动刷新"
+              falseText="自动刷新"
+              :trueValue="true"
+              :falseValue="false"
+              :showStatus="true"
+            ></TsFormSwitch>
+          </div>
+          <div v-if="isAutoRefresh" class="action-item" style="width: 50px">
+            <Progress 
+              v-if="countdown > 0"
+              hide-info
+              :percent="( countdown / interval) * 100"
+            />
+          </div>
           <div v-if="selectList && selectList.length > 0" class="action-item tsfont-close-o">
             <span @click="closeAlerts()">关闭告警</span>
           </div>
@@ -171,7 +188,8 @@ export default {
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
     AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
     AlertDeleteDialog: () => import('@/commercial-module/alert/pages/alert/alert-delete-dialog.vue'),
-    AlertCloseDialog: () => import('@/commercial-module/alert/pages/alert/alert-close-dialog.vue')
+    AlertCloseDialog: () => import('@/commercial-module/alert/pages/alert/alert-close-dialog.vue'),
+    TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch')
   },
   props: {},
   data() {
@@ -189,11 +207,20 @@ export default {
       isDeleteShow: false,
       isCloseShow: false,
       currentAlertId: null,
-      selectList: []
+      selectList: [],
+      isAutoRefresh: false,
+      timmer: null,
+      intervaler: null,
+      interval: 60000,
+      startTime: null,
+      countdown: 0
     };
   },
   beforeCreate() {},
   async created() {
+    if (this.$localStore.get('isAutoRefresh')) {
+      this.isAutoRefresh = true;
+    }
     this.searchParam.viewName = this.$route.params['view'] || '';
     this.searchAlert();
     this.listAllStatus();
@@ -210,6 +237,17 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    toggleCountdown() {
+      if (this.intervaler) {
+        clearInterval(this.intervaler);
+        this.intervaler = null;
+      }
+      if (this.isAutoRefresh) {
+        this.intervaler = setInterval(() => {
+          this.countdown = parseInt(this.interval - (Date.now() - this.startTime));
+        }, 1000);
+      }
+    },
     hasRole(alertData) {
       if (alertData.isClose) {
         return false;
@@ -388,6 +426,11 @@ export default {
         });
     },
     searchAlert(currentPage) {
+      if (this.timmer) {
+        clearTimeout(this.timmer);
+        this.timmer = null;
+        this.startTime = null;
+      }
       if (currentPage) {
         this.searchParam.currentPage = currentPage;
       }
@@ -408,6 +451,13 @@ export default {
             item.isDisabled = true;
           }
         });
+        if (this.isAutoRefresh) {
+          this.startTime = Date.now();
+          this.toggleCountdown();
+          this.timmer = setTimeout(() => {
+            this.searchAlert();
+          }, this.interval);
+        }
       });
     },
     closeViewEdit(needRefresh) {
@@ -458,7 +508,22 @@ export default {
       return attrList;
     }
   },
-  watch: {}
+  watch: {
+    isAutoRefresh: {
+      handler: function(val) {
+        this.$localStore.set('isAutoRefresh', val);
+        if (val) {
+          this.searchAlert();
+        } else {
+          if (this.timmer) {
+            clearTimeout(this.timmer);
+            this.timmer = null;
+          }
+          this.toggleCountdown();
+        }
+      }
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
