@@ -50,14 +50,14 @@
                 ]"
               ></TsFormRadio>
             </div>
-            <div v-if="alertData && alertData.childAlertCount" class="action-item"><Divider type="vertical" /></div>
+            <div v-if="alertData && alertData.childAlertCount" class="action-item"><Divider style="padding: 0px; margin: 0px" type="vertical" /></div>
             <div v-if="alertData && alertData.childAlertCount" class="action-item"><TsFormSwitch
               v-model="isCloseChildAlert"
               :showStatus="true"
               :trueValue="1"
               :falseValue="0"
-              trueText="关闭子告警"
-              falseText="关闭子告警"
+              trueText="同时关闭子告警"
+              falseText="同时关闭子告警"
             ></TsFormSwitch></div>
           </div>
         </TsFormItem>
@@ -73,7 +73,7 @@
                 @click.native="changeStatus(status)"
               >{{ status.label }}</Tag>
             </div>
-            <div v-if="alertData && alertData.childAlertCount" class="action-item"><Divider type="vertical" /></div>
+            <div v-if="alertData && alertData.childAlertCount" class="action-item"><Divider style="padding: 0px; margin: 0px" type="vertical" /></div>
             <div v-if="alertData && alertData.childAlertCount" class="action-item"><TsFormSwitch
               v-model="isChangeChildAlertStatus"
               :showStatus="true"
