@@ -10,8 +10,17 @@ const attrtype = {
   saveAttrType(params) {
     return axios.post('/api/rest/alert/attrtype/save', params);
   },
+  searchAttrTypeEnum(params) {
+    return axios.post('/api/rest/alert/attrenum/search', params);
+  },
+  saveAlertAttrEnum(params) {
+    return axios.post('/api/rest/alert/attrenum/save', params);
+  },
   deleteAttrType(id) {
     return axios.post('/api/rest/alert/attrtype/delete', { id: id });
+  },
+  deleteAttrTypeEnum(id) {
+    return axios.post('/api/rest/alert/attrenum/delete', { id: id });
   }
 };
 

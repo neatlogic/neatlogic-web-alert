@@ -50,16 +50,15 @@ export default {
           falseValue: 0
         },
         type: {
-          type: 'radio',
+          type: 'select',
           label: this.$t('page.type'),
           validateList: ['required'],
-          dataList: [
-            { value: 'number', text: '数字' },
-            { value: 'text', text: '字符串' },
-            { value: 'datetime', text: '日期时间' }
-            /*{ value: 'jsonobj', text: 'json对象' },
-            { value: 'jsonlist', text: 'json数组' }*/
-          ]
+          url: '/api/rest/universal/enum/get',
+          transfer: true,
+          desc: '枚举类型会自动保存枚举值',
+          params: {
+            enumClass: 'neatlogic.framework.alert.enums.AlertAttrType'
+          }
         }
       }
     };
