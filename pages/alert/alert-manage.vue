@@ -12,10 +12,10 @@
               </div>
               <DropdownMenu v-if="alertViewData" slot="list" v-auth="['ALERT_VIEW_MODIFY']">
                 <DropdownItem>
-                  <span class="tsfont-edit" @click.stop="editView()">编辑视图</span>
+                  <span class="tsfont-edit" @click.stop="editView()">{{ $t('dialog.title.edittarget', { target: $t('term.cmdb.view') }) }}</span>
                 </DropdownItem>
                 <DropdownItem>
-                  <span class="tsfont-trash-o" @click.stop="deleteView()">删除视图</span>
+                  <span class="tsfont-trash-o" @click.stop="deleteView()">{{ $t('dialog.title.deletetarget', { target: $t('term.cmdb.view') }) }}</span>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -30,12 +30,15 @@
               :showStatus="true"
             ></TsFormSwitch>
           </div>
-          <div v-if="isAutoRefresh" class="action-item" style="width: 50px">
-            <Progress 
-              v-if="countdown > 0"
-              hide-info
-              :percent="( countdown / interval) * 100"
-            />
+          <div v-if="isAutoRefresh" class="action-item">
+            <span>
+              <Progress
+                v-if="countdown > 0"
+                hide-info
+                style="width: 30px"
+                :percent="(countdown / interval) * 100"
+              />
+            </span>
           </div>
           <div v-if="selectList && selectList.length > 0" class="action-item tsfont-close-o">
             <span @click="closeAlerts()">关闭告警</span>
@@ -75,11 +78,11 @@
                 {{ updateTimeName }}
               </span>
               <DropdownMenu slot="list">
-                <DropdownItem :selected="searchParam.updateTimeHour === 1" @click.native="changeUpdateTime(1)">最近 1 小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 3" @click.native="changeUpdateTime(3)">最近 3 小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 24" @click.native="changeUpdateTime(24)">最近 24 小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 72" @click.native="changeUpdateTime(72)">最近 3 天</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 168" @click.native="changeUpdateTime(168)">最近 7 天</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 1" @click.native="changeUpdateTime(1)">最近1小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 3" @click.native="changeUpdateTime(3)">最近3小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 24" @click.native="changeUpdateTime(24)">最近24小时</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 72" @click.native="changeUpdateTime(72)">最近3天</DropdownItem>
+                <DropdownItem :selected="searchParam.updateTimeHour === 168" @click.native="changeUpdateTime(168)">最近7天</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -160,8 +163,8 @@
             <div class="tstable-action">
               <ul class="tstable-action-ul">
                 <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
-                <li class="tsfont-close-o" @click="closeAlert(row)">{{ $t('page.close') }}</li>
-                <li class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
+                <li v-if="hasRole(row)" class="tsfont-close-o" @click="closeAlert(row)">{{ $t('page.close') }}</li>
+                <li v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
               </ul>
             </div>
           </template>
@@ -234,7 +237,17 @@ export default {
   updated() {},
   activated() {},
   deactivated() {},
-  beforeDestroy() {},
+  beforeDestroy() {
+    if (this.intervaler) {
+      clearInterval(this.intervaler);
+      this.intervaler = null;
+    }
+    if (this.timmer) {
+      clearTimeout(this.timmer);
+      this.timmer = null;
+      this.startTime = null;
+    }
+  },
   destroyed() {},
   methods: {
     toggleCountdown() {
@@ -481,9 +494,9 @@ export default {
     updateTimeName() {
       if (this.searchParam.updateTimeHour) {
         if (this.searchParam.updateTimeHour <= 24) {
-          return '最近 ' + this.searchParam.updateTimeHour + ' 小时';
+          return '最近' + this.searchParam.updateTimeHour + '小时';
         } else {
-          return '最近 ' + this.searchParam.updateTimeHour / 24 + ' 天';
+          return '最近' + this.searchParam.updateTimeHour / 24 + '天';
         }
       }
       return null;
