@@ -9,7 +9,7 @@
       <template v-slot:content>
         <TsTable :tbodyList="alertLevelList" :theadList="theadList">
           <template v-slot:color="{ row }">
-            <div :style="{ background: row.color }" class="radius-xs" style="width: 20px; height: 20px; display: inline-block"></div>
+            <div :style="{ background: row.color }" class="radius-sm" style="width: 20px; height: 20px; display: inline-block"></div>
           </template>
           <template slot="action" slot-scope="{ row }">
             <div class="tstable-action">
