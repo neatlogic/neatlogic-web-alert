@@ -153,7 +153,7 @@ export default {
     //   this.$emit('on-save', data);
     // },
     listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList().then(res => {
+      this.$api.alert.alert.listAlertAttrList({isExpand: 1}).then(res => {
         this.attrList = res.Return;
       });
     }
