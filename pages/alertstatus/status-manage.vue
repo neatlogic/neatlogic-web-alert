@@ -7,7 +7,12 @@
         </div>
       </template>
       <template v-slot:content>
-        <TsTable :tbodyList="statusList" :theadList="theadList">
+        <TsTable
+          :canDrag="true"
+          :tbodyList="statusList"
+          :theadList="theadList"
+          @updateRowSort="updateSort"
+        >
           <template v-slot:color="{ row }">
             <div class="color-item radius-sm" :style="{ background: row.color }"></div>
           </template>
@@ -62,6 +67,14 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    updateSort(event, list) {
+      const statusList = list.map(d => d.name);
+      this.$api.alert.status.saveAlertStatusSort(statusList).then(res => {
+        if (res.Status === 'OK') {
+          this.$Message.success(this.$t('message.updatesuccess'));
+        }
+      });
+    },
     editStatus(status) {
       this.currentStatus = status;
       this.isEditShow = true;
