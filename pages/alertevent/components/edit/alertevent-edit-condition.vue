@@ -15,7 +15,7 @@
         >
           <ConditionGroup
             v-model="condition.rule"
-            :padding="false"
+            :padding="true"
             :level="level"
             :attrList="attrList"
           ></ConditionGroup>
