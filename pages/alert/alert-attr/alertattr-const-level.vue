@@ -35,7 +35,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-/deep/.level {
+::v-deep .level {
   background: var(--color) !important;
 }
 </style>

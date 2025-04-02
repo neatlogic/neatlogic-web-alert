@@ -64,11 +64,11 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-/deep/.jv-code {
+::v-deep .jv-code {
   padding: 0 !important;
   background: transparent !important;
 }
-/deep/.jv-container {
+::v-deep .jv-container {
   padding: 0 !important;
   background: transparent !important;
 }
