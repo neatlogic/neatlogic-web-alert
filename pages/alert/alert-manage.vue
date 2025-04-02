@@ -47,6 +47,31 @@
       </template>
       <template v-slot:topRight>
         <div class="action-group">
+          <div v-for="(attr, index) in topAttrList" :key="index" class="action-item">
+            <Poptip
+              v-model="attrPopMap[attr.name]"
+              trigger="click"
+              content="content"
+              style="text-align: left"
+              :width="300"
+            >
+              <div>
+                <span v-if="attrFilterMap[attr.name] && attrFilterMap[attr.name].length > 0" class="tsfont-drop-down">{{ attrFilterMap[attr.name].join(' ') }}</span>
+                <span v-else class="tsfont-drop-down">{{ attr.label }}</span>
+              </div>
+              <div slot="content">
+                <ConditionItem
+                  :conditionItem="attr"
+                  @change="
+                    val => {
+                      setAttrFilter(attr, val);
+                    }
+                  "
+                ></ConditionItem>
+                <div class="mt-sm" style="text-align: right"><Button size="small" type="primary" @click="doSearch(attr)">确认</Button></div>
+              </div>
+            </Poptip>
+          </div>
           <div class="action-item">
             <Dropdown placement="bottom-start" trigger="click">
               <span v-if="!searchParam.status">
@@ -192,7 +217,8 @@ export default {
     AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
     AlertDeleteDialog: () => import('@/commercial-module/alert/pages/alert/alert-delete-dialog.vue'),
     AlertCloseDialog: () => import('@/commercial-module/alert/pages/alert/alert-close-dialog.vue'),
-    TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch')
+    TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
+    ConditionItem: () => import('@/resources/components/Condition/condition-item.vue')
   },
   props: {},
   data() {
@@ -201,10 +227,12 @@ export default {
       isShowFilter: false,
       currentView: null,
       isViewEdit: false,
+      attrPopMap: {},
       attrList: [],
       statusList: [],
-      searchParam: { mode: 'simple', rule: {} },
+      searchParam: { mode: 'simple', rule: {}, attrFilterList: [] },
       alertData: {},
+      attrFilterMap: {},
       rule: {},
       alertViewList: [],
       isDeleteShow: false,
@@ -250,6 +278,23 @@ export default {
   },
   destroyed() {},
   methods: {
+    setAttrFilter(attr, val) {
+      if (val === null || val === '') {
+        this.$delete(this.attrFilterMap, attr.name);
+      } else {
+        let valueList = [];
+        if (val instanceof Array) {
+          valueList = val;
+        } else {
+          valueList = [val];
+        }
+        this.$set(this.attrFilterMap, attr.name, valueList);
+      }
+    },
+    doSearch(attr) {
+      this.searchAlert(1);
+      this.$set(this.attrPopMap, attr.name, false);
+    },
     toggleCountdown() {
       if (this.intervaler) {
         clearInterval(this.intervaler);
@@ -457,6 +502,15 @@ export default {
         this.searchParam.mode = 'simple';
         this.searchParam.rule = this.alertViewData?.config?.rule;
       }
+      const attrFilterList = [];
+      if (this.attrFilterMap) {
+        for (let key in this.attrFilterMap) {
+          if (this.attrFilterMap[key] && this.attrFilterMap[key].length > 0) {
+            attrFilterList.push({ name: key, valueList: this.attrFilterMap[key] });
+          }
+        }
+      }
+      this.searchParam.attrFilterList = attrFilterList;
       this.$api.alert.alert.searchAlert(this.searchParam).then(res => {
         this.alertData = res.Return;
         this.alertData.tbodyList.forEach(item => {
@@ -508,7 +562,17 @@ export default {
       }
       return list;
     },
-    conditionAttrList() {
+    topAttrList() {
+      const attrList = [];
+      this.attrList &&
+        this.attrList.forEach(item => {
+          if (item.isTop) {
+            attrList.push(item);
+          }
+        });
+      return attrList;
+    }
+    /*conditionAttrList() {
       const attrList = [];
       this.attrList &&
         this.attrList.forEach(item => {
@@ -519,7 +583,7 @@ export default {
           });
         });
       return attrList;
-    }
+    }*/
   },
   watch: {
     isAutoRefresh: {

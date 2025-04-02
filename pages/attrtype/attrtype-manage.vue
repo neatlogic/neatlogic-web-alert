@@ -14,9 +14,9 @@
           :canDrag="true"
           v-bind="attrTypeData"
           :theadList="theadList"
+          :showPager="false"
           @updateRowSort="updateSort"
           @changeCurrent="searchAlertAttrType"
-          @changePageSize="changePageSize"
         >
           <template v-slot:isActive="{ row }">
             <span v-if="row.isActive" class="text-success">{{ $t('page.yes') }}</span>
@@ -24,6 +24,10 @@
           </template>
           <template v-slot:isNormal="{ row }">
             <span v-if="row.isNormal" class="text-success">{{ $t('page.yes') }}</span>
+            <span v-else class="text-grey">{{ $t('page.no') }}</span>
+          </template>
+          <template v-slot:isTop="{ row }">
+            <span v-if="row.isTop" class="text-success">{{ $t('page.yes') }}</span>
             <span v-else class="text-grey">{{ $t('page.no') }}</span>
           </template>
           <template v-slot:enumCount="{ row }">
@@ -69,13 +73,14 @@ export default {
         { key: 'typeName', title: this.$t('page.type') },
         { key: 'enumCount', title: this.$t('term.knowledge.member') },
         { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'isTop', title: this.$t('term.alert.istop') },
         { key: 'isNormal', title: this.$t('term.alert.isnormalattr') },
         { key: 'action', title: '' }
       ],
       searchConfig: {
         search: true,
         labelPosition: 'left',
-        labelWidth: 70,
+        labelWidth: 120,
         searchList: [
           {
             type: 'select',
@@ -94,7 +99,16 @@ export default {
               { value: 0, text: this.$t('page.no') }
             ],
             name: 'isActive',
-            label: '是否激活'
+            label: this.$t('term.report.isactive')
+          },
+          {
+            type: 'radio',
+            dataList: [
+              { value: 1, text: this.$t('page.yes') },
+              { value: 0, text: this.$t('page.no') }
+            ],
+            name: 'isTop',
+            label: this.$t('term.alert.istop')
           },
           {
             type: 'radio',
