@@ -16,6 +16,9 @@ const attrtype = {
   saveAlertAttrEnum(params) {
     return axios.post('/api/rest/alert/attrenum/save', params);
   },
+  saveAttrTypeSort(idList) {
+    return axios.post('/api/rest/alert/attrtype/sort/update', { idList: idList });
+  },
   deleteAttrType(id) {
     return axios.post('/api/rest/alert/attrtype/delete', { id: id });
   },

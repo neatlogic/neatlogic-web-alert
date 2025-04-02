@@ -11,8 +11,10 @@
       </template>
       <template v-slot:content>
         <TsTable
+          :canDrag="true"
           v-bind="attrTypeData"
           :theadList="theadList"
+          @updateRowSort="updateSort"
           @changeCurrent="searchAlertAttrType"
           @changePageSize="changePageSize"
         >
@@ -58,7 +60,7 @@ export default {
     return {
       isEditAttrType: false,
       isEditAttrTypeItem: false,
-      searchParam: {},
+      searchParam: { needPage: false },
       attrTypeData: {},
       currentAttrTypeId: null,
       theadList: [
@@ -121,6 +123,14 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    updateSort(event, list) {
+      const attrList = list.map(d => d.id);
+      this.$api.alert.attrtype.saveAttrTypeSort(attrList).then(res => {
+        if (res.Status === 'OK') {
+          this.$Message.success(this.$t('message.updatesuccess'));
+        }
+      });
+    },
     closeAttrTypeItem() {
       this.isEditAttrTypeItem = false;
       this.currentAttrTypeId = null;
