@@ -11,6 +11,7 @@ const alertEventManage = () => import('@/commercial-module/alert/pages/alerteven
 const alertOriginManage = () => import('@/commercial-module/alert/pages/alert/alert-origin-manage.vue');
 const notifyTemplateManage = () => import('@/commercial-module/alert/pages/notifytemplate/notify-template-manage.vue');
 const statusManage = () => import('@/commercial-module/alert/pages/alertstatus/status-manage.vue');
+const ruleManage = () => import('@/commercial-module/alert/pages/alertrule/alertrule-manage.vue');
 
 let routerArr = [
   {
@@ -142,6 +143,18 @@ let routerArr = [
       icon: 'tsfont-heart-o',
       type: 'alertmanage',
       authority: 'ALERT_STATUS_MODIFY'
+    }
+  },
+  {
+    path: '/alertrule-manage',
+    name: 'alertrule-manage',
+    component: ruleManage,
+    meta: {
+      title: '告警特征管理',
+      ismenu: true,
+      icon: 'tsfont-celve',
+      type: 'alertmanage',
+      authority: 'ALERT_RULE_MODIFY'
     }
   },
   {

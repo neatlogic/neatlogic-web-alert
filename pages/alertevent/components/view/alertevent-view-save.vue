@@ -17,6 +17,24 @@
       </div>
     </TsFormItem>
     <TsFormItem
+      v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0 && configLocal.ruleList && configLocal.ruleList.length > 0"
+      style="margin: 0px !important"
+      label="告警特征"
+      labelPosition="left"
+    >
+      <TsFormSelect
+        :value="configLocal.ruleList"
+        url="/api/rest/alert/rule/list"
+        :params="{ isActive: 1 }"
+        transfer
+        border="border"
+        valueName="id"
+        textName="label"
+        multiple
+        readonly
+      ></TsFormSelect>
+    </TsFormItem>
+    <TsFormItem
       v-if="configLocal.defaultStatus"
       style="margin: 0px !important"
       label="默认状态"
@@ -31,17 +49,15 @@
       style="margin: 0px !important"
       label="处理结果"
       labelPosition="left"
-    >
-      <div>
-        <span
-          :class="{
-            'text-success': handler.status === 'succeed',
-            'text-error': handler.status === 'failed'
-          }"
-        >
-          {{ handler.statusName }}
-        </span>
-      </div>
+    ><div>
+      <span
+        :class="{
+          'text-success': handler.status === 'succeed',
+          'text-error': handler.status === 'failed'
+        }"
+      >{{ handler.statusName }}
+      </span>
+    </div>
     </TsFormItem>
     <TsFormItem
       v-if="handler.result && handler.result.alertId"
@@ -69,7 +85,8 @@ export default {
   name: '',
   components: {
     AlertView: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue'),
-    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
   },
   extends: AlertEventBase,
   props: {},

@@ -6,19 +6,34 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <TsFormItem label="关闭方式" labelPosition="left">
+    <TsFormItem label="关闭方式" labelPosition="left" style="margin:0px !important">
       <span>{{ configLocal.closeType === 'id' ? 'id' : '唯一键' }}</span>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.closeType === 'uniquekey'" label="唯一键" labelPosition="left">
+    <TsFormItem
+      v-if="configLocal.closeType === 'uniquekey'"
+      style="margin:0px !important"
+      label="唯一键"
+      labelPosition="left"
+    >
       <div v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length> 0">
         <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
       </div>
       <div v-else class="text-grey">-</div>
     </TsFormItem>
-    <TsFormItem v-if="handler.status" label="处理结果" labelPosition="left">
+    <TsFormItem
+      v-if="handler.status"
+      style="margin:0px !important"
+      label="处理结果"
+      labelPosition="left"
+    >
       <span :class="{ 'text-success': handler.status === 'succeed', 'text-error': handler.status === 'failed' }">{{ handler.statusName }}</span>
     </TsFormItem>
-    <TsFormItem v-if="handler.result" label="关闭数量" labelPosition="left">
+    <TsFormItem
+      v-if="handler.result"
+      style="margin:0px !important"
+      label="关闭数量"
+      labelPosition="left"
+    >
       <span class="text-grey">关闭了</span><span class="mr-xs ml-xs"><b>{{ handler.result.closeCount }}</b></span><span class="text-grey">个告警</span>
     </TsFormItem>
   </div>

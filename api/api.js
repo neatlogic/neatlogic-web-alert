@@ -6,6 +6,7 @@ import alertlevel from './alertlevel/alertlevel.js';
 import alertevent from './alertevent/alertevent.js';
 import notifytemplate from './alertnotifytemplate/alertnotifytemplate.js';
 import status from './alertstatus/alertstatus.js';
+import rule from './alertrule/alertrule.js';
 
 export default {
   alerttype,
@@ -14,5 +15,6 @@ export default {
   alertlevel,
   alertevent,
   notifytemplate,
-  status
+  status,
+  rule
 };

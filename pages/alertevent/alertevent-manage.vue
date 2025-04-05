@@ -49,6 +49,7 @@
                 <div class="border-base padding-md radius-md mb-md bg-op">
                   <div class="text-grey">
                     <h3 class="cursor" :class="{ 'tsfont-drop-right': !isShowStep(eventhandler), 'tsfont-drop-down': isShowStep(eventhandler) }" @click="toggleStep(eventhandler)">
+                      <span v-if="!eventhandler.isActive"><Tag color="error">已禁用</Tag></span>
                       <span :class="eventhandler.handlerIcon">{{ eventhandler.name }}</span>
                     </h3>
                   </div>

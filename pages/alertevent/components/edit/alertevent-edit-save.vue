@@ -19,14 +19,29 @@
       <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
       <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
     </TsFormItem>
+    <TsFormItem v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" label="告警特征" labelPosition="left">
+      <TsFormSelect
+        v-model="configLocal.ruleList"
+        url="/api/rest/alert/rule/list"
+        :params="{ isActive: 1 }"
+        transfer
+        border="border"
+        valueName="id"
+        textName="label"
+        multiple
+      ></TsFormSelect>
+      <div class="text-grey">
+        帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。
+      </div>
+    </TsFormItem>
     <TsFormItem label="默认状态" labelPosition="left">
-      <div class="text-grey">帮助：告警事件创建时的默认状态</div>
       <TsFormSelect
         v-model="configLocal.defaultStatus"
         :dataList="statusList"
         valueName="name"
         textName="label"
       ></TsFormSelect>
+      <div class="text-grey">帮助：告警事件创建时的默认状态</div>
     </TsFormItem>
   </div>
 </template>
@@ -51,7 +66,7 @@ export default {
   beforeCreate() {},
   created() {
     if (this.$utils.isEmpty(this.configLocal)) {
-      this.configLocal = { uniqueAttrList: [] };
+      this.configLocal = { uniqueAttrList: [], ruleList: [] };
     }
     this.listAllStatus();
     this.listAlertAttrList();

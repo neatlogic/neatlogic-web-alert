@@ -22,6 +22,9 @@
           <div class="action-item text-grey">分钟</div>
         </div>
         <div class="mt-md">
+          <Divider orientation="start">
+            <h4 class="text-grey" :class="interval.handler.icon">{{ interval.handler.name }}</h4>
+          </Divider>
           <component
             :is="handlers && handlers[interval.handler.handler.toLowerCase() + '_eventhandler']"
             v-if="handlers[interval.handler.handler.toLowerCase() + '_eventhandler']"
