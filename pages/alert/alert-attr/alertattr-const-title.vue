@@ -8,7 +8,7 @@
         @click="$emit('toggleChildren', row)"
       >
         <span v-if="row.childAlertCount >= 100" class="text-error superscript">99+</span>
-        <span v-else class="text-error superscript">{{ row.childAlertCount }}</span>
+        <span v-else class="text-error superscript"><b>{{ row.childAlertCount }}</b></span>
       </div>
       <div class="overflow">
         <a :title="row.title" @click="getAlertDetail(row)">{{ row.title }}</a>
@@ -72,7 +72,7 @@ export default {
   grid-template-columns: 30px auto;
 }
 .superscript {
-  font-size: 0.7em; /* 设置字体大小为原字体的70% */
+  font-size: 0.8em; /* 设置字体大小为原字体的70% */
   vertical-align: super; /* 设置为上标 */
 }
 </style>
