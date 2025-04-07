@@ -6,6 +6,9 @@
       </template>
       <template v-slot:content>
         <TsTable :tbodyList="alertRuleList" :theadList="theadList" :canSelectRow="false">
+          <template v-slot:attrName="{ row }">
+            <span>{{ getAttr(row.attrName) }}</span>
+          </template>
           <template v-slot:isActive="{ row }">
             <div v-if="row.isActive" class="text-success">{{ $t('page.yes') }}</div>
             <div v-else class="text-grey">{{ $t('page.no') }}</div>
@@ -54,6 +57,7 @@ export default {
       isEdit: false,
       alertRuleList: [],
       currentId: null,
+      attrList: [],
       theadList: [
         {
           key: 'name',
@@ -75,7 +79,8 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {
+  async created() {
+    await this.listAlertAttrList();
     this.listAlertRule();
   },
   beforeMount() {},
@@ -87,6 +92,21 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getAttr(name) {
+      if (this.attrList) {
+        const attr = this.attrList.find(d => d.name === name);
+        if (attr) {
+          return attr.label + '·' + attr.name;
+        }
+      }
+      return null;
+    },
+    async listAlertAttrList() {
+      const param = {};
+      await this.$api.alert.alert.listAlertAttrList(param).then(res => {
+        this.attrList = res.Return;
+      });
+    },
     listAlertRule() {
       this.$api.alert.rule.listAlertRule().then(res => {
         this.alertRuleList = res.Return;
