@@ -33,8 +33,8 @@
           <template v-slot:action="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
-                <li class="tsfont-edit" @click="editRule(row)">编辑</li>
-                <li class="tsfont-trash-o" @click="deleteRule(row)">删除</li>
+                <li class="tsfont-edit" @click="editRule(row)">{{ $t('page.edit') }}</li>
+                <li class="tsfont-trash-o" @click="deleteRule(row)">{{ $t('page.delete') }}</li>
               </ul>
             </div>
           </template>

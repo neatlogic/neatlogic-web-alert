@@ -1,38 +1,61 @@
 <template>
   <TsDialog v-bind="dialogConfig" @on-close="close">
     <template v-slot>
-      <TsForm ref="form" v-model="alertRuleData" :item-list="formConfig">
-        <template v-slot:config>
-          <div>
-            <TsTable :theadList="theadList" :tbodyList="alertRuleData.config.ruleList" :fixedHeader="false">
-              <template v-slot:pattern="{ row }">
-                <TsFormInput v-model="row.pattern" border="border" type="textarea"></TsFormInput>
-              </template>
-              <template v-slot:replacement="{ row }">
-                <TsFormInput v-model="row.replacement" border="border" type="textarea"></TsFormInput>
-              </template>
-              <template slot="action" slot-scope="{ row }">
-                <div class="tstable-action">
-                  <ul class="tstable-action-ul">
-                    <li class="tsfont-trash-o" @click="deleteRule(row)">删除</li>
-                  </ul>
-                </div>
-              </template>
-            </TsTable>
-            <div class="mt-sm">
-              <Button
-                style="width: 100%"
-                ghost
-                type="primary"
-                @click="addRule()"
-              ><span class="tsfont-plus">添加规则</span></Button>
+      <div>
+        <TsForm ref="form" v-model="alertRuleData" :item-list="formConfig">
+          <template v-slot:config>
+            <div>
+              <TsTable :theadList="theadList" :tbodyList="alertRuleData.config.ruleList" :fixedHeader="false">
+                <template v-slot:pattern="{ row }">
+                  <TsFormInput v-model="row.pattern" border="border"></TsFormInput>
+                </template>
+                <template v-slot:replacement="{ row }">
+                  <TsFormInput v-model="row.replacement" border="border"></TsFormInput>
+                </template>
+                <template slot="action" slot-scope="{ row }">
+                  <div class="tstable-action">
+                    <ul class="tstable-action-ul">
+                      <li class="tsfont-trash-o" @click="deleteRule(row)">删除</li>
+                    </ul>
+                  </div>
+                </template>
+              </TsTable>
+              <div class="mt-sm">
+                <Button
+                  style="width: 100%"
+                  ghost
+                  type="primary"
+                  @click="addRule()"
+                ><span class="tsfont-plus">添加规则</span></Button>
+              </div>
             </div>
-          </div>
-        </template>
-      </TsForm>
+          </template>
+        </TsForm>
+        <div v-if="alertRuleData && alertRuleData.config && alertRuleData.config.ruleList && alertRuleData.config.ruleList.length > 0" class="mt-md">
+          <TsFormItem :required="true" label="测试数据">
+            <TsFormInput
+              ref="content"
+              v-model="testContent"
+              :validateList="['required']"
+              :labelWidth="100"
+              border="border"
+              type="textarea"
+            ></TsFormInput>
+          </TsFormItem>
+          <TsFormItem v-if="result" label="转换结果">
+            <div style="white-space: normal; word-break: break-all">{{ result }}</div>
+          </TsFormItem>
+        </div>
+      </div>
     </template>
     <template v-slot:footer>
       <Button @click="close()">{{ $t('page.cancel') }}</Button>
+      <Button
+        v-if="alertRuleData && alertRuleData.config && alertRuleData.config.ruleList && alertRuleData.config.ruleList.length > 0"
+        type="primary"
+        ghost
+        @click="test()"
+      >{{ $t('page.test') }}</Button>
       <Button type="primary" @click="save()">{{ $t('page.confirm') }}</Button>
     </template>
   </TsDialog>
@@ -43,14 +66,18 @@ export default {
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
     TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
-    TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput')
+    TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },
   props: {
     id: { type: Number }
   },
   data() {
     return {
+      result: null,
+      testContent: null,
       dialogConfig: {
+        title: this.id ? '编辑特征' : '添加特征',
         type: 'modal',
         maskClose: false,
         isShow: true,
@@ -118,6 +145,19 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    test() {
+      if (this.$refs.content && this.$refs.content.valid()) {
+        const ruleList = this.alertRuleData.config.ruleList;
+        if (!ruleList || ruleList.length === 0) {
+          this.$Message.info('请至少添加一条规则');
+          return;
+        }
+        this.result = null;
+        this.$api.alert.rule.testAlertRule({ ruleList: this.alertRuleData.config.ruleList, content: this.testContent }).then(res => {
+          this.result = res.Return;
+        });
+      }
+    },
     getAlertRule() {
       if (this.id) {
         this.$api.alert.rule.getAlertRuleById(this.id).then(res => {

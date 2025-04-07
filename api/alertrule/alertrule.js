@@ -10,6 +10,9 @@ const rule = {
   saveAlertRule(params) {
     return axios.post('/api/rest/alert/rule/save', params);
   },
+  testAlertRule(params) {
+    return axios.post('/api/rest/alert/rule/test', params);
+  },
   deleteAlertRule(id) {
     return axios.post('/api/rest/alert/rule/delete', { id: id });
   }
