@@ -62,7 +62,8 @@ export default {
         title: '告警详情',
         type: 'slider',
         width: 'medium',
-        isShow: true
+        isShow: true,
+        maskClose: true
       },
       currentTab: 'detail',
       alertData: {}

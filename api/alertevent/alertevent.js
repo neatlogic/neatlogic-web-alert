@@ -16,8 +16,14 @@ const alertevent = {
   getAlertEventHandlerById(id) {
     return axios.post('/api/rest/alert/event/handler/get', { id: id });
   },
+  getAlertEventPluginByName(name) {
+    return axios.post('/api/rest/alert/event/plugin/get', { name: name });
+  },
   saveAlertEventHandler(params) {
     return axios.post('/api/rest/alert/event/handler/save', params);
+  },
+  saveAlertEventPluginConfig(params) {
+    return axios.post('/api/rest/alert/event/plugin/config/save', params);
   },
   deleteAlertEventHandler(id) {
     return axios.post('/api/rest/alert/event/handler/delete', { id: id });

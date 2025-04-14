@@ -12,6 +12,7 @@ const alertOriginManage = () => import('@/commercial-module/alert/pages/alert/al
 const notifyTemplateManage = () => import('@/commercial-module/alert/pages/notifytemplate/notify-template-manage.vue');
 const statusManage = () => import('@/commercial-module/alert/pages/alertstatus/status-manage.vue');
 const ruleManage = () => import('@/commercial-module/alert/pages/alertrule/alertrule-manage.vue');
+const eventPluginManage = () => import('@/commercial-module/alert/pages/alertevent/eventplugin-manage.vue');
 
 let routerArr = [
   {
@@ -167,6 +168,18 @@ let routerArr = [
       icon: 'tsfont-formtextarea',
       type: 'alertmanage',
       authority: 'ALERT_NOTIFY_TEMPLATE_MODIFY'
+    }
+  },
+  {
+    path: '/eventplugin-manage',
+    name: 'eventplugin-manage',
+    component: eventPluginManage,
+    meta: {
+      title: '事件插件管理',
+      ismenu: true,
+      icon: 'tsfont-plugin',
+      type: 'alertmanage',
+      authority: 'ALERT_EVENT_PLUGIN_MODIFY'
     }
   }
 ];
