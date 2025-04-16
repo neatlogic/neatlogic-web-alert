@@ -9,6 +9,6 @@ export { default as const_userList } from '@/commercial-module/alert/pages/alert
 export { default as const_teamList } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-const-teamlist.vue';
 
 //自定义属性是根据类型分类
-export { default as attr_string } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-attr-string.vue';
+export { default as attr_text } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-attr-text.vue';
 export { default as attr_number } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-attr-number.vue';
 export { default as attr_datetime } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-attr-datetime.vue';

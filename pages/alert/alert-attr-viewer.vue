@@ -1,29 +1,32 @@
 <template>
-  <div v-if="attr.kind === 'const' && handlers[attr.name]">
-    <component
-      :is="handlers[attr.name]"
-      :row="row"
-      :value="value"
-      :mode="mode"
-      :view="view"
-      :attr="attr"
-      @toggleChildren="toggleChildren"
-      @refresh="refresh"
-    ></component>
+  <div>
+    <div v-if="attr.kind === 'const' && handlers[attr.name]">
+      <component
+        :is="handlers[attr.name]"
+        :row="row"
+        :value="value"
+        :mode="mode"
+        :view="view"
+        :attr="attr"
+        @toggleChildren="toggleChildren"
+        @refresh="refresh"
+      ></component>
+    </div>
+    <div v-else-if="attr.kind === 'attr' && handlers['attr_' + attr.type]">
+      <component
+        :is="handlers['attr_' + attr.type]"
+        :row="row"
+        :mode="mode"
+        :view="view"
+        :value="value"
+        :attr="attr"
+        @toggleChildren="toggleChildren"
+        @refresh="refresh"
+      ></component>
+    </div>
+    <div v-else-if="value != null && value !== undefined && value !== ''">{{ value }}</div>
+    <div v-else class="text-grey">-</div>
   </div>
-  <div v-else-if="attr.kind === 'attr' && handlers['attr_' + attr.type]">
-    <component
-      :is="handlers['attr_' + attr.type]"
-      :row="row"
-      :mode="mode"
-      :view="view"
-      :value="value"
-      :attr="attr"
-      @toggleChildren="toggleChildren"
-      @refresh="refresh"
-    ></component>
-  </div>
-  <div v-else>{{ value }}</div>
 </template>
 <script>
 import * as handlers from '@/commercial-module/alert/pages/alert/alert-attr/index.js';

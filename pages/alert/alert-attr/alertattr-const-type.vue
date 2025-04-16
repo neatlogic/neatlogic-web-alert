@@ -2,6 +2,7 @@
   <div v-if="row.alertType" class="overflow">
     {{ row.alertType.label }}
   </div>
+  <div v-else class="text-grey">-</div>
 </template>
 <script>
 import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';

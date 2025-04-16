@@ -1,13 +1,19 @@
 <template>
-  <div v-if="mode !== 'audit' && row.teamList && row.teamList.length > 0">
-    <span v-for="(team, index) in row.teamList" :key="index" class="mr-xs">
-      <Tag>{{ team.teamName }}</Tag>
-    </span>
+  <div v-if="mode !== 'audit'">
+    <div v-if="row.teamList && row.teamList.length > 0">
+      <span v-for="(team, index) in row.teamList" :key="index" class="mr-xs">
+        <Tag>{{ team.teamName }}</Tag>
+      </span>
+    </div>
+    <div v-else class="text-grey">-</div>
   </div>
-  <div v-else-if="mode === 'audit' && teamList && teamList.length > 0">
-    <Tag v-for="(team, index) in teamList" :key="index">
-      {{ team.name }}
-    </Tag>
+  <div v-else-if="mode === 'audit'">
+    <div v-if="teamList && teamList.length > 0">
+      <Tag v-for="(team, index) in teamList" :key="index">
+        {{ team.name }}
+      </Tag>
+    </div>
+    <div v-else class="text-grey">-</div>
   </div>
 </template>
 <script>

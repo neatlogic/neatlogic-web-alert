@@ -1,7 +1,13 @@
 <template>
   <div v-if="hasStatus">
-    <Badge style="white-space: nowrap" :color="statusColor" :text="statusName"></Badge>
+    <Badge
+      v-if="statusName"
+      style="white-space: nowrap"
+      :color="statusColor"
+      :text="statusName"
+    ></Badge>
   </div>
+  <div v-else class="text-grey">-</div>
 </template>
 <script>
 import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';
@@ -43,7 +49,7 @@ export default {
       if (this.mode !== 'audit') {
         return !!this.row.status;
       } else {
-        if (this.value && this.value.length > 0) {
+        if (this.value && this.value.length > 0 && this.value[0]) {
           return true;
         }
       }
@@ -53,7 +59,7 @@ export default {
       if (this.mode !== 'audit') {
         return this.row.statusColor;
       } else {
-        if (this.value && this.value.length > 0) {
+        if (this.value && this.value.length > 0 && this.value[0]) {
           const s = this.statusList.find(d => d.name === this.value[0]);
           if (s) {
             return s.color;
@@ -67,7 +73,7 @@ export default {
       if (this.mode !== 'audit') {
         return this.row.statusName;
       } else {
-        if (this.value && this.value.length > 0) {
+        if (this.value && this.value.length > 0 && this.value[0]) {
           const s = this.statusList.find(d => d.name === this.value[0]);
           if (s) {
             return s.label;

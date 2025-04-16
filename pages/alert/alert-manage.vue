@@ -185,7 +185,6 @@
             </div>
             <div v-else-if="thead.key.startsWith('attr_') && row.attrObj" :key="index">
               <AlertAttrViewer
-                v-if="row.attrObj[thead.key.replace('attr_', '')]"
                 :view="alertViewData"
                 :attr="getAttrByName(thead.key)"
                 :value="row.attrObj[thead.key.replace('attr_', '')]"

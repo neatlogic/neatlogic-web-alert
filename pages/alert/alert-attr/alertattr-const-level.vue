@@ -1,12 +1,8 @@
 <template>
-  <div>
-    <Badge
-      v-if="row.alertLevel"
-      class-name="level"
-      :style="{ '--color': row.alertLevel.color }"
-      :text="row.alertLevel.label"
-    ></Badge>
+  <div v-if="row.alertLevel">
+    <Badge class-name="level" :style="{ '--color': row.alertLevel.color }" :text="row.alertLevel.label"></Badge>
   </div>
+  <div v-else class="text-grey">-</div>
 </template>
 <script>
 import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';

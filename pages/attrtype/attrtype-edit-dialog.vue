@@ -87,6 +87,9 @@ export default {
       if (this.id) {
         this.$api.alert.attrtype.getAttrTypeById(this.id).then(res => {
           this.attrTypeData = res.Return;
+          if (!this.attrTypeData.isTop) {
+            this.attrTypeData.isTop = 0;
+          }
         });
       }
     },

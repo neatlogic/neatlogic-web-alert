@@ -77,8 +77,8 @@
             <div v-if="alertData && alertData.childAlertCount" class="action-item"><TsFormSwitch
               v-model="isChangeChildAlertStatus"
               :showStatus="true"
-              trueText="同时修改子告警状态"
-              falseText="同时修改子告警状态"
+              trueText="同时应用子告警"
+              falseText="同时应用子告警"
               :falseValue="0"
               :trueValue="1"
             ></TsFormSwitch></div>
@@ -341,10 +341,9 @@ export default {
         this.attrList.forEach(d => {
           if (d.kind === 'const') {
             attrList.push(d);
-          } else if (this.alertTypeData.attrTypeIdList && this.alertTypeData.attrTypeIdList.length > 0) {
-            if (this.alertTypeData.attrTypeIdList.includes(d.id)) {
-              attrList.push(d);
-            }
+          } else if (this.alertData && this.alertData.attrObj && this.alertData.attrObj[d.name.replace('attr_', '')]) {
+            //没有值的扩展属性不显示
+            attrList.push(d);
           }
         });
       }

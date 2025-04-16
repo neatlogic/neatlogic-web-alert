@@ -12,7 +12,7 @@
           <b>{{ row.childAlertCount }}</b>
         </span>
       </div>
-      <div style="min-width: 0; word-break: keep-all; overflow: hidden; text-overflow: ellipsis;white-space:nowrap">
+      <div class="overflow">
         <a :title="row.title" @click="getAlertDetail(row)">{{ row.title }}</a>
       </div>
     </div>
