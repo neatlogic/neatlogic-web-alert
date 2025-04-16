@@ -7,6 +7,15 @@
     }"
   >
     <TsFormItem
+      v-if="mailServerData"
+      label="邮件服务器"
+      style="margin: 0px !important"
+      labelPosition="left"
+    ><div>
+      {{ mailServerData.name }}
+    </div>
+    </TsFormItem>
+    <TsFormItem
       style="margin: 0px !important"
       label="标题"
       labelPosition="left"
@@ -100,6 +109,7 @@ export default {
   props: {},
   data() {
     return {
+      mailServerData: null,
       statusList: [
         {
           value: 'new',
@@ -113,7 +123,11 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    if (this.configLocal && this.configLocal.mailServerId) {
+      this.getMailServer(this.configLocal.mailServerId);
+    }
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -128,6 +142,11 @@ export default {
       if (s) {
         return s.text;
       }
+    },
+    getMailServer(id) {
+      this.$api.framework.mailserver.get({id: id}).then(res => {
+        this.mailServerData = res.Return;
+      });
     }
   },
   filter: {},

@@ -7,6 +7,20 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <TsFormItem label="邮件服务器" labelPosition="left">
+      <div>
+        <TsFormSelect
+          v-model="configLocal.mailServerId"
+          url="/api/rest/mailserver/list"
+          transfer
+          rootName="tbodyList"
+          valueName="id"
+          textName="name"
+          border="border"
+        ></TsFormSelect>
+        <div class="text-grey">帮助：不选择代表使用默认的邮件服务器</div>
+      </div>
+    </TsFormItem>
     <TsFormItem label="可选属性" labelPosition="left">
       <div>
         <span class="mr-xs text-grey">点击复制属性</span>
@@ -92,6 +106,7 @@ export default {
   components: {
     FreemarkerHelp: () => import('@/commercial-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')
