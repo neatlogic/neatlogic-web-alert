@@ -323,9 +323,6 @@ export default {
       }
     },
     hasRole(alertData) {
-      if (alertData.isClose) {
-        return false;
-      }
       if (this.$AuthUtils.hasRole('ALERT_ADMIN')) {
         return true;
       }
