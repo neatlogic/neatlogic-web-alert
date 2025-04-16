@@ -4,6 +4,18 @@
       <template v-slot:topLeft>
         <div class="action-group">
           <div class="action-item">
+            <Dropdown trigger="click">
+              <Button type="primary" ghost :disabled="!selectList || selectList.length == 0">
+                {{ $t('page.batchoperation') }}
+                <span class="tsfont-down"></span>
+              </Button>
+              <DropdownMenu slot="list">
+                <DropdownItem @click.native="batchClose()">关闭告警</DropdownItem>
+                <DropdownItem @click.native="batchOpen()">打开告警</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+          <div class="action-item">
             <Dropdown placement="bottom-start" trigger="click">
               <div>
                 <span v-if="alertViewData">{{ alertViewData.label }}</span>
@@ -39,9 +51,6 @@
                 :percent="(countdown / interval) * 100"
               />
             </span>
-          </div>
-          <div v-if="selectList && selectList.length > 0" class="action-item tsfont-close-o">
-            <span @click="closeAlerts()">关闭告警</span>
           </div>
         </div>
       </template>
@@ -204,6 +213,12 @@
       :idList="selectList"
       @close="closeAlertClose"
     ></AlertCloseDialog>
+    <AlertOpenDialog
+      v-if="isOpenShow"
+      :id="currentAlertId"
+      :idList="selectList"
+      @close="closeAlertOpen"
+    ></AlertOpenDialog>
   </div>
 </template>
 <script>
@@ -217,6 +232,7 @@ export default {
     AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
     AlertDeleteDialog: () => import('@/commercial-module/alert/pages/alert/alert-delete-dialog.vue'),
     AlertCloseDialog: () => import('@/commercial-module/alert/pages/alert/alert-close-dialog.vue'),
+    AlertOpenDialog: () => import('@/commercial-module/alert/pages/alert/alert-open-dialog.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue')
   },
@@ -237,6 +253,7 @@ export default {
       alertViewList: [],
       isDeleteShow: false,
       isCloseShow: false,
+      isOpenShow: false,
       currentAlertId: null,
       selectList: [],
       isAutoRefresh: false,
@@ -329,9 +346,14 @@ export default {
       }
       return false;
     },
-    closeAlerts() {
+    batchClose() {
       if (this.selectList && this.selectList.length > 0) {
         this.isCloseShow = true;
+      }
+    },
+    batchOpen() {
+      if (this.selectList && this.selectList.length > 0) {
+        this.isOpenShow = true;
       }
     },
     getSelected(indexList, itemList) {
@@ -370,6 +392,14 @@ export default {
     },
     closeAlertClose(needRefresh) {
       this.isCloseShow = false;
+      this.currentAlertId = null;
+      if (needRefresh) {
+        this.searchAlert();
+        this.selectList = [];
+      }
+    },
+    closeAlertOpen(needRefresh) {
+      this.isOpenShow = false;
       this.currentAlertId = null;
       if (needRefresh) {
         this.searchAlert();

@@ -1,6 +1,6 @@
 <template>
   <div v-if="mode === 'list' && row" :style="{ 'margin-left': (row['_index'] || 0) * 31 + 'px' }">
-    <div :class="{ 'title-grid': row.childAlertCount }" style="max-width: 350px">
+    <div :class="{ 'title-grid': row.childAlertCount }">
       <div
         v-if="row.childAlertCount"
         class="cursor text-href"
@@ -8,9 +8,11 @@
         @click="$emit('toggleChildren', row)"
       >
         <span v-if="row.childAlertCount >= 100" class="text-error superscript">99+</span>
-        <span v-else class="text-error superscript"><b>{{ row.childAlertCount }}</b></span>
+        <span v-else class="text-error superscript">
+          <b>{{ row.childAlertCount }}</b>
+        </span>
       </div>
-      <div class="overflow">
+      <div style="min-width: 0; word-break: keep-all; overflow: hidden; text-overflow: ellipsis;white-space:nowrap">
         <a :title="row.title" @click="getAlertDetail(row)">{{ row.title }}</a>
       </div>
     </div>

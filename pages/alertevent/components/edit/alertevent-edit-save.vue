@@ -40,6 +40,7 @@
         :dataList="statusList"
         valueName="name"
         textName="label"
+        :transfer="true"
       ></TsFormSelect>
       <div class="text-grey">帮助：告警事件创建时的默认状态</div>
     </TsFormItem>

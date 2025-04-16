@@ -56,8 +56,8 @@
               :showStatus="true"
               :trueValue="1"
               :falseValue="0"
-              trueText="同时关闭子告警"
-              falseText="同时关闭子告警"
+              trueText="同时应用子告警"
+              falseText="同时应用子告警"
             ></TsFormSwitch></div>
           </div>
         </TsFormItem>

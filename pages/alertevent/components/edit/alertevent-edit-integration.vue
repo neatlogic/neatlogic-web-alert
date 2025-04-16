@@ -7,8 +7,9 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <TsFormItem label="集成" labelPosition="left">
+    <TsFormItem label="集成" labelPosition="left" :required="true">
       <TsFormSelect
+        ref="integraionUuid"
         v-model="configLocal.integrationUuid"
         transfer
         dynamicUrl="/api/rest/integration/search"
@@ -17,7 +18,7 @@
         textName="name"
         valueName="uuid"
         border="border"
-        :validateList="['required']"
+        :validateList="[{ name: 'required', message: ' ' }]"
         @on-change="
           val => {
             getIntegrationByUuid(val);
@@ -114,6 +115,14 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    async valid() {
+      let isValid = true;
+      const integraionUuid = this.$refs.integraionUuid;
+      if (!integraionUuid || !integraionUuid.valid()) {
+        isValid = false;
+      }
+      return isValid;
+    },
     clipboardSuc() {
       this.$Message.success(this.$t('message.copysuccess'));
     },
@@ -141,8 +150,7 @@ export default {
       return (this.integrationData && this.integrationData?.config?.param?.paramList) || [];
     }
   },
-  watch: {
-  }
+  watch: {}
 };
 </script>
 <style lang="less" scoped></style>

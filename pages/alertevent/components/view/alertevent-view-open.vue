@@ -6,11 +6,11 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <TsFormItem label="关闭方式" labelPosition="left" style="margin:0px !important">
-      <span>{{ configLocal.closeType === 'id' ? 'id' : '唯一键' }}</span>
+    <TsFormItem label="打开方式" labelPosition="left" style="margin:0px !important">
+      <span>{{ configLocal.openType === 'id' ? 'id' : '唯一键' }}</span>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.closeType === 'uniquekey'"
+      v-if="configLocal.openType === 'uniquekey'"
       style="margin:0px !important"
       label="唯一键"
       labelPosition="left"
@@ -20,7 +20,7 @@
       </div>
       <div v-else class="text-grey">-</div>
     </TsFormItem>
-    <TsFormItem label="同时关闭子告警" labelPosition="left" style="margin:0px !important">
+    <TsFormItem label="同时打开子告警" labelPosition="left" style="margin:0px !important">
       <span v-if="configLocal.isCloseChildAlert" class="text-success">{{ $t('page.yes') }}</span>
       <span v-else class="text-grey">{{ $t('page.no') }}</span>
     </TsFormItem>
@@ -35,10 +35,10 @@
     <TsFormItem
       v-if="handler.result"
       style="margin:0px !important"
-      label="关闭数量"
+      label="打开数量"
       labelPosition="left"
     >
-      <span class="text-grey">关闭了</span><span class="mr-xs ml-xs"><b>{{ handler.result.closeCount }}</b></span><span class="text-grey">个告警</span>
+      <span class="text-grey">打开了</span><span class="mr-xs ml-xs"><b>{{ handler.result.openCount }}</b></span><span class="text-grey">个告警</span>
     </TsFormItem>
   </div>
 </template>
@@ -67,10 +67,10 @@ export default {
   destroyed() {},
   methods: {
     getCloseType() {
-      if (this.configLocal.closeType === 'id') {
+      if (this.configLocal.openType === 'id') {
         return '关闭当前告警';
-      } else if (this.configLocal.closeType === 'uniquekey') {
-        return '关闭唯一键相同的所有告警';
+      } else if (this.configLocal.openType === 'uniquekey') {
+        return '打开唯一键相同的所有告警';
       }
     }
   },

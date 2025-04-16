@@ -7,7 +7,9 @@ import delete_eventhandler from '@/commercial-module/alert/pages/alertevent/comp
 import apply_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-apply.vue';
 import interval_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-interval.vue';
 import close_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-close.vue';
+import open_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-open.vue';
 import integration_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-integration.vue';
+import updatestatus_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-updatestatus.vue';
 
 // 获取动态组件
 const dynamicComponents = ComponentManager.getAlertEventHandlerViewComponent() || {};
@@ -20,7 +22,9 @@ const allComponents = {
   apply_eventhandler,
   interval_eventhandler,
   close_eventhandler,
+  open_eventhandler,
   integration_eventhandler,
+  updatestatus_eventhandler,
   ...dynamicComponents // 把动态组件合并进来
 };
 

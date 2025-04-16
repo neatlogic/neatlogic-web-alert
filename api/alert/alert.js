@@ -43,6 +43,9 @@ const alert = {
   deleteAlert(params) {
     return axios.post('/api/rest/alert/delete', params);
   },
+  openAlert(params) {
+    return axios.post('/api/rest/alert/open', params);
+  },
   closeAlert(params) {
     return axios.post('/api/rest/alert/close', params);
   },
@@ -51,9 +54,6 @@ const alert = {
   },
   deleteAlertView(id) {
     return axios.post('/api/rest/alert/view/delete', { id: id });
-  },
-  closeAlerts(idList) {
-    return axios.post('/api/rest/alert/close', { idList: idList });
   }
 };
 

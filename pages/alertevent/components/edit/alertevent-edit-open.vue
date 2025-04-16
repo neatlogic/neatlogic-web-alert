@@ -7,13 +7,13 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <TsFormItem label="关闭方式" labelPosition="left">
+    <TsFormItem label="打开方式" labelPosition="left">
       <TsFormRadio
-        v-model="configLocal.closeType"
+        v-model="configLocal.openType"
         :dataList="typeList"
       ></TsFormRadio>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.closeType === 'uniquekey'" label="唯一属性" labelPosition="left">
+    <TsFormItem v-if="configLocal.openType === 'uniquekey'" label="唯一属性" labelPosition="left">
       <TsFormCheckbox
         :dataList="attrList"
         valueName="name"
@@ -25,7 +25,7 @@
       <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
       <div v-if="error" class="text-error">{{ error }}</div>
     </TsFormItem>
-    <TsFormItem label="同时关闭子告警" labelPosition="left">
+    <TsFormItem label="同时打开子告警" labelPosition="left">
       <TsFormSwitch
         v-model="configLocal.isCloseChildAlert"
         :showStatus="true"
@@ -53,8 +53,8 @@ export default {
   data() {
     return {
       typeList: [
-        { value: 'id', text: '关闭当前告警' },
-        { value: 'uniquekey', text: '关闭唯一键相同的所有告警' }
+        { value: 'id', text: '打开当前告警' },
+        { value: 'uniquekey', text: '打开唯一键相同的所有告警' }
       ],
       attrList: [],
       error: ''
@@ -62,8 +62,8 @@ export default {
   },
   beforeCreate() {},
   created() {
-    if (!this.configLocal.closeType) {
-      this.$set(this.configLocal, 'closeType', 'id');
+    if (!this.configLocal.openType) {
+      this.$set(this.configLocal, 'openType', []);
     }
     if (!this.configLocal.uniqueAttrList) {
       this.$set(this.configLocal, 'uniqueAttrList', []);
