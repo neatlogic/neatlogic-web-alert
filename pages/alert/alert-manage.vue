@@ -145,6 +145,7 @@
           :multiple="true"
           :value="selectList"
           v-bind="alertData"
+          resizeKey="alert-table"
           :canResize="true"
           keyName="id"
           :theadList="[{ key: 'selection' }, ...finalTheadList, { key: 'action' }]"
