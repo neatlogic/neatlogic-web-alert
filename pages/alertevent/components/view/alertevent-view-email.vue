@@ -36,13 +36,14 @@
       label="收件人"
       labelPosition="left"
     >
-      <div><UserCard
-        v-for="(user, index) in configLocal.toUserList"
-        :key="index"
-        :uuid="user"
-        :initType="user.split('#')[0]"
-        class="mr-sm"
-      ></UserCard></div>
+      <UserSelect
+        ref="sltToUser"
+        :value="configLocal.toUserList"
+        :multiple="true"
+        :transfer="true"
+        :readonly="true"
+        :groupList="['alertUserType', 'user', 'team']"
+      ></UserSelect>
     </TsFormItem>
     <TsFormItem
       v-if="configLocal.ccUserList && configLocal.ccUserList.length > 0"
@@ -50,13 +51,14 @@
       label="抄送"
       labelPosition="left"
     >
-      <span><UserCard
-        v-for="(user, index) in configLocal.ccUserList"
-        :key="index"
-        :uuid="user"
-        :initType="user.split('#')[0]"
-        class="mr-sm"
-      ></UserCard></span>
+      <UserSelect
+        ref="sltToUser"
+        :value="configLocal.ccUserList"
+        :multiple="true"
+        :transfer="true"
+        :readonly="true"
+        :groupList="['alertUserType', 'user', 'team']"
+      ></UserSelect>
     </TsFormItem>
     <TsFormItem
       v-if="configLocal.interval"
@@ -103,7 +105,7 @@ export default {
   name: '',
   components: {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
-    UserCard: () => import('@/resources/components/UserCard/UserCard.vue')
+    UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')
   },
   extends: AlertEventBase,
   props: {},

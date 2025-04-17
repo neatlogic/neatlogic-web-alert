@@ -73,7 +73,7 @@
         :validateList="['required']"
         :multiple="true"
         :transfer="true"
-        :groupList="['alertUserType', 'user']"
+        :groupList="['alertUserType', 'user', 'team']"
       ></UserSelect>
     </TsFormItem>
     <TsFormItem labelPosition="left" label="抄送">
@@ -81,7 +81,7 @@
         v-model="configLocal.ccUserList"
         :multiple="true"
         :transfer="true"
-        :groupList="['alertUserType', 'user']"
+        :groupList="['alertUserType', 'user', 'team']"
       ></UserSelect>
     </TsFormItem>
     <TsFormItem label="通知间隔" labelPosition="left">
@@ -168,7 +168,7 @@ export default {
     //   this.$emit('on-save', data);
     // },
     listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList({isExpand: 1}).then(res => {
+      this.$api.alert.alert.listAlertAttrList({ isExpand: 1 }).then(res => {
         this.attrList = res.Return;
       });
     }
