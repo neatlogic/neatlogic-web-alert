@@ -324,10 +324,10 @@ export default {
             return true;
           }
         }
-        if (this.alertData.teamList && userInfo.teamList) {
+        if (this.alertData.teamList && userInfo.teamUuidList) {
           for (let i = 0; i < this.alertData.teamList.length; i++) {
             const team = this.alertData.teamList[i];
-            if (userInfo.teamList.find(d => d.uuid === team.teamUuid)) {
+            if (userInfo.teamUuidList.find(d => d === 'team#' + team.teamUuid)) {
               return true;
             }
           }

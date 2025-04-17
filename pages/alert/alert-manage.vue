@@ -333,10 +333,10 @@ export default {
           return true;
         }
       }
-      if (alertData.teamList && userInfo.teamList) {
+      if (alertData.teamList && userInfo.teamUuidList) {
         for (let i = 0; i < alertData.teamList.length; i++) {
           const team = alertData.teamList[i];
-          if (userInfo.teamList.find(d => d.uuid === team.teamUuid)) {
+          if (userInfo.teamUuidList.find(d => d === 'team#' + team.teamUuid)) {
             return true;
           }
         }
