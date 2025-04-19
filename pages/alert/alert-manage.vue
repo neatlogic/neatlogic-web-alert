@@ -56,96 +56,32 @@
       </template>
       <template v-slot:topRight>
         <div class="action-group">
-          <div v-for="(attr, index) in topAttrList" :key="index" class="action-item">
-            <Poptip
-              v-model="attrPopMap[attr.name]"
-              trigger="click"
-              content="content"
-              style="text-align: left"
-              :width="300"
-            >
-              <div>
-                <span v-if="attrFilterMap[attr.name] && attrFilterMap[attr.name].length > 0" class="tsfont-drop-down">{{ attrFilterMap[attr.name].join(' ') }}</span>
-                <span v-else class="tsfont-drop-down">{{ attr.label }}</span>
-              </div>
-              <div slot="content">
-                <ConditionItem
-                  :conditionItem="attr"
-                  @change="
-                    val => {
-                      setAttrFilter(attr, val);
-                    }
-                  "
-                ></ConditionItem>
-                <div class="mt-sm" style="text-align: right"><Button size="small" type="primary" @click="doSearch(attr)">确认</Button></div>
-              </div>
-            </Poptip>
+          <div class="action-item" style="width: 450px">
+            <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlert(1)">
+              <template v-for="(attr, index) in topAttrList" :slot="'attr_' + attr.name" slot-scope="{ valueConfig, textConfig }">
+                <div :key="index">
+                  <ConditionItem
+                    :value="valueConfig['attr_'+attr.name]"
+                    :conditionItem="attr"
+                    @change="
+                      val => {
+                        if (val != null) {
+                          $set(valueConfig, 'attr_' + attr.name, val);
+                          $set(textConfig, 'attr_' + attr.name, val);
+                        } else {
+                          $delete(valueConfig, 'attr_' + attr.name);
+                          $delete(textConfig, 'attr_' + attr.name);
+                        }
+                      }
+                    "
+                  ></ConditionItem>
+                </div>
+              </template>
+            </CombineSearcher>
           </div>
-          <div class="action-item">
-            <Dropdown placement="bottom-start" trigger="click">
-              <span v-if="!searchParam.level">
-                <i class="tsfont-drop-down"></i>
-                告警级别
-              </span>
-              <span v-else>
-                <i class="tsfont-drop-down"></i>
-                {{ levelName }}
-              </span>
-              <DropdownMenu slot="list">
-                <DropdownItem
-                  v-for="(level, index) in levelList"
-                  :key="index"
-                  :selected="searchParam.level === level.level"
-                  @click.native="changeLevel(level)"
-                >{{ level.label }}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <div class="action-item">
-            <Dropdown placement="bottom-start" trigger="click">
-              <span v-if="!searchParam.status">
-                <i class="tsfont-drop-down"></i>
-                告警状态
-              </span>
-              <span v-else>
-                <i class="tsfont-drop-down"></i>
-                {{ statusName }}
-              </span>
-              <DropdownMenu slot="list">
-                <DropdownItem
-                  v-for="(status, index) in statusList"
-                  :key="index"
-                  :selected="searchParam.status === status.name"
-                  @click.native="changeStatus(status)"
-                >{{ status.label }}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <div class="action-item">
-            <Dropdown placement="bottom-start" trigger="click">
-              <span v-if="!searchParam.updateTimeHour">
-                <i class="tsfont-drop-down"></i>
-                告警时间
-              </span>
-              <span v-else>
-                <i class="tsfont-drop-down"></i>
-                {{ updateTimeName }}
-              </span>
-              <DropdownMenu slot="list">
-                <DropdownItem :selected="searchParam.updateTimeHour === 1" @click.native="changeUpdateTime(1)">最近1小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 3" @click.native="changeUpdateTime(3)">最近3小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 24" @click.native="changeUpdateTime(24)">最近24小时</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 72" @click.native="changeUpdateTime(72)">最近3天</DropdownItem>
-                <DropdownItem :selected="searchParam.updateTimeHour === 168" @click.native="changeUpdateTime(168)">最近7天</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <div class="action-item">
-            <InputSearcher v-model="searchParam.keyword" @change="searchAlert(1)"></InputSearcher>
-          </div>
-          <div v-if="!isShowFilter" class="action-item">
+          <!--<div v-if="!isShowFilter" class="action-item">
             <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
-          </div>
+          </div>-->
           <div class="action-item" @click="isShowFilter = !isShowFilter">
             <Button type="primary" ghost @click="searchAlert(1)">
               <span :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }">{{ $t('page.advancesearch') }}</span>
@@ -245,7 +181,7 @@
 export default {
   name: '',
   components: {
-    InputSearcher: () => import('@/resources/components/InputSearcher/InputSearcher.vue'),
+    CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
     AlertViewEdit: () => import('@/commercial-module/alert/pages/alert/alert-view-edit.vue'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
@@ -259,6 +195,7 @@ export default {
   props: {},
   data() {
     return {
+      searchVal: {},
       alertViewData: null,
       isShowFilter: false,
       currentView: null,
@@ -287,6 +224,7 @@ export default {
   },
   beforeCreate() {},
   async created() {
+    await this.listAlertAttrList();
     if (this.$localStore.get('isAutoRefresh')) {
       this.isAutoRefresh = true;
     }
@@ -294,7 +232,6 @@ export default {
     this.searchAlert();
     this.listAllStatus();
     this.listAllLevel();
-    this.listAlertAttrList();
     //this.listAlertView();
     this.getViewByName();
   },
@@ -317,19 +254,6 @@ export default {
   },
   destroyed() {},
   methods: {
-    setAttrFilter(attr, val) {
-      if (val === null || val === '') {
-        this.$delete(this.attrFilterMap, attr.name);
-      } else {
-        let valueList = [];
-        if (val instanceof Array) {
-          valueList = val;
-        } else {
-          valueList = [val];
-        }
-        this.$set(this.attrFilterMap, attr.name, valueList);
-      }
-    },
     doSearch(attr) {
       this.searchAlert(1);
       this.$set(this.attrPopMap, attr.name, false);
@@ -473,8 +397,8 @@ export default {
         return this.attrList.find(d => d.name === name);
       }
     },
-    listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList(this.searchParam.viewName ? { viewName: this.searchParam.viewName } : {}).then(res => {
+    async listAlertAttrList() {
+      await this.$api.alert.alert.listAlertAttrList(this.searchParam.viewName ? { viewName: this.searchParam.viewName } : {}).then(res => {
         this.attrList = res.Return;
       });
     },
@@ -564,16 +488,29 @@ export default {
         this.searchParam.mode = 'simple';
         this.searchParam.rule = this.alertViewData?.config?.rule;
       }
+     
+      //提取固定属性
+      const { keyword, level, status, updateTimeHour } = this.searchVal;
+      const param = { keyword, level, status, updateTimeHour };
+      //提取扩展属性
       const attrFilterList = [];
-      if (this.attrFilterMap) {
-        for (let key in this.attrFilterMap) {
-          if (this.attrFilterMap[key] && this.attrFilterMap[key].length > 0) {
-            attrFilterList.push({ name: key, valueList: this.attrFilterMap[key] });
+      for (let key in this.searchVal) {
+        if (key.startsWith('attr_')) {
+          const val = this.searchVal[key];
+          if (val !== null && val !== '') {
+            let valueList = [];
+            if (val instanceof Array) {
+              valueList = val;
+            } else {
+              valueList = [val];
+            }
+            attrFilterList.push({ name: key.substring(5), valueList: valueList });
           }
         }
       }
-      this.searchParam.attrFilterList = attrFilterList;
-      this.$api.alert.alert.searchAlert(this.searchParam).then(res => {
+     
+      //this.searchParam.attrFilterList = attrFilterList;
+      this.$api.alert.alert.searchAlert({ ...this.searchParam, attrFilterList: attrFilterList, ...param }).then(res => {
         this.alertData = res.Return;
         this.alertData.tbodyList.forEach(item => {
           if (!this.hasRole(item)) {
@@ -633,6 +570,55 @@ export default {
       }
       return list;
     },
+    searchConfig() {
+      const config = {
+        search: true,
+        labelPosition: 'left',
+        searchList: [
+          {
+            type: 'select',
+            name: 'level',
+            label: '告警级别',
+            valueName: 'level',
+            textName: 'label',
+            url: '/api/rest/alert/level/list',
+            transfer: true
+          },
+          {
+            type: 'select',
+            name: 'status',
+            label: '告警状态',
+            url: '/api/rest/alert/status/list',
+            valueName: 'name',
+            textName: 'label',
+            transfer: true
+          },
+          {
+            type: 'select',
+            name: 'updateTimeHour',
+            label: '告警时间',
+            dataList: [
+              { value: 1, text: '最近1小时' },
+              { value: 3, text: '最近3小时' },
+              { value: 24, text: '最近24小时' },
+              { value: 72, text: '最近3天' },
+              { value: 168, text: '最近7天' }
+            ],
+            transfer: true
+          }
+        ]
+      };
+      if (this.topAttrList && this.topAttrList.length > 0) {
+        this.topAttrList.forEach(attr => {
+          config.searchList.push({
+            type: 'slot',
+            name: 'attr_' + attr.name,
+            label: attr.label
+          });
+        });
+      }
+      return config;
+    },
     topAttrList() {
       const attrList = [];
       this.attrList &&
@@ -643,18 +629,6 @@ export default {
         });
       return attrList;
     }
-    /*conditionAttrList() {
-      const attrList = [];
-      this.attrList &&
-        this.attrList.forEach(item => {
-          attrList.push({
-            name: item.value,
-            label: item.text,
-            expressionList: ['equal', 'notequal', 'like', 'notlike', 'is-null', 'is-not-null']
-          });
-        });
-      return attrList;
-    }*/
   },
   watch: {
     isAutoRefresh: {
