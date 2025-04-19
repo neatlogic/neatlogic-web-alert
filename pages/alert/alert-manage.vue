@@ -83,6 +83,26 @@
           </div>
           <div class="action-item">
             <Dropdown placement="bottom-start" trigger="click">
+              <span v-if="!searchParam.level">
+                <i class="tsfont-drop-down"></i>
+                告警级别
+              </span>
+              <span v-else>
+                <i class="tsfont-drop-down"></i>
+                {{ levelName }}
+              </span>
+              <DropdownMenu slot="list">
+                <DropdownItem
+                  v-for="(level, index) in levelList"
+                  :key="index"
+                  :selected="searchParam.level === level.level"
+                  @click.native="changeLevel(level)"
+                >{{ level.label }}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+          <div class="action-item">
+            <Dropdown placement="bottom-start" trigger="click">
               <span v-if="!searchParam.status">
                 <i class="tsfont-drop-down"></i>
                 告警状态
@@ -246,6 +266,7 @@ export default {
       attrPopMap: {},
       attrList: [],
       statusList: [],
+      levelList: [],
       searchParam: { mode: 'simple', rule: {}, attrFilterList: [] },
       alertData: {},
       attrFilterMap: {},
@@ -272,6 +293,7 @@ export default {
     this.searchParam.viewName = this.$route.params['view'] || '';
     this.searchAlert();
     this.listAllStatus();
+    this.listAllLevel();
     this.listAlertAttrList();
     //this.listAlertView();
     this.getViewByName();
@@ -356,10 +378,23 @@ export default {
     getSelected(indexList, itemList) {
       this.selectList = itemList.map(d => d.id);
     },
+    listAllLevel() {
+      this.$api.alert.alertlevel.listAlertLevel().then(res => {
+        this.levelList = res.Return;
+      });
+    },
     listAllStatus() {
       this.$api.alert.status.listAlertStatus().then(res => {
         this.statusList = res.Return;
       });
+    },
+    changeLevel(level) {
+      if (this.searchParam.level !== level.level) {
+        this.$set(this.searchParam, 'level', level.level);
+      } else {
+        this.$delete(this.searchParam, 'level');
+      }
+      this.searchAlert(1);
     },
     changeStatus(status) {
       if (this.searchParam.status !== status.name) {
@@ -563,6 +598,15 @@ export default {
   },
   filter: {},
   computed: {
+    levelName() {
+      if (this.searchParam.level && this.levelList && this.levelList.length > 0) {
+        const s = this.levelList.find(d => d.level === this.searchParam.level);
+        if (s) {
+          return s.label;
+        }
+      }
+      return null;
+    },
     statusName() {
       if (this.searchParam.status && this.statusList && this.statusList.length > 0) {
         const s = this.statusList.find(d => d.name === this.searchParam.status);
