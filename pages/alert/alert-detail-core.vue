@@ -202,8 +202,8 @@ export default {
       ],
       applyUserList: [],
       applyTeamList: [],
-      applyUserType: 'append',
-      applyTeamType: 'append'
+      applyUserType: 'replace',
+      applyTeamType: 'replace'
     };
   },
   beforeCreate() {},
