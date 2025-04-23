@@ -76,7 +76,7 @@ export default {
       if (!this.$refs.alertType.valid()) {
         isValid = false;
       }
-      if (!this.$refs.alertAdaptor.valid()) {
+      if (this.$refs.alertAdaptor && !this.$refs.alertAdaptor.valid()) {
         isValid = false;
       }
       return isValid;
