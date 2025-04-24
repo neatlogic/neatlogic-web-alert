@@ -46,9 +46,11 @@ export default {
       this.$emit('close', needRefresh);
     },
     confirm() {
-      this.$api.alert.alert.closeAlert({ id: this.id, idList: this.idList, isCloseChildAlert: this.isCloseChildAlert }).then(() => {
-        this.$Message.success(this.$t('term.alert.closesuccess'));
-        this.close(true);
+      this.$api.alert.alert.closeAlert({ id: this.id, idList: this.idList, isCloseChildAlert: this.isCloseChildAlert }).then((res) => {
+        if (res.Status === 'OK') {
+          this.$Message.success(this.$t('term.alert.closesuccess'));
+          this.close(true);
+        }
       });
     }
   },

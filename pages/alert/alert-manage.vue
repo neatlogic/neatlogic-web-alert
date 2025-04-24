@@ -96,6 +96,11 @@
             <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
           </div>
         </div>
+        <Loading
+          v-if="isLoading"
+          :loadingShow="true"
+          type="fix"
+        ></Loading>
         <TsTable
           v-if="finalTheadList && finalTheadList.length > 0"
           :multiple="true"
@@ -153,7 +158,8 @@
             <div class="tstable-action">
               <ul class="tstable-action-ul">
                 <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
-                <li v-if="hasRole(row)" class="tsfont-close-o" @click="closeAlert(row)">{{ $t('page.close') }}</li>
+                <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">打开</li>
+                <li v-if="!row.isClose && hasRole(row)" class="tsfont-eye-off" @click="closeAlert(row)">{{ $t('page.close') }}</li>
                 <li v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
               </ul>
             </div>
@@ -195,6 +201,7 @@ export default {
   props: {},
   data() {
     return {
+      isLoading: false,
       searchVal: {},
       alertViewData: null,
       isShowFilter: false,
@@ -367,6 +374,11 @@ export default {
       this.currentAlertId = alert.id;
       this.selectList = [];
     },
+    openAlert(alert) {
+      this.isOpenShow = true;
+      this.currentAlertId = alert.id;
+      this.selectList = [];
+    },
     deleteAlert(alert) {
       this.isDeleteShow = true;
       this.currentAlertId = alert.id;
@@ -510,6 +522,7 @@ export default {
       }
      
       //this.searchParam.attrFilterList = attrFilterList;
+      this.isLoading = true;
       this.$api.alert.alert.searchAlert({ ...this.searchParam, attrFilterList: attrFilterList, ...param }).then(res => {
         this.alertData = res.Return;
         this.alertData.tbodyList.forEach(item => {
@@ -524,6 +537,8 @@ export default {
             this.searchAlert();
           }, this.interval);
         }
+      }).finally(() => {
+        this.isLoading = false;
       });
     },
     closeViewEdit(needRefresh) {
