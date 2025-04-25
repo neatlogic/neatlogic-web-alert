@@ -12,6 +12,7 @@
               <DropdownMenu slot="list">
                 <DropdownItem @click.native="batchClose()">关闭告警</DropdownItem>
                 <DropdownItem @click.native="batchOpen()">打开告警</DropdownItem>
+                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" @click.native="batchDelete()">删除告警</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -168,7 +169,12 @@
       </template>
     </TsContain>
     <AlertViewEdit v-if="isViewEdit && alertViewData && alertViewData.id" :id="alertViewData.id" @close="closeViewEdit"></AlertViewEdit>
-    <AlertDeleteDialog v-if="isDeleteShow && currentAlertId" :id="currentAlertId" @close="closeAlertDelete"></AlertDeleteDialog>
+    <AlertDeleteDialog
+      v-if="isDeleteShow"
+      :id="currentAlertId"
+      :idList="selectList"
+      @close="closeAlertDelete"
+    ></AlertDeleteDialog>
     <AlertCloseDialog
       v-if="isCloseShow"
       :id="currentAlertId"
@@ -299,6 +305,11 @@ export default {
     batchClose() {
       if (this.selectList && this.selectList.length > 0) {
         this.isCloseShow = true;
+      }
+    },
+    batchDelete() {
+      if (this.selectList && this.selectList.length > 0) {
+        this.isDeleteShow = true;
       }
     },
     batchOpen() {

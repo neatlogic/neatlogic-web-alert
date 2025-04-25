@@ -17,7 +17,8 @@ export default {
   name: '',
   components: {},
   props: {
-    id: { type: Number }
+    id: { type: Number },
+    idList: { type: Array }
   },
   data() {
     return {
@@ -45,7 +46,7 @@ export default {
       this.$emit('close', needRefresh);
     },
     confirm() {
-      this.$api.alert.alert.deleteAlert({ id: this.id, isDeleteChildAlert: this.isDeleteChildAlert }).then(() => {
+      this.$api.alert.alert.deleteAlert({ id: this.id, idList: this.idList, isDeleteChildAlert: this.isDeleteChildAlert }).then(() => {
         this.$Message.success(this.$t('message.deletesuccess'));
         this.close(true);
       });
