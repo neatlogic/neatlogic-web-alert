@@ -117,7 +117,7 @@
         </TsFormItem>
       </div>
     </TabPane>
-    <TabPane label="原始数据" name="origin" :index="2">
+    <TabPane label="上报数据" name="origin" :index="2">
       <AlertOriginal v-if="currentTab === 'origin'" :alertData="alertData"></AlertOriginal>
     </TabPane>
     <TabPane label="操作记录" name="audit" :index="3">

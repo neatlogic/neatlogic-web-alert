@@ -12,6 +12,13 @@
       ></JsonViewer>
       <div v-else class="radius-md bg-op padding-md">{{ alertOriginData.content }}</div>
     </TsFormItem>
+    <TsFormItem v-if="alertOriginData.alertData" label="转换数据" labelPosition="left">
+      <JsonViewer
+        :expanded="true"
+        copyable
+        :value="alertOriginData.alertData"
+      ></JsonViewer>
+    </TsFormItem>
   </div>
 </template>
 <script>

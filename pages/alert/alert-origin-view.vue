@@ -25,8 +25,22 @@
               </TsFormItem>
             </div>
             <div style="grid-column-start: 1; grid-column-end: 3">
-              <TsFormItem label="内容" labelPosition="left">
-                <div style="white-space: normal; word-break: break-all">{{ alertData.content }}</div>
+              <TsFormItem label="原始数据" labelPosition="left">
+                <JsonViewer
+                  v-if="parseJson(alertData.content)"
+                  boxed
+                  copyable
+                  :value="parseJson(alertData.content)"
+                ></JsonViewer>
+                <div v-else class="bg-op radius-sm padding" style="white-space: normal; word-break: break-all">{{ alertData.content }}</div>
+              </tsformitem></div>
+            <div v-if="alertData.alertData" style="grid-column-start: 1; grid-column-end: 3">
+              <TsFormItem label="转换数据" labelPosition="left">
+                <JsonViewer
+                  boxed
+                  copyable
+                  :value="alertData.alertData"
+                ></JsonViewer>
               </TsFormItem>
             </div>
             <div v-if="alertData.error" style="grid-column-start: 1; grid-column-end: 3">
@@ -50,6 +64,7 @@
 export default {
   name: '',
   components: {
+    JsonViewer: () => import('vue-json-viewer'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     AlertViewEventAudit: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list.vue')
   },
@@ -82,6 +97,13 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    parseJson(content) {
+      try {
+        return JSON.parse(content);
+      } catch (e) {
+        return null;
+      }
+    },
     close() {
       this.$emit('close');
     },
