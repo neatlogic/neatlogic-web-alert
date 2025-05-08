@@ -439,7 +439,6 @@ export default {
     },
     editView() {
       this.isViewEdit = true;
-      console.log(this.alertViewData);
     },
     deleteView() {
       this.$createDialog({
