@@ -4,7 +4,7 @@
       <div
         v-if="row.childAlertCount"
         class="cursor text-href"
-        :class="{ 'tsfont-drop-down': row['_expand'], 'tsfont-drop-right': !row['_expand'] }"
+        :class="{ 'tsfont-drop-down': row['_hasChild'], 'tsfont-drop-right': !row['_hasChild'] }"
         @click="$emit('toggleChildren', row)"
       >
         <span v-if="row.childAlertCount >= 100" class="text-error superscript">99+</span>
@@ -71,7 +71,7 @@ export default {
 <style lang="less" scoped>
 .title-grid {
   display: grid;
-  grid-template-columns: 30px auto;
+  grid-template-columns: 33px auto;
 }
 .superscript {
   font-size: 0.8em; /* 设置字体大小为原字体的70% */

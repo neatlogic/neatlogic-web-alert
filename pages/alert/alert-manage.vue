@@ -62,7 +62,7 @@
               <template v-for="(attr, index) in topAttrList" :slot="'attr_' + attr.name" slot-scope="{ valueConfig, textConfig }">
                 <div :key="index">
                   <ConditionItem
-                    :value="valueConfig['attr_'+attr.name]"
+                    :value="valueConfig['attr_' + attr.name]"
                     :conditionItem="attr"
                     @change="
                       val => {
@@ -97,11 +97,7 @@
             <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
           </div>
         </div>
-        <Loading
-          v-if="isLoading"
-          :loadingShow="true"
-          type="fix"
-        ></Loading>
+        <Loading v-if="isLoading" :loadingShow="true" type="fix"></Loading>
         <TsTable
           v-if="finalTheadList && finalTheadList.length > 0"
           :multiple="true"
@@ -109,6 +105,7 @@
           v-bind="alertData"
           resizeKey="alert-table"
           :canResize="true"
+          :canExpand="true"
           keyName="id"
           :theadList="[{ key: 'selection' }, ...finalTheadList, { key: 'action' }]"
           @getSelected="getSelected"
@@ -153,6 +150,24 @@
                 :value="row.attrObj[thead.key.replace('attr_', '')]"
                 @refresh="searchAlert"
               ></AlertAttrViewer>
+            </div>
+          </template>
+          <template v-slot:expand="{ row }">
+            <div v-if="row._pager" style="padding-left:90px">
+              <Page
+                class="page-container"
+                transfer
+                size="small"
+                show-total
+                :total="row._pager.rowNum"
+                :current="row._pager.currentPage"
+                :page-size="row._pager.pageSize"
+                @on-change="
+                  page => {
+                    searchChildAlert(row.fromAlertId, page, true);
+                  }
+                "
+              />
             </div>
           </template>
           <template v-slot:action="{ row }">
@@ -232,7 +247,8 @@ export default {
       intervaler: null,
       interval: 60000,
       startTime: null,
-      countdown: 0
+      countdown: 0,
+      childAlertPage: {} //记录子告警分页信息
     };
   },
   beforeCreate() {},
@@ -396,14 +412,11 @@ export default {
     },
     toggleChildAlert(row) {
       if (!row._loading) {
-        const index = this.alertData.tbodyList.findIndex(d => d.id === row.id);
-        if (index > -1) {
-          if (row['_expand']) {
-            this.$set(row, '_expand', false);
-            this.alertData.tbodyList = this.alertData.tbodyList.filter(d => !d['parents'] || !d['parents'].includes(row.id));
-          } else {
-            this.searchChildAlert(row, index);
-          }
+        if (row['_hasChild']) {
+          this.$set(row, '_hasChild', false);
+          this.alertData.tbodyList = this.alertData.tbodyList.filter(d => !d['parents'] || !d['parents'].includes(row.id));
+        } else {
+          this.searchChildAlert(row.id);
         }
       }
     },
@@ -462,14 +475,33 @@ export default {
       }
       this.searchAlert(1);
     },
-    searchChildAlert(row, index) {
-      const searchParam = {};
-      searchParam.fromAlertId = row.id;
+    searchChildAlert(fromAlertId, currentPage, isChangePage) {
+      const index = this.alertData.tbodyList.findIndex(d => d.id === fromAlertId);
+      if (index <= -1) {
+        return;
+      }
+      const row = this.alertData.tbodyList[index];
+      this.childAlertPage[fromAlertId.toString()] = {
+        currentPage: currentPage || 1,
+        pageSize: 10
+      };
       this.$set(row, '_loading', true);
+
+      const searchParam = this.childAlertPage[row.id.toString()];
+      searchParam.fromAlertId = row.id;
+
       this.$api.alert.alert
         .searchAlert(searchParam)
         .then(res => {
+          if (isChangePage) {
+            //去掉原来展开数据，准备换成第一页
+            this.alertData.tbodyList = this.alertData.tbodyList.filter(d => !d['parents'] || !d['parents'].includes(row.id));
+          }
           const dataList = res.Return.tbodyList;
+          const pageSize = res.Return.pageSize;
+          const pageCount = res.Return.pageCount;
+          const currentPage = res.Return.currentPage;
+          const rowNum = res.Return.rowNum;
           dataList.forEach(d => {
             d['_index'] = (row['_index'] || 0) + 1;
             d['parents'] = [d.fromAlertId];
@@ -480,12 +512,28 @@ export default {
               d.isDisabled = true;
             }
           });
+          if (pageCount > 1) {
+            dataList[dataList.length - 1]['_pager'] = {
+              pageCount: pageCount,
+              pageSize: pageSize,
+              currentPage: currentPage,
+              rowNum: rowNum
+            };
+            dataList[dataList.length - 1]['_expand'] = true;
+          }
+
           if (index < this.alertData.tbodyList.length - 1) {
             this.alertData.tbodyList.splice(index + 1, 0, ...dataList);
           } else {
             this.alertData.tbodyList.push(...dataList);
           }
-          this.$set(row, '_expand', true);
+          this.$set(row, '_hasChild', true);
+          this.childAlertPage[row.id.toString()] = {
+            rowNum: res.Return.rowNum,
+            pageCount: res.Return.pageCount,
+            currentPage: res.Return.currentPage,
+            pageSize: res.Return.pageSize
+          };
         })
         .finally(() => {
           this.$set(row, '_loading', false);
@@ -510,7 +558,7 @@ export default {
         this.searchParam.mode = 'simple';
         this.searchParam.rule = this.alertViewData?.config?.rule;
       }
-     
+
       //提取固定属性
       const { keyword, level, status, updateTimeHour } = this.searchVal;
       const param = { keyword, level, status, updateTimeHour };
@@ -530,26 +578,29 @@ export default {
           }
         }
       }
-     
+
       //this.searchParam.attrFilterList = attrFilterList;
       this.isLoading = true;
-      this.$api.alert.alert.searchAlert({ ...this.searchParam, attrFilterList: attrFilterList, ...param }).then(res => {
-        this.alertData = res.Return;
-        this.alertData.tbodyList.forEach(item => {
-          if (!this.hasRole(item)) {
-            item.isDisabled = true;
+      this.$api.alert.alert
+        .searchAlert({ ...this.searchParam, attrFilterList: attrFilterList, ...param })
+        .then(res => {
+          this.alertData = res.Return;
+          this.alertData.tbodyList.forEach(item => {
+            if (!this.hasRole(item)) {
+              item.isDisabled = true;
+            }
+          });
+          if (this.isAutoRefresh) {
+            this.startTime = Date.now();
+            this.toggleCountdown();
+            this.timmer = setTimeout(() => {
+              this.searchAlert();
+            }, this.interval);
           }
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
-        if (this.isAutoRefresh) {
-          this.startTime = Date.now();
-          this.toggleCountdown();
-          this.timmer = setTimeout(() => {
-            this.searchAlert();
-          }, this.interval);
-        }
-      }).finally(() => {
-        this.isLoading = false;
-      });
     },
     closeViewEdit(needRefresh) {
       this.isViewEdit = false;
