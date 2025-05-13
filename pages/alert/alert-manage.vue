@@ -4,6 +4,12 @@
       <template v-slot:topLeft>
         <div class="action-group">
           <div class="action-item">
+            <span v-if="alertViewData">
+              <h3 class="text-grey">{{ alertViewData.label }}</h3>
+            </span>
+            <span v-else><h3 class="text-grey">所有告警</h3></span>
+          </div>
+          <div class="action-item">
             <Dropdown trigger="click">
               <Button type="primary" ghost :disabled="!selectList || selectList.length == 0">
                 {{ $t('page.batchoperation') }}
@@ -13,23 +19,6 @@
                 <DropdownItem @click.native="batchClose()">关闭告警</DropdownItem>
                 <DropdownItem @click.native="batchOpen()">打开告警</DropdownItem>
                 <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" @click.native="batchDelete()">删除告警</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <div class="action-item">
-            <Dropdown placement="bottom-start" trigger="click">
-              <div>
-                <span v-if="alertViewData">{{ alertViewData.label }}</span>
-                <span v-else>所有告警</span>
-                <span v-if="alertViewData" class="tsfont-drop-down"></span>
-              </div>
-              <DropdownMenu v-if="alertViewData" slot="list" v-auth="['ALERT_VIEW_MODIFY']">
-                <DropdownItem>
-                  <span class="tsfont-edit" @click.stop="editView()">{{ $t('dialog.title.edittarget', { target: $t('term.cmdb.view') }) }}</span>
-                </DropdownItem>
-                <DropdownItem>
-                  <span class="tsfont-trash-o" @click.stop="deleteView()">{{ $t('dialog.title.deletetarget', { target: $t('term.cmdb.view') }) }}</span>
-                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -87,6 +76,22 @@
             <Button type="primary" ghost @click="searchAlert(1)">
               <span :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }">{{ $t('page.advancesearch') }}</span>
             </Button>
+          </div>
+          <div v-if="alertViewData && $AuthUtils.hasRole('ALERT_VIEW_MODIFY')" class="action-item">
+            <Dropdown placement="bottom-start" trigger="click">
+              <div>
+                <span class="tsfont-os"></span>
+                <span class="tsfont-drop-down"></span>
+              </div>
+              <DropdownMenu v-if="alertViewData" slot="list">
+                <DropdownItem>
+                  <span class="tsfont-edit" @click.stop="editView()">{{ $t('dialog.title.edittarget', { target: $t('term.cmdb.view') }) }}</span>
+                </DropdownItem>
+                <DropdownItem>
+                  <span class="tsfont-trash-o" @click.stop="deleteView()">{{ $t('dialog.title.deletetarget', { target: $t('term.cmdb.view') }) }}</span>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </div>
         </div>
       </template>
@@ -153,7 +158,7 @@
             </div>
           </template>
           <template v-slot:expand="{ row }">
-            <div v-if="row._pager" style="padding-left:90px">
+            <div v-if="row._pager" style="padding-left: 90px">
               <Page
                 class="page-container"
                 transfer
