@@ -7,13 +7,13 @@
         :class="{ 'tsfont-drop-down': row['_hasChild'], 'tsfont-drop-right': !row['_hasChild'] }"
         @click="$emit('toggleChildren', row)"
       >
-        <span v-if="row.childAlertCount >= 100" class="text-error superscript">99+</span>
+        <span v-if="row.childAlertCount >= 100" class="text-error superscript"><b>99+</b></span>
         <span v-else class="text-error superscript">
           <b>{{ row.childAlertCount }}</b>
         </span>
       </div>
       <div class="overflow">
-        <a :title="row.title" @click="getAlertDetail(row)">{{ row.title }}</a>
+        <a :title="row.title" :style="row.isDelete ? 'text-decoration:line-through' : ''" @click="getAlertDetail(row)">{{ row.title }}</a>
       </div>
     </div>
     <AlertView
@@ -71,7 +71,7 @@ export default {
 <style lang="less" scoped>
 .title-grid {
   display: grid;
-  grid-template-columns: 33px auto;
+  grid-template-columns: auto 99%;
 }
 .superscript {
   font-size: 0.8em; /* 设置字体大小为原字体的70% */

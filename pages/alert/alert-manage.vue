@@ -176,7 +176,7 @@
             </div>
           </template>
           <template v-slot:action="{ row }">
-            <div class="tstable-action">
+            <div v-if="!row.isDelete" class="tstable-action">
               <ul class="tstable-action-ul">
                 <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
                 <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">打开</li>
@@ -304,6 +304,9 @@ export default {
       }
     },
     hasRole(alertData) {
+      if (alertData.isDelete) {
+        return false;
+      }
       if (this.$AuthUtils.hasRole('ALERT_ADMIN')) {
         return true;
       }

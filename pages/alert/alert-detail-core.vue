@@ -1,5 +1,5 @@
 <template>
-  <Tabs v-model="currentTab" :animated="false">
+  <Tabs v-if="alertData" v-model="currentTab" :animated="false">
     <TabPane
       v-if="alertData"
       label="告警详情"
@@ -159,6 +159,12 @@
       /></div>
     </TabPane>
   </Tabs>
+  <Alert v-else-if="!loading" type="error" show-icon>
+    数据异常
+    <span slot="desc">
+      告警不存在或已被删除
+    </span>
+  </Alert>
 </template>
 <script>
 export default {
@@ -180,6 +186,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       currentTab: 'info',
       alertData: null,
       alertTypeData: null,
@@ -269,7 +276,11 @@ export default {
       if (this.id) {
         await this.$api.alert.alert.getAlertById(this.id).then(res => {
           this.alertData = res.Return;
-          this.getAlertTypeById(this.alertData.type);
+          if (this.alertData) {
+            this.getAlertTypeById(this.alertData.type);
+          }
+        }).finally(() => {
+          this.loading = false;
         });
       }
     },
