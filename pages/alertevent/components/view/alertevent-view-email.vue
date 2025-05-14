@@ -28,7 +28,7 @@
       label="内容"
       labelPosition="left"
     >
-      <span class="text-grey">{{ configLocal.content }}</span>
+      <div v-html="configLocal.content"></div>
     </TsFormItem>
     <TsFormItem
       v-if="configLocal.toUserList && configLocal.toUserList.length > 0"
