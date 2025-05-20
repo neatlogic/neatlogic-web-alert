@@ -117,6 +117,9 @@
         </TsFormItem>
       </div>
     </TabPane>
+    <TabPane v-if="alertData.childAlertCount" name="childalert" :label="getChildAlertTabLabel()">
+      <AlertList v-if="currentTab === 'childalert'" :fromAlertId="alertData.id"></AlertList>
+    </TabPane>
     <TabPane label="上报数据" name="origin" :index="2">
       <AlertOriginal v-if="currentTab === 'origin'" :alertData="alertData"></AlertOriginal>
     </TabPane>
@@ -179,7 +182,8 @@ export default {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
-    UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')
+    UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue'),
+    AlertList: () => import('@/commercial-module/alert/pages/alert/alert-list.vue')
   },
   props: {
     id: { type: Number }
@@ -230,6 +234,23 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    getChildAlertTabLabel() {
+      return h => {
+        const returnList = [h('span', { class: 'mr-xs' }, '子告警')];
+        let eventCount = 0;
+        if (this.alertData && this.alertData.childAlertCount) {
+          returnList.push(
+            h('Badge', {
+              props: {
+                type: 'info',
+                count: this.alertData.childAlertCount
+              }
+            })
+          );
+        }
+        return h('div', returnList);
+      };
+    },
     listAllStatus() {
       this.$api.alert.status.listAlertStatus().then(res => {
         this.statusList = res.Return;
