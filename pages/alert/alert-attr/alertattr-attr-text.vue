@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasValue">
+  <div v-if="valueList.length > 0">
     <span v-for="(v, index) in valueList" :key="index" class="mr-xs">{{ v }}</span>
   </div>
   <div v-else class="text-grey">-</div>
@@ -28,20 +28,10 @@ export default {
   methods: {},
   filter: {},
   computed: {
-    hasValue() {
-      if (this.value && this.value.length > 0) {
-        for (let i = 0; i < this.value.length; i++) {
-          if (this.value[i] !== null && this.value[i] !== undefined && this.value[i] !== '') {
-            return true;
-          }
-        }
-      }
-      return false;
-    },
     valueList() {
       if (this.value instanceof Array) {
         return this.value;
-      } else if (this.hasValue) {
+      } else if (this.value !== null && this.value !== undefined && this.value !== '') {
         return [this.value];
       }
       return [];

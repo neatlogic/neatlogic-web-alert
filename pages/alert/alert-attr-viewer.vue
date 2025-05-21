@@ -40,7 +40,7 @@ export default {
     attr: { type: Object },
     view: { type: Object }, //视图
     mode: { type: String }, //detail|list
-    value: { type: [String, Number, Object, Array] }
+    value: { type: [Boolean, String, Number, Object, Array] }
   },
   data() {
     return {

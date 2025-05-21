@@ -7,8 +7,8 @@
         :class="{ 'tsfont-drop-down': row['_hasChild'], 'tsfont-drop-right': !row['_hasChild'] }"
         @click="$emit('toggleChildren', row)"
       >
-        <span v-if="row.childAlertCount >= 100" class="text-error superscript"><b>99+</b></span>
-        <span v-else class="text-error superscript">
+        <span v-if="row.childAlertCount >= 100" class="text-error superscript mr-xs"><b>99+</b></span>
+        <span v-else class="text-error superscript mr-xs">
           <b>{{ row.childAlertCount }}</b>
         </span>
       </div>

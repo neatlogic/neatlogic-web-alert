@@ -25,9 +25,9 @@
                   :value="alertData[attr.name.replace('const_', '')]"
                 ></AlertAttrViewer>
               </span>
-              <span v-else-if="attr.kind === 'attr' && alertData.attrObj">
+              <span v-else-if="attr.kind === 'attr' && alertData.attrObj ">
                 <AlertAttrViewer
-                  v-if="alertData.attrObj[attr.name.replace('attr_', '')]"
+                  v-if="alertData.attrObj.hasOwnProperty(attr.name.replace('attr_', ''))"
                   type="attr"
                   mode="detail"
                   :row="alertData"
@@ -373,7 +373,7 @@ export default {
         this.attrList.forEach(d => {
           if (d.kind === 'const') {
             attrList.push(d);
-          } else if (this.alertData && this.alertData.attrObj && this.alertData.attrObj[d.name.replace('attr_', '')]) {
+          } else if (this.alertData && this.alertData.attrObj && this.alertData.attrObj.hasOwnProperty(d.name.replace('attr_', ''))) {
             //没有值的扩展属性不显示
             attrList.push(d);
           }

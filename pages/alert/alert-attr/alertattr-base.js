@@ -4,7 +4,7 @@ export const AttrViewerBase = {
     attr: { type: Object },
     mode: { type: String, default: 'list' }, //detail|list|audit
     view: { type: Object }, //视图
-    value: { type: [String, Number, Object, Array] }
+    value: { type: [Boolean, String, Number, Object, Array] }
   },
   data() {
     return {};
