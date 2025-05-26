@@ -13,6 +13,10 @@ const notifyTemplateManage = () => import('@/commercial-module/alert/pages/notif
 const statusManage = () => import('@/commercial-module/alert/pages/alertstatus/status-manage.vue');
 const ruleManage = () => import('@/commercial-module/alert/pages/alertrule/alertrule-manage.vue');
 const eventPluginManage = () => import('@/commercial-module/alert/pages/alertevent/eventplugin-manage.vue');
+const alertTopoEdit = () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-edit.vue');
+const alertTopoDetail = () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue');
+const alertTopoManage = () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-manage.vue');
+const alertTopoWidgetManage = () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-widget-manage.vue');
 
 let routerArr = [
   {
@@ -180,6 +184,49 @@ let routerArr = [
       icon: 'tsfont-plugin',
       type: 'alertmanage',
       authority: 'ALERT_EVENT_PLUGIN_MODIFY'
+    }
+  },
+  {
+    path: '/alerttopo-edit',
+    name: 'alerttopo-edit',
+    component: alertTopoEdit,
+    meta: {
+      title: '编辑告警拓扑',
+      ismenu: false,
+      authority: 'ALERT_TOPO_MODIFY'
+    }
+  },
+  {
+    path: '/alerttopo-detail',
+    name: 'alerttopo-detail',
+    component: alertTopoDetail,
+    meta: {
+      title: '告警拓扑',
+      ismenu: false
+    }
+  },
+  {
+    path: '/alerttopo-manage',
+    name: 'alerttopo-manage',
+    component: alertTopoManage,
+    meta: {
+      title: '拓扑管理',
+      ismenu: true,
+      icon: 'tsfont-block',
+      type: 'alerttopo',
+      authority: 'ALERT_TOPO_MODIFY'
+    }
+  },
+  {
+    path: '/alerttopo-widget-manage',
+    name: 'alerttopo-widget-manage',
+    component: alertTopoWidgetManage,
+    meta: {
+      title: '图元管理',
+      ismenu: true,
+      icon: 'tsfont-block',
+      type: 'alerttopo',
+      authority: 'ALERT_TOPO_MODIFY'
     }
   }
 ];

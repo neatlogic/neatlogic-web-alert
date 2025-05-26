@@ -1,0 +1,100 @@
+@import (reference) '~@/resources/assets/css/variable.less';
+
+.theme(@bg-color,@title-bg-color,@bg-grey,@text-color,@border-color,@primary-color,@bg-info-grey) {
+  @keyframes bb {
+    0%,
+    100% {
+      stroke-opacity: 1;
+    }
+    50% {
+      stroke-opacity: 0;
+    }
+  }
+  .x6-graph-background {
+    background: @bg-color;
+  }
+  .x6-graph {
+    border-radius: 8px;
+  }
+  .x6-graph.transition g {
+    transition: transform 0.6s ease;
+  }
+  .bg {
+    fill: @bg-color;
+  }
+  .bg-grey {
+    fill: @bg-grey;
+  }
+  .common-rect {
+    fill: @bg-info-grey;
+  }
+  .title-bg {
+    fill: @title-bg-color;
+  }
+  text {
+    fill: @text-color;
+  }
+  .line {
+    stroke: @border-color;
+  }
+  .marker {
+    stroke: @border-color;
+    fill: @border-color;
+  }
+  .vertice {
+    fill: @border-color;
+    stroke: @bg-color;
+  }
+  .port {
+    fill: @bg-color;
+    stroke: @primary-color;
+  }
+  .port.hidden {
+    visibility: hidden;
+  }
+  .x6-edge:hover {
+    cursor: pointer;
+  }
+  .linktextbackground {
+    flood-color: @bg-color;
+  }
+  .custom-tools {
+    fill: rgba(0, 0, 0, 0);
+    stroke: @border-color;
+    stroke-width: 0;
+  }
+  .custom-tools-text {
+    fill: @text-color;
+  }
+  .custom-vertices {
+    fill: @primary-color;
+  }
+  .line-actived {
+    // 节点选中，对应的连接线高亮
+    stroke-width: 1px;
+    stroke: @warning-color;
+    animation: bb 1s linear infinite;
+  }
+  .marker-actived {
+    // 节点选中，对应连接线箭头高亮
+    stroke: @warning-color;
+    fill: @warning-color;
+  }
+  .x6-edge-label {
+    rect {
+      fill: none;
+    }
+  }
+  .custom-edge-button {
+    fill: @primary-color;
+    stroke: @bg-color;
+  }
+}
+
+html {
+  .theme(@default-op,@default-th-bg-color,@default-bg-grey,@default-text,@default-icon,@default-primary-color,@default-info-bg-color);
+
+  &.theme-dark {
+    .theme(@dark-op,@dark-th-bg-color,@dark-bg-grey,@dark-text,@dark-icon,@dark-primary-color,@dark-info-bg-color,);
+  }
+}

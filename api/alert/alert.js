@@ -54,6 +54,9 @@ const alert = {
   },
   deleteAlertView(id) {
     return axios.post('/api/rest/alert/view/delete', { id: id });
+  },
+  rebuildIndex(id) {
+    return axios.post('/api/rest/alert/index/rebuild', { id: id });
   }
 };
 
