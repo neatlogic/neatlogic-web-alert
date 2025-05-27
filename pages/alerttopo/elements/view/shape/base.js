@@ -1,6 +1,7 @@
 export default {
   rendered: (node, data) => {
-    node.removeTool('customdata');
+    console.log('data', data);
+    node.removeTool('alertdata');
     if (data.customData && data.customData.length > 0) {
       //为了显示顺序一致，倒序遍历
       let index = 0;
@@ -10,7 +11,7 @@ export default {
           const text = d.value.map(d => d.text).join(',');
           node.addTools([
             {
-              name: 'customdata',
+              name: 'alertdata',
               args: {
                 markup: [
                   {

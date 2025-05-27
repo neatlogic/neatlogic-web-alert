@@ -1,3 +1,4 @@
+import { Graph } from '@antv/x6';
 
 import layout_lane from './layout/lane';
 import layout_zone from './layout/zone';
@@ -9,5 +10,10 @@ import common_database from './common/database';
 import common_rect from './common/rect';
 import common_circle from './common/circle';
 import common_cube from './common/cube';
+
+//自定义数据标记
+Graph.registerNodeTool('alertdata', {
+  inherit: 'button' // 基类名称，使用已经注册的工具名称。
+});
 
 export default [layout_lane, layout_zone, layout_vline, layout_hline, common_text, common_circle, common_database, common_rect, common_cube];

@@ -19,7 +19,9 @@
       ></ConditionGroup>
       <div v-if="condition.hasOwnProperty('result')" class="mt-md">
         <span class="text-grey mr-sm"><b>判定结果</b></span>
-        <span :class="{ 'text-success': condition.result, 'text-error': !condition.result }">{{ condition.result }}</span>
+        <span v-if="condition.result === true" class="text-success">条件满足</span>
+        <span v-else-if="condition.result === false" class="text-error">条件不满足</span>
+        <span v-else class="text-grey">{{ condition.result }}</span>
       </div>
       <div v-if="condition.handler" class="mt-md">
         <div class="handler-container">

@@ -3,7 +3,7 @@ import utils from '@/resources/assets/js/util.js';
 import { Graph } from '@antv/x6';
 import { GridLayout } from '@/commercial-module/diagram/pages/editor/grid-layout.js';
 import { NodeFactory } from '@/commercial-module/diagram/pages/elements/core/NodeFactory.js';
-import { AutofillTool, ClearAutofillTool } from '@/commercial-module/diagram/pages/editor/diagram-tools.js';
+import { AutofillTool, ClearAutofillTool } from '@/commercial-module/alert/pages/alerttopo/topo-tools.js';
 const methods = {
   addAutofillTool(graph, ciEntityId, node) {
     methods.clearAutofillTool(graph, node);

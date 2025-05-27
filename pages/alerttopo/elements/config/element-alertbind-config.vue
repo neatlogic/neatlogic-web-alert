@@ -22,7 +22,15 @@
             :conditionItem="getAttrByName(filter.attr)"
             @change="
               val => {
-                filter.value = val;
+                if(val != null && val != '' && val != undefined){
+                  if(val instanceof Array){
+                    filter.value = val;
+                  }else{
+                    filter.value =[val];
+                  }
+                }else{
+                  filter.value = [];
+                }
               }
             "
           ></ConditionItem>

@@ -82,7 +82,9 @@
               @edge:selected="edgeSelected"
               @edge:unselected="edgeUnSelected"
               @render:done="renderDone"
-@edge:mode:change="edgeModeChange" @strict:mode:change="strictModeChange" @edge:router:change="edgeRouterChange"
+              @edge:mode:change="edgeModeChange"
+              @strict:mode:change="strictModeChange"
+              @edge:router:change="edgeRouterChange"
             ></TopoEditor>
           </div>
         </template>
@@ -124,7 +126,8 @@ export default {
         strictMode: false
       },
       alertAttrList: [],
-      searchVal: {}
+      searchVal: {},
+      searchParam: { mode: 'simple', pageSize: 500 }
     };
   },
   beforeCreate() {},
@@ -142,7 +145,148 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    filterAlert() {},
+    filterAlert() {
+      const attrFilterList = [];
+      for (let key in this.searchVal) {
+        const val = this.searchVal[key];
+        if (val !== null && val !== '') {
+          let valueList = [];
+          if (val instanceof Array) {
+            valueList = val;
+          } else {
+            valueList = [val];
+          }
+          attrFilterList.push({ name: key, valueList: valueList });
+        }
+      }
+      this.$api.alert.alert.searchAlert({ ...this.searchParam, attrFilterList: attrFilterList }).then(res => {
+        if (res?.Return?.tbodyList) {
+          const nodes = this.graph.getNodes();
+          nodes.forEach(node => {
+            //根据alertbind注入data数据，后续根据data数据产生tools
+            const setting = node.getProp('setting');
+            const alertbind = setting && setting.alertbind;
+            if (alertbind) {
+              const displayAttr = alertbind.displayAttr;
+              const filterList = alertbind.filterList;
+              const bindAlertList = [];
+              if (displayAttr && filterList && filterList.length > 0) {
+                res.Return.tbodyList.forEach(alert => {
+                  let isHit = false;
+                  let alertName;
+                  if (alert.attrObj) {
+                    alertName = alert.attrObj[displayAttr.substr(5)]; //去掉前缀attr_
+                    if (alertName != undefined && alertName != null && alertName !== '') {
+                      //找到显示属性才继续，不然没意义，无法显示
+                      //console.log('name', displayAttr.substr(5), alertName);
+                      isHit = true;
+                      for (let i = 0; i < filterList.length; i++) {
+                        const filter = filterList[i];
+                        const attrName = filter.attr.substr(5); //去掉前缀attr_
+                        //console.log('attrname', attrName, alert.attrObj[attrName], filter.value);
+                        if (alert.attrObj[attrName] && filter.value && filter.value.length > 0) {
+                          //console.log('filter compare', filter.value, filter, alert.attrObj[attrName]);
+                          if (!filter.value.some(val => val.toLowerCase() === String(alert.attrObj[attrName]).toLowerCase())) {
+                            isHit = false;
+                            break;
+                          }
+                        } else {
+                          isHit = false;
+                        }
+                      }
+                    }
+                  }
+                  if (isHit && alertName) {
+                    bindAlertList.push({ id: alert.id, name: alertName, level: alert.alertLevel });
+                  }
+                });
+              }
+              if (bindAlertList.length > 0) {
+                node.setData({ alertList: bindAlertList });
+                this.addAlertData(node);
+              }
+            }
+          });
+        }
+      });
+    },
+    addAlertData(node) {
+      //console.log('data', node.getData());
+      const data = node.getData();
+      node.removeTool('alertdata');
+      if (data.alertList && data.alertList.length > 0) {
+        let index = 0;
+        let hasMore = data.alertList.length > 5;
+        for (let i = 0; i < data.alertList.length; i++) {
+          const markup = [];
+          if (index > 4) {
+            markup.push({
+              tagName: 'text',
+              textContent: '......',
+              selector: 'name',
+              attrs: {
+                'font-size': 10,
+                'text-anchor': 'left',
+                'pointer-events': 'none'
+               
+              }
+            });
+            node.addTools([
+              {
+                name: 'alertdata',
+                args: {
+                  markup: markup,
+                  x: 0,
+                  y: 0,
+                  offset: { x: 0, y: -8 }
+                }
+              }
+            ]);
+            break;
+          } else {
+            const alert = data.alertList[i];
+            if (alert.level) {
+              markup.push({
+                tagName: 'text',
+                textContent: alert.level.label,
+                selector: 'name',
+                attrs: {
+                  'font-size': 10,
+                  style: 'fill:' + alert.level.color,
+                  'text-anchor': 'left',
+                  'pointer-events': 'none'
+                }
+              });
+            }
+            markup.push({
+              tagName: 'text',
+              textContent: alert.name,
+              selector: 'text',
+              attrs: {
+                style: 'font-weight:bold',
+                'font-size': 10,
+                'text-anchor': 'left',
+                'pointer-events': 'none',
+                x: alert.level ? alert.level.label.length * 10 + 2 : 0
+              }
+            });
+            node.addTools([
+              {
+                name: 'alertdata',
+                args: {
+                  markup: markup,
+                  x: 0,
+                  y: 0,
+                  offset: { x: 0, y: -5 - index * 12 - (hasMore ? 12 : 0) }
+                }
+              }
+            ]);
+          }
+         
+          index++;
+        }
+      }
+    },
     getAttrByName(name) {
       return this.alertAttrList.find(item => item.name === name);
     },
