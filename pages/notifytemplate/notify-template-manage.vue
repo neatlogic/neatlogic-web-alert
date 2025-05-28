@@ -36,7 +36,7 @@ export default {
   name: '',
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    TemplateEdit: () => import('@/commercial-module/alert/pages/notifytemplate/notify-template-edit.vue')
+    TemplateEdit: () => import('@/community-module/alert/pages/notifytemplate/notify-template-edit.vue')
   },
   props: {},
   data() {

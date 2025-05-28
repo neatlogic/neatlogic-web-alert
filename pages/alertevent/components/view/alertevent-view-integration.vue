@@ -79,7 +79,7 @@
   </div>
 </template>
 <script>
-import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-base.js';
+import { AlertEventBase } from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.js';
 
 export default {
   name: '',

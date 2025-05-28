@@ -21,7 +21,7 @@ export default {
   name: '',
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
+    AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
     UserCard: () => import('@/resources/components/UserCard/UserCard.vue')
   },
   props: {

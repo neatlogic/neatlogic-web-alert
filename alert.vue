@@ -24,7 +24,7 @@ export default {
     TopNav: () => import('@/views/components/topnav/topnav.vue'),
     LeftMenu: () => import('@/views/components/leftmenu/leftmenu.vue'),
     LicenseValidator: () => import('@/views/components/license/license-validator.vue'),
-    AlertMenu: () => import('@/commercial-module/alert/pages/leftmenu/alert-menu.vue')
+    AlertMenu: () => import('@/community-module/alert/pages/leftmenu/alert-menu.vue')
   },
   data() {
     return {

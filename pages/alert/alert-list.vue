@@ -131,11 +131,11 @@ export default {
   components: {
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
+    AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue'),
-    AlertDeleteDialog: () => import('@/commercial-module/alert/pages/alert/alert-delete-dialog.vue'),
-    AlertCloseDialog: () => import('@/commercial-module/alert/pages/alert/alert-close-dialog.vue'),
-    AlertOpenDialog: () => import('@/commercial-module/alert/pages/alert/alert-open-dialog.vue')
+    AlertDeleteDialog: () => import('@/community-module/alert/pages/alert/alert-delete-dialog.vue'),
+    AlertCloseDialog: () => import('@/community-module/alert/pages/alert/alert-close-dialog.vue'),
+    AlertOpenDialog: () => import('@/community-module/alert/pages/alert/alert-open-dialog.vue')
   },
   props: {
     fromAlertId: { type: Number }

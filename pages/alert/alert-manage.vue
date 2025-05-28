@@ -251,15 +251,15 @@ export default {
   components: {
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AlertViewEdit: () => import('@/commercial-module/alert/pages/alert/alert-view-edit.vue'),
+    AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
-    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
-    AlertDeleteDialog: () => import('@/commercial-module/alert/pages/alert/alert-delete-dialog.vue'),
-    AlertCloseDialog: () => import('@/commercial-module/alert/pages/alert/alert-close-dialog.vue'),
-    AlertOpenDialog: () => import('@/commercial-module/alert/pages/alert/alert-open-dialog.vue'),
+    AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
+    AlertDeleteDialog: () => import('@/community-module/alert/pages/alert/alert-delete-dialog.vue'),
+    AlertCloseDialog: () => import('@/community-module/alert/pages/alert/alert-close-dialog.vue'),
+    AlertOpenDialog: () => import('@/community-module/alert/pages/alert/alert-open-dialog.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue'),
-    TopoDetail: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue')
+    TopoDetail: () => import('@/community-module/alert/pages/alerttopo/alerttopo-detail.vue')
   },
   props: {},
   data() {

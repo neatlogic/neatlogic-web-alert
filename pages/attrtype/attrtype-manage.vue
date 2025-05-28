@@ -55,8 +55,8 @@ export default {
   name: '',
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AttrTypeEdit: () => import('@/commercial-module/alert/pages/attrtype/attrtype-edit-dialog.vue'),
-    AttrTypeItemEdit: () => import('@/commercial-module/alert/pages/attrtype/attrtype-edititem-dialog.vue'),
+    AttrTypeEdit: () => import('@/community-module/alert/pages/attrtype/attrtype-edit-dialog.vue'),
+    AttrTypeItemEdit: () => import('@/community-module/alert/pages/attrtype/attrtype-edititem-dialog.vue'),
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue')
   },
   props: {},

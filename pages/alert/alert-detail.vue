@@ -46,8 +46,8 @@
 export default {
   name: '',
   components: {
-    AlertDetailCore: () => import('@/commercial-module/alert/pages/alert/alert-detail-core.vue'),
-    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue')
+    AlertDetailCore: () => import('@/community-module/alert/pages/alert/alert-detail-core.vue'),
+    AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue')
   },
   props: {},
   data() {

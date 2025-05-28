@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/config/alertevent-config-base.js';
+import { AlertEventBase } from '@/community-module/alert/pages/alertevent/components/config/alertevent-config-base.js';
 
 export default {
   name: '',

@@ -35,7 +35,7 @@ export default {
   name: '',
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    StatusEdit: () => import('@/commercial-module/alert/pages/alertstatus/status-edit.vue')
+    StatusEdit: () => import('@/community-module/alert/pages/alertstatus/status-edit.vue')
   },
   props: {},
   data() {

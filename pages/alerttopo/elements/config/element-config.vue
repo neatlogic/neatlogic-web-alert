@@ -74,7 +74,7 @@
   </div>
 </template>
 <script>
-import components from '@/commercial-module/diagram/pages/elements/config/index.js';
+import components from '@/community-module/alert/pages/alerttopo/elements/config/index.js';
 import { Cell, Graph } from '@antv/x6';
 
 export default {
@@ -87,7 +87,7 @@ export default {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
     TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
-    CustomDataEdit: () => import('@/commercial-module/alert/pages/alerttopo/elements/config/customdata-config.vue')
+    CustomDataEdit: () => import('@/community-module/alert/pages/alerttopo/elements/config/customdata-config.vue')
   },
   props: {
     mode: { type: String, default: 'widget' }, //graph|widget|template三种模式

@@ -26,12 +26,12 @@
   <div v-else-if="mode === 'detail' && row">{{ row.title }}</div>
 </template>
 <script>
-import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';
+import { AttrViewerBase } from '@/community-module/alert/pages/alert/alert-attr/alertattr-base.js';
 
 export default {
   name: '',
   components: {
-    AlertView: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue')
+    AlertView: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue')
   },
   extends: AttrViewerBase,
   props: {},

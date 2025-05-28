@@ -1,5 +1,5 @@
 import { Graph } from '@antv/x6';
-import { marquee } from '@/commercial-module/alert/pages/alerttopo/elements/core/marquee-tools.js';
+import { marquee } from '@/community-module/alert/pages/alerttopo/elements/core/marquee-tools.js';
 
 import layout_lane from './layout/lane';
 import layout_zone from './layout/zone';

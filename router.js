@@ -2,21 +2,21 @@ import { $t } from '@/resources/init.js';
 const refresh = () => import('@/views/pages/common/refresh.vue');
 const noAuthority = () => import('@/views/pages/common/no-authority.vue');
 const welcome = () => import('@/views/pages/common/welcome.vue');
-const alertTypeManage = () => import('@/commercial-module/alert/pages/alerttype/alerttype-manage.vue');
-const alertManage = () => import('@/commercial-module/alert/pages/alert/alert-manage.vue');
-const alertDetail = () => import('@/commercial-module/alert/pages/alert/alert-detail.vue');
-const attrTypeManage = () => import('@/commercial-module/alert/pages/attrtype/attrtype-manage.vue');
-const alertLevelManage = () => import('@/commercial-module/alert/pages/alertlevel/alertlevel-manage.vue');
-const alertEventManage = () => import('@/commercial-module/alert/pages/alertevent/alertevent-manage.vue');
-const alertOriginManage = () => import('@/commercial-module/alert/pages/alert/alert-origin-manage.vue');
-const notifyTemplateManage = () => import('@/commercial-module/alert/pages/notifytemplate/notify-template-manage.vue');
-const statusManage = () => import('@/commercial-module/alert/pages/alertstatus/status-manage.vue');
-const ruleManage = () => import('@/commercial-module/alert/pages/alertrule/alertrule-manage.vue');
-const eventPluginManage = () => import('@/commercial-module/alert/pages/alertevent/eventplugin-manage.vue');
-const alertTopoEdit = () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-edit.vue');
-const alertTopoDetail = () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue');
-const alertTopoManage = () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-manage.vue');
-const alertTopoWidgetManage = () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-widget-manage.vue');
+const alertTypeManage = () => import('@/community-module/alert/pages/alerttype/alerttype-manage.vue');
+const alertManage = () => import('@/community-module/alert/pages/alert/alert-manage.vue');
+const alertDetail = () => import('@/community-module/alert/pages/alert/alert-detail.vue');
+const attrTypeManage = () => import('@/community-module/alert/pages/attrtype/attrtype-manage.vue');
+const alertLevelManage = () => import('@/community-module/alert/pages/alertlevel/alertlevel-manage.vue');
+const alertEventManage = () => import('@/community-module/alert/pages/alertevent/alertevent-manage.vue');
+const alertOriginManage = () => import('@/community-module/alert/pages/alert/alert-origin-manage.vue');
+const notifyTemplateManage = () => import('@/community-module/alert/pages/notifytemplate/notify-template-manage.vue');
+const statusManage = () => import('@/community-module/alert/pages/alertstatus/status-manage.vue');
+const ruleManage = () => import('@/community-module/alert/pages/alertrule/alertrule-manage.vue');
+const eventPluginManage = () => import('@/community-module/alert/pages/alertevent/eventplugin-manage.vue');
+const alertTopoEdit = () => import('@/community-module/alert/pages/alerttopo/alerttopo-edit.vue');
+const alertTopoDetail = () => import('@/community-module/alert/pages/alerttopo/alerttopo-detail.vue');
+const alertTopoManage = () => import('@/community-module/alert/pages/alerttopo/alerttopo-manage.vue');
+const alertTopoWidgetManage = () => import('@/community-module/alert/pages/alerttopo/alerttopo-widget-manage.vue');
 
 let routerArr = [
   {

@@ -84,14 +84,13 @@
 </template>
 <script>
 import screenfull from '@/resources/assets/js/screenfull.js';
-import { ElementFactory } from '@/commercial-module/alert/pages/alerttopo/elements/core/ElementFactory.js';
 
 export default {
   name: '',
   components: {
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
-    TopoToolbar: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-toolbar.vue'),
-    TopoEditor: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-editor.vue'),
+    TopoToolbar: () => import('@/community-module/alert/pages/alerttopo/alerttopo-toolbar.vue'),
+    TopoEditor: () => import('@/community-module/alert/pages/alerttopo/alerttopo-editor.vue'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue')
   },
   props: {

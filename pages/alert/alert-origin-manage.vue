@@ -52,7 +52,7 @@ export default {
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
-    AlertOriginView: () => import('@/commercial-module/alert/pages/alert/alert-origin-view.vue')
+    AlertOriginView: () => import('@/community-module/alert/pages/alert/alert-origin-view.vue')
   },
   props: {},
   data() {

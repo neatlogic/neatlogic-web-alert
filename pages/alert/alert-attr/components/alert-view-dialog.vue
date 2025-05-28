@@ -26,7 +26,7 @@
 export default {
   name: '',
   components: {
-    AlertDetailCore: () => import('@/commercial-module/alert/pages/alert/alert-detail-core.vue')
+    AlertDetailCore: () => import('@/community-module/alert/pages/alert/alert-detail-core.vue')
   },
   props: {
     id: { type: Number },

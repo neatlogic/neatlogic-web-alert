@@ -28,10 +28,10 @@ import { History } from '@antv/x6-plugin-history';
 import { Clipboard } from '@antv/x6-plugin-clipboard';
 import { Export } from '@antv/x6-plugin-export';
 import { MiniMap } from '@antv/x6-plugin-minimap';
-import elements from '@/commercial-module/alert/pages/alerttopo/elements/view/shape/index.js';
-import { ElementFactory } from '@/commercial-module/alert/pages/alerttopo/elements/core/ElementFactory.js';
-import TopoUtil from '@/commercial-module/alert/pages/alerttopo/topo-util.js';
-import RightClickMenu from '@/commercial-module/alert/pages/alerttopo/right-click-menu.vue';
+import elements from '@/community-module/alert/pages/alerttopo/elements/view/shape/index.js';
+import { ElementFactory } from '@/community-module/alert/pages/alerttopo/elements/core/ElementFactory.js';
+import TopoUtil from '@/community-module/alert/pages/alerttopo/topo-util.js';
+import RightClickMenu from '@/community-module/alert/pages/alerttopo/right-click-menu.vue';
 export default {
   name: '',
   components: {

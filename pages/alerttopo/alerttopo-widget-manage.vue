@@ -84,9 +84,9 @@
   </div>
 </template>
 <script>
-import { NodeFactory } from '@/commercial-module/alert/pages/alerttopo/elements/core/NodeFactory.js';
-import elements from '@/commercial-module/alert/pages/alerttopo/elements/view/shape/index.js';
-import elementTypes from '@/commercial-module/alert/pages/alerttopo/elements/view/shape_type/index.js';
+import { NodeFactory } from '@/community-module/alert/pages/alerttopo/elements/core/NodeFactory.js';
+import elements from '@/community-module/alert/pages/alerttopo/elements/view/shape/index.js';
+import elementTypes from '@/community-module/alert/pages/alerttopo/elements/view/shape_type/index.js';
 
 export default {
   name: '',
@@ -94,8 +94,8 @@ export default {
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     TsCard: () => import('@/resources/components/TsCard/TsCard.vue'),
-    WidgetEdit: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-widget-edit.vue'),
-    TopoEditor: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-editor.vue')
+    WidgetEdit: () => import('@/community-module/alert/pages/alerttopo/alerttopo-widget-edit.vue'),
+    TopoEditor: () => import('@/community-module/alert/pages/alerttopo/alerttopo-editor.vue')
   },
   props: {},
   data() {

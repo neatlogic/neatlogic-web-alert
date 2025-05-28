@@ -79,12 +79,12 @@
   </div>
 </template>
 <script>
-import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-base.js';
+import { AlertEventBase } from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.js';
 
 export default {
   name: '',
   components: {
-    AlertView: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue'),
+    AlertView: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
   },

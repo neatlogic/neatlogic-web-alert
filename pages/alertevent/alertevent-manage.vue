@@ -120,8 +120,8 @@ export default {
   name: '',
   components: {
     draggable,
-    AlertEventEdit: () => import('@/commercial-module/alert/pages/alertevent/alertevent-edit.vue'),
-    AlertEventViewer: () => import('@/commercial-module/alert/pages/alertevent/components/view/alertevent-viewer.vue')
+    AlertEventEdit: () => import('@/community-module/alert/pages/alertevent/alertevent-edit.vue'),
+    AlertEventViewer: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-viewer.vue')
   },
   props: {},
   data() {

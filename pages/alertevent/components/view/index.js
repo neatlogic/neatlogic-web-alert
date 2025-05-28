@@ -1,15 +1,15 @@
 import ComponentManager from '@/resources/import/component-manager.js';
 
-import email_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-email.vue';
-import save_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-save.vue';
-import condition_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-condition.vue';
-import delete_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-delete.vue';
-import apply_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-apply.vue';
-import interval_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-interval.vue';
-import close_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-close.vue';
-import open_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-open.vue';
-import integration_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-integration.vue';
-import updatestatus_eventhandler from '@/commercial-module/alert/pages/alertevent/components/view/alertevent-view-updatestatus.vue';
+import email_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-email.vue';
+import save_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-save.vue';
+import condition_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-condition.vue';
+import delete_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-delete.vue';
+import apply_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-apply.vue';
+import interval_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-interval.vue';
+import close_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-close.vue';
+import open_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-open.vue';
+import integration_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-integration.vue';
+import updatestatus_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-updatestatus.vue';
 
 // 获取动态组件
 const dynamicComponents = ComponentManager.getAlertEventHandlerViewComponent() || {};

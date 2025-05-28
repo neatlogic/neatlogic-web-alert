@@ -1,5 +1,14 @@
 <template>
   <TsForm v-model="data" :item-list="form" :labelPosition="mode === 'widget' ? 'right' : 'top'">
+    <template v-slot:borderWidth>
+      <div class="pl-nm pr-nm"><Slider v-model="data.borderWidth" :min="1" :max="20"></Slider></div>
+    </template>
+    <template v-slot:fontSize>
+      <div class="pl-nm pr-nm"><Slider v-model="data.fontSize" :min="12" :max="20"></Slider></div>
+    </template>
+    <template v-slot:radius>
+      <div class="pl-nm pr-nm"><Slider v-model="data.radius" :min="0" :max="20"></Slider></div>
+    </template>
     <template v-slot:fontColor>
       <ColorPicker
         :transfer="true"
@@ -15,31 +24,40 @@
         "
       />
     </template>
-    <template v-slot:iconColor>
+    <template v-slot:borderColor>
       <ColorPicker
         :transfer="true"
-        :value="data.iconColor"
+        :value="data.borderColor"
         alpha
         recommend
         class="colorPicker"
         transfer-class-name="color-picker-transfer-class"
         @on-change="
           val => {
-            $set(data, 'iconColor', val);
+            $set(data, 'borderColor', val);
           }
         "
       />
     </template>
-    <template v-slot:iconSize>
-      <div class="pl-nm pr-nm"><Slider v-model="data.iconSize" :min="20" :max="50"></Slider></div>
-    </template>
-    <template v-slot:fontSize>
-      <div class="pl-nm pr-nm"><Slider v-model="data.fontSize" :min="12" :max="30"></Slider></div>
+    <template v-slot:bgColor>
+      <ColorPicker
+        :transfer="true"
+        :value="data.bgColor"
+        alpha
+        recommend
+        class="colorPicker"
+        transfer-class-name="color-picker-transfer-class"
+        @on-change="
+          val => {
+            $set(data, 'bgColor', val);
+          }
+        "
+      />
     </template>
   </TsForm>
 </template>
 <script>
-import { ConfigBase } from '@/commercial-module/diagram/pages/elements/config/config-base.js';
+import { ConfigBase } from '@/community-module/alert/pages/alerttopo/elements/config/config-base.js';
 export default {
   name: '',
   components: {

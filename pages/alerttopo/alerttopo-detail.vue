@@ -39,9 +39,9 @@ import screenfull from '@/resources/assets/js/screenfull.js';
 export default {
   name: '',
   components: {
-    TopoToolbar: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-toolbar.vue'),
-    TopoEditor: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-editor.vue'),
-    AlertView: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue')
+    TopoToolbar: () => import('@/community-module/alert/pages/alerttopo/alerttopo-toolbar.vue'),
+    TopoEditor: () => import('@/community-module/alert/pages/alerttopo/alerttopo-editor.vue'),
+    AlertView: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue')
   },
   props: {
     alertList: { type: Array },

@@ -49,7 +49,7 @@ export default {
   name: '',
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AlertRuleEdit: () => import('@/commercial-module/alert/pages/alertrule/alertrule-edit-dialog.vue')
+    AlertRuleEdit: () => import('@/community-module/alert/pages/alertrule/alertrule-edit-dialog.vue')
   },
   props: {},
   data() {

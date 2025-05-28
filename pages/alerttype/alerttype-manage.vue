@@ -113,7 +113,7 @@ export default {
   components: {
     TsCard: () => import('@/resources/components/TsCard/TsCard.vue'),
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AlertTypeEidt: () => import('@/commercial-module/alert/pages/alerttype/alerttype-edit-dialog.vue'),
+    AlertTypeEidt: () => import('@/community-module/alert/pages/alerttype/alerttype-edit-dialog.vue'),
     UserCard: () => import('@/resources/components/UserCard/UserCard.vue')
   },
   props: {},

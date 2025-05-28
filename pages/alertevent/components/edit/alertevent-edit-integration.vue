@@ -77,7 +77,7 @@
   </div>
 </template>
 <script>
-import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
+import { AlertEventBase } from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
 import clipboard from '@/resources/directives/clipboard.js';
 
 export default {

@@ -16,7 +16,7 @@
 export default {
   name: '',
   components: {
-    AuditItem: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list-item.vue')
+    AuditItem: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list-item.vue')
   },
   props: {
     alertData: { type: Object }

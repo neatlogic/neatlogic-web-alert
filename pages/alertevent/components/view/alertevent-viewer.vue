@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-import handlers from '@/commercial-module/alert/pages/alertevent/components/view/index.js';
+import handlers from '@/community-module/alert/pages/alertevent/components/view/index.js';
 export default {
   name: '',
   components: {

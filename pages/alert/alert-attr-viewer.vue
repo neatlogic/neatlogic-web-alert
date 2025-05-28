@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import * as handlers from '@/commercial-module/alert/pages/alert/alert-attr/index.js';
+import * as handlers from '@/community-module/alert/pages/alert/alert-attr/index.js';
 export default {
   name: '',
   components: {

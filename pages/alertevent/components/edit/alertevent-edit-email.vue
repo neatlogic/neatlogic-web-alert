@@ -97,14 +97,14 @@
   </div>
 </template>
 <script>
-import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
+import { AlertEventBase } from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
 import clipboard from '@/resources/directives/clipboard.js';
 
 export default {
   name: '',
   directives: { clipboard },
   components: {
-    FreemarkerHelp: () => import('@/commercial-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
+    FreemarkerHelp: () => import('@/community-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror'),

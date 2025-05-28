@@ -41,8 +41,8 @@
 export default {
   name: '',
   components: {
-    AuditItem: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list-item.vue'),
-    AlertEventViewer: () => import('@/commercial-module/alert/pages/alertevent/components/view/alertevent-viewer.vue')
+    AuditItem: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list-item.vue'),
+    AlertEventViewer: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-viewer.vue')
   },
   props: {
     level: { type: Number, default: 0 },

@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import handlers from '@/commercial-module/alert/pages/alertevent/components/config/index.js';
+import handlers from '@/community-module/alert/pages/alertevent/components/config/index.js';
 export default {
   name: '',
   components: {

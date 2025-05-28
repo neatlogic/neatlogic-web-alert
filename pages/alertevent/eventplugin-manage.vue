@@ -32,8 +32,8 @@ export default {
   name: '',
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    PluginConfig: () => import('@/commercial-module/alert/pages/alertevent/components/config/alertevent-configer.vue'),
-    EventPluginConfig: () => import('@/commercial-module/alert/pages/alertevent/eventplugin-edit.vue')
+    PluginConfig: () => import('@/community-module/alert/pages/alertevent/components/config/alertevent-configer.vue'),
+    EventPluginConfig: () => import('@/community-module/alert/pages/alertevent/eventplugin-edit.vue')
   },
   props: {},
   data() {

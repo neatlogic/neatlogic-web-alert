@@ -57,7 +57,7 @@
   </TsForm>
 </template>
 <script>
-import { ConfigBase } from '@/commercial-module/diagram/pages/elements/config/config-base.js';
+import { ConfigBase } from '@/community-module/alert/pages/alerttopo/elements/config/config-base.js';
 export default {
   name: '',
   components: {

@@ -61,7 +61,7 @@ export default {
   name: '',
   components: {
     TsCard: () => import('@/resources/components/TsCard/TsCard.vue'),
-    TopoEditor: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-editor.vue')
+    TopoEditor: () => import('@/community-module/alert/pages/alerttopo/alerttopo-editor.vue')
   },
   props: {},
   data() {

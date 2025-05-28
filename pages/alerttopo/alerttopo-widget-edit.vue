@@ -47,16 +47,16 @@
   </div>
 </template>
 <script>
-import { ElementFactory } from '@/commercial-module/alert/pages/alerttopo/elements/core/ElementFactory.js';
-import { NodeFactory } from '@/commercial-module/alert/pages/alerttopo/elements/core/NodeFactory.js';
-import elements from '@/commercial-module/alert/pages/alerttopo/elements/view/shape/index.js';
-import elementtypes from '@/commercial-module/alert/pages/alerttopo/elements/view/shape_type/index.js';
+import { ElementFactory } from '@/community-module/alert/pages/alerttopo/elements/core/ElementFactory.js';
+import { NodeFactory } from '@/community-module/alert/pages/alerttopo/elements/core/NodeFactory.js';
+import elements from '@/community-module/alert/pages/alerttopo/elements/view/shape/index.js';
+import elementtypes from '@/community-module/alert/pages/alerttopo/elements/view/shape_type/index.js';
 export default {
   name: 'WidgetEdit',
   components: {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
-    TopoEditor: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-editor.vue'),
-    ElementConfig: () => import('@/commercial-module/alert/pages/alerttopo/elements/config/element-config.vue'),
+    TopoEditor: () => import('@/community-module/alert/pages/alerttopo/alerttopo-editor.vue'),
+    ElementConfig: () => import('@/community-module/alert/pages/alerttopo/elements/config/element-config.vue'),
     TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
     IconDialog: () => import('@/views/pages/common/icon-dialog.vue')
   },

@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import { AttrViewerBase } from '@/commercial-module/alert/pages/alert/alert-attr/alertattr-base.js';
+import { AttrViewerBase } from '@/community-module/alert/pages/alert/alert-attr/alertattr-base.js';
 export default {
   name: '',
   components: {},

@@ -66,7 +66,7 @@ export default {
   components: {
     JsonViewer: () => import('vue-json-viewer'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
-    AlertViewEventAudit: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list.vue')
+    AlertViewEventAudit: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list.vue')
   },
   props: {
     alertId: { type: Number }

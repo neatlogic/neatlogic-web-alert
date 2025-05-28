@@ -32,7 +32,7 @@
 export default {
   name: '',
   components: {
-    EditCiEntityDialog: () => import('@/commercial-module/diagram/pages/elements/config/cientity-edit-dialog.vue')
+    EditCiEntityDialog: () => import('@/community-module/diagram/pages/elements/config/cientity-edit-dialog.vue')
   },
   props: {
     cell: { type: Object }

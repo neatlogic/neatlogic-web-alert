@@ -50,7 +50,7 @@ export default {
   name: 'AlertMenu',
   components: {
     VerticalPager: () => import('@/resources/plugins/VerticalPager/vertical-pager.vue'),
-    AlertViewEdit: () => import('@/commercial-module/alert/pages/alert/alert-view-edit.vue')
+    AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue')
   },
   extends: LeftMenu,
   data: function() {

@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-import * as elements from '@/commercial-module/alert/pages/alerttopo/elements/view/shape/index.js';
+import * as elements from '@/community-module/alert/pages/alerttopo/elements/view/shape/index.js';
 export default {
   name: '',
   components: {
@@ -93,7 +93,7 @@ export default {
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue')
-    //WidgetEdit: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-widget-edit.vue')
+    //WidgetEdit: () => import('@/community-module/alert/pages/alerttopo/alerttopo-widget-edit.vue')
   },
   props: {
     setting: { type: Object }

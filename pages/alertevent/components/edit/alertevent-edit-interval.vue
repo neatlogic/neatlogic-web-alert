@@ -102,7 +102,7 @@
   </div>
 </template>
 <script>
-import { AlertEventBase } from '@/commercial-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
+import { AlertEventBase } from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
 export default {
   name: '',
   components: {
@@ -124,7 +124,7 @@ export default {
     if (this.$utils.isEmpty(this.configLocal)) {
       this.configLocal = { intervalList: [] };
     }
-    const handlers = await import('@/commercial-module/alert/pages/alertevent/components/edit/index.js');
+    const handlers = await import('@/community-module/alert/pages/alertevent/components/edit/index.js');
     this.handlers = handlers.default;
     this.listEventPlugin();
     this.listAlertAttrList();

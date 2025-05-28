@@ -173,17 +173,17 @@
 export default {
   name: '',
   components: {
-    AlertViewAudit: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-audit-list.vue'),
-    AlertViewEventAudit: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list.vue'),
+    AlertViewAudit: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-audit-list.vue'),
+    AlertViewEventAudit: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-eventaudit-list.vue'),
     UserCard: () => import('@/resources/components/UserCard/UserCard.vue'),
-    AlertOriginal: () => import('@/commercial-module/alert/pages/alert/alert-attr/components/alert-view-original.vue'),
+    AlertOriginal: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-original.vue'),
     TsCkeditor: () => import('@/resources/plugins/TsCkeditor/TsCkeditor.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
-    AlertAttrViewer: () => import('@/commercial-module/alert/pages/alert/alert-attr-viewer.vue'),
+    AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue'),
-    AlertList: () => import('@/commercial-module/alert/pages/alert/alert-list.vue')
+    AlertList: () => import('@/community-module/alert/pages/alert/alert-list.vue')
   },
   props: {
     id: { type: Number }

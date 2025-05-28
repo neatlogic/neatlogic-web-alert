@@ -11,7 +11,7 @@
       >
         <div style="position: relative">
           <div class="mask"></div>
-          <DiagramEditor
+          <TopoEditor
             :readonly="true"
             :grid="false"
             :panning="false"
@@ -25,7 +25,7 @@
                 ready(graph, dnd, widget);
               }
             "
-          ></DiagramEditor>
+          ></TopoEditor>
           <div class="widget-text mt-xs text-grey">{{ widget.label || widget.name }}</div>
         </div>
       </div>
@@ -35,11 +35,11 @@
 </template>
 <script>
 import { Graph } from '@antv/x6';
-import { NodeFactory } from '@/commercial-module/alert/pages/alerttopo/elements/core/NodeFactory.js';
+import { NodeFactory } from '@/community-module/alert/pages/alerttopo/elements/core/NodeFactory.js';
 export default {
   name: '',
   components: {
-    DiagramEditor: () => import('@/commercial-module/diagram/pages/editor/diagram-editor.vue')
+    TopoEditor: () => import('@/community-module/alert/pages/alerttopo/alerttopo-editor.vue')
   },
   props: {
     widgetList: { type: Array },

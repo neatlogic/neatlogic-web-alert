@@ -101,7 +101,7 @@
 <script>
 import { Graph, Node, Edge } from '@antv/x6';
 import { MiniMap } from '@antv/x6-plugin-minimap';
-import TopoUtil from '@/commercial-module/alert/pages/alerttopo/topo-util.js';
+import TopoUtil from '@/community-module/alert/pages/alerttopo/topo-util.js';
 
 export default {
   name: '',

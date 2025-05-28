@@ -121,7 +121,7 @@
 </template>
 <script>
 import screenfull from '@/resources/assets/js/screenfull.js';
-import { ElementFactory } from '@/commercial-module/alert/pages/alerttopo/elements/core/ElementFactory.js';
+import { ElementFactory } from '@/community-module/alert/pages/alerttopo/elements/core/ElementFactory.js';
 
 export default {
   name: '',
@@ -129,12 +129,12 @@ export default {
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     //TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
-    TopoToolbar: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-toolbar.vue'),
-    TopoEditor: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-editor.vue'),
-    GraphConfig: () => import('@/commercial-module/alert/pages/alerttopo/elements/config/graph-config.vue'),
-    ElementConfig: () => import('@/commercial-module/alert/pages/alerttopo/elements/config/element-config.vue'),
-    EdgeConfig: () => import('@/commercial-module/alert/pages/alerttopo/elements/config/edge-config.vue'),
-    WidgetPanel: () => import('@/commercial-module/alert/pages/alerttopo/widget-panel.vue')
+    TopoToolbar: () => import('@/community-module/alert/pages/alerttopo/alerttopo-toolbar.vue'),
+    TopoEditor: () => import('@/community-module/alert/pages/alerttopo/alerttopo-editor.vue'),
+    GraphConfig: () => import('@/community-module/alert/pages/alerttopo/elements/config/graph-config.vue'),
+    ElementConfig: () => import('@/community-module/alert/pages/alerttopo/elements/config/element-config.vue'),
+    EdgeConfig: () => import('@/community-module/alert/pages/alerttopo/elements/config/edge-config.vue'),
+    WidgetPanel: () => import('@/community-module/alert/pages/alerttopo/widget-panel.vue')
   },
   props: {},
   data() {

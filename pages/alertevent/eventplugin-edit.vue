@@ -20,7 +20,7 @@ export default {
   name: '',
   components: {
     TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
-    PluginConfig: () => import('@/commercial-module/alert/pages/alertevent/components/config/alertevent-configer.vue')
+    PluginConfig: () => import('@/community-module/alert/pages/alertevent/components/config/alertevent-configer.vue')
   },
   props: {
     name: { type: String }

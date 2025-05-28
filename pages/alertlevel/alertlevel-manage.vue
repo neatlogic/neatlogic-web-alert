@@ -30,7 +30,7 @@ export default {
   name: '',
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AlertLevelEdit: () => import('@/commercial-module/alert/pages/alertlevel/alertlevel-edit-dialog.vue')
+    AlertLevelEdit: () => import('@/community-module/alert/pages/alertlevel/alertlevel-edit-dialog.vue')
   },
   props: {},
   data() {
