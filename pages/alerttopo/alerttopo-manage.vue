@@ -6,8 +6,6 @@
           <div class="action-item tsfont-plus" @click="editTopo()">拓扑图</div>
         </div>
       </template>
-      <template v-slot:topCenter>上中</template>
-      <template v-slot:topRight>上右</template>
       <template v-slot:content>
         <TsCard
           v-if="!loading"
