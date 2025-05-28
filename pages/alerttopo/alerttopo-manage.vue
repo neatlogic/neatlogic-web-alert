@@ -18,8 +18,7 @@
         >
           <template slot="header" slot-scope="{ row }">
             <div style="position: relative">
-              <!--没有templateId代表自动架构图-->
-              <h3 class="text-grey">{{ row.label }}·{{ row.name }}</h3>
+              <h3 class="text-grey">{{ row.name }}</h3>
             </div>
           </template>
           <div slot-scope="{ row }" class="bg-grey">
