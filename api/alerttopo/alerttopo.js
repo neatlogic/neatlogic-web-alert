@@ -7,6 +7,9 @@ const topo = {
   searchTopo(params) {
     return axios.post('/api/rest/alert/topo/search', params);
   },
+  listTopo(params) {
+    return axios.post('/api/rest/alert/topo/list', params);
+  },
   searchWidget(params) {
     return axios.post('/api/rest/alert/topo/widget/search', params);
   },

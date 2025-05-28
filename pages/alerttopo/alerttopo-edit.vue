@@ -28,7 +28,7 @@
     </template>
     <template v-slot:topRight>
       <div class="action-group">
-        <div class="action-item">过滤属性</div>
+        <!-- <div class="action-item">过滤属性</div>
         <div class="action-item">
           <TsFormSelect
             v-model="graphConfig.filterAttrList"
@@ -40,7 +40,7 @@
             border="border"
             :width="250"
           ></TsFormSelect>
-        </div>
+        </div>-->
         <div class="action-item">
           <Button type="primary" @click="saveTopo()">{{ $t('page.save') }}</Button>
         </div>
@@ -87,7 +87,6 @@
               :element="currentWidget"
               :cell="selectedNode"
               :graph="graph"
-              :isShowInteractTabPane="isShowInteractTabPane"
               @setting:update="updateWidgetSetting"
               @data:update="updateWidgetData"
             ></ElementConfig>
@@ -129,7 +128,7 @@ export default {
   components: {
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
-    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
+    //TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TopoToolbar: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-toolbar.vue'),
     TopoEditor: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-editor.vue'),
     GraphConfig: () => import('@/commercial-module/alert/pages/alerttopo/elements/config/graph-config.vue'),
@@ -141,7 +140,6 @@ export default {
   data() {
     return {
       id: null,
-      isShowInteractTabPane: true,
       loading: true,
       graph: null,
       dnd: null,
@@ -220,29 +218,6 @@ export default {
       this.dnd = dnd;
       if (this.topoData) {
         const { graph = {} } = this.topoData.config || {};
-        const { cells = [] } = graph || {};
-        if (this.isShowInteractTabPane) {
-          cells.forEach(item => {
-            // 每次重新渲染都需要设置不可允许拖拽大小
-            if (item && item.setting && item.setting.resizable) {
-              item.setting.resizable = false;
-            }
-            if (item && item.type == 'cmdb' && item.shape == 'edge') {
-              if (item.attrs && item.attrs.line && item.attrs.line.stroke) {
-                item.attrs.line.class = '';
-                item.attrs.line.fill = 'none';
-                if (item.attrs.line.targetMarker) {
-                  item.attrs.line.targetMarker.class = '';
-                  item.attrs.line.targetMarker.fill = item.attrs.line.stroke;
-                }
-                if (item.attrs.line.sourceMarker) {
-                  item.attrs.line.sourceMarker.class = '';
-                  item.attrs.line.sourceMarker.fill = item.attrs.line.stroke;
-                }
-              }
-            }
-          });
-        }
         this.graph.fromJSON(this.topoData?.config?.graph || {});
       }
     },
@@ -288,7 +263,6 @@ export default {
       const widgetName = node.getProp('widgetName');
       const w = ElementFactory.getElement(widget.name);
       //config不会写入节点，而是每次都从最新数据获取，这样旧图也能应用新的配置
-
       //const widgetData = widgetName && this.allWidgetList.find(d => d.name === widgetName);
       if (w) {
         this.$api.alert.topo.getWidgetByName(widgetName).then(res => {

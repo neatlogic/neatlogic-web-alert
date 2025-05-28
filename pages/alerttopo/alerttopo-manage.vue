@@ -41,9 +41,9 @@
             ></TopoEditor>
           </div>
           <template v-slot:control="{ row }">
-            <div class="action-item">
+            <!--<div class="action-item">
               <span class="tsfont-search" @click="viewDiagram(row)">{{ $t('page.detail') }}</span>
-            </div>
+            </div>-->
             <div class="action-item">
               <span class="tsfont-edit" @click="editDiagram(row)">{{ $t('page.edit') }}</span>
             </div>

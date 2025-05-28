@@ -40,9 +40,9 @@
           <a @click="clearCustomData()">{{ $t('page.cleardata') }}</a>
         </div>
       </TabPane>
-      <TabPane v-if="['template', 'graph'].includes(mode) && setting.autofill" :label="$t('term.diagram.autofill')">
+      <!--<TabPane v-if="['template', 'graph'].includes(mode) && setting.autofill" :label="$t('term.diagram.autofill')">
         <ElementAutofillSetting :setting="setting"></ElementAutofillSetting>
-      </TabPane>
+      </TabPane>-->
       <TabPane v-if="['template', 'graph'].includes(mode) && setting.alertbind" label="告警绑定">
         <ElementAlertBindSetting :setting="setting"></ElementAlertBindSetting>
       </TabPane>

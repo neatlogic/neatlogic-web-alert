@@ -22,13 +22,13 @@
             :conditionItem="getAttrByName(filter.attr)"
             @change="
               val => {
-                if(val != null && val != '' && val != undefined){
-                  if(val instanceof Array){
+                if (val != null && val != '' && val != undefined) {
+                  if (val instanceof Array) {
                     filter.value = val;
-                  }else{
-                    filter.value =[val];
+                  } else {
+                    filter.value = [val];
                   }
-                }else{
+                } else {
                   filter.value = [];
                 }
               }
@@ -38,7 +38,16 @@
       </div>
       <div><a class="tsfont-plus" @click="addFilter()">条件</a></div>
     </TsFormItem>
-    <TsFormItem label="显示属性" labelPosition="top">
+    <TsFormItem v-if="setting.alertbind.filterList && setting.alertbind.filterList.length > 0" label="显示信息" labelPosition="top">
+      <TsFormRadio
+        v-model="setting.alertbind.displayType"
+        :dataList="[
+          { value: 'detail', text: '告警详情' },
+          { value: 'summary', text: '级别统计' }
+        ]"
+      ></TsFormRadio>
+    </TsFormItem>
+    <!--<TsFormItem label="显示属性" labelPosition="top">
       <TsFormSelect
         v-model="setting.alertbind.displayAttr"
         :dataList="alertAttrList"
@@ -48,7 +57,7 @@
         border="border"
       ></TsFormSelect>
     </TsFormItem>
-    <!--<TsFormItem
+    <TsFormItem
       v-if="setting.alertbind.filterList && setting.alertbind.filterList.length > 0"
       :required="true"
       :label="$t('term.diagram.widget')"
@@ -82,6 +91,7 @@ export default {
   components: {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
+    TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue')
     //WidgetEdit: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-widget-edit.vue')
   },
@@ -138,6 +148,9 @@ export default {
         attr: null,
         value: null
       });
+      if (!this.setting.alertbind.displayType) {
+        this.$set(this.setting.alertbind, 'displayType', 'detail');
+      }
     },
     getAllCommonWidget() {
       this.$api.alert.topo.getWidgetListByType('common').then(res => {

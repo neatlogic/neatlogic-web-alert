@@ -42,6 +42,33 @@
               />
             </span>
           </div>
+          <div class="action-item">
+            <TsFormSwitch
+              v-model="isShowTopo"
+              trueText="告警拓扑"
+              falseText="告警拓扑"
+              :trueValue="true"
+              :falseValue="false"
+              :showStatus="true"
+            ></TsFormSwitch>
+          </div>
+          <div v-if="isShowTopo" class="action-item">
+            <Dropdown>
+              <a href="javascript:void(0)">
+                <span v-if="!topoId">选择拓扑图</span>
+                <span v-else>{{ topoList.find(d => d.id === topoId).name }}</span>
+                <span class="tsfont-drop-down"></span>
+              </a>
+              <DropdownMenu slot="list">
+                <DropdownItem
+                  v-for="(topo, index) in topoList"
+                  :key="index"
+                  :selected="topoId === topo.id"
+                  @click.native="changeTopo(topo.id)"
+                >{{ topo.name }}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
         </div>
       </template>
       <template v-slot:topRight>
@@ -103,89 +130,98 @@
           </div>
         </div>
         <Loading v-if="isLoading" :loadingShow="true" type="fix"></Loading>
-        <TsTable
-          v-if="finalTheadList && finalTheadList.length > 0"
-          :multiple="true"
-          :value="selectList"
-          v-bind="alertData"
-          resizeKey="alert-table"
-          :canResize="true"
-          :canExpand="true"
-          keyName="id"
-          :theadList="[{ key: 'selection' }, ...finalTheadList, { key: 'action' }]"
-          @getSelected="getSelected"
-          @changeCurrent="searchAlert"
-          @changePageSize="changePageSize"
-        >
-          <template v-for="(thead, index) in finalTheadList" :slot="thead.key" slot-scope="{ row }">
-            <div v-if="thead.key === 'const_attrObj'" :key="index">
-              <div v-if="thead.attrList && thead.attrList.length > 0">
-                <template v-for="(extendattr, aindex) in thead.attrList">
-                  <div v-if="getAttrByName(extendattr) && row.attrObj && row.attrObj[extendattr.replace('attr_', '')]" :key="aindex">
-                    <Tag>
-                      <span class="text-grey mr-xs">{{ getAttrByName(extendattr).label }}</span>
-                      <span class="text-grey">
-                        <b><AlertAttrViewer
-                          v-if="row.attrObj[extendattr.replace('attr_', '')]"
-                          :view="alertViewData"
-                          :attr="getAttrByName(extendattr)"
-                          :value="row.attrObj[extendattr.replace('attr_', '')]"
-                          @refresh="searchAlert"
-                        ></AlertAttrViewer></b>
-                      </span>
-                    </Tag>
-                  </div>
-                </template>
+        <div v-if="isShowTopo">
+          <TopoDetail
+            v-if="topoId"
+            :id="topoId"
+            :alertList="alertData.tbodyList"
+          ></TopoDetail>
+        </div>
+        <div v-else>
+          <TsTable
+            v-if="finalTheadList && finalTheadList.length > 0"
+            :multiple="true"
+            :value="selectList"
+            v-bind="alertData"
+            resizeKey="alert-table"
+            :canResize="true"
+            :canExpand="true"
+            keyName="id"
+            :theadList="[{ key: 'selection' }, ...finalTheadList, { key: 'action' }]"
+            @getSelected="getSelected"
+            @changeCurrent="searchAlert"
+            @changePageSize="changePageSize"
+          >
+            <template v-for="(thead, index) in finalTheadList" :slot="thead.key" slot-scope="{ row }">
+              <div v-if="thead.key === 'const_attrObj'" :key="index">
+                <div v-if="thead.attrList && thead.attrList.length > 0">
+                  <template v-for="(extendattr, aindex) in thead.attrList">
+                    <div v-if="getAttrByName(extendattr) && row.attrObj && row.attrObj[extendattr.replace('attr_', '')]" :key="aindex">
+                      <Tag>
+                        <span class="text-grey mr-xs">{{ getAttrByName(extendattr).label }}</span>
+                        <span class="text-grey">
+                          <b><AlertAttrViewer
+                            v-if="row.attrObj[extendattr.replace('attr_', '')]"
+                            :view="alertViewData"
+                            :attr="getAttrByName(extendattr)"
+                            :value="row.attrObj[extendattr.replace('attr_', '')]"
+                            @refresh="searchAlert"
+                          ></AlertAttrViewer></b>
+                        </span>
+                      </Tag>
+                    </div>
+                  </template>
+                </div>
               </div>
-            </div>
-            <div v-else-if="thead.key.startsWith('const_')" :key="index">
-              <AlertAttrViewer
-                :attr="getAttrByName(thead.key)"
-                :row="row"
-                :view="alertViewData"
-                :value="row[thead.key.replace('const_', '')]"
-                @toggleChildren="toggleChildAlert"
-                @refresh="searchAlert"
-              ></AlertAttrViewer>
-            </div>
-            <div v-else-if="thead.key.startsWith('attr_') && row.attrObj" :key="index">
-              <AlertAttrViewer
-                :view="alertViewData"
-                :attr="getAttrByName(thead.key)"
-                :value="row.attrObj[thead.key.replace('attr_', '')]"
-                @refresh="searchAlert"
-              ></AlertAttrViewer>
-            </div>
-          </template>
-          <template v-slot:expand="{ row }">
-            <div v-if="row._pager" style="padding-left: 90px">
-              <Page
-                class="page-container"
-                transfer
-                size="small"
-                show-total
-                :total="row._pager.rowNum"
-                :current="row._pager.currentPage"
-                :page-size="row._pager.pageSize"
-                @on-change="
-                  page => {
-                    searchChildAlert(row.fromAlertId, page, true);
-                  }
-                "
-              />
-            </div>
-          </template>
-          <template v-slot:action="{ row }">
-            <div v-if="!row.isDelete" class="tstable-action">
-              <ul class="tstable-action-ul">
-                <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
-                <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">打开</li>
-                <li v-if="!row.isClose && hasRole(row)" class="tsfont-eye-off" @click="closeAlert(row)">{{ $t('page.close') }}</li>
-                <li v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
-              </ul>
-            </div>
-          </template>
-        </TsTable>
+              <div v-else-if="thead.key.startsWith('const_')" :key="index">
+                <AlertAttrViewer
+                  :attr="getAttrByName(thead.key)"
+                  :row="row"
+                  :view="alertViewData"
+                  :value="row[thead.key.replace('const_', '')]"
+                  @toggleChildren="toggleChildAlert"
+                  @refresh="searchAlert"
+                ></AlertAttrViewer>
+              </div>
+              <div v-else-if="thead.key.startsWith('attr_') && row.attrObj" :key="index">
+                <AlertAttrViewer
+                  :view="alertViewData"
+                  :attr="getAttrByName(thead.key)"
+                  :value="row.attrObj[thead.key.replace('attr_', '')]"
+                  @refresh="searchAlert"
+                ></AlertAttrViewer>
+              </div>
+            </template>
+            <template v-slot:expand="{ row }">
+              <div v-if="row._pager" style="padding-left: 90px">
+                <Page
+                  class="page-container"
+                  transfer
+                  size="small"
+                  show-total
+                  :total="row._pager.rowNum"
+                  :current="row._pager.currentPage"
+                  :page-size="row._pager.pageSize"
+                  @on-change="
+                    page => {
+                      searchChildAlert(row.fromAlertId, page, true);
+                    }
+                  "
+                />
+              </div>
+            </template>
+            <template v-slot:action="{ row }">
+              <div v-if="!row.isDelete" class="tstable-action">
+                <ul class="tstable-action-ul">
+                  <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
+                  <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">打开</li>
+                  <li v-if="!row.isClose && hasRole(row)" class="tsfont-eye-off" @click="closeAlert(row)">{{ $t('page.close') }}</li>
+                  <li v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
+                </ul>
+              </div>
+            </template>
+          </TsTable>
+        </div>
       </template>
     </TsContain>
     <AlertViewEdit v-if="isViewEdit && alertViewData && alertViewData.id" :id="alertViewData.id" @close="closeViewEdit"></AlertViewEdit>
@@ -222,12 +258,15 @@ export default {
     AlertCloseDialog: () => import('@/commercial-module/alert/pages/alert/alert-close-dialog.vue'),
     AlertOpenDialog: () => import('@/commercial-module/alert/pages/alert/alert-open-dialog.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
-    ConditionItem: () => import('@/resources/components/Condition/condition-item.vue')
+    ConditionItem: () => import('@/resources/components/Condition/condition-item.vue'),
+    TopoDetail: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue')
   },
   props: {},
   data() {
     return {
       isLoading: false,
+      isShowTopo: false,
+      isShowAlert: false,
       searchVal: {},
       alertViewData: null,
       isShowFilter: false,
@@ -253,15 +292,18 @@ export default {
       interval: 60000,
       startTime: null,
       countdown: 0,
+      topoList: [],
+      topoId: null,
+      topoAlertSize: 1000, //告警拓扑默认查询数据量
       childAlertPage: {} //记录子告警分页信息
     };
   },
   beforeCreate() {},
   async created() {
     await this.listAlertAttrList();
-    if (this.$localStore.get('isAutoRefresh')) {
+    /*if (this.$localStore.get('isAutoRefresh')) {
       this.isAutoRefresh = true;
-    }
+    }*/
     this.searchParam.viewName = this.$route.params['view'] || '';
     this.searchAlert();
     this.listAllStatus();
@@ -288,6 +330,9 @@ export default {
   },
   destroyed() {},
   methods: {
+    changeTopo(topoId) {
+      this.topoId = topoId;
+    },
     doSearch(attr) {
       this.searchAlert(1);
       this.$set(this.attrPopMap, attr.name, false);
@@ -589,8 +634,15 @@ export default {
 
       //this.searchParam.attrFilterList = attrFilterList;
       this.isLoading = true;
+      let finalParam;
+      if (this.isShowTopo) {
+        //如果展示拓扑，默认查出最近1000条数据
+        finalParam = { ...this.searchParam, attrFilterList: attrFilterList, ...param, pageSize: this.topoAlertSize };
+      } else {
+        finalParam = { ...this.searchParam, attrFilterList: attrFilterList, ...param };
+      }
       this.$api.alert.alert
-        .searchAlert({ ...this.searchParam, attrFilterList: attrFilterList, ...param })
+        .searchAlert(finalParam)
         .then(res => {
           this.alertData = res.Return;
           this.alertData.tbodyList.forEach(item => {
@@ -727,6 +779,24 @@ export default {
           }
           this.toggleCountdown();
         }
+      }
+    },
+    isShowTopo: {
+      handler: function(val) {
+        if (val) {
+          //清空批量选中数据
+          this.selectList = [];
+          this.$api.alert.topo.listTopo().then(res => {
+            this.topoList = res.Return;
+            if (this.topoList && this.topoList.length > 0) {
+              this.topoId = this.topoList[0].id;
+            }
+          });
+        } else {
+          this.topoId = null;
+        }
+        //切换模式触发一次搜索
+        this.searchAlert(1);
       }
     }
   }
