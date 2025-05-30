@@ -1,6 +1,9 @@
 import axios from '@/resources/api/http.js';
 
 const alertevent = {
+  testScriptPlugin(params) {
+    return axios.post('/api/rest/alert/event/handler/script/test', params);
+  },
   listEventPlugin(params) {
     return axios.post('/api/rest/alert/event/plugin/list', params);
   },

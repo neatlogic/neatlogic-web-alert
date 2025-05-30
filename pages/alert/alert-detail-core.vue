@@ -193,7 +193,7 @@ export default {
       loading: true,
       currentTab: 'info',
       alertData: null,
-      alertTypeData: null,
+      //alertTypeData: null,
       dialogConfig: {
         title: '告警详情',
         width: 'large',
@@ -297,21 +297,21 @@ export default {
       if (this.id) {
         await this.$api.alert.alert.getAlertById(this.id).then(res => {
           this.alertData = res.Return;
-          if (this.alertData) {
+          /*if (this.alertData) {
             this.getAlertTypeById(this.alertData.type);
-          }
+          }*/
         }).finally(() => {
           this.loading = false;
         });
       }
     },
-    async getAlertTypeById(id) {
+    /*async getAlertTypeById(id) {
       if (id) {
         await this.$api.alert.alerttype.getAlertTypeById(id).then(res => {
           this.alertTypeData = res.Return;
         });
       }
-    },
+    },*/
     async confirm() {
       const alertData = this.$utils.deepClone(this.alertData);
       if (this.selectedStatus) {
@@ -369,7 +369,7 @@ export default {
     },
     finalAttrList() {
       const attrList = [];
-      if (this.attrList && this.attrList.length > 0 && this.alertTypeData) {
+      if (this.attrList && this.attrList.length > 0 /*&& this.alertTypeData*/) {
         this.attrList.forEach(d => {
           if (d.kind === 'const') {
             attrList.push(d);

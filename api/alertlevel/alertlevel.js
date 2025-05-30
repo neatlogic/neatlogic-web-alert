@@ -7,6 +7,9 @@ const alertlevel = {
   getAlertLevelById(id) {
     return axios.post('/api/rest/alert/level/get', { id: id });
   },
+  getAlertLevelByLevel(level) {
+    return axios.post('/api/rest/alert/level/get', { level: level });
+  },
   saveAlertLevel(params) {
     return axios.post('/api/rest/alert/level/save', params);
   },

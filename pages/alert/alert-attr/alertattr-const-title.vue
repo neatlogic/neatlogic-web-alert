@@ -24,6 +24,7 @@
     ></AlertView>
   </div>
   <div v-else-if="mode === 'detail' && row">{{ row.title }}</div>
+  <div v-else-if="mode === 'audit' && value && value.length > 0">{{ value[0] }}</div>
 </template>
 <script>
 import { AttrViewerBase } from '@/community-module/alert/pages/alert/alert-attr/alertattr-base.js';

@@ -36,7 +36,7 @@ export default {
     return {
       dialogConfig: {
         title: '告警详情',
-        width: 'large',
+        width: 'huge',
         isShow: true,
         type: 'slider',
         maskClose: true

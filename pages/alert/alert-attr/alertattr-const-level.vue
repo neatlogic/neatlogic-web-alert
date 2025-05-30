@@ -1,6 +1,9 @@
 <template>
-  <div v-if="row.alertLevel">
+  <div v-if="mode !== 'audit' && row.alertLevel">
     <Badge class-name="level" :style="{ '--color': row.alertLevel.color }" :text="row.alertLevel.label"></Badge>
+  </div>
+  <div v-else-if="mode === 'audit' && levelData">
+    <Badge class-name="level" :style="{ '--color': levelData.color }" :text="levelData.label"></Badge>
   </div>
   <div v-else class="text-grey">-</div>
 </template>
@@ -12,10 +15,18 @@ export default {
   extends: AttrViewerBase,
   props: {},
   data() {
-    return {};
+    return {
+      levelData: null
+    };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    if (this.mode === 'audit' && this.value && this.value.length > 0 && this.value[0]) {
+      this.$api.alert.alertlevel.getAlertLevelByLevel(this.value[0]).then(res => {
+        this.levelData = res.Return;
+      });
+    }
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
