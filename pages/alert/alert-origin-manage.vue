@@ -62,9 +62,15 @@ export default {
       isShowView: false,
       currentAlertId: null,
       searchConfig: {
-        search: true,
+        search: false,
+        searchMode: 'clickBtnSearch',
         labelPosition: 'left',
         searchList: [
+          {
+            type: 'text',
+            label: '关键字',
+            name: 'keyword'
+          },
           {
             type: 'radio',
             label: '状态',

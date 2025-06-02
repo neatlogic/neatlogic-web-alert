@@ -9,6 +9,40 @@
     <TsFormItem label="脚本" labelPosition="left">
       <TsCodemirror :value="configLocal.script" :isReadOnly="true" codeMode="javascript"></TsCodemirror>
     </TsFormItem>
+    <!--<TsFormItem
+      v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0"
+      style="margin: 0px !important"
+      label="唯一键"
+      labelPosition="left"
+    >
+      <div>
+        <span class="mr-sm text-grey">重新计算唯一键</span>
+        <span v-if="configLocal.needRebuildUniqueKey" class="text-success">是</span>
+        <span v-else class="text-error">否</span>
+      </div>
+      <div v-if="configLocal.needRebuildUniqueKey">
+        <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
+        <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
+      </div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.needRebuildUniqueKey && configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0 && configLocal.ruleList && configLocal.ruleList.length > 0"
+      style="margin: 0px !important"
+      label="告警特征"
+      labelPosition="left"
+    >
+      <TsFormSelect
+        :value="configLocal.ruleList"
+        url="/api/rest/alert/rule/list"
+        :params="{ isActive: 1 }"
+        transfer
+        border="border"
+        valueName="id"
+        textName="label"
+        multiple
+        readonly
+      ></TsFormSelect>
+    </TsFormItem>-->
     <TsFormItem v-if="handler.result" label="前后对比" labelPosition="left">
       <div class="grid">
         <div
@@ -137,6 +171,8 @@ export default {
   name: '',
   components: {
     JsonViewer: () => import('vue-json-viewer'),
+    //TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
+    //TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue')

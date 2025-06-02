@@ -10,15 +10,24 @@
             <span v-else><h3 class="text-grey">所有告警</h3></span>
           </div>
           <div class="action-item">
-            <Dropdown trigger="click">
-              <Button type="primary" ghost :disabled="!selectList || selectList.length == 0">
+            <Dropdown trigger="click" @on-click="dropdownClick">
+              <Button type="primary" ghost>
                 {{ $t('page.batchoperation') }}
                 <span class="tsfont-down"></span>
               </Button>
               <DropdownMenu slot="list">
-                <DropdownItem @click.native="batchClose()">关闭告警</DropdownItem>
-                <DropdownItem @click.native="batchOpen()">打开告警</DropdownItem>
-                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" @click.native="batchDelete()">删除告警</DropdownItem>
+                <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">关闭选中告警</DropdownItem>
+                <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">打开选中告警</DropdownItem>
+                <DropdownItem
+                  v-if="$AuthUtils.hasRole('ALERT_ADMIN')"
+                  name="deleteselect"
+                  :disabled="!selectList || selectList.length == 0"
+                >删除选中告警</DropdownItem>
+                <DropdownItem
+                  v-if="$AuthUtils.hasRole('ALERT_ADMIN')"
+                  name="deletematch"
+                  :disabled="!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule)"
+                >删除匹配告警</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -73,7 +82,13 @@
       </template>
       <template v-slot:topRight>
         <div class="action-group">
-          <div class="action-item" style="width: 450px">
+          <div class="action-item">
+            <RadioGroup v-if="!isShowTopo" v-model="searchParam.searchMode" type="button">
+              <Radio label="tree"><i class="tsfont-tree"></i></Radio>
+              <Radio label="flat"><i class="tsfont-list"></i></Radio>
+            </RadioGroup>
+          </div>
+          <div class="action-item" style="width: 400px">
             <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlert(1)">
               <template v-for="(attr, index) in topAttrList" :slot="'attr_' + attr.name" slot-scope="{ valueConfig, textConfig }">
                 <div :key="index">
@@ -131,11 +146,7 @@
         </div>
         <Loading v-if="isLoading" :loadingShow="true" type="fix"></Loading>
         <div v-if="isShowTopo">
-          <TopoDetail
-            v-if="topoId"
-            :id="topoId"
-            :alertList="alertData.tbodyList"
-          ></TopoDetail>
+          <TopoDetail v-if="topoId" :id="topoId" :alertList="alertData.tbodyList"></TopoDetail>
         </div>
         <div v-else>
           <TsTable
@@ -228,6 +239,8 @@
     <AlertDeleteDialog
       v-if="isDeleteShow"
       :id="currentAlertId"
+      :searchParam="finalSearchParam"
+      :mode="deleteMode"
       :idList="selectList"
       @close="closeAlertDelete"
     ></AlertDeleteDialog>
@@ -268,6 +281,7 @@ export default {
       isShowTopo: false,
       isShowAlert: false,
       searchVal: {},
+      deleteMode: 'select', //删除模式:select|match
       alertViewData: null,
       isShowFilter: false,
       currentView: null,
@@ -276,7 +290,7 @@ export default {
       attrList: [],
       statusList: [],
       levelList: [],
-      searchParam: { mode: 'simple', rule: {}, attrFilterList: [] },
+      searchParam: { mode: 'simple', rule: {}, attrFilterList: [], searchMode: 'tree' },
       alertData: {},
       attrFilterMap: {},
       rule: {},
@@ -295,7 +309,8 @@ export default {
       topoList: [],
       topoId: null,
       topoAlertSize: 1000, //告警拓扑默认查询数据量
-      childAlertPage: {} //记录子告警分页信息
+      childAlertPage: {}, //记录子告警分页信息
+      finalSearchParam: null //最后的搜索参数，用于批量删除
     };
   },
   beforeCreate() {},
@@ -330,6 +345,17 @@ export default {
   },
   destroyed() {},
   methods: {
+    dropdownClick(name) {
+      if (name === 'close') {
+        this.batchClose();
+      } else if (name === 'open') {
+        this.batchOpen();
+      } else if (name === 'deleteselect') {
+        this.batchDelete();
+      } else if (name === 'deletematch') {
+        this.batchDeleteMatch();
+      }
+    },
     changeTopo(topoId) {
       this.topoId = topoId;
     },
@@ -379,7 +405,12 @@ export default {
     batchDelete() {
       if (this.selectList && this.selectList.length > 0) {
         this.isDeleteShow = true;
+        this.deleteMode = 'select';
       }
+    },
+    batchDeleteMatch() {
+      this.isDeleteShow = true;
+      this.deleteMode = 'match';
     },
     batchOpen() {
       if (this.selectList && this.selectList.length > 0) {
@@ -641,6 +672,8 @@ export default {
       } else {
         finalParam = { ...this.searchParam, attrFilterList: attrFilterList, ...param };
       }
+      this.finalSearchParam = {};
+      Object.assign(this.finalSearchParam, finalParam);
       this.$api.alert.alert
         .searchAlert(finalParam)
         .then(res => {
@@ -708,9 +741,15 @@ export default {
     },
     searchConfig() {
       const config = {
-        search: true,
+        search: false,
+        searchMode: 'clickBtnSearch',
         labelPosition: 'left',
         searchList: [
+          {
+            type: 'text',
+            name: 'keyword',
+            label: '关键字'
+          },
           {
             type: 'select',
             name: 'level',
@@ -767,6 +806,12 @@ export default {
     }
   },
   watch: {
+    'searchParam.searchMode': {
+      handler: function(val) {
+        this.searchAlert(1);
+      },
+      deep: true
+    },
     isAutoRefresh: {
       handler: function(val) {
         this.$localStore.set('isAutoRefresh', val);

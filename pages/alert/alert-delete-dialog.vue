@@ -1,9 +1,12 @@
 <template>
   <TsDialog v-bind="dialogConfig" @on-close="close()">
     <template v-slot>
-      <div>
+      <div v-if="mode === 'select'">
         <div>{{ $t('dialog.content.deleteconfirm', { target: $t('term.alert.alert') }) }}</div>
         <div class="mt-md"><Checkbox v-model="isDeleteChildAlert" :true-value="1" :false-value="0">同时删除子告警</Checkbox></div>
+      </div>
+      <div v-else-if="mode === 'match'">
+        <div>是否确认删除所有匹配条件的告警？</div>
       </div>
     </template>
     <template v-slot:footer>
@@ -17,8 +20,10 @@ export default {
   name: '',
   components: {},
   props: {
+    mode: { type: String, default: 'select' },
     id: { type: Number },
-    idList: { type: Array }
+    idList: { type: Array },
+    searchParam: { type: Object } //搜索参数
   },
   data() {
     return {
@@ -46,10 +51,24 @@ export default {
       this.$emit('close', needRefresh);
     },
     confirm() {
-      this.$api.alert.alert.deleteAlert({ id: this.id, idList: this.idList, isDeleteChildAlert: this.isDeleteChildAlert }).then(() => {
-        this.$Message.success(this.$t('message.deletesuccess'));
-        this.close(true);
-      });
+      const param = {};
+      if (this.mode === 'select') {
+        param.id = this.id;
+        param.idList = this.idList;
+        param.isDeleteChildAlert = this.isDeleteChildAlert;
+      } else if (this.mode === 'match') {
+        param.searchParam = this.searchParam;
+      }
+      this.$api.alert.alert
+        .deleteAlert(param)
+        .then(() => {
+          if (this.mode === 'select') {
+            this.$Message.success(this.$t('message.deletesuccess'));
+          } else if (this.mode === 'match') {
+            this.$Message.success('已提交后台删除');
+          }
+          this.close(true);
+        });
     }
   },
   filter: {},
