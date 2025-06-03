@@ -265,11 +265,11 @@ export default {
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue'),
     TopoDetail: () => {
-      if (COMMERCIAL_MODULES.includes('alert')) {
-        return import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue');
-      } else {
-        return Promise.resolve({ render: () => null });
-      }
+      //商业模块代码
+      return import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue')
+        .catch(() => {
+          return { render: () => null };
+        });
     }
   },
   props: {},
