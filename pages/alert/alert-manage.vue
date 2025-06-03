@@ -272,7 +272,7 @@ export default {
     AlertOpenDialog: () => import('@/community-module/alert/pages/alert/alert-open-dialog.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue'),
-    TopoDetail: () => import('@/community-module/alert/pages/alerttopo/alerttopo-detail.vue')
+    TopoDetail: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue')
   },
   props: {},
   data() {

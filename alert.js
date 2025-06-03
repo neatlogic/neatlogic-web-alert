@@ -1,6 +1,8 @@
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Alert from './alert.vue';
+import '@/resources/base.js';
 import routers from './router.js';
 import store from '@/resources/store';
 import VueI18n from 'vue-i18n';
@@ -9,7 +11,7 @@ import api from '@/resources/api/api.js';
 import LocalStore from '@/resources/assets/js/localStore.js';
 
 //公共的全局组件、样式等
-import '@/resources/base.js';
+
 import {initRouter, initI18n} from '@/resources/init.js';
 
 Vue.use(VueRouter);

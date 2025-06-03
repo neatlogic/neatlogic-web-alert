@@ -13,11 +13,7 @@ const notifyTemplateManage = () => import('@/community-module/alert/pages/notify
 const statusManage = () => import('@/community-module/alert/pages/alertstatus/status-manage.vue');
 const ruleManage = () => import('@/community-module/alert/pages/alertrule/alertrule-manage.vue');
 const eventPluginManage = () => import('@/community-module/alert/pages/alertevent/eventplugin-manage.vue');
-const alertTopoEdit = () => import('@/community-module/alert/pages/alerttopo/alerttopo-edit.vue');
-const alertTopoDetail = () => import('@/community-module/alert/pages/alerttopo/alerttopo-detail.vue');
-const alertTopoManage = () => import('@/community-module/alert/pages/alerttopo/alerttopo-manage.vue');
-const alertTopoWidgetManage = () => import('@/community-module/alert/pages/alerttopo/alerttopo-widget-manage.vue');
-
+import { config } from './config.js';
 let routerArr = [
   {
     path: '/',
@@ -185,50 +181,11 @@ let routerArr = [
       type: 'alertmanage',
       authority: 'ALERT_EVENT_PLUGIN_MODIFY'
     }
-  },
-  {
-    path: '/alerttopo-edit',
-    name: 'alerttopo-edit',
-    component: alertTopoEdit,
-    meta: {
-      title: '编辑告警拓扑',
-      ismenu: false,
-      authority: 'ALERT_TOPO_MODIFY'
-    }
-  },
-  {
-    path: '/alerttopo-detail',
-    name: 'alerttopo-detail',
-    component: alertTopoDetail,
-    meta: {
-      title: '告警拓扑',
-      ismenu: false
-    }
-  },
-  {
-    path: '/alerttopo-manage',
-    name: 'alerttopo-manage',
-    component: alertTopoManage,
-    meta: {
-      title: '拓扑管理',
-      ismenu: true,
-      icon: 'tsfont-block',
-      type: 'alerttopo',
-      authority: 'ALERT_TOPO_MODIFY'
-    }
-  },
-  {
-    path: '/alerttopo-widget-manage',
-    name: 'alerttopo-widget-manage',
-    component: alertTopoWidgetManage,
-    meta: {
-      title: '图元管理',
-      ismenu: true,
-      icon: 'tsfont-block',
-      type: 'alerttopo',
-      authority: 'ALERT_TOPO_MODIFY'
-    }
   }
 ];
 
-export default routerArr;
+import ComponentManager from '@/resources/import/component-manager.js';
+let importRouterList = ComponentManager.getRouterComponent(config.module) || [];
+console.log('!!!!!!!!!!!!!!!1', config.module, importRouterList);
+console.log(new Error().stack);
+export default [...routerArr, ...importRouterList];
