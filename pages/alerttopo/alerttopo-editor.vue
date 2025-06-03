@@ -400,19 +400,33 @@ export default {
     },
     highlightEdge(edge, action) {
       if (edge && edge.isEdge()) {
+        const lineClassName = edge.getAttrByPath('line/class');
+        if (lineClassName) {
+          /**
+           * 保存连线的默认 CSS class 名称。
+           * 此操作目的在于，后续执行取消高亮操作时，能够基于该默认 class 名称将连线样式恢复至初始状态。
+           * 注意：当连线模式为非常规线时，连线元素不会包含该 class 名称，
+           * 所以仅在连线为默认颜色时，才会对该 class 名称进行存储。
+           */
+          edge.setAttrByPath('line/data-default-class', lineClassName);
+        }
         edge.setAttrByPath('line/class', 'line-' + action);
         edge.setAttrByPath('line/targetMarker/class', 'marker-' + action);
       }
     },
     unHighlightEdge(edge) {
       if (edge && edge.isEdge()) {
-        const edgeClass = edge.getAttrByPath('line/stroke');
-        if (edgeClass) {
-          edge.setAttrByPath('line/class', edgeClass);
-          edge.setAttrByPath('line/targetMarker/class', edgeClass);
-        } else {
+        const dataDefaultClass = edge.getAttrByPath('line/data-default-class');
+        if (dataDefaultClass) {
+          /**
+           * 此操作在取消连线高亮状态后执行。
+           * 目的是将连线的颜色从高亮样式恢复到其初始的默认颜色，确保连线外观与未高亮时一致。
+           */
           edge.setAttrByPath('line/class', 'line');
           edge.setAttrByPath('line/targetMarker/class', 'marker');
+        } else {
+          edge.setAttrByPath('line/class', null);
+          edge.setAttrByPath('line/targetMarker/class', null);
         }
       }
     },
