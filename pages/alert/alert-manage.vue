@@ -18,16 +18,8 @@
               <DropdownMenu slot="list">
                 <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">关闭选中告警</DropdownItem>
                 <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">打开选中告警</DropdownItem>
-                <DropdownItem
-                  v-if="$AuthUtils.hasRole('ALERT_ADMIN')"
-                  name="deleteselect"
-                  :disabled="!selectList || selectList.length == 0"
-                >删除选中告警</DropdownItem>
-                <DropdownItem
-                  v-if="$AuthUtils.hasRole('ALERT_ADMIN')"
-                  name="deletematch"
-                  :disabled="!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule)"
-                >删除匹配告警</DropdownItem>
+                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">删除选中告警</DropdownItem>
+                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deletematch" :disabled="!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule)">删除匹配告警</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -51,7 +43,7 @@
               />
             </span>
           </div>
-          <div class="action-item">
+          <div v-if="COMMERCIAL_MODULES.includes('alert')" class="action-item">
             <TsFormSwitch
               v-model="isShowTopo"
               trueText="告警拓扑"
@@ -272,11 +264,18 @@ export default {
     AlertOpenDialog: () => import('@/community-module/alert/pages/alert/alert-open-dialog.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
     ConditionItem: () => import('@/resources/components/Condition/condition-item.vue'),
-    TopoDetail: () => import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue')
+    TopoDetail: () => {
+      if (COMMERCIAL_MODULES.includes('alert')) {
+        return import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue');
+      } else {
+        return Promise.resolve({ render: () => null });
+      }
+    }
   },
   props: {},
   data() {
     return {
+      COMMERCIAL_MODULES: COMMERCIAL_MODULES,
       isLoading: false,
       isShowTopo: false,
       isShowAlert: false,

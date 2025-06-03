@@ -186,6 +186,4 @@ let routerArr = [
 
 import ComponentManager from '@/resources/import/component-manager.js';
 let importRouterList = ComponentManager.getRouterComponent(config.module) || [];
-console.log('!!!!!!!!!!!!!!!1', config.module, importRouterList);
-console.log(new Error().stack);
 export default [...routerArr, ...importRouterList];
