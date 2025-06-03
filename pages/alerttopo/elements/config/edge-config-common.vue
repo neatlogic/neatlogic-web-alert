@@ -46,6 +46,7 @@
               edge.setAttrByPath('line/targetMarker/fill', val);
               edge.setAttrByPath('line/sourceMarker/fill', val);
               edge.setAttrByPath('label/style', 'fill:' + val);
+              edge.setAttrByPath('line/data-default-class', null); // 修改值时，移除默认样式
             } else {
               edge.setAttrByPath('line/class', 'line');
               edge.setAttrByPath('line/targetMarker/class', 'marker');
