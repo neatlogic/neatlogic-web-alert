@@ -256,6 +256,7 @@
   </div>
 </template>
 <script>
+import ComponentManager from '@/resources/import/component-manager.js';
 export default {
   name: '',
   components: {
@@ -314,15 +315,7 @@ export default {
   beforeCreate() {},
   async created() {
     if (COMMERCIAL_MODULES.includes('alert')) {
-      import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue')
-        .then(module => {
-          // module.default 就是组件
-          this.TopoDetail = module.default;
-        })
-        .catch(() => {
-          console.warn('TopoDetail 模块未找到');
-          this.TopoDetail = null;
-        });
+      this.TopoDetail = ComponentManager.getVueTemplate('alerttopo-detail');
     }
 
     await this.listAlertAttrList();
