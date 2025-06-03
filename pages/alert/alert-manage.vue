@@ -138,7 +138,12 @@
         </div>
         <Loading v-if="isLoading" :loadingShow="true" type="fix"></Loading>
         <div v-if="isShowTopo">
-          <TopoDetail v-if="topoId" :id="topoId" :alertList="alertData.tbodyList"></TopoDetail>
+          <component
+            :is="TopoDetail"
+            v-if="TopoDetail && topoId"
+            :id="topoId"
+            :alertList="alertData.tbodyList"
+          ></component>
         </div>
         <div v-else>
           <TsTable
@@ -263,19 +268,13 @@ export default {
     AlertCloseDialog: () => import('@/community-module/alert/pages/alert/alert-close-dialog.vue'),
     AlertOpenDialog: () => import('@/community-module/alert/pages/alert/alert-open-dialog.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
-    ConditionItem: () => import('@/resources/components/Condition/condition-item.vue'),
-    TopoDetail: () => {
-      //商业模块代码
-      return import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue')
-        .catch(() => {
-          return { render: () => null };
-        });
-    }
+    ConditionItem: () => import('@/resources/components/Condition/condition-item.vue')
   },
   props: {},
   data() {
     return {
       COMMERCIAL_MODULES: COMMERCIAL_MODULES,
+      TopoDetail: null,
       isLoading: false,
       isShowTopo: false,
       isShowAlert: false,
@@ -314,6 +313,18 @@ export default {
   },
   beforeCreate() {},
   async created() {
+    if (COMMERCIAL_MODULES.includes('alert')) {
+      import('@/commercial-module/alert/pages/alerttopo/alerttopo-detail.vue')
+        .then(module => {
+          // module.default 就是组件
+          this.TopoDetail = module.default;
+        })
+        .catch(() => {
+          console.warn('TopoDetail 模块未找到');
+          this.TopoDetail = null;
+        });
+    }
+
     await this.listAlertAttrList();
     /*if (this.$localStore.get('isAutoRefresh')) {
       this.isAutoRefresh = true;
