@@ -111,7 +111,7 @@
               <span :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }">{{ $t('page.advancesearch') }}</span>
             </Button>
           </div>
-          <div v-if="alertViewData && $AuthUtils.hasRole('ALERT_VIEW_MODIFY')" class="action-item">
+          <!--<div v-if="alertViewData && $AuthUtils.hasRole('ALERT_VIEW_MODIFY')" class="action-item">
             <Dropdown placement="bottom-start" trigger="click">
               <div>
                 <span class="tsfont-os"></span>
@@ -126,7 +126,7 @@
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
-          </div>
+          </div>-->
         </div>
       </template>
       <template v-slot:content>
@@ -232,7 +232,7 @@
         </div>
       </template>
     </TsContain>
-    <AlertViewEdit v-if="isViewEdit && alertViewData && alertViewData.id" :id="alertViewData.id" @close="closeViewEdit"></AlertViewEdit>
+    <!--<AlertViewEdit v-if="isViewEdit && alertViewData && alertViewData.id" :id="alertViewData.id" @close="closeViewEdit"></AlertViewEdit>-->
     <AlertDeleteDialog
       v-if="isDeleteShow"
       :id="currentAlertId"
@@ -262,7 +262,7 @@ export default {
   components: {
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
+    //AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
     AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
     AlertDeleteDialog: () => import('@/community-module/alert/pages/alert/alert-delete-dialog.vue'),

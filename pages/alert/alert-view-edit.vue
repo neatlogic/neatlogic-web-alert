@@ -90,6 +90,16 @@ export default {
           trueValue: 1,
           falseValue: 0
         },
+        catalogId: {
+          type: 'select',
+          label: '目录',
+          dynamicUrl: '/api/rest/alert/catalog/search',
+          params: {isActive: 1, needView: 0},
+          rootName: 'tbodyList',
+          valueName: 'id',
+          textName: 'name',
+          validateList: ['required']
+        },
         authList: {
           type: 'userselect',
           label: '授权',

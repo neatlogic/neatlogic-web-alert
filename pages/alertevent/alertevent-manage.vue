@@ -136,7 +136,7 @@ export default {
       alertTypeData: null,
       typeId: null,
       currentPlugin: null,
-      stepHideMap: {}
+      stepShowMap: {}
     };
   },
   beforeCreate() {},
@@ -180,10 +180,10 @@ export default {
       };
     },
     toggleStep(eventhandler) {
-      this.$set(this.stepHideMap, eventhandler.uuid, !this.stepHideMap[eventhandler.uuid]);
+      this.$set(this.stepShowMap, eventhandler.uuid, !this.stepShowMap[eventhandler.uuid]);
     },
     isShowStep(eventhandler) {
-      return !this.stepHideMap[eventhandler.uuid];
+      return this.stepShowMap[eventhandler.uuid];
     },
     editAlertEventHandler(eventhandler) {
       this.isEditEvent = true;

@@ -13,6 +13,7 @@ const notifyTemplateManage = () => import('@/community-module/alert/pages/notify
 const statusManage = () => import('@/community-module/alert/pages/alertstatus/status-manage.vue');
 const ruleManage = () => import('@/community-module/alert/pages/alertrule/alertrule-manage.vue');
 const eventPluginManage = () => import('@/community-module/alert/pages/alertevent/eventplugin-manage.vue');
+const catalogManage = () => import('@/community-module/alert/pages/alertcatalog/catalog-manage.vue');
 import { config } from './config.js';
 let routerArr = [
   {
@@ -180,6 +181,16 @@ let routerArr = [
       icon: 'tsfont-plugin',
       type: 'alertmanage',
       authority: 'ALERT_EVENT_PLUGIN_MODIFY'
+    }
+  },
+  {
+    path: '/catalog-manage',
+    name: 'catalog-manage',
+    component: catalogManage,
+    meta: {
+      title: '视图目录管理',
+      ismenu: false,
+      authority: 'ALERT_VIEW_MODIFY'
     }
   }
 ];
