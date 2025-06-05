@@ -112,9 +112,9 @@
             <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
           </div>-->
           <div class="action-item" @click="isShowFilter = !isShowFilter">
-            <a type="primary" ghost @click="searchAlert(1)">
+            <span @click="searchAlert(1)">
               <span :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }">{{ $t('page.advancesearch') }}</span>
-            </a>
+            </span>
           </div>
           <!--<div v-if="alertViewData && $AuthUtils.hasRole('ALERT_VIEW_MODIFY')" class="action-item">
             <Dropdown placement="bottom-start" trigger="click">
@@ -342,13 +342,15 @@ export default {
   deactivated() {},
   beforeDestroy() {
     if (this.intervaler) {
-      clearInterval(this.intervaler);
-      this.intervaler = null;
+      //clearInterval(this.intervaler);
+      //this.intervaler = null;
+      this.intervaler.clear();
     }
     if (this.timmer) {
-      clearTimeout(this.timmer);
-      this.timmer = null;
+      //clearTimeout(this.timmer);
+      //this.timmer = null;
       this.startTime = null;
+      this.timmer.clear();
     }
   },
   destroyed() {},
@@ -373,11 +375,14 @@ export default {
     },
     toggleCountdown() {
       if (this.intervaler) {
-        clearInterval(this.intervaler);
-        this.intervaler = null;
+        //clearInterval(this.intervaler);
+        this.intervaler.clear();
       }
       if (this.isAutoRefresh) {
-        this.intervaler = setInterval(() => {
+        /* this.intervaler = setInterval(() => {
+          this.countdown = parseInt(this.interval - (Date.now() - this.startTime));
+        }, 1000);*/
+        this.intervaler = this.$utils.setInterval(async() => {
           this.countdown = parseInt(this.interval - (Date.now() - this.startTime));
         }, 1000);
       }
@@ -631,7 +636,7 @@ export default {
           this.$set(row, '_loading', false);
         });
     },
-    searchAlert(currentPage) {
+    async searchAlert(currentPage) {
       if (this.timmer) {
         clearTimeout(this.timmer);
         this.timmer = null;
@@ -682,7 +687,7 @@ export default {
       }
       this.finalSearchParam = {};
       Object.assign(this.finalSearchParam, finalParam);
-      this.$api.alert.alert
+      await this.$api.alert.alert
         .searchAlert(finalParam)
         .then(res => {
           this.alertData = res.Return;
@@ -691,13 +696,13 @@ export default {
               item.isDisabled = true;
             }
           });
-          if (this.isAutoRefresh) {
+          /*if (this.isAutoRefresh) {
             this.startTime = Date.now();
             this.toggleCountdown();
             this.timmer = setTimeout(() => {
               this.searchAlert();
             }, this.interval);
-          }
+          }*/
         })
         .finally(() => {
           this.isLoading = false;
@@ -829,14 +834,17 @@ export default {
       handler: function(val) {
         this.$localStore.set('isAutoRefresh', val);
         if (val) {
-          this.searchAlert();
+          //this.searchAlert();
+          this.timer = this.$utils.setInterval(async() => {
+            this.startTime = Date.now();
+            await this.searchAlert();
+          }, this.interval);
         } else {
           if (this.timmer) {
-            clearTimeout(this.timmer);
-            this.timmer = null;
+            this.timer.clear();
           }
-          this.toggleCountdown();
         }
+        this.toggleCountdown();
       }
     },
     isShowTopo: {
