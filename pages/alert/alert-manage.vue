@@ -1,28 +1,14 @@
 <template>
   <div>
     <TsContain>
+      <template v-slot:navigation>
+        <span v-if="alertViewData">
+          {{ alertViewData.label }}
+        </span>
+        <span v-else>所有告警</span>
+      </template>
       <template v-slot:topLeft>
         <div class="action-group">
-          <div class="action-item">
-            <span v-if="alertViewData">
-              <h3 class="text-grey">{{ alertViewData.label }}</h3>
-            </span>
-            <span v-else><h3 class="text-grey">所有告警</h3></span>
-          </div>
-          <div class="action-item">
-            <Dropdown trigger="click" @on-click="dropdownClick">
-              <Button type="primary" ghost>
-                {{ $t('page.batchoperation') }}
-                <span class="tsfont-down"></span>
-              </Button>
-              <DropdownMenu slot="list">
-                <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">关闭选中告警</DropdownItem>
-                <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">打开选中告警</DropdownItem>
-                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">删除选中告警</DropdownItem>
-                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deletematch" :disabled="!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule)">删除匹配告警</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
           <div class="action-item">
             <TsFormSwitch
               v-model="isAutoRefresh"
@@ -74,6 +60,25 @@
       </template>
       <template v-slot:topRight>
         <div class="action-group">
+          <div v-if="!isShowTopo" class="action-item">
+            <Dropdown trigger="click" @on-click="dropdownClick">
+              <span>
+                {{ $t('page.batchoperation') }}
+                <span class="tsfont-drop-down"></span>
+              </span>
+              <DropdownMenu slot="list">
+                <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">关闭选中告警</DropdownItem>
+                <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">打开选中告警</DropdownItem>
+                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">删除选中告警</DropdownItem>
+                <DropdownItem
+                  v-if="$AuthUtils.hasRole('ALERT_ADMIN')"
+                  divided
+                  name="deletematch"
+                  :disabled="!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule)"
+                >删除匹配告警</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
           <div class="action-item">
             <RadioGroup v-if="!isShowTopo" v-model="searchParam.searchMode" type="button">
               <Radio label="tree"><i class="tsfont-tree"></i></Radio>
@@ -107,9 +112,9 @@
             <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
           </div>-->
           <div class="action-item" @click="isShowFilter = !isShowFilter">
-            <Button type="primary" ghost @click="searchAlert(1)">
+            <a type="primary" ghost @click="searchAlert(1)">
               <span :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }">{{ $t('page.advancesearch') }}</span>
-            </Button>
+            </a>
           </div>
           <!--<div v-if="alertViewData && $AuthUtils.hasRole('ALERT_VIEW_MODIFY')" class="action-item">
             <Dropdown placement="bottom-start" trigger="click">

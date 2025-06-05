@@ -39,7 +39,12 @@
             </a>
           </div>
           <div v-if="catalog.viewList && catalog.viewList.length > 0 && !catalog._hideview">
-            <div v-for="view in catalog.viewList" :key="view.id" class="link alert-menu-link">
+            <div
+              v-for="view in catalog.viewList"
+              :key="view.id"
+              class="link alert-menu-link"
+              :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
+            >
               <a class="ml-lg alert-menu-a" @click="goTo('/alert-manage/' + view.name)">
                 <span class="alert-name overflow">{{ view.label }}</span>
                 <span v-if="alertCount > 0" class="text-error ml-xs superscript">
