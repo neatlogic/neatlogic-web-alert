@@ -80,7 +80,7 @@
               <Radio label="flat"><i class="tsfont-list"></i></Radio>
             </RadioGroup>
           </div>
-          <div class="action-item" style="width: 400px">
+          <div class="action-item" style="width: 500px">
             <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlert(1)">
               <template v-for="(attr, index) in topAttrList" :slot="'attr_' + attr.name" slot-scope="{ valueConfig, textConfig }">
                 <div :key="index">
@@ -647,8 +647,8 @@ export default {
       }
 
       //提取固定属性
-      const { keyword, level, status, updateTimeHour } = this.searchVal;
-      const param = { keyword, level, status, updateTimeHour };
+      const { keyword, level, status, source, updateTimeHour } = this.searchVal;
+      const param = { keyword, level, status, source, updateTimeHour };
       //提取扩展属性
       const attrFilterList = [];
       for (let key in this.searchVal) {
@@ -770,6 +770,11 @@ export default {
             valueName: 'name',
             textName: 'label',
             transfer: true
+          },
+          {
+            type: 'text',
+            name: 'source',
+            label: '告警来源'
           },
           {
             type: 'select',
