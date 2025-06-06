@@ -1,7 +1,7 @@
 <template>
-  <Tabs v-if="alertData" v-model="currentTab" :animated="false">
+  <Tabs v-if="readonlyAlertData" v-model="currentTab" :animated="false">
     <TabPane
-      v-if="alertData"
+      v-if="readonlyAlertData"
       label="告警详情"
       name="info"
       :index="1"
@@ -20,19 +20,19 @@
                 <AlertAttrViewer
                   type="const"
                   :attr="attr"
-                  :row="alertData"
+                  :row="readonlyAlertData"
                   mode="detail"
-                  :value="alertData[attr.name.replace('const_', '')]"
+                  :value="readonlyAlertData[attr.name.replace('const_', '')]"
                 ></AlertAttrViewer>
               </span>
-              <span v-else-if="attr.kind === 'attr' && alertData.attrObj ">
+              <span v-else-if="attr.kind === 'attr' && readonlyAlertData.attrObj ">
                 <AlertAttrViewer
-                  v-if="alertData.attrObj.hasOwnProperty(attr.name.replace('attr_', ''))"
+                  v-if="readonlyAlertData.attrObj.hasOwnProperty(attr.name.replace('attr_', ''))"
                   type="attr"
                   mode="detail"
-                  :row="alertData"
+                  :row="readonlyAlertData"
                   :attr="attr"
-                  :value="alertData.attrObj[attr.name.replace('attr_', '')]"
+                  :value="readonlyAlertData.attrObj[attr.name.replace('attr_', '')]"
                 ></AlertAttrViewer>
               </span>
             </div>
@@ -193,6 +193,7 @@ export default {
       loading: true,
       currentTab: 'info',
       alertData: null,
+      readonlyAlertData: null, //用于显示的只读数据
       //alertTypeData: null,
       dialogConfig: {
         title: '告警详情',
@@ -297,6 +298,7 @@ export default {
       if (this.id) {
         await this.$api.alert.alert.getAlertById(this.id).then(res => {
           this.alertData = res.Return;
+          this.readonlyAlertData = this.$utils.deepClone(this.alertData);
           /*if (this.alertData) {
             this.getAlertTypeById(this.alertData.type);
           }*/
