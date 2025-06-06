@@ -56,16 +56,12 @@
               </DropdownMenu>
             </Dropdown>
           </div>
-          <div v-if="!isShowTopo" class="action-item">
+          <div v-if="!isShowTopo && ((selectList && selectList.length > 0) || (finalSearchParam && finalSearchParam.rule && !$utils.isEmpty(finalSearchParam.rule)))" class="action-item">
             <Dropdown trigger="click" @on-click="dropdownClick">
-              <span
-                :class="{
-                  disable: (!selectList || selectList.length == 0) && (!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule))
-                }"
-              >
+              <div>
                 {{ $t('page.batchoperation') }}
                 <span class="tsfont-drop-down"></span>
-              </span>
+              </div>
               <DropdownMenu slot="list">
                 <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">关闭选中告警</DropdownItem>
                 <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">打开选中告警</DropdownItem>
