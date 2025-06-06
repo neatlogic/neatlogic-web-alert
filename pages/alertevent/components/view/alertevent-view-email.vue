@@ -11,11 +11,30 @@
       label="邮件服务器"
       style="margin: 0px !important"
       labelPosition="left"
-    ><div>
-      {{ mailServerData.name }}
-    </div>
+    >
+      <div>
+        {{ mailServerData.name }}
+      </div>
     </TsFormItem>
     <TsFormItem
+      v-if="configLocal.type === 'template'"
+      labelPosition="left"
+      style="margin: 0px !important"
+      label="模板"
+    >
+      <TsFormSelect
+        :value="configLocal.template"
+        transfer
+        dynamicUrl="/api/rest/alert/notifytemplate/search"
+        border="border"
+        :readonly="true"
+        rootName="tbodyList"
+        valueName="id"
+        textName="label"
+      ></TsFormSelect>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.type === 'custom'"
       style="margin: 0px !important"
       label="标题"
       labelPosition="left"
@@ -23,7 +42,7 @@
       <span>{{ configLocal.title }}</span>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.content"
+      v-if="configLocal.type === 'custom' && configLocal.content"
       style="margin: 0px !important"
       label="内容"
       labelPosition="left"
@@ -85,7 +104,8 @@
           'text-error': handler.status === 'failed',
           'text-warning': handler.status === 'skipped'
         }"
-      >{{ handler.statusName }}
+      >
+        {{ handler.statusName }}
       </span>
     </TsFormItem>
     <TsFormItem
@@ -104,6 +124,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')
   },
@@ -146,7 +167,7 @@ export default {
       }
     },
     getMailServer(id) {
-      this.$api.framework.mailserver.get({id: id}).then(res => {
+      this.$api.framework.mailserver.get({ id: id }).then(res => {
         this.mailServerData = res.Return;
       });
     }

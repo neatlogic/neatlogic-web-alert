@@ -21,7 +21,13 @@
         <div class="text-grey">帮助：不选择代表使用默认的邮件服务器</div>
       </div>
     </TsFormItem>
-    <TsFormItem label="可选属性" labelPosition="left">
+    <TsFormItem label="">
+      <TsFormRadio
+        v-model="configLocal.type"
+        :dataList="typeList"
+      ></TsFormRadio>
+    </TsFormItem>
+    <TsFormItem v-if="configLocal.type === 'custom'" label="可选属性" labelPosition="left">
       <div>
         <span class="mr-xs text-grey">点击复制属性</span>
         <Tag
@@ -34,7 +40,12 @@
         >{{ attr.label }}</Tag>
       </div>
     </TsFormItem>
-    <TsFormItem :required="true" label="标题" labelPosition="left">
+    <TsFormItem
+      v-if="configLocal.type === 'custom'"
+      :required="true"
+      label="标题"
+      labelPosition="left"
+    >
       <TsFormInput
         ref="txtTitle"
         v-model="configLocal.title"
@@ -42,22 +53,25 @@
         border="border"
       ></TsFormInput>
     </TsFormItem>
-    <TsFormItem :required="true" label="内容" labelPosition="left">
+    <TsFormItem
+      v-if="configLocal.type === 'custom'"
+      :required="true"
+      label="内容"
+      labelPosition="left"
+    >
       <div>
-        <div>
-          <Poptip
-            trigger="hover"
-            placement="right"
-            width="650"
-            :transfer="true"
-            :title="'Freemarker' + $t('page.help')"
-          >
-            <span class="tsfont-info-o text-href">{{ $t('term.process.programarhelp') }}</span>
-            <div slot="content">
-              <FreemarkerHelp></FreemarkerHelp>
-            </div>
-          </Poptip>
-        </div>
+        <Poptip
+          trigger="hover"
+          placement="right"
+          width="650"
+          :transfer="true"
+          :title="'Freemarker' + $t('page.help')"
+        >
+          <span class="tsfont-info-o text-href">{{ $t('term.process.programarhelp') }}</span>
+          <div slot="content">
+            <FreemarkerHelp></FreemarkerHelp>
+          </div>
+        </Poptip>
       </div>
       <TsCodemirror
         ref="txtContent"
@@ -65,6 +79,22 @@
         :validateList="['required']"
         codeMode="html"
       ></TsCodemirror>
+    </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.type === 'template'"
+      label="模板"
+      :required="true"
+      labelPosition="left"
+    >
+      <TsFormSelect
+        v-model="configLocal.template"
+        dynamicUrl="/api/rest/alert/notifytemplate/search"
+        transfer
+        border="border"
+        rootName="tbodyList"
+        valueName="id"
+        textName="label"
+      ></TsFormSelect>
     </TsFormItem>
     <TsFormItem :required="true" labelPosition="left" label="收件人">
       <UserSelect
@@ -109,6 +139,7 @@ export default {
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')
   },
   extends: AlertEventBase,
@@ -125,12 +156,20 @@ export default {
         { value: 'proceessing', text: '处理中' },
         { value: 'resolved', text: '已处理' },
         { value: 'closed', text: '已关闭' }
+      ],
+      typeList: [
+        {value: 'custom', text: '自定义'},
+        {value: 'template', text: '模板'}
       ]
     };
   },
   beforeCreate() {},
   created() {
     this.listAlertAttrList();
+    //补充默认值
+    if (!this.configLocal.type) {
+      this.$set(this.configLocal, 'type', 'custom');
+    }
   },
   beforeMount() {},
   mounted() {},
@@ -141,6 +180,10 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    changeType(type) {
+      this.$set(this.configLocal, 'type', type);
+      console.log(this.configLocal);
+    },
     clipboardSuc() {
       this.$Message.success(this.$t('message.copysuccess'));
     },

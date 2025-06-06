@@ -16,6 +16,28 @@
               >{{ attr.label }}</Tag>
             </div>
           </template>
+          <template v-slot:content>
+            <div>
+              <Poptip
+                trigger="hover"
+                placement="right"
+                width="650"
+                :transfer="true"
+                :title="'Freemarker' + $t('page.help')"
+              >
+                <span class="tsfont-info-o text-href">{{ $t('term.process.programarhelp') }}</span>
+                <div slot="content">
+                  <FreemarkerHelp></FreemarkerHelp>
+                </div>
+              </Poptip>
+            </div>
+            <TsCodemirror
+              ref="txtContent"
+              v-model="notifyTemplateData.content"
+              :validateList="['required']"
+              codeMode="html"
+            ></TsCodemirror>
+          </template>
         </TsForm>
       </div>
     </template>
@@ -32,7 +54,9 @@ export default {
   name: '',
   directives: { clipboard },
   components: {
-    TsForm: () => import('@/resources/plugins/TsForm/TsForm')
+    TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
+    FreemarkerHelp: () => import('@/community-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
+    TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror')
   },
   props: {
     id: { type: Number }
@@ -65,13 +89,12 @@ export default {
         },
         attr: { type: 'slot', label: '属性列表' },
         title: {
-          type: 'textarea',
+          type: 'text',
           label: this.$t('page.title'),
           desc: '有些应用场景不一定有标题，例如短信等'
         },
         content: {
-          type: 'textarea',
-          validateList: ['required'],
+          type: 'slot',
           label: this.$t('page.content')
         }
       },
@@ -120,7 +143,7 @@ export default {
       this.$Message.success(this.$t('message.copysuccess'));
     },
     listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList().then(res => {
+      this.$api.alert.alert.listAlertAttrList({ isExpand: 1 }).then(res => {
         this.attrList = res.Return;
       });
     }
