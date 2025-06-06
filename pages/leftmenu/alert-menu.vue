@@ -3,16 +3,28 @@
     <div :class="{ grid: pageCount > 1 }">
       <div>
         <div v-if="$AuthUtils.hasRole(['ALERT_VIEW_MODIFY'])" class="link alert-menu-link">
-          <Dropdown>
+          <Dropdown
+            @on-click="
+              name => {
+                if (name === 'view') {
+                  addView();
+                } else if (name === 'catalog') {
+                  addCatalog();
+                } else if (name === 'manage') {
+                  toEditView();
+                }
+              }
+            "
+          >
             <a class="alert-menu-a">
               <span class="text-href tsfont-plus"></span>
               <span class="text-href ml-xs">添加</span>
               <span class="text-href tsfont-drop-down"></span>
             </a>
             <DropdownMenu slot="list">
-              <DropdownItem><span class="tsfont-plus" @click="addView()">视图</span></DropdownItem>
-              <DropdownItem><span class="tsfont-plus" @click="addCatalog()">目录</span></DropdownItem>
-              <DropdownItem divided><span class="tsfont-setting" @click="toEditView()">管理</span></DropdownItem>
+              <DropdownItem name="view"><span class="tsfont-plus">视图</span></DropdownItem>
+              <DropdownItem name="catalog"><span class="tsfont-plus">目录</span></DropdownItem>
+              <DropdownItem name="manage" divided><span class="tsfont-setting">管理</span></DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
