@@ -41,11 +41,11 @@
           </div>
           <div v-if="isShowTopo" class="action-item">
             <Dropdown>
-              <a href="javascript:void(0)">
+              <span>
                 <span v-if="!topoId">选择拓扑图</span>
                 <span v-else>{{ topoList.find(d => d.id === topoId).name }}</span>
                 <span class="tsfont-drop-down"></span>
-              </a>
+              </span>
               <DropdownMenu slot="list">
                 <DropdownItem
                   v-for="(topo, index) in topoList"
@@ -56,13 +56,13 @@
               </DropdownMenu>
             </Dropdown>
           </div>
-        </div>
-      </template>
-      <template v-slot:topRight>
-        <div class="action-group">
           <div v-if="!isShowTopo" class="action-item">
             <Dropdown trigger="click" @on-click="dropdownClick">
-              <span>
+              <span
+                :class="{
+                  disable: (!selectList || selectList.length == 0) && (!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule))
+                }"
+              >
                 {{ $t('page.batchoperation') }}
                 <span class="tsfont-drop-down"></span>
               </span>
@@ -79,13 +79,17 @@
               </DropdownMenu>
             </Dropdown>
           </div>
+        </div>
+      </template>
+      <template v-slot:topRight>
+        <div class="action-group">
           <div class="action-item">
             <RadioGroup v-if="!isShowTopo" v-model="searchParam.searchMode" type="button">
               <Radio label="tree"><i class="tsfont-tree"></i></Radio>
               <Radio label="flat"><i class="tsfont-list"></i></Radio>
             </RadioGroup>
           </div>
-          <div class="action-item" style="width: 500px">
+          <div class="action-item" style="width: 400px">
             <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlert(1)">
               <template v-for="(attr, index) in topAttrList" :slot="'attr_' + attr.name" slot-scope="{ valueConfig, textConfig }">
                 <div :key="index">

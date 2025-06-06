@@ -84,7 +84,7 @@ export default {
   data: function() {
     return {
       alertCatalogList: [],
-      searchParam: { isActive: 1, needView: 1, pageSize: 5, currentPage: 1 },
+      searchParam: { isActive: 1, needView: 1, pageSize: 10, currentPage: 1 },
       pageCount: 0,
       isViewEdit: false,
       isCatalogEdit: false,
