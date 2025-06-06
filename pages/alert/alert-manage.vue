@@ -29,7 +29,7 @@
               />
             </span>
           </div>
-          <div v-if="COMMERCIAL_MODULES.includes('alert')" class="action-item">
+          <div v-if="COMMERCIAL_MODULES.includes('alert') && topoList && topoList.length > 0" class="action-item">
             <TsFormSwitch
               v-model="isShowTopo"
               trueText="告警拓扑"
@@ -325,6 +325,12 @@ export default {
   async created() {
     if (COMMERCIAL_MODULES.includes('alert')) {
       this.TopoDetail = ComponentManager.getVueTemplate('alerttopo-detail');
+      this.$api.alert.topo.listTopo().then(res => {
+        this.topoList = res.Return;
+        if (this.topoList && this.topoList.length > 0) {
+          this.topoId = this.topoList[0].id;
+        }
+      });
     }
 
     await this.listAlertAttrList();
@@ -856,15 +862,7 @@ export default {
         if (val) {
           //清空批量选中数据
           this.selectList = [];
-          this.$api.alert.topo.listTopo().then(res => {
-            this.topoList = res.Return;
-            if (this.topoList && this.topoList.length > 0) {
-              this.topoId = this.topoList[0].id;
-            }
-          });
-        } else {
-          this.topoId = null;
-        }
+        } 
         //切换模式触发一次搜索
         this.searchAlert(1);
       }
