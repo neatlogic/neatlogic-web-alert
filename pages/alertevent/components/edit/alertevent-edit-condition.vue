@@ -22,14 +22,6 @@
           <div class="mt-md">
             <div v-if="!condition.handler">
               <div v-if=" pluginList && pluginList.length > 0">
-                <!-- <Dropdown placement="bottom-start" :transfer="true">
-                  <a href="javascript:void(0)" class="tsfont-plus">添加插件</a>
-                  <DropdownMenu slot="list">
-                    <DropdownItem v-for="(plugin, hindex) in pluginList" :key="hindex" @click.native="addPlugin(condition, plugin)">
-                      <span :class="plugin.icon">{{ plugin.label }}</span>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </Dropdown> -->
                 <Poptip
                   transfer
                   trigger="hover"

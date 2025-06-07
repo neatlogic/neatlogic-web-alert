@@ -22,10 +22,7 @@
       </div>
     </TsFormItem>
     <TsFormItem label="">
-      <TsFormRadio
-        v-model="configLocal.type"
-        :dataList="typeList"
-      ></TsFormRadio>
+      <TsFormRadio v-model="configLocal.type" :dataList="typeList"></TsFormRadio>
     </TsFormItem>
     <TsFormItem v-if="configLocal.type === 'custom'" label="可选属性" labelPosition="left">
       <div>
@@ -91,6 +88,7 @@
         dynamicUrl="/api/rest/alert/notifytemplate/search"
         transfer
         border="border"
+        :params="{ isActive: 1 }"
         rootName="tbodyList"
         valueName="id"
         textName="label"
@@ -158,8 +156,8 @@ export default {
         { value: 'closed', text: '已关闭' }
       ],
       typeList: [
-        {value: 'custom', text: '自定义'},
-        {value: 'template', text: '模板'}
+        { value: 'custom', text: '自定义' },
+        { value: 'template', text: '模板' }
       ]
     };
   },
