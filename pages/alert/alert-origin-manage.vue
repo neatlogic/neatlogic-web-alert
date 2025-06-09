@@ -9,6 +9,7 @@
           <template v-slot:status="{ row }">
             <span v-if="row.status === 'succeed'" class="text-success">{{ $t('page.success') }}</span>
             <span v-else-if="row.status === 'failed'" class="text-error">{{ $t('page.fail') }}</span>
+            <span v-else-if="row.status === 'ignored'" class="text-info">{{ $t('page.ignore') }}</span>
           </template>
           <template v-slot:content="{ row }">
             <div v-if="row.highlightMap && row.highlightMap.content">

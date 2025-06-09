@@ -23,16 +23,25 @@
         <span v-else-if="condition.result === false" class="text-error">条件不满足</span>
         <span v-else class="text-grey">{{ condition.result }}</span>
       </div>
-      <div v-if="condition.handler" class="mt-md">
-        <div class="handler-container">
-          <Divider orientation="start">
-            <h4 class="text-grey" :class="condition.handler.icon">{{ condition.handler.name }}</h4>
-          </Divider>
+      <div v-if="selectedHandlerList(condition).length > 0" class="mt-md">
+        <div class="text-success mb-md">满足以上条件则执行</div>
+        <div
+          v-for="(selectedHandler, hindex) in selectedHandlerList(condition)"
+          :key="hindex"
+          class="handler-container padding-md radius-md mb-md"
+          :class="{
+            'bg-grey': level % 2 === 0,
+            'bg-op': level % 2 !== 0
+          }"
+        >
+          <div>
+            <span><b class="text-grey">{{ hindex+1 }}.{{ selectedHandler.name }}</b></span>
+          </div>
           <component
-            :is="handlers && handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
-            v-if="handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
+            :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
+            v-if="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
             :ref="'pluginConfig' + index"
-            :handler="condition.handler"
+            :handler="selectedHandler"
             :event="event"
             :mode="mode"
             :isChild="true"
@@ -77,6 +86,16 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    selectedHandlerList(condition) {
+      if (condition.handler) {
+        if (Array.isArray(condition.handler)) {
+          return condition.handler;
+        } else if (typeof condition.handler === 'object') {
+          return [condition.handler];
+        }
+      }
+      return [];
+    },
     listEventPlugin() {
       this.$api.alert.alertevent.listEventPlugin({ eventName: this.event.name }).then(res => {
         this.pluginList = res.Return;

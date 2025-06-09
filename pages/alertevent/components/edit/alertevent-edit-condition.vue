@@ -9,10 +9,7 @@
   >
     <component :is="isChild ? 'div' : 'TsFormItem'" label="条件" labelPosition="left">
       <div>
-        <div
-          v-for="(condition, index) in configLocal.conditionList"
-          :key="index"
-        >
+        <div v-for="(condition, index) in configLocal.conditionList" :key="index">
           <ConditionGroup
             v-model="condition.rule"
             :padding="true"
@@ -20,8 +17,44 @@
             :attrList="attrList"
           ></ConditionGroup>
           <div class="mt-md">
-            <div v-if="!condition.handler">
-              <div v-if=" pluginList && pluginList.length > 0">
+            <div class="text-success mb-md">满足以上条件则执行</div>
+            <draggable
+              v-if="selectedHandlerList(condition).length > 0"
+              tag="div"
+              :list="selectedHandlerList(condition)"
+              handle=".tsfont-drag"
+              group="root"
+              @change="changeSort(condition)"
+            >
+              <div
+                v-for="(selectedHandler, hindex) in selectedHandlerList(condition)"
+                :key="hindex"
+                class="handler-container padding-md radius-md mb-md"
+                :class="{
+                  'bg-grey': level % 2 === 0,
+                  'bg-op': level % 2 !== 0
+                }"
+              >
+                <div class="tsfont-close-s text-grey cursor del-handler" @click="removeHandler(condition, hindex)"></div>
+                <div>
+                  <span class="tsfont-drag" style="cursor: move"></span>
+                  <span>
+                    <b class="text-grey">{{ hindex+1 }}.{{ selectedHandler.name }}</b>
+                  </span>
+                </div>
+                <component
+                  :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
+                  v-if="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
+                  :ref="'pluginConfig_' + index + '_' + hindex"
+                  :handler="selectedHandler"
+                  :event="event"
+                  :isChild="true"
+                  :level="level + 1"
+                ></component>
+              </div>
+            </draggable>
+            <div>
+              <div v-if="pluginList && pluginList.length > 0">
                 <Poptip
                   transfer
                   trigger="hover"
@@ -53,18 +86,6 @@
               </div>
               <div v-else class="text-error">没有可用插件</div>
             </div>
-            <div v-else class="handler-container">
-              <div class="tsfont-close-s text-grey cursor del-handler" @click="$set(condition, 'handler', null)"></div>
-              <component
-                :is="handlers && handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
-                v-if="handlers[condition.handler.handler.toLowerCase() + '_eventhandler']"
-                :ref="'pluginConfig' + index"
-                :handler="condition.handler"
-                :event="event"
-                :isChild="true"
-                :level="level + 1"
-              ></component>
-            </div>
           </div>
         </div>
         <Alert v-if="error" class="mt-md" type="error">{{ error }}</Alert>
@@ -73,10 +94,12 @@
   </div>
 </template>
 <script>
+import draggable from 'vuedraggable';
 import { AlertEventBase } from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.js';
 export default {
   name: '',
   components: {
+    draggable,
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },
@@ -109,6 +132,27 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    changeSort(condition) {
+    },
+    selectedHandlerList(condition) {
+      if (condition.handler) {
+        if (Array.isArray(condition.handler)) {
+          return condition.handler;
+        } else if (typeof condition.handler === 'object') {
+          return [condition.handler];
+        }
+      }
+      return [];
+    },
+    removeHandler(condition, index) {
+      if (condition.handler) {
+        if (Array.isArray(condition.handler)) {
+          condition.handler.splice(index, 1);
+        } else if (typeof condition.handler === 'object') {
+          this.$set(condition, 'handler', []);
+        }
+      }
+    },
     addCondition() {},
     addPlugin(condition, plugin) {
       const handlerData = {
@@ -118,7 +162,15 @@ export default {
         icon: plugin.icon,
         isActive: 1
       };
-      this.$set(condition, 'handler', handlerData);
+      if (!condition.handler) {
+        this.$set(condition, 'handler', [handlerData]);
+      } else {
+        if (!Array.isArray(condition.handler)) {
+          //转换旧数据
+          condition.handler = [condition.handler];
+        }
+        condition.handler.push(handlerData);
+      }
       this.error = '';
     },
     listEventPlugin() {
@@ -136,13 +188,16 @@ export default {
       if (this.configLocal.conditionList && this.configLocal.conditionList.length > 0) {
         for (let i = 0; i < this.configLocal.conditionList.length; i++) {
           const condition = this.configLocal.conditionList[i];
-          if (!condition.handler) {
+          if (!condition.handler || condition.handler.length === 0) {
             isValid = false;
             this.error = '请选择插件';
-          }
-          const pluginConfig = this.$refs[`pluginConfig${i}`];
-          if (pluginConfig && !(await pluginConfig[0].valid())) {
-            isValid = false;
+          } else {
+            for (let hindex = 0; hindex < condition.handler.length; hindex++) {
+              const pluginConfig = this.$refs[`pluginConfig_${i}_${hindex}`];
+              if (pluginConfig && !(await pluginConfig[0].valid())) {
+                isValid = false;
+              }
+            }
           }
         }
       }
@@ -151,9 +206,18 @@ export default {
     getConfig() {
       if (this.configLocal.conditionList && this.configLocal.conditionList.length > 0) {
         this.configLocal.conditionList.forEach((condition, index) => {
-          const pluginConfig = this.$refs[`pluginConfig${index}`];
-          if (pluginConfig) {
-            this.$set(condition.handler, 'config', pluginConfig[0].getConfig());
+          if (condition.handler) {
+            if (Array.isArray(condition.handler) && condition.handler.length > 0) {
+              condition.handler.forEach((h, hindex) => {
+                const pluginConfig = this.$refs[`pluginConfig_${index}_${hindex}`];
+                this.$set(h, 'config', pluginConfig[0].getConfig());
+              });
+            } else if (typeof condition.handler === 'object') {
+              //转换老数据
+              const pluginConfig = this.$refs[`pluginConfig_${index}_0`];
+              this.$set(condition.handler, 'config', pluginConfig[0].getConfig());
+              condition.handler = [condition.handler];
+            }
           }
         });
       }

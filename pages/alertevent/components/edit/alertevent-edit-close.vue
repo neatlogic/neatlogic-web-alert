@@ -25,6 +25,21 @@
       <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
       <div v-if="error" class="text-error">{{ error }}</div>
     </TsFormItem>
+    <TsFormItem v-if="configLocal.closeType === 'uniquekey' && configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" label="告警特征" labelPosition="left">
+      <TsFormSelect
+        v-model="configLocal.ruleList"
+        url="/api/rest/alert/rule/list"
+        :params="{ isActive: 1 }"
+        transfer
+        border="border"
+        valueName="id"
+        textName="label"
+        multiple
+      ></TsFormSelect>
+      <div class="text-grey">
+        帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。
+      </div>
+    </TsFormItem>
     <TsFormItem label="同时关闭子告警" labelPosition="left">
       <TsFormSwitch
         v-model="configLocal.isCloseChildAlert"
@@ -46,6 +61,7 @@ export default {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox'),
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch')
   },
   extends: AlertEventBase,

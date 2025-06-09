@@ -20,6 +20,24 @@
       </div>
       <div v-else class="text-grey">-</div>
     </TsFormItem>
+    <TsFormItem
+      v-if="configLocal.closeType === 'uniquekey' && configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0 && configLocal.ruleList && configLocal.ruleList.length > 0"
+      style="margin: 0px !important"
+      label="告警特征"
+      labelPosition="left"
+    >
+      <TsFormSelect
+        :value="configLocal.ruleList"
+        url="/api/rest/alert/rule/list"
+        :params="{ isActive: 1 }"
+        transfer
+        border="border"
+        valueName="id"
+        textName="label"
+        multiple
+        readonly
+      ></TsFormSelect>
+    </TsFormItem>
     <TsFormItem label="同时关闭子告警" labelPosition="left" style="margin:0px !important">
       <span v-if="configLocal.isCloseChildAlert" class="text-success">{{ $t('page.yes') }}</span>
       <span v-else class="text-grey">{{ $t('page.no') }}</span>
@@ -48,7 +66,8 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
-    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
   },
   extends: AlertEventBase,
   props: {},
