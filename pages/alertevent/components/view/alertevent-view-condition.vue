@@ -65,16 +65,13 @@ export default {
   data() {
     return {
       attrList: [],
-      pluginList: [],
       handlers: []
-      //AlertEventViewer: null
     };
   },
   beforeCreate() {},
   async created() {
     const handlers = await import('@/community-module/alert/pages/alertevent/components/view/index.js');
     this.handlers = handlers.default;
-    this.listEventPlugin();
     this.listAlertAttrList();
   },
   beforeMount() {},
@@ -95,11 +92,6 @@ export default {
         }
       }
       return [];
-    },
-    listEventPlugin() {
-      this.$api.alert.alertevent.listEventPlugin({ eventName: this.event.name }).then(res => {
-        this.pluginList = res.Return;
-      });
     },
     listAlertAttrList() {
       this.$api.alert.alert.listAlertAttrList().then(res => {

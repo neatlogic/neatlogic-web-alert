@@ -50,6 +50,74 @@
       </span>
     </TsFormItem>
     <TsFormItem
+      :labelWidth="90"
+      label="成功动作"
+      labelPosition="left"
+      style="margin: 0px !important"
+    >
+      <div>
+        <div
+          v-for="(selectedHandler, hindex) in configLocal.successCallbackList"
+          :key="hindex"
+          class="handler-container padding-md radius-md mb-md"
+          :class="{
+            'bg-grey': level % 2 === 0,
+            'bg-op': level % 2 !== 0
+          }"
+        >
+          <div>
+            <span>
+              <b class="text-grey">{{ hindex + 1 }}.{{ selectedHandler.name }}</b>
+            </span>
+          </div>
+          <component
+            :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
+            v-if="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
+            :ref="'pluginConfig_' + hindex"
+            :handler="selectedHandler"
+            :event="event"
+            :mode="mode"
+            :isChild="true"
+            :level="level + 1"
+          ></component>
+        </div>
+      </div>
+    </TsFormItem>
+    <TsFormItem
+      :labelWidth="90"
+      label="失败动作"
+      labelPosition="left"
+      style="margin: 0px !important"
+    >
+      <div>
+        <div
+          v-for="(selectedHandler, hindex) in configLocal.failedCallbackList"
+          :key="hindex"
+          class="handler-container padding-md radius-md mb-md"
+          :class="{
+            'bg-grey': level % 2 === 0,
+            'bg-op': level % 2 !== 0
+          }"
+        >
+          <div>
+            <span>
+              <b class="text-grey">{{ hindex + 1 }}.{{ selectedHandler.name }}</b>
+            </span>
+          </div>
+          <component
+            :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
+            v-if="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
+            :ref="'pluginConfig_' + hindex"
+            :handler="selectedHandler"
+            :event="event"
+            :mode="mode"
+            :isChild="true"
+            :level="level + 1"
+          ></component>
+        </div>
+      </div>
+    </TsFormItem>
+    <TsFormItem
       v-if="handler.result"
       style="margin: 0px !important"
       labelPosition="left"
@@ -90,11 +158,14 @@ export default {
   props: {},
   data() {
     return {
-      integrationData: null
+      integrationData: null,
+      handlers: []
     };
   },
   beforeCreate() {},
-  created() {
+  async created() {
+    const handlers = await import('@/community-module/alert/pages/alertevent/components/view/index.js');
+    this.handlers = handlers.default;
     this.getIntegration();
   },
   beforeMount() {},

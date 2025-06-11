@@ -1,6 +1,9 @@
 <template>
   <div>
     <TsContain>
+      <template v-slot:topLeft>
+        <span v-auth="['ALERT_ADMIN']"><AuditConfig auditName="ALERT-ORIGIN" help="不设置代表不自动清理接入记录。系统只会清理没有生成告警的接入记录，已经生成告警的接入记录只能跟随告警一起删除"></AuditConfig></span>
+      </template>
       <template v-slot:topRight>
         <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlertOrigin(1)"></CombineSearcher>
       </template>
@@ -53,7 +56,8 @@ export default {
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
-    AlertOriginView: () => import('@/community-module/alert/pages/alert/alert-origin-view.vue')
+    AlertOriginView: () => import('@/community-module/alert/pages/alert/alert-origin-view.vue'),
+    AuditConfig: () => import('@/views/components/auditconfig/auditconfig.vue')
   },
   props: {},
   data() {
