@@ -108,37 +108,25 @@
               </template>
             </CombineSearcher>
           </div>
-          <!--<div v-if="!isShowFilter" class="action-item">
-            <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
-          </div>-->
           <div class="action-item" @click="isShowFilter = !isShowFilter">
-            <span @click="searchAlert(1)">
-              <span :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }">{{ $t('page.advancesearch') }}</span>
-            </span>
+            <span :class="{ 'tsfont-drop-right': !isShowFilter, 'tsfont-drop-down': isShowFilter }">{{ $t('page.advancesearch') }}</span>
+            <span v-if="hasRule" class="text-error tsfont-dot"></span>
           </div>
-          <!--<div v-if="alertViewData && $AuthUtils.hasRole('ALERT_VIEW_MODIFY')" class="action-item">
-            <Dropdown placement="bottom-start" trigger="click">
-              <div>
-                <span class="tsfont-os"></span>
-                <span class="tsfont-drop-down"></span>
-              </div>
-              <DropdownMenu v-if="alertViewData" slot="list">
-                <DropdownItem>
-                  <span class="tsfont-edit" @click.stop="editView()">{{ $t('dialog.title.edittarget', { target: $t('term.cmdb.view') }) }}</span>
-                </DropdownItem>
-                <DropdownItem>
-                  <span class="tsfont-trash-o" @click.stop="deleteView()">{{ $t('dialog.title.deletetarget', { target: $t('term.cmdb.view') }) }}</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>-->
         </div>
       </template>
       <template v-slot:content>
         <div v-if="isShowFilter" class="border-base radius-md mb-md padding-md">
           <ConditionGroup v-model="searchParam.rule" :attrList="attrList"></ConditionGroup>
           <div style="text-align: right" class="mt-md">
-            <Button type="primary" @click="searchAlert(1)">{{ $t('page.search') }}</Button>
+            <Button
+              type="primary"
+              @click="
+                isShowFilter = false;
+                searchAlert(1);
+              "
+            >
+              {{ $t('page.search') }}
+            </Button>
           </div>
         </div>
         <Loading v-if="isLoading" :loadingShow="true" type="fix"></Loading>
@@ -237,7 +225,6 @@
         </div>
       </template>
     </TsContain>
-    <!--<AlertViewEdit v-if="isViewEdit && alertViewData && alertViewData.id" :id="alertViewData.id" @close="closeViewEdit"></AlertViewEdit>-->
     <AlertDeleteDialog
       v-if="isDeleteShow"
       :id="currentAlertId"
@@ -381,13 +368,9 @@ export default {
     },
     toggleCountdown() {
       if (this.intervaler) {
-        //clearInterval(this.intervaler);
         this.intervaler.clear();
       }
       if (this.isAutoRefresh) {
-        /* this.intervaler = setInterval(() => {
-          this.countdown = parseInt(this.interval - (Date.now() - this.startTime));
-        }, 1000);*/
         this.intervaler = this.$utils.setInterval(async() => {
           this.countdown = parseInt(this.interval - (Date.now() - this.startTime));
         }, 1000);
@@ -527,7 +510,7 @@ export default {
       if (this.searchParam.viewName) {
         this.$api.alert.alert.getAlertViewByName(this.searchParam.viewName).then(res => {
           this.alertViewData = res.Return;
-          this.searchParam.rule = this.alertViewData?.config?.rule;
+          this.$set(this.searchParam, 'rule', this.alertViewData?.config?.rule);
         });
       }
     },
@@ -555,22 +538,6 @@ export default {
     },
     editView() {
       this.isViewEdit = true;
-    },
-    deleteView() {
-      this.$createDialog({
-        title: this.$t('dialog.title.deletetarget', { target: this.$t('term.cmdb.view') }),
-        content: this.$t('dialog.content.deleteconfirm', { target: this.$t('term.cmdb.view') }),
-        'on-ok': vnode => {
-          this.$api.alert.alert.deleteAlertView(this.alertViewData.id).then(res => {
-            if (res.Status === 'OK') {
-              this.$Message.success(this.$t('message.deletesuccess'));
-              //删除视图用del，菜单会根据action来判断是否更换当前视图
-              this.$store.commit('leftMenu/setAlertViewCount', 'del');
-              vnode.isShow = false;
-            }
-          });
-        }
-      });
     },
     changePageSize(pageSize) {
       if (pageSize) {
@@ -651,16 +618,6 @@ export default {
       if (currentPage) {
         this.searchParam.currentPage = currentPage;
       }
-      //判断搜索模式组织条件
-      if (this.isShowFilter) {
-        //高级搜索去掉关键字
-        this.searchParam.mode = 'advanced';
-        //this.searchParam.keyword = '';
-      } else {
-        //普通搜索还原搜索条件
-        this.searchParam.mode = 'simple';
-        this.searchParam.rule = this.alertViewData?.config?.rule;
-      }
 
       //提取固定属性
       const { keyword, level, status, source, updateTimeHour } = this.searchVal;
@@ -702,27 +659,20 @@ export default {
               item.isDisabled = true;
             }
           });
-          /*if (this.isAutoRefresh) {
-            this.startTime = Date.now();
-            this.toggleCountdown();
-            this.timmer = setTimeout(() => {
-              this.searchAlert();
-            }, this.interval);
-          }*/
         })
         .finally(() => {
           this.isLoading = false;
         });
-    },
-    closeViewEdit(needRefresh) {
-      this.isViewEdit = false;
-      if (needRefresh) {
-        this.searchAlert(1);
-      }
     }
   },
   filter: {},
   computed: {
+    hasRule() {
+      if (this.searchParam.rule && this.searchParam.rule.conditionGroupList && this.searchParam.rule.conditionGroupList.length > 0) {
+        return true;
+      }
+      return false;
+    },
     levelName() {
       if (this.searchParam.level && this.levelList && this.levelList.length > 0) {
         const s = this.levelList.find(d => d.level === this.searchParam.level);
@@ -858,7 +808,7 @@ export default {
         if (val) {
           //清空批量选中数据
           this.selectList = [];
-        } 
+        }
         //切换模式触发一次搜索
         this.searchAlert(1);
       }

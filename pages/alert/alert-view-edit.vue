@@ -12,21 +12,21 @@
             >
               <span>{{ attr.label }}</span>
             </Tag>
-            <Divider v-if="selectAttrList && selectAttrList.length > 0" orientation="left">已选属性</Divider>
+            <Divider v-if="alertViewData.config.attrList && alertViewData.config.attrList.length > 0" orientation="left">已选属性</Divider>
             <draggable
-              v-if="selectAttrList && selectAttrList.length > 0"
+              v-if="alertViewData.config.attrList && alertViewData.config.attrList.length > 0"
               handle=".tsfont-option-vertical"
               :list="alertViewData.config.attrList"
-              @end="onDragEnd"
+              :move="onMove"
             >
               <Tag
-                v-for="(attr, index) in selectAttrList"
+                v-for="(attr, index) in alertViewData.config.attrList"
                 :key="index"
-                :closable="attr.name !== 'const_title'"
+                :closable="attr !== 'const_title'"
                 @on-close="toggleAttr(attr)"
               >
-                <span style="cursor: move" :class="{ 'tsfont-option-vertical': attr.name !== 'const_title' }"></span>
-                <span>{{ attr.label }}</span>
+                <span style="cursor: move" :class="{ 'tsfont-option-vertical': attr !== 'const_title' }"></span>
+                <span>{{ getAttrByName(attr).label }}</span>
               </Tag>
             </draggable>
           </div>
@@ -94,7 +94,7 @@ export default {
           type: 'select',
           label: '目录',
           dynamicUrl: '/api/rest/alert/catalog/search',
-          params: {isActive: 1, needView: 0},
+          params: { isActive: 1, needView: 0 },
           rootName: 'tbodyList',
           valueName: 'id',
           textName: 'name',
@@ -118,9 +118,9 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {
+  async created() {
+    await this.getViewById();
     this.listAlertAttrList();
-    this.getViewById();
   },
   beforeMount() {},
   mounted() {},
@@ -131,13 +131,18 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    onDragEnd(evt) {
-      //锁定const_title永远在第一位
-      this.alertViewData.config.attrList = ['const_title', ...this.alertViewData.config.attrList.filter(d => d !== 'const_title')];
+    onMove(e, originalEvent) {
+      if (e.relatedContext.index === 0) {
+        return false;
+      }
+      return true;
     },
-    getViewById() {
+    getAttrByName(name) {
+      return this.attrList.find(item => item.name === name) || {};
+    },
+    async getViewById() {
       if (this.id) {
-        this.$api.alert.alert.getAlertViewById(this.id).then(res => {
+        await this.$api.alert.alert.getAlertViewById(this.id).then(res => {
           this.alertViewData = res.Return;
           this.isReady = true;
         });
@@ -156,8 +161,17 @@ export default {
       }
     },
     listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList().then(res => {
+      this.$api.alert.alert.listAlertAttrList({ isActive: 1 }).then(res => {
         this.attrList = res.Return;
+        //删除已经不存在的属性
+        if (this.alertViewData.config.attrList && this.alertViewData.config.attrList.length > 0) {
+          for (let i = this.alertViewData.config.attrList.length - 1; i >= 0; i--) {
+            const att = this.alertViewData.config.attrList[i];
+            if (!this.attrList.find(d => d.name === att)) {
+              this.$delete(this.alertViewData.config.attrList, i);
+            }
+          }
+        }
       });
     },
     close(needRefresh) {
@@ -166,9 +180,9 @@ export default {
     saveAlertView() {
       const form = this.$refs.form;
       if (form && form.valid()) {
-        //console.log(JSON.stringify(this.alertViewData, null, 2));
         this.$api.alert.alert.saveAlertView(this.alertViewData).then(res => {
           if (res.Status === 'OK') {
+            this.$Message.success(this.$t('message.updatesuccess'));
             this.close(true);
           }
         });
@@ -179,26 +193,6 @@ export default {
   computed: {
     unSelectAttrList() {
       return this.attrList.filter(item => !this.isAttrSelected(item));
-    },
-    selectAttrList() {
-      const attrList = [];
-      if (this.alertViewData.config.attrList) {
-        this.alertViewData.config.attrList.forEach(item => {
-          const attr = this.attrList.find(i => i.name === item);
-          if (attr) {
-            attrList.push(attr);
-          }
-        });
-      }
-      return attrList;
-    },
-    conditionAttrList() {
-      const attrList = [];
-      this.selectAttrList &&
-        this.selectAttrList.forEach(item => {
-          attrList.push(item);
-        });
-      return attrList;
     }
   },
   watch: {}
