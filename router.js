@@ -14,6 +14,7 @@ const statusManage = () => import('@/community-module/alert/pages/alertstatus/st
 const ruleManage = () => import('@/community-module/alert/pages/alertrule/alertrule-manage.vue');
 const eventPluginManage = () => import('@/community-module/alert/pages/alertevent/eventplugin-manage.vue');
 const catalogManage = () => import('@/community-module/alert/pages/alertcatalog/catalog-manage.vue');
+const sourceManage = () => import('@/community-module/alert/pages/alertsource/alertsource-manage.vue');
 import { config } from './config.js';
 let routerArr = [
   {
@@ -157,6 +158,18 @@ let routerArr = [
       icon: 'tsfont-celve',
       type: 'alertmanage',
       authority: 'ALERT_RULE_MODIFY'
+    }
+  },
+  {
+    path: '/alertsource-manage',
+    name: 'alertsource-manage',
+    component: sourceManage,
+    meta: {
+      title: '告警来源管理',
+      ismenu: true,
+      icon: 'tsfont-dataconversion',
+      type: 'alertmanage',
+      authority: 'ALERT_SOURCE_MODIFY'
     }
   },
   {

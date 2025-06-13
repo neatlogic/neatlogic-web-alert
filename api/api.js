@@ -8,6 +8,7 @@ import notifytemplate from './alertnotifytemplate/alertnotifytemplate.js';
 import status from './alertstatus/alertstatus.js';
 import rule from './alertrule/alertrule.js';
 import catalog from './alertcatalog/alertcatalog.js';
+import source from './alertsource/alertsource.js';
 
 export default {
   alerttype,
@@ -18,5 +19,6 @@ export default {
   notifytemplate,
   status,
   rule,
-  catalog
+  catalog,
+  source
 };

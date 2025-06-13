@@ -738,9 +738,14 @@ export default {
             transfer: true
           },
           {
-            type: 'text',
+            type: 'select',
             name: 'source',
-            label: '告警来源'
+            label: '告警来源',
+            dynamicUrl: '/api/rest/alert/source/search',
+            valueName: 'name',
+            textName: 'label',
+            rootName: 'tbodyList',
+            transfer: true
           },
           {
             type: 'select',

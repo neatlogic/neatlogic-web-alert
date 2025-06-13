@@ -1,6 +1,6 @@
 <template>
   <div v-if="mode !== 'audit' && row.source" class="overflow">
-    {{ row.source }}
+    {{ row.sourceName || row.source }}
   </div>
   <div v-else-if="mode === 'audit' && value && value.length > 0 && value[0]">
     {{ value[0] }}
