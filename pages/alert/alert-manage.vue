@@ -75,17 +75,22 @@
               </DropdownMenu>
             </Dropdown>
           </div>
-        </div>
-      </template>
-      <template v-slot:topRight>
-        <div class="action-group">
           <div class="action-item">
-            <RadioGroup v-if="!isShowTopo" v-model="searchParam.searchMode" type="button">
+            <RadioGroup
+              v-if="!isShowTopo"
+              v-model="searchParam.searchMode"
+              size="small"
+              type="button"
+            >
               <Radio label="tree"><i class="tsfont-tree"></i></Radio>
               <Radio label="flat"><i class="tsfont-list"></i></Radio>
             </RadioGroup>
           </div>
-          <div class="action-item" style="width: 400px">
+        </div>
+      </template>
+      <template v-slot:topRight>
+        <div class="action-group">
+          <div class="action-item" style="width: 380px">
             <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlert(1)">
               <template v-for="(attr, index) in topAttrList" :slot="'attr_' + attr.name" slot-scope="{ valueConfig, textConfig }">
                 <div :key="index">
@@ -712,7 +717,7 @@ export default {
       const config = {
         search: false,
         searchMode: 'clickBtnSearch',
-        labelPosition: 'left',
+        labelPosition: 'top',
         searchList: [
           {
             type: 'text',
