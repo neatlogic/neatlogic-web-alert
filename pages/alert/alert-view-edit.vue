@@ -8,7 +8,7 @@
               v-for="(attr, index) in unSelectAttrList"
               :key="index"
               class="cursor"
-              @click.native="toggleAttr(attr)"
+              @click.native="selectAttr(attr)"
             >
               <span>{{ attr.label }}</span>
             </Tag>
@@ -23,7 +23,7 @@
                 v-for="(attr, index) in alertViewData.config.attrList"
                 :key="index"
                 :closable="attr !== 'const_title'"
-                @on-close="toggleAttr(attr)"
+                @on-close="remoteAttr(attr)"
               >
                 <span style="cursor: move" :class="{ 'tsfont-option-vertical': attr !== 'const_title' }"></span>
                 <span>{{ getAttrByName(attr).label }}</span>
@@ -153,11 +153,13 @@ export default {
     isAttrSelected(attr) {
       return this.alertViewData.config.attrList.some(item => item === attr.name);
     },
-    toggleAttr(attr) {
-      if (this.isAttrSelected(attr)) {
-        this.alertViewData.config.attrList = this.alertViewData.config.attrList.filter(item => item !== attr.name);
-      } else {
-        this.alertViewData.config.attrList = [...this.alertViewData.config.attrList, attr.name];
+    selectAttr(attr) {
+      this.alertViewData.config.attrList.push(attr.name);
+    },
+    remoteAttr(attrName) {
+      const index = this.alertViewData.config.attrList.findIndex(d => d === attrName);
+      if (index > -1) {
+        this.alertViewData.config.attrList.splice(index, 1);
       }
     },
     listAlertAttrList() {
