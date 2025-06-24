@@ -16,9 +16,12 @@
         <span class="mr-xs">
           <Badge :type="getBadgeType(audit)" :text="audit.statusName"></Badge>
         </span>
-        <span class="text-grey"><b>{{ audit.handlerName }}</b></span>
+        <span class="text-grey">
+          <b>{{ audit.handlerName }}</b>
+        </span>
+        <span v-if="audit.isAsync" class="ml-xs"><Tag color="warning">异步</Tag></span>
         <span class="text-grey ml-xs">{{ audit.startTime | formatDate }}</span>
-        <span v-if="audit.status !=='running'" class="text-grey">（{{ getTimeCost(audit.timeCost) }}）</span>
+        <span v-if="audit.status !== 'running'" class="text-grey">（{{ getTimeCost(audit.timeCost) }}）</span>
       </div>
       <div v-if="audit && !hideChild[audit.id.toString()]" class="mt-md" :style="{ 'padding-left': level * 10 + 'px' }">
         <AlertEventViewer

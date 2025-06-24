@@ -51,6 +51,7 @@
                     <h3 class="cursor" :class="{ 'tsfont-drop-right': !isShowStep(eventhandler), 'tsfont-drop-down': isShowStep(eventhandler) }" @click="toggleStep(eventhandler)">
                       <span v-if="!eventhandler.isActive"><Tag color="error">已禁用</Tag></span>
                       <span :class="eventhandler.handlerIcon">{{ eventhandler.name }}</span>
+                      <span v-if="eventhandler.isAsync" class="ml-sm"><Tag color="warning">异步</Tag></span>
                     </h3>
                   </div>
                   <div v-if="isShowStep(eventhandler)" class="mt-md"><AlertEventViewer :eventHandlerData="eventhandler"></AlertEventViewer></div>
@@ -78,11 +79,7 @@
                 >
                   <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget', { target: $t('page.plugins') }) }}</a>
                   <div slot="content" class="api">
-                    <div
-                      v-for="(plugin, hindex) in pluginList"
-                      :key="hindex"
-                      @click="addPlugin(plugin)"
-                    >
+                    <div v-for="(plugin, hindex) in pluginList" :key="hindex" @click="addPlugin(plugin)">
                       <div class="plugin-grid cursor padding-sm radius-sm plugin-item">
                         <div><i class="fz20 text-primary" :class="plugin.icon"></i></div>
                         <div>
