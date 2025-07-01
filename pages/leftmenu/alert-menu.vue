@@ -129,6 +129,7 @@ export default {
         this.pageCount = res.Return.pageCount;
         if (this.alertCatalogList && this.alertCatalogList.length > 0) {
           this.alertCatalogList.forEach(catalog => {
+            this.$set(catalog, '_hideview', true);
             if (catalog.viewList && catalog.viewList.length > 0) {
               catalog.viewList.forEach(view => {
                 this.$api.alert.alert.searchAlertCount({ viewName: view.name }).then(res => {
