@@ -15,6 +15,9 @@
         <div class="action-item">
           <Button @click="close()">{{ $t('page.close') }}</Button>
         </div>
+        <div v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="action-item">
+          <Button type="warning" @click="rebuildIndex()">{{ $t('page.rebuildindex') }}</Button>
+        </div>
         <div v-if="hasRole" class="action-item">
           <Button type="primary" @click="confirm()">{{ $t('page.confirm') }}</Button>
         </div>
@@ -56,6 +59,13 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    rebuildIndex() {
+      this.$api.alert.alert.rebuildIndex(this.id).then(res => {
+        if (res.Status === 'OK') {
+          this.$Message.success(this.$t('message.executesuccess'));
+        }
+      });
+    },
     isReady() {
       this.hasRole = this.$refs.alertDetailCore && this.$refs.alertDetailCore.hasRole;
       this.alertData = this.$refs.alertDetailCore && this.$refs.alertDetailCore.alertData;

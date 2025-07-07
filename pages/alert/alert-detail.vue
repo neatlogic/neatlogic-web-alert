@@ -19,11 +19,11 @@
           ></AlertAttrViewer>
         </div>
       </div>
-    </template> 
+    </template>
     <template v-slot:topRight>
       <div class="action-group">
         <div v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="action-item">
-          <Button type="warning" ghost @click="rebuildIndex()">重建索引</Button>
+          <Button type="warning" @click="rebuildIndex()">{{ $t('page.rebuildindex') }}</Button>
         </div>
         <div v-if="hasRole" class="action-item">
           <Button type="primary" @click="confirm()">{{ $t('page.confirm') }}</Button>
@@ -101,7 +101,7 @@ export default {
     rebuildIndex() {
       this.$api.alert.alert.rebuildIndex(this.id).then(res => {
         if (res.Status === 'OK') {
-          this.$Message.success('重建成功');
+          this.$Message.success(this.$t('message.executesuccess'));
         }
       });
     },
