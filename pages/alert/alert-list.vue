@@ -57,7 +57,7 @@
             </template>
           </div>
         </div>
-        <div v-else-if="thead.key.startsWith('const_')" :key="index">
+        <div v-else-if="thead.key.startsWith('const_')" :key="'e' + index">
           <AlertAttrViewer
             :attr="getAttrByName(thead.key)"
             :row="row"
@@ -67,7 +67,7 @@
             @refresh="searchAlert"
           ></AlertAttrViewer>
         </div>
-        <div v-else-if="thead.key.startsWith('attr_') && row.attrObj" :key="index">
+        <div v-else-if="thead.key.startsWith('attr_') && row.attrObj" :key="'f' + index">
           <AlertAttrViewer
             :view="alertViewData"
             :attr="getAttrByName(thead.key)"
