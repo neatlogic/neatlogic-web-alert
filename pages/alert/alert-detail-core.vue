@@ -2,7 +2,7 @@
   <Tabs v-if="readonlyAlertData" v-model="currentTab" :animated="false">
     <TabPane
       v-if="readonlyAlertData"
-      label="告警详情"
+      :label="$t('term.alert.alertdetail')"
       name="info"
       :index="1"
     >
@@ -39,7 +39,7 @@
           </div>
         </div>
         <Divider v-if="hasRole"></Divider>
-        <TsFormItem v-if="hasRole" label="关闭" labelPosition="left">
+        <TsFormItem v-if="hasRole" :label="$t('page.close')" labelPosition="left">
           <div class="action-group">
             <div class="action-item">
               <TsFormRadio
@@ -56,12 +56,12 @@
               :showStatus="true"
               :trueValue="1"
               :falseValue="0"
-              trueText="同时应用子告警"
-              falseText="同时应用子告警"
+              :trueText="$t('term.alert.applychildalert')"
+              :falseText="$t('term.alert.applychildalert')"
             ></TsFormSwitch></div>
           </div>
         </TsFormItem>
-        <TsFormItem v-if="hasRole" label="状态" labelPosition="left">
+        <TsFormItem v-if="hasRole" :label="$t('page.status')" labelPosition="left">
           <div class="action-group">
             <div class="action-item"><Badge :color="alertData.statusColor" :text="alertData.statusName"></Badge></div>
             <div v-if="finalStatusList.length > 0" class="action-item"><Divider style="padding: 0px; margin: 0px" type="vertical"></Divider></div>
@@ -77,14 +77,14 @@
             <div v-if="alertData && alertData.childAlertCount" class="action-item"><TsFormSwitch
               v-model="isChangeChildAlertStatus"
               :showStatus="true"
-              trueText="同时应用子告警"
-              falseText="同时应用子告警"
+              :trueText="$t('term.alert.applychildalert')"
+              :falseText="$t('term.alert.applychildalert')"
               :falseValue="0"
               :trueValue="1"
             ></TsFormSwitch></div>
           </div>
         </TsFormItem>
-        <TsFormItem v-if="hasRole" label="转交处理人" labelPosition="left">
+        <TsFormItem v-if="hasRole" :label="$t('term.alert.transferworker')" labelPosition="left">
           <div class="action-group">
             <div class="action-item"><UserSelect
               v-model="applyUserList"
@@ -98,7 +98,7 @@
             </div>
           </div>
         </TsFormItem>
-        <TsFormItem v-if="hasRole" label="转交处理组" labelPosition="left">
+        <TsFormItem v-if="hasRole" :label="$t('term.alert.transferteam')" labelPosition="left">
           <div class="action-group">
             <div class="action-item"><UserSelect
               v-model="applyTeamList"
@@ -112,7 +112,7 @@
             </div>
           </div>
         </TsFormItem>
-        <TsFormItem v-if="hasRole" label="评论" labelPosition="left">
+        <TsFormItem v-if="hasRole" :label="$t('page.comment')" labelPosition="left">
           <TsCkeditor v-model="comment"></TsCkeditor>
         </TsFormItem>
       </div>
@@ -120,19 +120,19 @@
     <TabPane v-if="alertData.childAlertCount" name="childalert" :label="getChildAlertTabLabel()">
       <AlertList v-if="currentTab === 'childalert'" :fromAlertId="alertData.id"></AlertList>
     </TabPane>
-    <TabPane label="上报数据" name="origin" :index="2">
+    <TabPane :label="$t('term.alert.reportdata')" name="origin" :index="2">
       <AlertOriginal v-if="currentTab === 'origin'" :alertData="alertData"></AlertOriginal>
     </TabPane>
-    <TabPane label="操作记录" name="audit" :index="3">
+    <TabPane :label="$t('page.actionaudit')" name="audit" :index="3">
       <AlertViewAudit v-if="currentTab === 'audit'" :alertData="alertData" :attrList="attrList"></AlertViewAudit>
     </TabPane>
-    <TabPane label="事件记录" name="eventaudit" :index="4">
+    <TabPane :label="$t('term.alert.eventaudit')" name="eventaudit" :index="4">
       <AlertViewEventAudit v-if="currentTab === 'eventaudit'" :alertData="alertData"></AlertViewEventAudit>
     </TabPane>
     <TabPane
       v-if="commentData && commentData.tbodyList && commentData.tbodyList.length > 0"
       :index="5"
-      label="评论"
+      :label="$t('page.comment')"
       name="comment"
     >
       <Timeline>
@@ -163,9 +163,9 @@
     </TabPane>
   </Tabs>
   <Alert v-else-if="!loading" type="error" show-icon>
-    数据异常
+    {{ $t('page.exception') }}
     <span slot="desc">
-      告警不存在或已被删除
+      {{ $t('term.alert.alertnotexists') }}
     </span>
   </Alert>
 </template>
@@ -209,8 +209,8 @@ export default {
       isChangeChildAlertStatus: 1,
       commentData: null,
       applyType: [
-        { value: 'append', text: '追加' },
-        { value: 'replace', text: '替换' }
+        { value: 'append', text: this.$t('page.append') },
+        { value: 'replace', text: this.$t('page.replace') }
       ],
       applyUserList: [],
       applyTeamList: [],
@@ -237,7 +237,7 @@ export default {
   methods: {
     getChildAlertTabLabel() {
       return h => {
-        const returnList = [h('span', { class: 'mr-xs' }, '子告警')];
+        const returnList = [h('span', { class: 'mr-xs' }, this.$t('term.alert.childalert'))];
         let eventCount = 0;
         if (this.alertData && this.alertData.childAlertCount) {
           returnList.push(
@@ -335,7 +335,7 @@ export default {
       let result = false;
       await this.$api.alert.alert.handleAlert(alertData).then(res => {
         if (res.Status === 'OK') {
-          this.$Message.success('操作成功');
+          this.$Message.success(this.$t('message.executesuccess'));
           result = true;
         }
       });

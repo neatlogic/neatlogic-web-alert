@@ -5,15 +5,15 @@
         <span v-if="alertViewData">
           {{ alertViewData.label }}
         </span>
-        <span v-else>所有告警</span>
+        <span v-else>{{ $t('term.alert.allalert') }}</span>
       </template>
       <template v-slot:topLeft>
         <div class="action-group">
           <div class="action-item">
             <TsFormSwitch
               v-model="isAutoRefresh"
-              trueText="自动刷新"
-              falseText="自动刷新"
+              :trueText="$t('page.autorefresh')"
+              :falseText="$t('page.autorefresh')"
               :trueValue="true"
               :falseValue="false"
               :showStatus="true"
@@ -32,8 +32,8 @@
           <div v-if="COMMERCIAL_MODULES.includes('alert') && topoList && topoList.length > 0" class="action-item">
             <TsFormSwitch
               v-model="isShowTopo"
-              trueText="告警拓扑"
-              falseText="告警拓扑"
+              :trueText="$t('term.alert.alerttopo')"
+              :falseText="$t('term.alert.alerttopo')"
               :trueValue="true"
               :falseValue="false"
               :showStatus="true"
@@ -42,7 +42,7 @@
           <div v-if="isShowTopo" class="action-item">
             <Dropdown>
               <span>
-                <span v-if="!topoId">选择拓扑图</span>
+                <span v-if="!topoId">{{ $t('dialog.title.choosetarget',{'target':$t('page.topo')}) }}</span>
                 <span v-else>{{ topoList.find(d => d.id === topoId).name }}</span>
                 <span class="tsfont-drop-down"></span>
               </span>
@@ -63,15 +63,15 @@
                 <span class="tsfont-drop-down"></span>
               </div>
               <DropdownMenu slot="list">
-                <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">关闭选中告警</DropdownItem>
-                <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">打开选中告警</DropdownItem>
+                <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.closeselectedalert') }}</DropdownItem>
+                <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.openselectedalert') }}</DropdownItem>
                 <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">删除选中告警</DropdownItem>
                 <DropdownItem
                   v-if="$AuthUtils.hasRole('ALERT_ADMIN')"
                   divided
                   name="deletematch"
                   :disabled="!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule)"
-                >删除匹配告警</DropdownItem>
+                >{{ $t('term.alert.deletematchalert') }}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </div>
@@ -82,8 +82,12 @@
               size="small"
               type="button"
             >
-              <Radio label="tree"><i class="tsfont-tree"></i></Radio>
-              <Radio label="flat"><i class="tsfont-list"></i></Radio>
+              <Radio label="tree">
+                <Tooltip :content="$t('term.alert.onlysearchparentalert')"><i class="tsfont-tree"></i></Tooltip>
+              </Radio>
+              <Radio label="flat">
+                <Tooltip :content="$t('term.alert.searchallalert')"><i class="tsfont-list"></i></Tooltip>
+              </Radio>
             </RadioGroup>
           </div>
         </div>
@@ -179,7 +183,7 @@
                   </template>
                 </div>
               </div>
-              <div v-else-if="thead.key.startsWith('const_')" :key="index">
+              <div v-else-if="thead.key.startsWith('const_')" :key="'e' + index">
                 <AlertAttrViewer
                   :attr="getAttrByName(thead.key)"
                   :row="row"
@@ -189,7 +193,7 @@
                   @refresh="searchAlert"
                 ></AlertAttrViewer>
               </div>
-              <div v-else-if="thead.key.startsWith('attr_') && row.attrObj" :key="index">
+              <div v-else-if="thead.key.startsWith('attr_') && row.attrObj" :key="'f' + index">
                 <AlertAttrViewer
                   :view="alertViewData"
                   :attr="getAttrByName(thead.key)"
