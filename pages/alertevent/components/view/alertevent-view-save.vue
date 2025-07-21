@@ -9,7 +9,7 @@
     <TsFormItem
       v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0"
       style="margin: 0px !important"
-      label="唯一键"
+      :label="$t('term.alert.uniquekey')"
       labelPosition="left"
     >
       <div>
@@ -19,7 +19,7 @@
     <TsFormItem
       v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0 && configLocal.ruleList && configLocal.ruleList.length > 0"
       style="margin: 0px !important"
-      label="告警特征"
+      :label="$t('term.alert.alertsign')"
       labelPosition="left"
     >
       <TsFormSelect
@@ -37,7 +37,7 @@
     <TsFormItem
       v-if="configLocal.defaultStatus"
       style="margin: 0px !important"
-      label="默认状态"
+      :label="$t('term.alert.defaultstatus')"
       labelPosition="left"
     >
       <div v-if="statusData">
@@ -47,23 +47,25 @@
     <TsFormItem
       v-if="handler.status"
       style="margin: 0px !important"
-      label="处理结果"
+      :label="$t('term.alert.dealresult')"
       labelPosition="left"
-    ><div>
-      <span
-        :class="{
-          'text-success': handler.status === 'succeed',
-          'text-error': handler.status === 'failed'
-        }"
-      >{{ handler.statusName }}
-      </span>
-    </div>
+    >
+      <div>
+        <span
+          :class="{
+            'text-success': handler.status === 'succeed',
+            'text-error': handler.status === 'failed'
+          }"
+        >
+          {{ handler.statusName }}
+        </span>
+      </div>
     </TsFormItem>
     <TsFormItem
       v-if="handler.result && handler.result.alertId"
       style="margin: 0px !important"
       labelPosition="left"
-      label="创建告警"
+      :label="$t('term.alert.createalert')"
     >
       <span class="text-href" @click="showAlert(handler.result.alertId)">{{ handler.result.alertTitle }}</span>
     </TsFormItem>
@@ -71,9 +73,17 @@
       v-if="handler.result && handler.result.fromAlertId"
       style="margin: 0px !important"
       labelPosition="left"
-      label="归并到告警"
+      :label="$t('term.alert.joinalert')"
     >
       <span class="text-href" @click="showAlert(handler.result.fromAlertId)">{{ handler.result.fromAlertTitle }}</span>
+    </TsFormItem>
+    <TsFormItem
+      v-if="handler.error"
+      style="margin: 0px !important"
+      labelPosition="left"
+      :label="$t('page.exception')"
+    >
+      <div class="text-error">{{ handler.error }}</div>
     </TsFormItem>
     <AlertView v-if="isShowAlert" :id="currentAlertId" @close="isShowAlert = false"></AlertView>
   </div>
