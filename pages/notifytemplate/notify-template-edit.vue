@@ -59,7 +59,8 @@ export default {
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror')
   },
   props: {
-    id: { type: Number }
+    id: { type: Number },
+    isCopy: {type: Boolean, default: false}
   },
   data() {
     return {
@@ -100,7 +101,7 @@ export default {
       },
       notifyTemplateData: { isActive: 1 },
       dialogConfig: {
-        title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('page.template') }) : this.$t('dialog.title.addtarget', { target: this.$t('page.template') }),
+        title: this.id ? (this.isCopy ? this.$t('dialog.title.copytarget', {'target': this.$t('page.template')}) : this.$t('dialog.title.edittarget', { target: this.$t('page.template') })) : this.$t('dialog.title.addtarget', { target: this.$t('page.template') }),
         type: 'modal',
         isShow: true,
         width: 'medium'
@@ -127,7 +128,7 @@ export default {
     save() {
       if (this.$refs.mainForm && this.$refs.mainForm.valid()) {
         this.$api.alert.notifytemplate.saveNotifyTemplate(this.notifyTemplateData).then(res => {
-          this.$Message.success('保存成功');
+          this.$Message.success(this.$t('message.savesuccess'));
           this.close(true);
         });
       }
@@ -136,6 +137,10 @@ export default {
       if (this.id) {
         this.$api.alert.notifytemplate.getNotifyTemplateById(this.id).then(res => {
           this.notifyTemplateData = res.Return;
+          if (this.isCopy) {
+            this.notifyTemplateData.name = this.notifyTemplateData.name + '_copy';
+            this.notifyTemplateData.id = null;
+          }
         });
       }
     },

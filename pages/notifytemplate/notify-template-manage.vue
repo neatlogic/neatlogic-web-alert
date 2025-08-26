@@ -20,6 +20,7 @@
           <template slot="action" slot-scope="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
+                <li class="tsfont-copy" @click="copyTemplate(row)">{{ $t('page.copy') }}</li>
                 <li class="tsfont-edit" @click="editTemplate(row)">{{ $t('page.edit') }}</li>
                 <li class="tsfont-trash-o" @click="deleteTemplate(row)">{{ $t('page.delete') }}</li>
               </ul>
@@ -28,7 +29,12 @@
         </TsTable>
       </template>
     </TsContain>
-    <TemplateEdit v-if="isEditTemplate" :id="currentTemplateId" @close="closeEdit"></TemplateEdit>
+    <TemplateEdit
+      v-if="isEditTemplate"
+      :id="currentTemplateId"
+      :isCopy="isCopy"
+      @close="closeEdit"
+    ></TemplateEdit>
   </div>
 </template>
 <script>
@@ -45,6 +51,7 @@ export default {
       currentTemplateId: null,
       searchParam: {},
       notifyTemplateData: null,
+      isCopy: false,
       theadList: [
         {
           key: 'name',
@@ -71,15 +78,24 @@ export default {
   methods: {
     closeEdit(needRefresh) {
       this.isEditTemplate = false;
+      this.isCopy = false;
       this.currentTemplateId = null;
       if (needRefresh) {
         this.searchNotifyTemplate();
       }
     },
+    copyTemplate(template) {
+      if (template) {
+        this.currentTemplateId = template.id;
+      }
+      this.isCopy = true;
+      this.isEditTemplate = true;
+    },
     editTemplate(template) {
       if (template) {
         this.currentTemplateId = template.id;
       }
+      this.isCopy = false;
       this.isEditTemplate = true;
     },
     deleteTemplate(template) {
