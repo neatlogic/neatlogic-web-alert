@@ -9,6 +9,7 @@ import status from './alertstatus/alertstatus.js';
 import rule from './alertrule/alertrule.js';
 import catalog from './alertcatalog/alertcatalog.js';
 import source from './alertsource/alertsource.js';
+import alerttrash from './alert/alerttrash.js';
 
 export default {
   alerttype,
@@ -20,5 +21,6 @@ export default {
   status,
   rule,
   catalog,
-  source
+  source,
+  alerttrash
 };

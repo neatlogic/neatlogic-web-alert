@@ -73,7 +73,7 @@ export default {
         { key: 'typeName', title: this.$t('page.type') },
         { key: 'enumCount', title: this.$t('term.knowledge.member') },
         { key: 'isActive', title: this.$t('term.report.isactive') },
-        { key: 'isTop', title: this.$t('term.alert.istop') },
+        { key: 'isTop', title: this.$t('term.alert.istop'), tooltip: '置顶属性会出现在默认的结果列表和搜索条件中' },
         { key: 'isNormal', title: this.$t('term.alert.isnormalattr') },
         { key: 'action', title: '' }
       ],

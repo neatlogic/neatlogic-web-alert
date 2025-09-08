@@ -15,6 +15,9 @@ const ruleManage = () => import('@/community-module/alert/pages/alertrule/alertr
 const eventPluginManage = () => import('@/community-module/alert/pages/alertevent/eventplugin-manage.vue');
 const catalogManage = () => import('@/community-module/alert/pages/alertcatalog/catalog-manage.vue');
 const sourceManage = () => import('@/community-module/alert/pages/alertsource/alertsource-manage.vue');
+const alertTrashManage = () => import('@/community-module/alert/pages/alerttrash/alert-trash-manage.vue');
+//const alertTrashDetail = () => import('@/community-module/alert/pages/alerttrash/alert-trash-detail.vue');
+
 import { config } from './config.js';
 let routerArr = [
   {
@@ -89,6 +92,29 @@ let routerArr = [
       authority: 'ALERT_BASE'
     }
   },
+  {
+    path: '/alert-trash-manage',
+    name: 'alert-trash-manage',
+    component: alertTrashManage,
+    meta: {
+      title: '已删除告警',
+      ismenu: true,
+      icon: 'tsfont-trash-o',
+      type: 'alert',
+      authority: 'ALERT_BASE'
+    }
+  },
+  /*{
+    path: '/alert-trash-detail/:id?',
+    name: 'alert-trash-detail',
+    component: alertTrashDetail,
+    meta: {
+      title: '告警详情',
+      ismenu: false,
+      type: 'alert',
+      authority: 'ALERT_BASE'
+    }
+  },*/
   {
     path: '/alertevent-manage/:typeId?',
     name: 'alertevent-manage',
