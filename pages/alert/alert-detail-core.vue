@@ -25,7 +25,7 @@
                   :value="readonlyAlertData[attr.name.replace('const_', '')]"
                 ></AlertAttrViewer>
               </span>
-              <span v-else-if="attr.kind === 'attr' && readonlyAlertData.attrObj ">
+              <span v-else-if="attr.kind === 'attr' && readonlyAlertData.attrObj">
                 <AlertAttrViewer
                   v-if="readonlyAlertData.attrObj.hasOwnProperty(attr.name.replace('attr_', ''))"
                   type="attr"
@@ -117,21 +117,42 @@
         </TsFormItem>
       </div>
     </TabPane>
-    <TabPane v-if="alertData.childAlertCount" name="childalert" :label="getChildAlertTabLabel()">
+    <TabPane
+      v-for="(attr, index) in tabAttrList"
+      :key="'tab_' + index"
+      :name="'attr_' + attr.id"
+      :label="attr.label"
+      :index="index + 10"
+    >
+      <AlertAttrViewer
+        v-if="readonlyAlertData.attrObj.hasOwnProperty(attr.name.replace('attr_', ''))"
+        type="attr"
+        mode="detail"
+        :row="readonlyAlertData"
+        :attr="attr"
+        :value="readonlyAlertData.attrObj[attr.name.replace('attr_', '')]"
+      ></AlertAttrViewer>
+    </TabPane>
+    <TabPane
+      v-if="alertData.childAlertCount"
+      name="childalert"
+      :label="getChildAlertTabLabel()"
+      :index="100"
+    >
       <AlertList v-if="currentTab === 'childalert'" :fromAlertId="alertData.id"></AlertList>
     </TabPane>
-    <TabPane :label="$t('term.alert.reportdata')" name="origin" :index="2">
+    <TabPane :label="$t('term.alert.reportdata')" name="origin" :index="101">
       <AlertOriginal v-if="currentTab === 'origin'" :alertData="alertData"></AlertOriginal>
     </TabPane>
-    <TabPane :label="$t('page.actionaudit')" name="audit" :index="3">
+    <TabPane :label="$t('page.actionaudit')" name="audit" :index="102">
       <AlertViewAudit v-if="currentTab === 'audit'" :alertData="alertData" :attrList="attrList"></AlertViewAudit>
     </TabPane>
-    <TabPane :label="$t('term.alert.eventaudit')" name="eventaudit" :index="4">
+    <TabPane :label="$t('term.alert.eventaudit')" name="eventaudit" :index="103">
       <AlertViewEventAudit v-if="currentTab === 'eventaudit'" :alertData="alertData"></AlertViewEventAudit>
     </TabPane>
     <TabPane
       v-if="commentData && commentData.tbodyList && commentData.tbodyList.length > 0"
-      :index="5"
+      :index="104"
       :label="$t('page.comment')"
       name="comment"
     >
@@ -296,15 +317,18 @@ export default {
 
     async getAlertById() {
       if (this.id) {
-        await this.$api.alert.alert.getAlertById(this.id).then(res => {
-          this.alertData = res.Return;
-          this.readonlyAlertData = this.$utils.deepClone(this.alertData);
-          /*if (this.alertData) {
+        await this.$api.alert.alert
+          .getAlertById(this.id)
+          .then(res => {
+            this.alertData = res.Return;
+            this.readonlyAlertData = this.$utils.deepClone(this.alertData);
+            /*if (this.alertData) {
             this.getAlertTypeById(this.alertData.type);
           }*/
-        }).finally(() => {
-          this.loading = false;
-        });
+          })
+          .finally(() => {
+            this.loading = false;
+          });
       }
     },
     /*async getAlertTypeById(id) {
@@ -369,13 +393,24 @@ export default {
       }
       return false;
     },
+    tabAttrList() {
+      const attrList = [];
+      if (this.attrList && this.attrList.length > 0) {
+        this.attrList.forEach(d => {
+          if (d.isTab) {
+            attrList.push(d);
+          }
+        });
+      }
+      return attrList;
+    },
     finalAttrList() {
       const attrList = [];
-      if (this.attrList && this.attrList.length > 0 /*&& this.alertTypeData*/) {
+      if (this.attrList && this.attrList.length > 0) {
         this.attrList.forEach(d => {
           if (d.kind === 'const') {
             attrList.push(d);
-          } else if (this.alertData && this.alertData.attrObj && this.alertData.attrObj.hasOwnProperty(d.name.replace('attr_', ''))) {
+          } else if (!d.isTab && this.alertData && this.alertData.attrObj && this.alertData.attrObj.hasOwnProperty(d.name.replace('attr_', ''))) {
             //没有值的扩展属性不显示
             attrList.push(d);
           }

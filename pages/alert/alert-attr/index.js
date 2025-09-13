@@ -12,3 +12,4 @@ export { default as const_source } from '@/community-module/alert/pages/alert/al
 export { default as attr_text } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-text.vue';
 export { default as attr_number } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-number.vue';
 export { default as attr_datetime } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-datetime.vue';
+export { default as attr_html } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-html.vue';

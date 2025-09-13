@@ -56,6 +56,18 @@ export default {
           trueValue: 1,
           falseValue: 0
         },
+        isRow: {
+          label: this.$t('term.alert.iswholerow'),
+          type: 'switch',
+          trueValue: 1,
+          falseValue: 0
+        },
+        isTab: {
+          label: this.$t('term.alert.istab'),
+          type: 'switch',
+          trueValue: 1,
+          falseValue: 0
+        },
         type: {
           type: 'select',
           label: this.$t('page.type'),

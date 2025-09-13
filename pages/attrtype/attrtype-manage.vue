@@ -30,6 +30,14 @@
             <span v-if="row.isTop" class="text-success">{{ $t('page.yes') }}</span>
             <span v-else class="text-grey">{{ $t('page.no') }}</span>
           </template>
+          <template v-slot:isRow="{ row }">
+            <span v-if="row.isRow" class="text-success">{{ $t('page.yes') }}</span>
+            <span v-else class="text-grey">{{ $t('page.no') }}</span>
+          </template>
+          <template v-slot:isTab="{ row }">
+            <span v-if="row.isTab" class="text-success">{{ $t('page.yes') }}</span>
+            <span v-else class="text-grey">{{ $t('page.no') }}</span>
+          </template>
           <template v-slot:enumCount="{ row }">
             <Badge v-if="row.type === 'enum'" :count="row.enumCount" type="primary"></Badge>
             <div v-else></div>
@@ -74,6 +82,8 @@ export default {
         { key: 'enumCount', title: this.$t('term.knowledge.member') },
         { key: 'isActive', title: this.$t('term.report.isactive') },
         { key: 'isTop', title: this.$t('term.alert.istop'), tooltip: '置顶属性会出现在默认的结果列表和搜索条件中' },
+        { key: 'isRow', title: this.$t('term.alert.iswholerow') },
+        { key: 'isTab', title: this.$t('term.alert.istab') },
         { key: 'isNormal', title: this.$t('term.alert.isnormalattr') },
         { key: 'action', title: '' }
       ],
@@ -109,6 +119,15 @@ export default {
             ],
             name: 'isTop',
             label: this.$t('term.alert.istop')
+          },
+          {
+            type: 'radio',
+            dataList: [
+              { value: 1, text: this.$t('page.yes') },
+              { value: 0, text: this.$t('page.no') }
+            ],
+            name: 'isRow',
+            label: this.$t('term.alert.iswholerow')
           },
           {
             type: 'radio',

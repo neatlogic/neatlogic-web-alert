@@ -39,7 +39,7 @@
                 <div>
                   <span class="tsfont-drag" style="cursor: move"></span>
                   <span>
-                    <b class="text-grey">{{ hindex+1 }}.{{ selectedHandler.name }}</b>
+                    <b class="text-grey">{{ hindex + 1 }}.{{ selectedHandler.name }}</b>
                   </span>
                 </div>
                 <component
@@ -132,8 +132,7 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    changeSort(condition) {
-    },
+    changeSort(condition) {},
     selectedHandlerList(condition) {
       if (condition.handler) {
         if (Array.isArray(condition.handler)) {
@@ -179,7 +178,7 @@ export default {
       });
     },
     listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList().then(res => {
+      this.$api.alert.alert.listAlertAttrList({ isCondition: 1 }).then(res => {
         this.attrList = res.Return;
       });
     },

@@ -94,7 +94,7 @@ export default {
       return [];
     },
     listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList().then(res => {
+      this.$api.alert.alert.listAlertAttrList({ isCondition: 1 }).then(res => {
         this.attrList = res.Return;
       });
     }
@@ -105,7 +105,7 @@ export default {
       if (this.mode === 'audit') {
         return this.handler.result.conditionList;
       } else {
-        return this.configLocal.conditionList; 
+        return this.configLocal.conditionList;
       }
     }
   },
