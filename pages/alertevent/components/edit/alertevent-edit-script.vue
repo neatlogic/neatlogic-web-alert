@@ -23,6 +23,7 @@
               <strong>O</strong>
               ，转换后数据的变量为
               <strong>N</strong>，默认情况下N和O数据相同。 <span class="text-error">注意：</span>如果上一个事件插件（包括父插件）存在返回值，请通过<b>O.prevEventResult</b>获取。
+              父告警（如果有）数据的变量为<strong>O.parentAlert</strong>，可以通过O.parentAlert.xxx的方式获取父告警属性，如果没有父告警，O.parentAlert.xxx将会返回空值。
             </dt>
             <dt>
               2、范例
