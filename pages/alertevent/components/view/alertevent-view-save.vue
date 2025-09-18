@@ -45,6 +45,13 @@
       </div>
     </TsFormItem>
     <TsFormItem
+      v-if="configLocal.serialSave"
+      style="margin: 0px !important"
+      :label="$t('term.alert.serialsave')"
+      labelPosition="left"
+    ><span class="text-success">{{ $t('page.yes') }}</span>
+    </TsFormItem>
+    <TsFormItem
       v-if="handler.status"
       style="margin: 0px !important"
       :label="$t('term.alert.dealresult')"

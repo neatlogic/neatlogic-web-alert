@@ -34,7 +34,7 @@
         帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。
       </div>
     </TsFormItem>
-    <TsFormItem label="默认状态" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.defaultstatus')" labelPosition="left">
       <TsFormSelect
         v-model="configLocal.defaultStatus"
         :dataList="statusList"
@@ -42,7 +42,15 @@
         textName="label"
         :transfer="true"
       ></TsFormSelect>
-      <div class="text-grey">帮助：告警事件创建时的默认状态</div>
+      <div class="text-grey">帮助：告警事件创建时的默认状态。</div>
+    </TsFormItem>
+    <TsFormItem :label="$t('term.alert.serialsave')" labelPosition="left">
+      <TsFormSwitch
+        v-model="configLocal.serialSave"
+        :trueValue="true"
+        :falseValue="false"
+      ></TsFormSwitch>
+      <div class="text-grey">帮助：唯一键相同的告警串行保存，避免唯一键相同的告警同时保存时，出现父子关系不正常的现象。</div>
     </TsFormItem>
   </div>
 </template>
@@ -54,7 +62,8 @@ export default {
   components: {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox'),
-    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
+    TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch')
   },
   extends: AlertEventBase,
   props: {},
