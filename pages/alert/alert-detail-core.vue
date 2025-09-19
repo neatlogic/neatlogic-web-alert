@@ -397,7 +397,7 @@ export default {
       const attrList = [];
       if (this.attrList && this.attrList.length > 0) {
         this.attrList.forEach(d => {
-          if (d.isTab) {
+          if (d.isTab && this.readonlyAlertData.attrObj[d.name.replace('attr_', '')]) {
             attrList.push(d);
           }
         });
