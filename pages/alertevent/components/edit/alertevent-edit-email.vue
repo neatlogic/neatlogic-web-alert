@@ -24,9 +24,9 @@
     <TsFormItem label="">
       <TsFormRadio v-model="configLocal.type" :dataList="typeList"></TsFormRadio>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.type === 'custom'" label="可选属性" labelPosition="left">
+    <TsFormItem v-if="configLocal.type === 'custom'" :label="$t('term.cmdb.selectedattr')" labelPosition="left">
       <div>
-        <span class="mr-xs text-grey">点击复制属性</span>
+        <span class="mr-xs text-grey">{{ $t('term.alert.clickcopyattr') }}</span>
         <Tag
           v-for="(attr, index) in attrList"
           :key="index"
@@ -40,20 +40,20 @@
     <TsFormItem
       v-if="configLocal.type === 'custom'"
       :required="true"
-      label="标题"
+      :label="$t('page.title')"
       labelPosition="left"
     >
       <TsFormInput
         ref="txtTitle"
         v-model="configLocal.title"
-        :validateList="['required']"
+        :validateList="[{ name: 'required', message: ' ' }]"
         border="border"
       ></TsFormInput>
     </TsFormItem>
     <TsFormItem
       v-if="configLocal.type === 'custom'"
       :required="true"
-      label="内容"
+      :label="$t('page.content')"
       labelPosition="left"
     >
       <div>
@@ -79,15 +79,17 @@
     </TsFormItem>
     <TsFormItem
       v-if="configLocal.type === 'template'"
-      label="模板"
+      :label="$t('page.template')"
       :required="true"
       labelPosition="left"
     >
       <TsFormSelect
+        ref="sltTemplate"
         v-model="configLocal.template"
         dynamicUrl="/api/rest/alert/notifytemplate/search"
         transfer
         border="border"
+        :validateList="[{ name: 'required', message: ' ' }]"
         :params="{ isActive: 1 }"
         rootName="tbodyList"
         valueName="id"
@@ -98,13 +100,13 @@
       <UserSelect
         ref="sltToUser"
         v-model="configLocal.toUserList"
-        :validateList="['required']"
+        :validateList="[{ name: 'required', message: ' ' }]"
         :multiple="true"
         :transfer="true"
         :groupList="['alertUserType', 'user', 'team']"
       ></UserSelect>
     </TsFormItem>
-    <TsFormItem labelPosition="left" label="抄送">
+    <TsFormItem labelPosition="left" :label="$t('term.alert.cc')">
       <UserSelect
         v-model="configLocal.ccUserList"
         :multiple="true"
@@ -112,7 +114,7 @@
         :groupList="['alertUserType', 'user', 'team']"
       ></UserSelect>
     </TsFormItem>
-    <TsFormItem label="通知间隔" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.alertinterval')" labelPosition="left">
       <TsFormInput
         v-model="configLocal.interval"
         type="number"
@@ -178,10 +180,6 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    changeType(type) {
-      this.$set(this.configLocal, 'type', type);
-      console.log(this.configLocal);
-    },
     clipboardSuc() {
       this.$Message.success(this.$t('message.copysuccess'));
     },
@@ -189,6 +187,7 @@ export default {
       const txtTitle = this.$refs['txtTitle'];
       const sltToUser = this.$refs['sltToUser'];
       const txtContent = this.$refs['txtContent'];
+      const sltTemplate = this.$refs['sltTemplate'];
       let isValid = true;
       if (txtTitle && !txtTitle.valid()) {
         isValid = false;
@@ -197,6 +196,9 @@ export default {
         isValid = false;
       }
       if (txtContent && !txtContent.valid()) {
+        isValid = false;
+      }
+      if (sltTemplate && !sltTemplate.valid()) {
         isValid = false;
       }
       return isValid;

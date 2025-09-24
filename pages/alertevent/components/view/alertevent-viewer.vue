@@ -10,7 +10,6 @@
       :mode="mode"
       :alertData="alertData"
     ></component>
-    <div v-else>插件{{ eventHandlerData.handler }}不存在</div>
   </div>
 </template>
 <script>
