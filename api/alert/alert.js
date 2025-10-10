@@ -1,6 +1,10 @@
 import axios from '@/resources/api/http.js';
 
 const alert = {
+  //获取ALERT的视图列表
+  updateAlertMenu() {
+    return axios.post('/api/rest/alert/view/list', {});
+  },
   getAlertViewById(id) {
     return axios.post('/api/rest/alert/view/get', { id: id });
   },
