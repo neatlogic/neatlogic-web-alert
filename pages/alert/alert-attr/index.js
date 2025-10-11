@@ -8,6 +8,7 @@ export { default as const_status } from '@/community-module/alert/pages/alert/al
 export { default as const_userList } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-userlist.vue';
 export { default as const_teamList } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-teamlist.vue';
 export { default as const_source } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-source.vue';
+export { default as const_markList } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-markList.vue';
 //自定义属性是根据类型分类
 export { default as attr_text } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-text.vue';
 export { default as attr_number } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-number.vue';

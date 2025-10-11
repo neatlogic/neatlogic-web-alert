@@ -7,7 +7,7 @@
       <template v-slot:topLeft>
         <div v-if="alertTypeData" class="action-group">
           <div class="action-item">
-            <span class="text-grey mr-xs">告警类型</span>
+            <span class="text-grey mr-xs">{{ $t('term.alert.alerttype') }}</span>
             <span>
               <b class="text-grey">{{ alertTypeData.label }}</b>
             </span>
@@ -49,7 +49,7 @@
                 <div class="border-base padding-md radius-md mb-md bg-op">
                   <div class="text-grey">
                     <h3 class="cursor" :class="{ 'tsfont-drop-right': !isShowStep(eventhandler), 'tsfont-drop-down': isShowStep(eventhandler) }" @click="toggleStep(eventhandler)">
-                      <span v-if="!eventhandler.isActive"><Tag color="error">已禁用</Tag></span>
+                      <span v-if="!eventhandler.isActive"><Tag color="error">{{ $t('page.ban') }}</Tag></span>
                       <span :class="eventhandler.handlerIcon">{{ eventhandler.name }}</span>
                       <span v-if="eventhandler.isAsync" class="ml-sm"><Tag color="warning">异步</Tag></span>
                     </h3>
@@ -75,21 +75,23 @@
                   word-wrap
                   transfer
                   placement="top"
-                  width="400"
+                  width="500"
                 >
                   <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget', { target: $t('page.plugins') }) }}</a>
                   <div slot="content" class="api">
-                    <div v-for="(plugin, hindex) in pluginList" :key="hindex" @click="addPlugin(plugin)">
-                      <div class="plugin-grid cursor padding-sm radius-sm plugin-item">
-                        <div><i class="fz20 text-primary" :class="plugin.icon"></i></div>
-                        <div>
-                          <span class="mr-sm">
-                            <b>{{ plugin.label }}</b>
-                          </span>
-                          <span class="text-grey">{{ plugin.description }}</span>
+                    <div style="max-height: 300px; overflow: auto !important">
+                      <div v-for="(plugin, hindex) in pluginList" :key="hindex" @click="addPlugin(plugin)">
+                        <div class="plugin-grid cursor padding-sm radius-sm plugin-item">
+                          <div><i class="fz20 text-primary" :class="plugin.icon"></i></div>
+                          <div>
+                            <span class="mr-sm">
+                              <b>{{ plugin.label }}</b>
+                            </span>
+                            <span class="text-grey">{{ plugin.description }}</span>
+                          </div>
                         </div>
+                        <Divider v-if="hindex < pluginList.length - 1" style="margin: 0px"></Divider>
                       </div>
-                      <Divider v-if="hindex < pluginList.length - 1" style="margin: 0px"></Divider>
                     </div>
                   </div>
                 </Poptip>

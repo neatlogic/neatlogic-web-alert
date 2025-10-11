@@ -10,6 +10,7 @@ import rule from './alertrule/alertrule.js';
 import catalog from './alertcatalog/alertcatalog.js';
 import source from './alertsource/alertsource.js';
 import alerttrash from './alert/alerttrash.js';
+import alertmark from './alertmark/alertmark.js';
 
 export default {
   alerttype,
@@ -22,5 +23,6 @@ export default {
   rule,
   catalog,
   source,
-  alerttrash
+  alerttrash,
+  alertmark
 };

@@ -150,6 +150,7 @@
         <div v-else>
           <TsTable
             v-if="finalTheadList && finalTheadList.length > 0"
+            :sortList="sortList"
             :multiple="true"
             :value="selectList"
             v-bind="alertData"
@@ -161,6 +162,7 @@
             @getSelected="getSelected"
             @changeCurrent="searchAlert"
             @changePageSize="changePageSize"
+            @updateSort="updateSort"
           >
             <template v-for="(thead, index) in finalTheadList" :slot="thead.key" slot-scope="{ row }">
               <div v-if="thead.key === 'const_attrObj'" :key="index">
@@ -310,7 +312,8 @@ export default {
       topoId: null,
       topoAlertSize: 1000, //告警拓扑默认查询数据量
       childAlertPage: {}, //记录子告警分页信息
-      finalSearchParam: null //最后的搜索参数，用于批量删除
+      finalSearchParam: null, //最后的搜索参数，用于批量删除
+      sortData: {}
     };
   },
   beforeCreate() {},
@@ -357,6 +360,10 @@ export default {
   },
   destroyed() {},
   methods: {
+    updateSort(sort) {
+      this.sortData = sort;
+      this.searchAlert();
+    },
     dropdownClick(name) {
       if (name === 'close') {
         this.batchClose();
@@ -657,6 +664,9 @@ export default {
       } else {
         finalParam = { ...this.searchParam, attrFilterList: attrFilterList, ...param };
       }
+      if (!this.$utils.isEmptyObj(this.sortData)) {
+        finalParam.sortData = this.sortData;
+      }
       this.finalSearchParam = {};
       Object.assign(this.finalSearchParam, finalParam);
       await this.$api.alert.alert
@@ -714,6 +724,13 @@ export default {
       let list = [];
       if (this.alertData && this.alertData.theadList) {
         list = this.alertData.theadList;
+      }
+      return list;
+    },
+    sortList() {
+      let list = [];
+      if (this.alertData && this.alertData.theadList) {
+        list = this.alertData.theadList.filter(d => d.sort).map(d => d.key);
       }
       return list;
     },

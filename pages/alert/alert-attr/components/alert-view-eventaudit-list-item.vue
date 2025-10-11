@@ -81,6 +81,8 @@ export default {
         return 'error';
       } else if (audit.status === 'skipped') {
         return 'warning';
+      } else if (audit.status === 'suppress') {
+        return 'normal';
       } else {
         return 'primary';
       }

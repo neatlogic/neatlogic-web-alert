@@ -63,7 +63,7 @@
                   width="400"
                 >
                   <a href="javascript:void(0)" class="tsfont-plus">{{ $t('dialog.title.addtarget', { target: $t('page.plugins') }) }}</a>
-                  <div slot="content" class="api">
+                  <div slot="content" class="api" style="max-height: 300px; overflow: auto !important">
                     <div
                       v-for="(plugin, hindex) in pluginList"
                       :key="hindex"

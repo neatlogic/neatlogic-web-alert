@@ -84,6 +84,18 @@
             ></TsFormSwitch></div>
           </div>
         </TsFormItem>
+        <TsFormItem v-if="hasRole" :label="$t('page.tag')" labelPosition="left">
+          <TsFormSelect
+            v-model="alertData.markNameList"
+            dynamicUrl="/api/rest/alert/mark/search"
+            transfer
+            :multiple="true"
+            :allowCreate="true"
+            valueName="name"
+            textName="name"
+            border="border"
+          ></TsFormSelect>
+        </TsFormItem>
         <TsFormItem v-if="hasRole" :label="$t('term.alert.transferworker')" labelPosition="left">
           <div class="action-group">
             <div class="action-item"><UserSelect
@@ -204,7 +216,8 @@ export default {
     TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue'),
-    AlertList: () => import('@/community-module/alert/pages/alert/alert-list.vue')
+    AlertList: () => import('@/community-module/alert/pages/alert/alert-list.vue'),
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
   },
   props: {
     id: { type: Number }
@@ -235,6 +248,7 @@ export default {
       ],
       applyUserList: [],
       applyTeamList: [],
+      markList: [],
       applyUserType: 'replace',
       applyTeamType: 'replace'
     };

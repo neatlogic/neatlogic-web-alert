@@ -1,18 +1,17 @@
 <template>
   <div v-if="mode !== 'audit'">
-    <div v-if="row.teamList && row.teamList.length > 0">
-      <span v-for="(team, index) in row.teamList" :key="index" class="mr-xs">
-        <Tag>{{ team.teamName }}</Tag>
+    <div v-if="row.markList && row.markList.length > 0">
+      <span v-for="(mark, index) in row.markList" :key="index" class="mr-xs">
+        <Tag>{{ mark.name }}</Tag>
       </span>
     </div>
     <div v-else class="text-grey">-</div>
   </div>
-  <div v-else-if="mode === 'audit'">
-    {{ teamList }}
-    <div v-if="teamList && teamList.length > 0">
-      <Tag v-for="(team, index) in teamList" :key="index">
-        {{ team.name }}
-      </Tag>
+  <div v-else-if="mode === 'audit' ">
+    <div v-if="markList && markList.length > 0">
+      <span v-for="(mark, index) in markList" :key="index" class="mr-xs">
+        <Tag>{{ mark.name }}</Tag>
+      </span>
     </div>
     <div v-else class="text-grey">-</div>
   </div>
@@ -21,18 +20,16 @@
 import { AttrViewerBase } from '@/community-module/alert/pages/alert/alert-attr/alertattr-base.js';
 export default {
   name: '',
-  components: {},
+  components: { },
   extends: AttrViewerBase,
   props: {},
   data() {
     return {
-      teamList: []
+      markList: []
     };
   },
   beforeCreate() {},
-  created() {
-    this.getTeamByIdList();
-  },
+  created() {},
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -42,10 +39,10 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
-    getTeamByIdList() {
+    getMarkByNameList() {
       if (this.mode === 'audit' && this.value && this.value.length > 0) {
-        this.$api.framework.team.getTeamListByUuid({ teamUuidList: this.value }).then(res => {
-          this.teamList = res.Return.teamList;
+        this.$api.alert.alertmark.getMarkByNameList(this.value).then(res => {
+          this.markList = res.Return;
         });
       }
     }
