@@ -16,6 +16,7 @@ const eventPluginManage = () => import('@/community-module/alert/pages/alerteven
 const catalogManage = () => import('@/community-module/alert/pages/alertcatalog/catalog-manage.vue');
 const sourceManage = () => import('@/community-module/alert/pages/alertsource/alertsource-manage.vue');
 const alertTrashManage = () => import('@/community-module/alert/pages/alerttrash/alert-trash-manage.vue');
+const alertMarkManage = () => import('@/community-module/alert/pages/alertmark/alertmark-manage.vue');
 //const alertTrashDetail = () => import('@/community-module/alert/pages/alerttrash/alert-trash-detail.vue');
 
 import { config } from './config.js';
@@ -231,7 +232,20 @@ let routerArr = [
       ismenu: false,
       authority: 'ALERT_VIEW_MODIFY'
     }
+  },
+  {
+    path: '/alertmark-manage',
+    name: 'alertmark-manage',
+    component: alertMarkManage,
+    meta: {
+      title: '告警标签管理',
+      ismenu: true,
+      icon: 'tsfont-tags',
+      type: 'alertmanage',
+      authority: 'ALERT_MARK_MODIFY'
+    }
   }
+
 ];
 
 import ComponentManager from '@/resources/import/component-manager.js';

@@ -2,7 +2,8 @@
   <div v-if="mode !== 'audit'">
     <div v-if="row.markList && row.markList.length > 0">
       <span v-for="(mark, index) in row.markList" :key="index" class="mr-xs">
-        <Tag>{{ mark.name }}</Tag>
+        <Tag v-if="mark.style" :color="mark.style">{{ mark.name }}</Tag>
+        <Tag v-else>{{ mark.name }}</Tag>
       </span>
     </div>
     <div v-else class="text-grey">-</div>
@@ -10,7 +11,8 @@
   <div v-else-if="mode === 'audit' ">
     <div v-if="markList && markList.length > 0">
       <span v-for="(mark, index) in markList" :key="index" class="mr-xs">
-        <Tag>{{ mark.name }}</Tag>
+        <Tag v-if="mark.style" :color="mark.style">{{ mark.name }}</Tag>
+        <Tag v-else>{{ mark.name }}</Tag>
       </span>
     </div>
     <div v-else class="text-grey">-</div>
