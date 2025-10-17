@@ -194,6 +194,14 @@
         @on-change="searchAlertComment"
       /></div>
     </TabPane>
+    <TabPane
+      v-if="COMMERCIAL_MODULES.includes('alert')"
+      :index="200"
+      label="AI分析"
+      name="ai"
+    >
+      <component :is="alertAiTitle" v-if="currentTab === 'ai' && readonlyAlertData.title" :content="readonlyAlertData.title"></component>
+    </TabPane>
   </Tabs>
   <Alert v-else-if="!loading" type="error" show-icon>
     {{ $t('page.exception') }}
@@ -203,6 +211,8 @@
   </Alert>
 </template>
 <script>
+import ComponentManager from '@/resources/import/component-manager.js';
+
 export default {
   name: '',
   components: {
@@ -224,6 +234,8 @@ export default {
   },
   data() {
     return {
+      COMMERCIAL_MODULES: COMMERCIAL_MODULES,
+      alertAiTitle: null,
       loading: true,
       currentTab: 'info',
       alertData: null,
@@ -253,8 +265,13 @@ export default {
       applyTeamType: 'replace'
     };
   },
-  beforeCreate() {},
+  beforeCreate() {
+
+  },
   async created() {
+    if (this.COMMERCIAL_MODULES.includes('alert')) {
+      this.alertAiTitle = ComponentManager.getVueTemplate('alert-ai-title');
+    }
     this.listAllStatus();
     this.listAlertAttrList();
     await this.getAlertById();
