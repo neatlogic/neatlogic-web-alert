@@ -5,7 +5,8 @@
         <span v-auth="['ALERT_ADMIN']"><AuditConfig auditName="ALERT-ORIGIN" help="不设置代表不自动清理接入记录。系统只会清理没有生成告警的接入记录，已经生成告警的接入记录只能跟随告警一起删除"></AuditConfig></span>
       </template>
       <template v-slot:topRight>
-        <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlertOrigin(1)"></CombineSearcher>
+        <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlertOrigin(1)">
+        </CombineSearcher>
       </template>
       <template v-slot:content>
         <TsTable v-bind="alertOriginData" :theadList="theadList" @changeCurrent="searchAlertOrigin">
@@ -34,7 +35,7 @@
                 v-html="c"
               ></div>
             </div>
-            <div v-else-if="row.error" class="div-content text-error" style="max-width:500px;white-space:normal">{{ row.error }}</div>
+            <div v-else-if="row.error" class="div-content text-error" style="max-width: 500px; white-space: normal">{{ row.error }}</div>
             <span v-else>-</span>
           </template>
           <template v-slot:action="{ row }">
@@ -92,6 +93,15 @@ export default {
             transfer: true,
             dynamicUrl: '/api/rest/alert/alerttype/search',
             rootName: 'tbodyList',
+            valueName: 'name',
+            textName: 'label'
+          },
+          {
+            type: 'select',
+            label: '适配器',
+            name: 'adaptor',
+            transfer: true,
+            url: '/api/rest/alert/adaptorname/list',
             valueName: 'name',
             textName: 'label'
           },
@@ -157,7 +167,8 @@ export default {
   },
   filter: {},
   computed: {},
-  watch: {}
+  watch: {
+  }
 };
 </script>
 <style lang="less" scoped>
