@@ -32,7 +32,7 @@
           <a class="alert-menu-a tsfont-monitor" @click="goTo('/alert-manage')">
             <span class="alert-name overflow">所有告警</span>
             <span v-if="alertCount > 0" class="text-error ml-xs superscript">
-              <b>{{ alertCount > 99 ? '99+' : alertCount }}</b>
+              <b>{{ alertCount }}</b>
             </span>
           </a>
         </div>
@@ -60,7 +60,7 @@
               <a class="ml-lg alert-menu-a" @click="goTo('/alert-manage/' + view.name)">
                 <span class="alert-name overflow">{{ view.label }}</span>
                 <span v-if="alertCount > 0" class="text-error ml-xs superscript">
-                  <b>{{ view.alertCount > 99 ? '99+' : view.alertCount }}</b>
+                  <b>{{ view.alertCount }}</b>
                 </span>
               </a>
             </div>
