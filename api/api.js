@@ -11,6 +11,7 @@ import catalog from './alertcatalog/alertcatalog.js';
 import source from './alertsource/alertsource.js';
 import alerttrash from './alert/alerttrash.js';
 import alertmark from './alertmark/alertmark.js';
+import alerteventhandlertype from './alertevent/alerteventhandlertype.js';
 
 export default {
   alerttype,
@@ -24,5 +25,6 @@ export default {
   catalog,
   source,
   alerttrash,
-  alertmark
+  alertmark,
+  alerteventhandlertype
 };

@@ -30,16 +30,17 @@
         </div>
         <div class="link alert-menu-link" :class="{ active: $isMenuActive('/alert-manage') }" @click="goTo('/alert-manage')">
           <a class="alert-menu-a tsfont-monitor" @click="goTo('/alert-manage')">
-            <span class="alert-name overflow">所有告警</span>
+            <span class="alert-name">所有告警</span>
             <span v-if="alertCount > 0" class="text-error ml-xs superscript">
               <b>{{ alertCount }}</b>
             </span>
           </a>
         </div>
         <div v-for="catalog in alertCatalogList" :key="catalog.id">
-          <div class="link alert-menu-link">
+          <div class="link alert-menu-link" style="height: auto">
             <a
-              class="alert-menu-a"
+              class="alert-menu-a pt-sm pb-sm"
+              style="height: auto;line-height:1;"
               :class="{
                 'tsfont-dot': !catalog.viewList || catalog.viewList.length === 0,
                 'tsfont-drop-down': catalog.viewList && catalog.viewList.length > 0 && !catalog._hideview,
@@ -55,10 +56,11 @@
               v-for="view in catalog.viewList"
               :key="view.id"
               class="link alert-menu-link"
+              style="height: auto"
               :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
             >
-              <a class="ml-lg alert-menu-a" @click="goTo('/alert-manage/' + view.name)">
-                <span class="alert-name overflow">{{ view.label }}</span>
+              <a class="ml-lg alert-menu-a pt-sm pb-sm" style="height: auto; padding-right: 0px;line-height:1.1;" @click="goTo('/alert-manage/' + view.name)">
+                <span class="alert-name">{{ view.label }}</span>
                 <span v-if="alertCount > 0" class="text-error ml-xs superscript">
                   <b>{{ view.alertCount }}</b>
                 </span>
@@ -178,17 +180,21 @@ export default {
       position: relative;
       width: 100%;
       padding-right: 0px !important;
+      margin-right: 0px !important;
     }
     .alert-menu-setting-icon {
       right: 4px;
     }
     .alert-name {
-      max-width: calc(100% - 44px);
+      max-width: calc(100% - 40px);
     }
   }
   .alert-name {
     display: inline-block;
-    max-width: calc(100% - 35px);
+    white-space: normal;
+    word-break: break-all;
+    max-width: calc(100% - 30px);
+    height: auto;
   }
   .alert-menu-setting-icon {
     position: absolute;

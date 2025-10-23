@@ -50,6 +50,15 @@
         </div>
       </div>
     </div>
+    <TsFormItem
+      v-if="handler.error"
+      style="margin: 0px !important"
+      labelPosition="left"
+      :labelWidth="90"
+      label="异常"
+    >
+      <div class="text-error">{{ handler.error }}</div>
+    </TsFormItem>
   </div>
 </template>
 <script>
@@ -58,6 +67,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue')
   },
   extends: AlertEventBase,
@@ -103,7 +113,7 @@ export default {
   computed: {
     conditionList() {
       if (this.mode === 'audit') {
-        return this.handler.result.conditionList;
+        return this.handler?.result?.conditionList || [];
       } else {
         return this.configLocal.conditionList;
       }

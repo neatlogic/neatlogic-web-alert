@@ -51,7 +51,8 @@
                     <h3 class="cursor" :class="{ 'tsfont-drop-right': !isShowStep(eventhandler), 'tsfont-drop-down': isShowStep(eventhandler) }" @click="toggleStep(eventhandler)">
                       <span v-if="!eventhandler.isActive"><Tag color="error">{{ $t('page.ban') }}</Tag></span>
                       <span :class="eventhandler.handlerIcon">{{ eventhandler.name }}</span>
-                      <span v-if="eventhandler.isAsync" class="ml-sm"><Tag color="warning">异步</Tag></span>
+                      <span v-if="eventhandler.typeLabel" class="ml-sm"><Tag>{{ eventhandler.typeLabel }}</Tag></span>
+                      <span v-if="eventhandler.isAsync" class="ml-sm"><Tag color="warning">{{ $t('term.alert.async') }}</Tag></span>
                     </h3>
                   </div>
                   <div v-if="isShowStep(eventhandler)" class="mt-md"><AlertEventViewer :eventHandlerData="eventhandler"></AlertEventViewer></div>

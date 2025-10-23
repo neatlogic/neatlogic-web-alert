@@ -2,7 +2,7 @@
   <TsDialog v-bind="dialogConfig" @on-close="close()">
     <template v-slot>
       <div>
-        <TsFormItem :required="true" label="名称" labelPosition="left">
+        <TsFormItem :required="true" :label="$t('page.name')" labelPosition="left">
           <TsFormInput
             ref="txtName"
             v-model="eventHandlerData.name"
@@ -11,14 +11,33 @@
             :validateList="[{ name: 'required', message: ' ' }]"
           ></TsFormInput>
         </TsFormItem>
-        <TsFormItem label="事件" labelPosition="left">
+        <TsFormItem :label="$t('page.event')" labelPosition="left">
           <span>{{ event.label }}·{{ event.name }}</span>
         </TsFormItem>
-        <TsFormItem label="插件" labelPosition="left">
+        <TsFormItem :label="$t('page.plugins')" labelPosition="left">
           <span v-if="plugin">{{ plugin.label }}·{{ plugin.name }}</span>
           <span v-else-if="eventHandlerData">{{ eventHandlerData.handlerName }}·{{ eventHandlerData.handler }}</span>
         </TsFormItem>
-        <TsFormItem label="是否激活" labelPosition="left">
+        <TsFormItem :label="$t('page.type')" labelPosition="left">
+          <TsFormSelect
+            v-model="eventHandlerData.typeId"
+            dynamicUrl="/api/rest/alert/event/handler/type/search"
+            transfer
+            valueName="id"
+            textName="label"
+            border="border"
+          ></TsFormSelect>
+        </TsFormItem>
+        <TsFormItem :label="$t('term.alert.async')" labelPosition="left">
+          <TsFormRadio
+            v-model="eventHandlerData.isAsync"
+            :dataList="[
+              { value: 1, text: '异步动作' },
+              { value: 0, text: '同步动作' }
+            ]"
+          ></TsFormRadio>
+        </TsFormItem>
+        <TsFormItem :label="$t('term.report.isactive')" labelPosition="left">
           <TsFormSwitch v-model="eventHandlerData.isActive" :trueValue="1" :falseValue="0"></TsFormSwitch>
         </TsFormItem>
         <component
@@ -45,6 +64,8 @@ export default {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
+    TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     ...handlers
   },
   props: {
@@ -93,6 +114,7 @@ export default {
           event: this.event.name,
           alertType: this.alertType.id,
           handler: this.plugin.name,
+          isAsync: this.plugin.isAsync,
           isActive: 1,
           config: null
         };

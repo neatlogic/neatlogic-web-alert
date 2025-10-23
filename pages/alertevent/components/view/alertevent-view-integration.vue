@@ -31,7 +31,7 @@
           labelPosition="top"
           :label="(param.description || param.name) + '(' + param.typeName + ')'"
         >
-          <div style="line-height: 1">{{ getExpression(param.name) }}</div>
+          <div style="line-height: 1"><code>{{ getExpression(param.name) }}</code></div>
         </TsFormItem>
       </div>
     </TsFormItem>
@@ -50,6 +50,7 @@
       </span>
     </TsFormItem>
     <TsFormItem
+      v-if="configLocal.successCallbackList && configLocal.successCallbackList.length >0"
       :labelWidth="90"
       label="成功动作"
       labelPosition="left"
@@ -84,6 +85,7 @@
       </div>
     </TsFormItem>
     <TsFormItem
+      v-if="configLocal.failedCallbackList && configLocal.failedCallbackList.length >0"
       :labelWidth="90"
       label="失败动作"
       labelPosition="left"

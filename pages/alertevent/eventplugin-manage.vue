@@ -1,6 +1,11 @@
 <template>
   <div>
     <TsContain>
+      <template v-slot:topRight>
+        <div class="action-group">
+          <div class="action-item tsfont-listsetting" @click="editType()">类型管理</div>
+        </div>
+      </template>
       <template v-slot:content>
         <TsTable :theadList="theadList" :tbodyList="pluginList">
           <template v-slot:isActive="{ row }">
@@ -13,18 +18,15 @@
           <template slot="action" slot-scope="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
-                <li class="tsfont-edit" @click="configPlugin(row)">配置</li>
+                <li class="tsfont-edit" @click="configPlugin(row)">{{ $t('page.config') }}</li>
               </ul>
             </div>
           </template>
         </TsTable>
       </template>
     </TsContain>
-    <EventPluginConfig
-      v-if="isConfig"
-      :name="currentName"
-      @close="closeConfig"
-    ></EventPluginConfig>
+    <EventPluginConfig v-if="isConfig" :name="currentName" @close="closeConfig"></EventPluginConfig>
+    <EventPluginType v-if="isEditType" @close="isEditType = false"></EventPluginType>
   </div>
 </template>
 <script>
@@ -33,7 +35,8 @@ export default {
   components: {
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
     PluginConfig: () => import('@/community-module/alert/pages/alertevent/components/config/alertevent-configer.vue'),
-    EventPluginConfig: () => import('@/community-module/alert/pages/alertevent/eventplugin-edit.vue')
+    EventPluginConfig: () => import('@/community-module/alert/pages/alertevent/eventplugin-edit.vue'),
+    EventPluginType: () => import('@/community-module/alert/pages/alertevent/eventplugin-type-edit.vue')
   },
   props: {},
   data() {
@@ -47,11 +50,12 @@ export default {
           title: '唯一标识'
         },
         { key: 'label', title: '名称' },
-        {key: 'isActive', title: '激活'},
+        { key: 'isActive', title: '激活' },
         { key: 'config', title: '配置' },
         { key: 'description', title: '描述' },
         { key: 'action' }
-      ]
+      ],
+      isEditType: false
     };
   },
   beforeCreate() {},
@@ -67,6 +71,9 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    editType() {
+      this.isEditType = true;
+    },
     closeConfig(needRefresh) {
       this.isConfig = false;
       this.currentName = null;
