@@ -31,7 +31,9 @@
           labelPosition="top"
           :label="(param.description || param.name) + '(' + param.typeName + ')'"
         >
-          <div style="line-height: 1"><code>{{ getExpression(param.name) }}</code></div>
+          <div style="line-height: 1">
+            <code>{{ getExpression(param.name) }}</code>
+          </div>
         </TsFormItem>
       </div>
     </TsFormItem>
@@ -50,7 +52,7 @@
       </span>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.successCallbackList && configLocal.successCallbackList.length >0"
+      v-if="mode !== 'audit' && configLocal.successCallbackList && configLocal.successCallbackList.length > 0"
       :labelWidth="90"
       label="成功动作"
       labelPosition="left"
@@ -74,18 +76,18 @@
           <component
             :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
             v-if="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
-            :ref="'pluginConfig_' + hindex"
             :handler="selectedHandler"
             :event="event"
             :mode="mode"
             :isChild="true"
             :level="level + 1"
+            :alertData="alertData"
           ></component>
         </div>
       </div>
     </TsFormItem>
     <TsFormItem
-      v-if="configLocal.failedCallbackList && configLocal.failedCallbackList.length >0"
+      v-if="mode !== 'audit' && configLocal.failedCallbackList && configLocal.failedCallbackList.length > 0"
       :labelWidth="90"
       label="失败动作"
       labelPosition="left"
@@ -109,12 +111,48 @@
           <component
             :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
             v-if="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
-            :ref="'pluginConfig_' + hindex"
+            :handler="selectedHandler"
+            :event="event"
+            :mode="mode"
+            :isChild="true"
+            :alertData="alertData"
+            :level="level + 1"
+          ></component>
+        </div>
+      </div>
+    </TsFormItem>
+    <!--执行结果-->
+    <TsFormItem
+      v-if="mode === 'audit' && handler.status && handler.childAuditList && handler.childAuditList.length > 0"
+      :labelWidth="90"
+      :label="handler.status === 'succeed'?'成功动作':'失败动作'"
+      labelPosition="left"
+      style="margin: 0px !important"
+    >
+      <div>
+        <div
+          v-for="(selectedHandler, hindex) in handler.childAuditList"
+          :key="hindex"
+          class="handler-container padding-md radius-md mb-md"
+          :class="{
+            'bg-grey': level % 2 === 0,
+            'bg-op': level % 2 !== 0
+          }"
+        >
+          <div>
+            <span>
+              <b class="text-grey">{{ hindex + 1 }}.{{ selectedHandler.handlerName }}</b>
+            </span>
+          </div>
+          <component
+            :is="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
+            v-if="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
             :handler="selectedHandler"
             :event="event"
             :mode="mode"
             :isChild="true"
             :level="level + 1"
+            :alertData="alertData"
           ></component>
         </div>
       </div>

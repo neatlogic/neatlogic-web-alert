@@ -94,7 +94,7 @@
       </template>
       <template v-slot:topRight>
         <div class="action-group">
-          <div class="action-item" style="width: 380px">
+          <div class="action-item" style="width: 400px">
             <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlert(1)">
               <template v-for="(attr, index) in topAttrList" :slot="'attr_' + attr.name" slot-scope="{ valueConfig, textConfig }">
                 <div :key="index">
@@ -636,8 +636,8 @@ export default {
       }
 
       //提取固定属性
-      const { keyword, level, status, source, updateTimeHour } = this.searchVal;
-      const param = { keyword, level, status, source, updateTimeHour };
+      const { keyword, level, status, source, updateTimeHour, markNameList } = this.searchVal;
+      const param = { keyword, level, status, source, updateTimeHour, markNameList };
       //提取扩展属性
       const attrFilterList = [];
       for (let key in this.searchVal) {
@@ -771,6 +771,16 @@ export default {
             valueName: 'name',
             textName: 'label',
             rootName: 'tbodyList',
+            transfer: true
+          },
+          {
+            type: 'select',
+            name: 'markNameList',
+            label: '告警标签',
+            multiple: true,
+            dynamicUrl: '/api/rest/alert/mark/search',
+            valueName: 'name',
+            textName: 'name',
             transfer: true
           },
           {

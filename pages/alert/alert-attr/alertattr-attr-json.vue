@@ -6,6 +6,7 @@
     <div v-else-if="typeof jsonValue === 'object' && jsonValue !== null">
       <JsonViewer boxed copyable :value="jsonValue"></JsonViewer>
     </div>
+    <div v-else>{{ jsonValue }}</div>
   </div>
   <div v-else class="text-grey">-</div>
 </template>

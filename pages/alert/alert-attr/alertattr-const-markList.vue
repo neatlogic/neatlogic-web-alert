@@ -31,7 +31,9 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getMarkByNameList();
+  },
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
