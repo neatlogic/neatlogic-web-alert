@@ -265,9 +265,7 @@ export default {
       applyTeamType: 'replace'
     };
   },
-  beforeCreate() {
-
-  },
+  beforeCreate() {},
   async created() {
     if (this.COMMERCIAL_MODULES.includes('alert')) {
       this.alertAiTitle = ComponentManager.getVueTemplate('alert-ai-title');
@@ -337,8 +335,7 @@ export default {
       this.selectedStatus = this.selectedStatus === status.name ? null : status.name;
     },
     listAlertAttrList() {
-      const param = {};
-      this.$api.alert.alert.listAlertAttrList(param).then(res => {
+      this.$api.alert.alert.listAlertAttrList({ isColumn: 1 }).then(res => {
         this.attrList = res.Return;
       });
     },

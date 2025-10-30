@@ -13,18 +13,10 @@
         </span>
       </div>
       <div class="overflow">
-        <a
-          :title="row.title"
-          :style="row.isDelete ? 'text-decoration:line-through' : ''"
-          @click="getAlertDetail(row)"
-        >
+        <a :title="row.title" :style="row.isDelete ? 'text-decoration:line-through' : ''" @click="getAlertDetail(row)">
           <span v-for="(mark, index) in row.markList" :key="index">
-            <Tag
-              v-if="mark.style"
-              style="font-size: 0.8em;margin:0px 3px 0px 0px;padding:0px 6px"
-              :color="mark.style"
-            >{{ mark.name }}</Tag>
-            <Tag v-else style="font-size: 0.8em;">{{ mark.name }}</Tag>
+            <Tag v-if="mark.style" style="font-size: 0.8em; margin: 0px 3px 0px 0px; padding: 0px 6px" :color="mark.style">{{ mark.name }}</Tag>
+            <Tag v-else style="font-size: 0.8em">{{ mark.name }}</Tag>
           </span>
           <span>{{ row.title }}</span>
         </a>
@@ -37,7 +29,13 @@
       @close="close"
     ></AlertView>
   </div>
-  <div v-else-if="mode === 'detail' && row">{{ row.title }}</div>
+  <div v-else-if="mode === 'detail' && row">
+    <span v-for="(mark, index) in row.markList" :key="index">
+      <Tag v-if="mark.style" style="font-size: 0.8em; margin: 0px 3px 0px 0px; padding: 0px 6px" :color="mark.style">{{ mark.name }}</Tag>
+      <Tag v-else style="font-size: 0.8em">{{ mark.name }}</Tag>
+    </span>
+    <span>{{ row.title }}</span>
+  </div>
   <div v-else-if="mode === 'audit' && value && value.length > 0">{{ value[0] }}</div>
 </template>
 <script>

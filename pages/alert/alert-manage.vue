@@ -157,6 +157,7 @@
             resizeKey="alert-table"
             :canResize="true"
             :canExpand="true"
+            :canSelectRow="false"
             keyName="id"
             :theadList="[{ key: 'selection' }, ...finalTheadList, { key: 'action' }]"
             @getSelected="getSelected"
