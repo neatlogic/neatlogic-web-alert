@@ -7,6 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <TsFormItem label="唯一键" labelPosition="left">
       <div class="text-grey">帮助：唯一键值相同的告警将会收敛成一条告警</div>
       <TsFormCheckbox
@@ -30,9 +31,7 @@
         textName="label"
         multiple
       ></TsFormSelect>
-      <div class="text-grey">
-        帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。
-      </div>
+      <div class="text-grey">帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。</div>
     </TsFormItem>
     <TsFormItem :label="$t('term.alert.defaultstatus')" labelPosition="left">
       <TsFormSelect
@@ -45,11 +44,7 @@
       <div class="text-grey">帮助：告警事件创建时的默认状态。</div>
     </TsFormItem>
     <TsFormItem :label="$t('term.alert.serialsave')" labelPosition="left">
-      <TsFormSwitch
-        v-model="configLocal.serialSave"
-        :trueValue="true"
-        :falseValue="false"
-      ></TsFormSwitch>
+      <TsFormSwitch v-model="configLocal.serialSave" :trueValue="true" :falseValue="false"></TsFormSwitch>
       <div class="text-grey">帮助：唯一键相同的告警串行保存，避免唯一键相同的告警同时保存时，出现父子关系不正常的现象。</div>
     </TsFormItem>
   </div>
@@ -60,6 +55,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),

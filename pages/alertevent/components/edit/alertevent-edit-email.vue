@@ -7,6 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <TsFormItem label="邮件服务器" labelPosition="left">
       <div>
         <TsFormSelect
@@ -134,6 +135,7 @@ export default {
   name: '',
   directives: { clipboard },
   components: {
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     FreemarkerHelp: () => import('@/community-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),

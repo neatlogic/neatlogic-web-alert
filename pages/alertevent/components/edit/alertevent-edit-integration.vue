@@ -7,6 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <TsFormItem label="集成" labelPosition="left" :required="true">
       <TsFormSelect
         ref="integraionUuid"
@@ -226,6 +227,7 @@ export default {
   name: '',
   components: {
     draggable,
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput')

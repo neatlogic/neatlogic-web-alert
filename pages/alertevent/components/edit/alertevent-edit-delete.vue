@@ -7,12 +7,9 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <TsFormItem :required="true" label="删除子告警" labelPosition="left">
-      <TsFormSwitch
-        v-model="configLocal.isDeleteChildAlert"
-        :trueValue="1"
-        :falseValue="0"
-      ></TsFormSwitch>
+      <TsFormSwitch v-model="configLocal.isDeleteChildAlert" :trueValue="1" :falseValue="0"></TsFormSwitch>
       <div class="text-grey mt-md">是否同时删除所有子告警？</div>
     </TsFormItem>
   </div>
@@ -23,18 +20,17 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch')
   },
   extends: AlertEventBase,
   props: {},
   data() {
-    return {
-    };
+    return {};
   },
   beforeCreate() {},
-  created() {
-  },
+  created() {},
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -43,9 +39,7 @@ export default {
   deactivated() {},
   beforeDestroy() {},
   destroyed() {},
-  methods: {
-   
-  },
+  methods: {},
   filter: {},
   computed: {},
   watch: {}

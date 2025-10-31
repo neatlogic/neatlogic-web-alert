@@ -7,6 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <TsFormItem :required="true" label="分配给" labelPosition="left">
       <UserSelect
         ref="userSelect"
@@ -27,6 +28,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')
   },

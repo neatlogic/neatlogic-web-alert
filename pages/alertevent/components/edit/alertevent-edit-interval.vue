@@ -7,6 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <component :is="isChild ? 'div' : 'TsFormItem'" label="调度设置" labelPosition="left">
       <div
         v-for="(interval, index) in configLocal.intervalList"
@@ -106,6 +107,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },

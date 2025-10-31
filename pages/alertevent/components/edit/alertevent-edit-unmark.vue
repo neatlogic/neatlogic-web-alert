@@ -7,6 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <TsFormItem :label="$t('page.tag')" :required="true" labelPosition="left">
       <TsFormSelect
         ref="select"
@@ -29,14 +30,14 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
   },
   extends: AlertEventBase,
   props: {},
   data() {
-    return {
-    };
+    return {};
   },
   beforeCreate() {},
   created() {

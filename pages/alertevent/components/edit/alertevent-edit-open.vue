@@ -7,11 +7,9 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <TsFormItem label="打开方式" labelPosition="left">
-      <TsFormRadio
-        v-model="configLocal.openType"
-        :dataList="typeList"
-      ></TsFormRadio>
+      <TsFormRadio v-model="configLocal.openType" :dataList="typeList"></TsFormRadio>
     </TsFormItem>
     <TsFormItem v-if="configLocal.openType === 'uniquekey'" label="唯一属性" labelPosition="left">
       <TsFormCheckbox
@@ -43,6 +41,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox'),

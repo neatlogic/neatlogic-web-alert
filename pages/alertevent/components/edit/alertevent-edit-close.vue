@@ -7,11 +7,9 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <TsFormItem label="关闭方式" labelPosition="left">
-      <TsFormRadio
-        v-model="configLocal.closeType"
-        :dataList="typeList"
-      ></TsFormRadio>
+      <TsFormRadio v-model="configLocal.closeType" :dataList="typeList"></TsFormRadio>
     </TsFormItem>
     <TsFormItem v-if="configLocal.closeType === 'uniquekey'" label="唯一属性" labelPosition="left">
       <TsFormCheckbox
@@ -36,9 +34,7 @@
         textName="label"
         multiple
       ></TsFormSelect>
-      <div class="text-grey">
-        帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。
-      </div>
+      <div class="text-grey">帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。</div>
     </TsFormItem>
     <TsFormItem label="同时关闭子告警" labelPosition="left">
       <TsFormSwitch
@@ -58,6 +54,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio'),
     TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox'),

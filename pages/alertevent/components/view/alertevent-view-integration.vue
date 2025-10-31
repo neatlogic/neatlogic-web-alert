@@ -69,9 +69,20 @@
           }"
         >
           <div>
-            <span>
-              <b class="text-grey">{{ hindex + 1 }}.{{ selectedHandler.name }}</b>
-            </span>
+            <div>
+              <b class="text-grey">
+                <span v-if="!selectedHandler.isActive">
+                  <Tag color="error">{{ $t('page.ban') }}</Tag>
+                </span>
+                <span>{{ hindex + 1 }}.{{ selectedHandler.name }}</span>
+                <span v-if="selectedHandler.typeLabel">
+                  <Tag>{{ selectedHandler.typeLabel }}</Tag>
+                </span>
+                <span v-if="selectedHandler.isAsync">
+                  <Tag color="warning">{{ $t('term.alert.async') }}</Tag>
+                </span>
+              </b>
+            </div>
           </div>
           <component
             :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
@@ -104,9 +115,20 @@
           }"
         >
           <div>
-            <span>
-              <b class="text-grey">{{ hindex + 1 }}.{{ selectedHandler.name }}</b>
-            </span>
+            <div>
+              <b class="text-grey">
+                <span v-if="!selectedHandler.isActive">
+                  <Tag color="error">{{ $t('page.ban') }}</Tag>
+                </span>
+                <span>{{ hindex + 1 }}.{{ selectedHandler.name }}</span>
+                <span v-if="selectedHandler.typeLabel">
+                  <Tag>{{ selectedHandler.typeLabel }}</Tag>
+                </span>
+                <span v-if="selectedHandler.isAsync">
+                  <Tag color="warning">{{ $t('term.alert.async') }}</Tag>
+                </span>
+              </b>
+            </div>
           </div>
           <component
             :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"

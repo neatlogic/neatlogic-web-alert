@@ -32,9 +32,18 @@
           }"
         >
           <div>
-            <span>
-              <b class="text-grey">{{ hindex + 1 }}.{{ selectedHandler.name }}</b>
-            </span>
+            <b class="text-grey">
+              <span v-if="!selectedHandler.isActive">
+                <Tag color="error">{{ $t('page.ban') }}</Tag>
+              </span>
+              <span>{{ hindex + 1 }}.{{ selectedHandler.name }}</span>
+              <span v-if="selectedHandler.typeLabel">
+                <Tag>{{ selectedHandler.typeLabel }}</Tag>
+              </span>
+              <span v-if="selectedHandler.isAsync">
+                <Tag color="warning">{{ $t('term.alert.async') }}</Tag>
+              </span>
+            </b>
           </div>
           <component
             :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
@@ -48,34 +57,6 @@
           ></component>
         </div>
       </div>
-      <!--执行结果-->
-      <!-- <div v-if="mode === 'audit' && handler.childAuditList && handler.childAuditList.length > 0" class="mt-md">
-        <div
-          v-for="(selectedHandler, hindex) in handler.childAuditList"
-          :key="hindex"
-          class="handler-container padding-md radius-md mb-md"
-          :class="{
-            'bg-grey': level % 2 === 0,
-            'bg-op': level % 2 !== 0
-          }"
-        >
-          <div>
-            <span>
-              <b class="text-grey">{{ hindex + 1 }}.{{ selectedHandler.handlerName }}</b>
-            </span>
-          </div>
-          <component
-            :is="handlers && handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
-            v-if="handlers[selectedHandler.handler.toLowerCase() + '_eventhandler']"
-            :ref="'pluginConfig' + index"
-            :handler="selectedHandler"
-            :event="event"
-            :mode="mode"
-            :isChild="true"
-            :level="level + 1"
-          ></component>
-        </div>
-      </div>-->
     </div>
     <TsFormItem
       v-if="handler.error"

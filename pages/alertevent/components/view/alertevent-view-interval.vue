@@ -23,7 +23,18 @@
         </div>
         <div class="mt-md">
           <Divider orientation="start">
-            <h4 class="text-grey" :class="interval.handler.icon">{{ interval.handler.name }}</h4>
+            <b class="text-grey">
+              <span v-if="!interval.handler.isActive">
+                <Tag color="error">{{ $t('page.ban') }}</Tag>
+              </span>
+              <span :class="interval.handler.icon">{{ interval.handler.name }}</span>
+              <span v-if="interval.handler.typeLabel">
+                <Tag>{{ interval.handler.typeLabel }}</Tag>
+              </span>
+              <span v-if="interval.handler.isAsync">
+                <Tag color="warning">{{ $t('term.alert.async') }}</Tag>
+              </span>
+            </b>
           </Divider>
           <component
             :is="handlers && handlers[interval.handler.handler.toLowerCase() + '_eventhandler']"

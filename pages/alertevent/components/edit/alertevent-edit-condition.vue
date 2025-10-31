@@ -7,6 +7,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <EditBase :handler="handler"></EditBase>
     <component :is="isChild ? 'div' : 'TsFormItem'" label="条件" labelPosition="left">
       <div>
         <div v-for="(condition, index) in configLocal.conditionList" :key="index">
@@ -100,8 +101,11 @@ export default {
   name: '',
   components: {
     draggable,
+    EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
-    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
+    TsFormRadio: () => import('@/resources/plugins/TsForm/TsFormRadio')
   },
   extends: AlertEventBase,
   props: {},
