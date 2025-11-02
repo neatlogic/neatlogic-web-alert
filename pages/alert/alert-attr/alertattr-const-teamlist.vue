@@ -8,7 +8,6 @@
     <div v-else class="text-grey">-</div>
   </div>
   <div v-else-if="mode === 'audit'">
-    {{ teamList }}
     <div v-if="teamList && teamList.length > 0">
       <Tag v-for="(team, index) in teamList" :key="index">
         {{ team.name }}
