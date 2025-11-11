@@ -14,6 +14,18 @@
             <span v-if="row.status === 'succeed'" class="text-success">{{ $t('page.success') }}</span>
             <span v-else-if="row.status === 'failed'" class="text-error">{{ $t('page.fail') }}</span>
             <span v-else-if="row.status === 'ignored'" class="text-info">{{ $t('page.ignore') }}</span>
+            <Poptip
+              v-if="row.error"
+              trigger="hover"
+              word-wrap
+              :transfer="true"
+              placement="right"
+              width="450"
+              :title="$t('page.exception')"
+              :content="row.error"
+            >
+              <span class="cursor text-error tsfont-warning-s"></span>
+            </Poptip>
           </template>
           <template v-slot:content="{ row }">
             <div v-if="row.highlightMap && row.highlightMap.content">
@@ -25,18 +37,6 @@
               ></div>
             </div>
             <div v-else class="div-content text-primary">{{ row.content }}</div>
-          </template>
-          <template v-slot:error="{ row }">
-            <div v-if="row.highlightMap && row.highlightMap.error">
-              <div
-                v-for="(c, cindex) in row.highlightMap.error"
-                :key="cindex"
-                class="div-content text-grey"
-                v-html="c"
-              ></div>
-            </div>
-            <div v-else-if="row.error" class="div-content text-error" style="max-width: 500px; white-space: normal">{{ row.error }}</div>
-            <span v-else>-</span>
           </template>
           <template v-slot:action="{ row }">
             <div class="tstable-action">
@@ -130,7 +130,6 @@ export default {
         { key: 'time', title: '时间', type: 'time' },
         { key: 'status', title: '处理状态' },
         { key: 'content', title: '内容' },
-        { key: 'error', title: '异常' },
         { key: 'action' }
       ]
     };
