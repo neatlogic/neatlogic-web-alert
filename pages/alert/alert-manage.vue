@@ -42,7 +42,7 @@
           <div v-if="isShowTopo" class="action-item">
             <Dropdown>
               <span>
-                <span v-if="!topoId">{{ $t('dialog.title.choosetarget',{'target':$t('page.topo')}) }}</span>
+                <span v-if="!topoId">{{ $t('dialog.title.choosetarget', { target: $t('page.topo') }) }}</span>
                 <span v-else>{{ topoList.find(d => d.id === topoId).name }}</span>
                 <span class="tsfont-drop-down"></span>
               </span>
@@ -127,6 +127,15 @@
         <div v-if="isShowFilter" class="border-base radius-md mb-md padding-md">
           <ConditionGroup v-model="searchParam.rule" :attrList="attrList"></ConditionGroup>
           <div style="text-align: right" class="mt-md">
+            <Button
+              v-auth="['ALERT_EXPORT']"
+              type="primary"
+              class="mr-xs"
+              ghost
+              @click="exportAlert()"
+            >
+              {{ $t('page.export') }}
+            </Button>
             <Button
               type="primary"
               @click="
@@ -227,7 +236,7 @@
               <div v-if="!row.isDelete" class="tstable-action">
                 <ul class="tstable-action-ul">
                   <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
-                  <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">打开</li>
+                  <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">{{ $t('term.alert.open') }}</li>
                   <li v-if="!row.isClose && hasRole(row)" class="tsfont-eye-off" @click="closeAlert(row)">{{ $t('page.close') }}</li>
                   <li v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
                 </ul>
@@ -257,6 +266,13 @@
       :idList="selectList"
       @close="closeAlertOpen"
     ></AlertOpenDialog>
+    <ExportDialog
+      v-if="isExportShow"
+      :alertIdList="selectList"
+      :searchVal="searchVal"
+      :searchParam="searchParam"
+      @close="isExportShow = false"
+    ></ExportDialog>
   </div>
 </template>
 <script>
@@ -273,7 +289,8 @@ export default {
     AlertCloseDialog: () => import('@/community-module/alert/pages/alert/alert-close-dialog.vue'),
     AlertOpenDialog: () => import('@/community-module/alert/pages/alert/alert-open-dialog.vue'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch'),
-    ConditionItem: () => import('@/resources/components/Condition/condition-item.vue')
+    ConditionItem: () => import('@/resources/components/Condition/condition-item.vue'),
+    ExportDialog: () => import('@/community-module/alert/pages/alert/export-dialog.vue')
   },
   props: {},
   data() {
@@ -314,7 +331,8 @@ export default {
       topoAlertSize: 1000, //告警拓扑默认查询数据量
       childAlertPage: {}, //记录子告警分页信息
       finalSearchParam: null, //最后的搜索参数，用于批量删除
-      sortData: {}
+      sortData: {},
+      isExportShow: false
     };
   },
   beforeCreate() {},
@@ -361,6 +379,9 @@ export default {
   },
   destroyed() {},
   methods: {
+    exportAlert() {
+      this.isExportShow = true;
+    },
     updateSort(sort) {
       this.sortData = sort;
       this.searchAlert();
