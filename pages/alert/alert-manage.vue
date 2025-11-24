@@ -658,8 +658,8 @@ export default {
       }
 
       //提取固定属性
-      const { keyword, level, status, source, updateTimeHour, markNameList } = this.searchVal;
-      const param = { keyword, level, status, source, updateTimeHour, markNameList };
+      const { keyword, level, status, source, updateTimeHour, markNameList, teamIdList, userIdList } = this.searchVal;
+      const param = { keyword, level, status, source, updateTimeHour, markNameList, teamIdList, userIdList };
       //提取扩展属性
       const attrFilterList = [];
       for (let key in this.searchVal) {
@@ -760,7 +760,7 @@ export default {
       const config = {
         search: false,
         searchMode: 'clickBtnSearch',
-        labelPosition: 'top',
+        labelPosition: 'left',
         searchList: [
           {
             type: 'text',
@@ -816,6 +816,22 @@ export default {
               { value: 72, text: '最近3天' },
               { value: 168, text: '最近7天' }
             ],
+            transfer: true
+          },
+          {
+            type: 'userselect',
+            name: 'teamIdList',
+            label: '处理组',
+            groupList: ['team'],
+            multiple: true,
+            transfer: true
+          },
+          {
+            type: 'userselect',
+            name: 'userIdList',
+            label: '处理人',
+            groupList: ['user'],
+            multiple: true,
             transfer: true
           }
         ]
