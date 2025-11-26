@@ -53,7 +53,7 @@ export default {
         try {
           return JSON.parse(this.value);
         } catch (e) {
-          this.error = '转换失败，异常：' + e;
+          return this.value;
         }
       }
       return null;
