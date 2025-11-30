@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      attrTypeData: { isActive: 1, isNormal: 0, isTop: 0 },
+      attrTypeData: { isActive: 1, isNormal: 0, isTop: 0, isTab: 0, isIndex: 0, isRow: 0 },
       dialogConfig: {
         title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('page.attribute') }) : this.$t('dialog.title.addtarget', { target: this.$t('page.attribute') }),
         width: 'small',
@@ -49,6 +49,13 @@ export default {
           trueValue: 1,
           falseValue: 0,
           desc: '置顶属性可以作为顶层搜索条件出现在告警列表页面里'
+        },
+        isIndex: {
+          type: 'switch',
+          label: this.$t('term.alert.isindex'),
+          trueValue: 1,
+          falseValue: 0,
+          desc: '不索引的属性不会保存到ES'
         },
         isNormal: {
           label: this.$t('term.alert.isnormalattr'),
