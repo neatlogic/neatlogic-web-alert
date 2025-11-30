@@ -83,6 +83,8 @@ export default {
         return 'warning';
       } else if (audit.status === 'suppress') {
         return 'normal';
+      } else if (audit.status === 'disabled') {
+        return 'normal';
       } else {
         return 'primary';
       }

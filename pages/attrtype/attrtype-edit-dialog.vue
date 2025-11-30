@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      attrTypeData: { isActive: 1, isNormal: 0, isTop: 0, isTab: 0, isIndex: 0, isRow: 0 },
+      attrTypeData: { isActive: 1, isNormal: 0, isTop: 0, isTab: 0, isIndex: 1, isRow: 0 },
       dialogConfig: {
         title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('page.attribute') }) : this.$t('dialog.title.addtarget', { target: this.$t('page.attribute') }),
         width: 'small',

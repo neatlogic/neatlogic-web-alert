@@ -88,7 +88,7 @@ export default {
         { key: 'isTop', title: this.$t('term.alert.istop'), tooltip: '置顶属性会出现在默认的结果列表和搜索条件中' },
         { key: 'isRow', title: this.$t('term.alert.iswholerow') },
         { key: 'isTab', title: this.$t('term.alert.istab') },
-        { key: 'isIndex', title: this.$t('term.alert.isindex') },
+        { key: 'isIndex', title: this.$t('term.alert.isindex'), tooltip: '不索引的属性无法检索' },
         { key: 'isNormal', title: this.$t('term.alert.isnormalattr') },
         { key: 'action', title: '' }
       ],
