@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      attrTypeData: { isActive: 1, isNormal: 0, isTop: 0, isTab: 0, isIndex: 1, isRow: 0 },
+      attrTypeData: { isActive: 1, isShow: 1, isNormal: 0, isTop: 0, isTab: 0, isIndex: 1, isRow: 0 },
       dialogConfig: {
         title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('page.attribute') }) : this.$t('dialog.title.addtarget', { target: this.$t('page.attribute') }),
         width: 'small',
@@ -40,6 +40,12 @@ export default {
         isActive: {
           type: 'switch',
           label: this.$t('term.report.isactive'),
+          trueValue: 1,
+          falseValue: 0
+        },
+        isShow: {
+          type: 'switch',
+          label: this.$t('term.alert.isshow'),
           trueValue: 1,
           falseValue: 0
         },

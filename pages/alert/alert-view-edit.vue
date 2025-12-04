@@ -32,7 +32,7 @@
           </div>
         </template>
         <template v-slot:condition>
-          <ConditionGroup v-if="isReady" v-model="alertViewData.config.rule" :attrList="attrList"></ConditionGroup>
+          <ConditionGroup v-if="isReady" v-model="alertViewData.config.rule" :attrList="conditionAttrList"></ConditionGroup>
         </template>
       </TsForm>
     </template>
@@ -59,6 +59,7 @@ export default {
       isReady: false,
       alertViewData: { isActive: 1, config: { attrList: ['const_title'], rule: {} } }, //默认必须选择标题，而且不能调整位置
       attrList: [],
+      conditionAttrList: [],
       dialogConfig: {
         title: this.id
           ? this.$t('dialog.title.edittarget', {
@@ -120,7 +121,9 @@ export default {
   beforeCreate() {},
   async created() {
     await this.getViewById();
-    this.listAlertAttrList();
+    await this.listAlertAttrList();
+    await this.listAlertConditionAttrList();
+    this.isReady = true;
   },
   beforeMount() {},
   mounted() {},
@@ -144,10 +147,7 @@ export default {
       if (this.id) {
         await this.$api.alert.alert.getAlertViewById(this.id).then(res => {
           this.alertViewData = res.Return;
-          this.isReady = true;
         });
-      } else {
-        this.isReady = true;
       }
     },
     isAttrSelected(attr) {
@@ -162,8 +162,13 @@ export default {
         this.alertViewData.config.attrList.splice(index, 1);
       }
     },
-    listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList({ isActive: 1 }).then(res => {
+    async listAlertConditionAttrList() {
+      await this.$api.alert.alert.listAlertAttrList({ isCondition: 1 }).then(res => {
+        this.conditionAttrList = res.Return;
+      });
+    },
+    async listAlertAttrList() {
+      await this.$api.alert.alert.listAlertAttrList({ isColumn: 1 }).then(res => {
         this.attrList = res.Return;
         //删除已经不存在的属性
         if (this.alertViewData.config.attrList && this.alertViewData.config.attrList.length > 0) {

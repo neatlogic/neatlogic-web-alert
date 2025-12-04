@@ -22,6 +22,10 @@
             <span v-if="row.isActive" class="text-success">{{ $t('page.yes') }}</span>
             <span v-else class="text-grey">{{ $t('page.no') }}</span>
           </template>
+          <template v-slot:isShow="{ row }">
+            <span v-if="row.isShow" class="text-success">{{ $t('page.yes') }}</span>
+            <span v-else class="text-grey">{{ $t('page.no') }}</span>
+          </template>
           <template v-slot:isNormal="{ row }">
             <span v-if="row.isNormal" class="text-success">{{ $t('page.yes') }}</span>
             <span v-else class="text-grey">{{ $t('page.no') }}</span>
@@ -85,6 +89,7 @@ export default {
         { key: 'typeName', title: this.$t('page.type') },
         { key: 'enumCount', title: this.$t('term.knowledge.member') },
         { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'isShow', title: this.$t('term.alert.isshow') },
         { key: 'isTop', title: this.$t('term.alert.istop'), tooltip: '置顶属性会出现在默认的结果列表和搜索条件中' },
         { key: 'isRow', title: this.$t('term.alert.iswholerow') },
         { key: 'isTab', title: this.$t('term.alert.istab') },
@@ -115,6 +120,15 @@ export default {
             ],
             name: 'isActive',
             label: this.$t('term.report.isactive')
+          },
+          {
+            type: 'radio',
+            dataList: [
+              { value: 1, text: this.$t('page.yes') },
+              { value: 0, text: this.$t('page.no') }
+            ],
+            name: 'isShow',
+            label: this.$t('term.alert.isshow')
           },
           {
             type: 'radio',
