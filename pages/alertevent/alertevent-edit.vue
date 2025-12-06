@@ -18,28 +18,6 @@
           <span v-if="plugin">{{ plugin.label }}·{{ plugin.name }}</span>
           <span v-else-if="eventHandlerData">{{ eventHandlerData.handlerName }}·{{ eventHandlerData.handler }}</span>
         </TsFormItem>
-        <!--<TsFormItem :label="$t('page.type')" labelPosition="left">
-          <TsFormSelect
-            v-model="eventHandlerData.typeId"
-            dynamicUrl="/api/rest/alert/event/handler/type/search"
-            transfer
-            valueName="id"
-            textName="label"
-            border="border"
-          ></TsFormSelect>
-        </TsFormItem>
-        <TsFormItem :label="$t('term.alert.async')" labelPosition="left">
-          <TsFormRadio
-            v-model="eventHandlerData.isAsync"
-            :dataList="[
-              { value: 1, text: '异步动作' },
-              { value: 0, text: '同步动作' }
-            ]"
-          ></TsFormRadio>
-        </TsFormItem>
-        <TsFormItem :label="$t('term.report.isactive')" labelPosition="left">
-          <TsFormSwitch v-model="eventHandlerData.isActive" :trueValue="1" :falseValue="0"></TsFormSwitch>
-        </TsFormItem>-->
         <component
           :is="handlers[handlerName.toLowerCase() + '_eventhandler']"
           v-if="handlerName && handlers[handlerName.toLowerCase() + '_eventhandler']"

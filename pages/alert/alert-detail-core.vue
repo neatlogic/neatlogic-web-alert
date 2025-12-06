@@ -197,6 +197,14 @@
     <TabPane
       v-if="COMMERCIAL_MODULES.includes('alert')"
       :index="200"
+      label="订阅记录"
+      name="subscribe"
+    >
+      <component :is="alertSubscribeAudit" v-if="currentTab === 'subscribe'" :alertId="id"></component>
+    </TabPane>
+    <TabPane
+      v-if="COMMERCIAL_MODULES.includes('alert')"
+      :index="201"
       label="AI分析"
       name="ai"
     >
@@ -236,6 +244,7 @@ export default {
     return {
       COMMERCIAL_MODULES: COMMERCIAL_MODULES,
       alertAiTitle: null,
+      alertSubscribeAudit: null,
       loading: true,
       currentTab: 'info',
       alertData: null,
@@ -265,10 +274,13 @@ export default {
       applyTeamType: 'replace'
     };
   },
-  beforeCreate() {},
+  beforeCreate() {
+
+  },
   async created() {
     if (this.COMMERCIAL_MODULES.includes('alert')) {
       this.alertAiTitle = ComponentManager.getVueTemplate('alert-ai-title');
+      this.alertSubscribeAudit = ComponentManager.getVueTemplate('alert-subscribe-audit');
     }
     this.listAllStatus();
     this.listAlertAttrList();
