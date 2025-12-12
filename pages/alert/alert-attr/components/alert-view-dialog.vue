@@ -15,7 +15,7 @@
         <div class="action-item">
           <Button @click="close()">{{ $t('page.close') }}</Button>
         </div>
-        <div v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="action-item">
+        <div v-if="$AuthUtils.hasRole('ALERT_INDEX')" class="action-item">
           <Button type="warning" @click="rebuildIndex()">{{ $t('page.rebuildindex') }}</Button>
         </div>
         <div v-if="hasRole" class="action-item">

@@ -22,7 +22,7 @@
     </template>
     <template v-slot:topRight>
       <div class="action-group">
-        <div v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="action-item">
+        <div v-if="$AuthUtils.hasRole('ALERT_INDEX')" class="action-item">
           <Button type="warning" @click="rebuildIndex()">{{ $t('page.rebuildindex') }}</Button>
         </div>
         <div v-if="hasRole" class="action-item">
