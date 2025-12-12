@@ -323,7 +323,7 @@ export default {
       isAutoRefresh: false,
       timmer: null,
       intervaler: null,
-      interval: 60000,
+      interval: 3 * 60 * 1000,
       startTime: null,
       countdown: 0,
       topoList: [],
