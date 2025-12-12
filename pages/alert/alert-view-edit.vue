@@ -163,7 +163,7 @@ export default {
       }
     },
     async listAlertConditionAttrList() {
-      await this.$api.alert.alert.listAlertAttrList({ isCondition: 1 }).then(res => {
+      await this.$api.alert.alert.listAlertAttrList({}).then(res => {
         this.conditionAttrList = res.Return;
       });
     },
