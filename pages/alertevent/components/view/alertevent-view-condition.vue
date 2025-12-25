@@ -12,6 +12,7 @@
         :readonly="true"
         :padding="false"
         :level="level"
+        :resultMap="condition.resultMap"
         :attrList="attrList"
       ></ConditionGroup>
       <div v-if="mode === 'audit' && condition.hasOwnProperty('result')" class="mt-md">
