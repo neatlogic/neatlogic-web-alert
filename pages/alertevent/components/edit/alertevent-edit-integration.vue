@@ -8,7 +8,7 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem label="集成" labelPosition="left" :required="true">
+    <TsFormItem :label="$t('page.integration')" labelPosition="left" :required="true">
       <TsFormSelect
         ref="integraionUuid"
         v-model="configLocal.integrationUuid"
@@ -27,7 +27,7 @@
         "
       ></TsFormSelect>
     </TsFormItem>
-    <TsFormItem v-if="integrationData && paramList.length > 0" label="参数映射" labelPosition="left">
+    <TsFormItem v-if="integrationData && paramList.length > 0" :label="$t('term.process.paramsMapping')" labelPosition="left">
       <div>
         <div>
           <span class="mr-xs text-grey">点击复制属性</span>
@@ -339,6 +339,20 @@ export default {
       return item ? item.expression : '';
     },
     getConfig() {
+      //清理不存在的属性
+      if (this.configLocal.paramMapping && this.configLocal.paramMapping.length > 0) {
+        for (let i = this.configLocal.paramMapping.length - 1; i >= 0; i--) {
+          let isExists = false;
+          if (this.paramList && this.paramList.length > 0) {
+            if (this.paramList.find(d => d.name === this.configLocal.paramMapping[i].name)) {
+              isExists = true;
+            }
+          }
+          if (!isExists) {
+            this.$delete(this.configLocal.paramMapping, i);
+          }
+        }
+      }
       if (this.configLocal.successCallbackList && this.configLocal.successCallbackList.length > 0) {
         this.configLocal.successCallbackList.forEach((handler, index) => {
           const pluginConfig = this.$refs[`successPluginConfig_${index}`];
