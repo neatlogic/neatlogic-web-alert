@@ -10,14 +10,46 @@
               </div>
             </template>
             <template v-slot:script>
-              <TsCodemirror
-                v-model="actionData.script"
-                codeMode="js"
-                :validateList="['required']"
-                placeholder="function(alertData){}"
-                @change="scriptError = '';"
-              ></TsCodemirror>
-              <div v-if="scriptError" class="mt-md text-error">{{ scriptError }}</div>
+              <Tabs v-model="currentTab" :animated="false" name="main">
+                <TabPane
+                  tab="main"
+                  :label="$t('page.script')"
+                  name="script"
+                  :index="1"
+                >
+                  <TsCodemirror
+                    v-model="actionData.script"
+                    codeMode="js"
+                    :validateList="['required']"
+                    placeholder="function(alertData){}"
+                    @change="scriptError = ''"
+                  ></TsCodemirror>
+                  <div v-if="scriptError" class="mt-md text-error">{{ scriptError }}</div>
+                </TabPane>
+                <TabPane
+                  v-if="COMMERCIAL_MODULES.includes('alert')"
+                  tab="main"
+                  label="AI助手"
+                  name="aihelper"
+                  :index="2"
+                >
+                  <TsFormInput
+                    v-model="helpContent"
+                    placeholder="请输入需求，例如：弹出警告框，提示“是否生成事件”。如果同意则调用集成生成工单，提供参数告警内容和级别，成功后提示操作完成"
+                    type="textarea"
+                    border="border"
+                  ></TsFormInput>
+                  <div>
+                    <Button
+                      :disabled="!helpContent"
+                      ghost
+                      type="info"
+                      size="small"
+                      @click="runScriptHelper()"
+                    >{{ $t('term.alert.generatecode') }}</Button>
+                  </div>
+                </TabPane>
+              </Tabs>
             </template>
           </TsForm>
         </div>
@@ -40,6 +72,7 @@ export default {
   name: '',
   components: {
     TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
+    TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     IconDialog: () => import('@/views/pages/common/icon-dialog.vue'),
     TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror')
   },
@@ -48,6 +81,8 @@ export default {
   },
   data() {
     return {
+      COMMERCIAL_MODULES: COMMERCIAL_MODULES,
+      helpContent: '',
       dialogConfig: {
         title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('page.action') }) : this.$t('dialog.title.addtarget', { target: this.$t('page.action') }),
         type: 'modal',
@@ -55,6 +90,7 @@ export default {
         isShow: true,
         width: 'medium'
       },
+      currentTab: 'script',
       scriptError: '',
       isIconDialogShow: false,
       actionData: { isActive: 1 },
@@ -116,6 +152,28 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    async runScriptHelper() {
+      if (this.helpContent) {
+        this.$set(this.actionData, 'script', '');
+        this.currentTab = 'script';
+        const res = await this.$api.alert.ai.runActionHelper(this.helpContent);
+        // 获取可读流 reader
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+
+        let done = false;
+        let text = '';
+        while (!done) {
+          const { value, done: streamDone } = await reader.read();
+          done = streamDone;
+          if (value) {
+            const chunk = decoder.decode(value, { stream: true });
+            text += chunk;
+            this.$set(this.actionData, 'script', text);
+          }
+        }
+      }
+    },
     getActionById() {
       if (this.id) {
         this.$api.alert.action.getActionById(this.id).then(res => {
