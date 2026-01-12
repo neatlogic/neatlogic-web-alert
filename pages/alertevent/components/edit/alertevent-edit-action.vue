@@ -8,17 +8,17 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem :label="$t('page.tag')" :required="true" labelPosition="left">
+    <TsFormItem :label="$t('page.action')" :required="true" labelPosition="left">
       <TsFormSelect
         ref="select"
-        v-model="configLocal.markList"
+        v-model="configLocal.actionList"
         :validateList="[{ name: 'required', message: ' ' }]"
-        dynamicUrl="/api/rest/alert/mark/search"
+        dynamicUrl="/api/rest/alert/action/search"
         transfer
         :search="true"
         valueName="name"
         :multiple="true"
-        textName="name"
+        textName="label"
         border="border"
       ></TsFormSelect>
     </TsFormItem>
@@ -41,8 +41,8 @@ export default {
   },
   beforeCreate() {},
   created() {
-    if (!this.configLocal.markList) {
-      this.$set(this.configLocal, 'markList', []);
+    if (!this.configLocal.actionList) {
+      this.$set(this.configLocal, 'actionList', []);
     }
   },
   beforeMount() {},

@@ -17,6 +17,7 @@ const catalogManage = () => import('@/community-module/alert/pages/alertcatalog/
 const sourceManage = () => import('@/community-module/alert/pages/alertsource/alertsource-manage.vue');
 const alertTrashManage = () => import('@/community-module/alert/pages/alerttrash/alert-trash-manage.vue');
 const alertMarkManage = () => import('@/community-module/alert/pages/alertmark/alertmark-manage.vue');
+const alertActionManage = () => import('@/community-module/alert/pages/alertaction/action-manage.vue');
 //const alertTrashDetail = () => import('@/community-module/alert/pages/alerttrash/alert-trash-detail.vue');
 
 import { config } from './config.js';
@@ -243,6 +244,18 @@ let routerArr = [
       icon: 'tsfont-tags',
       type: 'alertmanage',
       authority: 'ALERT_MARK_MODIFY'
+    }
+  },
+  {
+    path: '/alertaction-manage',
+    name: 'alertaction-manage',
+    component: alertActionManage,
+    meta: {
+      title: '自定义操作管理',
+      ismenu: true,
+      icon: 'tsfont-lightning',
+      type: 'alertmanage',
+      authority: 'ALERT_ACTION_MODIFY'
     }
   }
 

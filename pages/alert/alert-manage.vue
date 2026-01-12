@@ -235,6 +235,14 @@
             <template v-slot:action="{ row }">
               <div v-if="!row.isDelete" class="tstable-action">
                 <ul class="tstable-action-ul">
+                  <li
+                    v-for="(action, ai) in row.actionList"
+                    :key="ai"
+                    :class="action.icon"
+                    @click="doAction(row, action.script)"
+                  >
+                    {{ action.label }}
+                  </li>
                   <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
                   <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">{{ $t('term.alert.open') }}</li>
                   <li v-if="!row.isClose && hasRole(row)" class="tsfont-eye-off" @click="closeAlert(row)">{{ $t('page.close') }}</li>
@@ -379,6 +387,14 @@ export default {
   },
   destroyed() {},
   methods: {
+    doAction(alertData, script) {
+      const fn = new Function(`"use strict"; return (${script});`)();
+      try {
+        fn.call(this, alertData);
+      } catch (e) {
+        this.$Notice.error({ title: this.$t('page.exception'), desc: '动作执行异常：' + e.message });
+      }
+    },
     exportAlert() {
       this.isExportShow = true;
     },

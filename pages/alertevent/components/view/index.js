@@ -12,6 +12,8 @@ import integration_eventhandler from '@/community-module/alert/pages/alertevent/
 import updatestatus_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-updatestatus.vue';
 import mark_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-mark.vue';
 import unmark_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-unmark.vue';
+import action_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-action.vue';
+import unaction_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-unaction.vue';
 
 // 获取动态组件
 const dynamicComponents = ComponentManager.getAlertEventHandlerViewComponent() || {};
@@ -29,6 +31,8 @@ const allComponents = {
   updatestatus_eventhandler,
   mark_eventhandler,
   unmark_eventhandler,
+  action_eventhandler,
+  unaction_eventhandler,
   ...dynamicComponents // 把动态组件合并进来
 };
 

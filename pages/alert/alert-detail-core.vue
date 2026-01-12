@@ -210,6 +210,18 @@
     >
       <component :is="alertAiTitle" v-if="currentTab === 'ai' && readonlyAlertData.title" :content="readonlyAlertData.title"></component>
     </TabPane>
+    <div v-if="alertData.actionList && alertData.actionList.length > 0" slot="extra">
+      <Dropdown placement="bottom-end">
+        <a href="javascript:void(0)">
+          <span>自定义操作</span>
+          <span class="tsfont-drop-down"></span>
+        </a>
+        <DropdownMenu slot="list">
+          <DropdownItem v-for="(action,ai) in alertData.actionList" :key="ai" @click.native="doAction(alertData,action.script)">
+            <span :class="action.icon">{{ action.label }}</span></DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    </div>
   </Tabs>
   <Alert v-else-if="!loading" type="error" show-icon>
     {{ $t('page.exception') }}
@@ -297,6 +309,14 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    doAction(alertData, script) {
+      const fn = new Function(`"use strict"; return (${script});`)();
+      try {
+        fn.call(this, alertData);
+      } catch (e) {
+        this.$Notice.error({ title: this.$t('page.exception'), desc: '动作执行异常：' + e.message });
+      }
+    },
     getChildAlertTabLabel() {
       return h => {
         const returnList = [h('span', { class: 'mr-xs' }, this.$t('term.alert.childalert'))];

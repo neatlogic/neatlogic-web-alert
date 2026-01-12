@@ -1,6 +1,6 @@
 <template>
   <div
-    class="radius-md cc"
+    class="radius-md"
     :class="{
       'padding-md': isChild,
       'bg-grey': level % 2 !== 0,
