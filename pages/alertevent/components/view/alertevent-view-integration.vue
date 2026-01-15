@@ -9,7 +9,7 @@
     <TsFormItem
       v-if="integrationData"
       style="margin: 0px !important"
-      label="集成"
+      :label="$t('page.integration')"
       labelPosition="left"
       :labelWidth="90"
     >
@@ -20,7 +20,7 @@
     <TsFormItem
       v-if="integrationData && paramList.length > 0"
       :labelWidth="90"
-      label="参数映射"
+      :label="$t('term.process.paramsMapping')"
       style="margin: 0px !important"
       labelPosition="left"
     >
@@ -37,10 +37,29 @@
         </TsFormItem>
       </div>
     </TsFormItem>
+    <!--异常才显示数据-->
+    <TsFormItem
+      v-if="handler.error && handler.result && handler.result.sourceParam"
+      labelPosition="left"
+      :labelWidth="90"
+      style="margin: 0px !important"
+      :label="$t('term.alert.alertdata')"
+    >
+      <div>{{ handler.result.sourceParam }}</div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="handler.error && handler.result && handler.result.param"
+      labelPosition="left"
+      :labelWidth="90"
+      style="margin: 0px !important"
+      :label="$t('term.framework.sendingparam')"
+    >
+      <div>{{ handler.result.param }}</div>
+    </TsFormItem>
     <TsFormItem
       v-if="configLocal.interval"
       style="margin: 0px !important"
-      label="调用间隔"
+      :label="$t('term.alert.invokeinterval')"
       labelPosition="left"
       :labelWidth="90"
     >
@@ -48,13 +67,13 @@
         <span class="mr-xs">
           <b>{{ configLocal.interval }}</b>
         </span>
-        <span class="text-grey">分钟</span>
+        <span class="text-grey">{{ $t('page.minute') }}</span>
       </span>
     </TsFormItem>
     <TsFormItem
       v-if="mode !== 'audit' && configLocal.successCallbackList && configLocal.successCallbackList.length > 0"
       :labelWidth="90"
-      label="成功动作"
+      :label="$t('term.alert.successaction')"
       labelPosition="left"
       style="margin: 0px !important"
     >
@@ -100,7 +119,7 @@
     <TsFormItem
       v-if="mode !== 'audit' && configLocal.failedCallbackList && configLocal.failedCallbackList.length > 0"
       :labelWidth="90"
-      label="失败动作"
+      :label="$t('term.alert.failedaction')"
       labelPosition="left"
       style="margin: 0px !important"
     >
@@ -147,7 +166,7 @@
     <TsFormItem
       v-if="mode === 'audit' && handler.status && handler.childAuditList && handler.childAuditList.length > 0"
       :labelWidth="90"
-      :label="handler.status === 'succeed'?'成功动作':'失败动作'"
+      :label="handler.status === 'succeed' ? $t('term.alert.successaction') : $t('term.alert.failedaction')"
       labelPosition="left"
       style="margin: 0px !important"
     >
@@ -184,7 +203,7 @@
       style="margin: 0px !important"
       labelPosition="left"
       :labelWidth="90"
-      label="调用结果"
+      :label="$t('term.alert.invokeresult')"
     >
       <span :class="{ 'text-success': handler.status === 'succeed', 'text-error': handler.status === 'failed' }">{{ handler.statusName }}</span>
     </TsFormItem>
@@ -193,7 +212,7 @@
       style="margin: 0px !important"
       labelPosition="left"
       :labelWidth="90"
-      label="返回信息"
+      :label="$t('term.alert.returnresult')"
     >
       <div>{{ handler.result.response }}</div>
     </TsFormItem>
@@ -202,7 +221,7 @@
       style="margin: 0px !important"
       labelPosition="left"
       :labelWidth="90"
-      label="异常"
+      :label="$t('page.exception')"
     >
       <div class="text-error">{{ handler.error }}</div>
     </TsFormItem>
