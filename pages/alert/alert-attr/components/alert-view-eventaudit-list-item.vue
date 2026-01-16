@@ -16,6 +16,7 @@
         <span class="mr-xs">
           <Badge :type="getBadgeType(audit)" :text="audit.statusName"></Badge>
         </span>
+        <span class="text-grey" style="text-weight: bold" :class="audit.handlerIcon"></span>
         <span class="text-grey">
           <b>{{ audit.handlerName }}</b>
         </span>
