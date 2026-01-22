@@ -16,13 +16,17 @@
         :attrList="attrList"
       ></ConditionGroup>
       <div v-if="mode === 'audit' && condition.hasOwnProperty('result')" class="mt-md">
-        <span class="text-grey mr-sm"><b>判定结果</b></span>
-        <span v-if="condition.result === true" class="text-success">条件满足</span>
-        <span v-else-if="condition.result === false" class="text-error">条件不满足</span>
+        <span class="text-grey mr-sm"><b>{{ $t('term.alert.conditionresult') }}</b></span>
+        <span v-if="condition.result === true" class="text-success">{{ $t('term.alert.conditionmatch') }}</span>
+        <span v-else-if="condition.result === false" class="text-error">{{ $t('term.alert.conditionmotmatch') }}</span>
         <span v-else class="text-grey">{{ condition.result }}</span>
       </div>
+      <div v-if="mode === 'audit' && condition.hasOwnProperty('error')" class="mt-md">
+        <span class="text-grey mr-sm"><b>{{ $t('page.exception') }}</b></span>
+        <span class="text-error">{{ condition.error }}</span>
+      </div>
       <div v-if="mode !== 'audit' && selectedHandlerList(condition).length > 0" class="mt-md">
-        <div class="text-success mb-md">满足以上条件则执行</div>
+        <div class="text-success mb-md">{{ $t('term.alert.abeyrule') }}</div>
         <div
           v-for="(selectedHandler, hindex) in selectedHandlerList(condition)"
           :key="hindex"
