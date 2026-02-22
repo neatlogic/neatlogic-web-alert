@@ -14,7 +14,6 @@ import mark_eventhandler from '@/community-module/alert/pages/alertevent/compone
 import unmark_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-unmark.vue';
 import action_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-action.vue';
 import unaction_eventhandler from '@/community-module/alert/pages/alertevent/components/view/alertevent-view-unaction.vue';
-
 // 获取动态组件
 const dynamicComponents = ComponentManager.getAlertEventHandlerViewComponent() || {};
 

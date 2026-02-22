@@ -33,21 +33,24 @@
                   name="aihelper"
                   :index="2"
                 >
-                  <TsFormInput
-                    v-model="helpContent"
-                    placeholder="请输入需求，例如：弹出警告框，提示“是否生成事件”。如果同意则调用集成生成工单，提供参数告警内容和级别，成功后提示操作完成"
-                    type="textarea"
-                    border="border"
-                  ></TsFormInput>
-                  <div>
-                    <Button
-                      :disabled="!helpContent"
-                      ghost
-                      type="info"
-                      size="small"
-                      @click="runScriptHelper()"
-                    >{{ $t('term.alert.generatecode') }}</Button>
+                  <div v-if="isAiEnable">
+                    <TsFormInput
+                      v-model="helpContent"
+                      placeholder="请输入需求，例如：弹出警告框，提示“是否生成事件”。如果同意则调用集成生成工单，提供参数告警内容和级别，成功后提示操作完成"
+                      type="textarea"
+                      border="border"
+                    ></TsFormInput>
+                    <div>
+                      <Button
+                        :disabled="!helpContent"
+                        ghost
+                        type="info"
+                        size="small"
+                        @click="runScriptHelper()"
+                      >{{ $t('term.alert.generatecode') }}</Button>
+                    </div>
                   </div>
+                  <div v-else class="text-grey">请先配置智能体</div>
                 </TabPane>
               </Tabs>
             </template>
@@ -136,11 +139,13 @@ export default {
           maxlength: 500,
           label: this.$t('page.explain')
         }
-      ]
+      ],
+      isAiEnable: false
     };
   },
   beforeCreate() {},
   created() {
+    this.checkAiIsEnable();
     this.getActionById();
   },
   beforeMount() {},
@@ -152,6 +157,11 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    async checkAiIsEnable() {
+      await this.$api.ai.agent.checkAgentIsEnable('ALERT_ACTION_HELPER').then(res => {
+        this.isAiEnable = !!res.Return;
+      });
+    },
     async runScriptHelper() {
       if (this.helpContent) {
         this.$set(this.actionData, 'script', '');
