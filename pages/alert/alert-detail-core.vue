@@ -203,7 +203,7 @@
       <component :is="alertSubscribeAudit" v-if="currentTab === 'subscribe'" :alertId="id"></component>
     </TabPane>
     <TabPane
-      v-if="COMMERCIAL_MODULES.includes('alert')"
+      v-if="$AuthUtils.hasRole('ALERT_TITLE_AI')"
       :index="201"
       label="AI分析"
       name="ai"
