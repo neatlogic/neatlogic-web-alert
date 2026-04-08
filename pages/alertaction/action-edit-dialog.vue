@@ -71,6 +71,8 @@
   </div>
 </template>
 <script>
+import { createSseParser } from '@/resources/utils/SseUtil.js';
+
 export default {
   name: '',
   components: {
@@ -167,19 +169,31 @@ export default {
         this.$set(this.actionData, 'script', '');
         this.currentTab = 'script';
         const res = await this.$api.alert.ai.runActionHelper(this.helpContent);
-        // 获取可读流 reader
         const reader = res.body.getReader();
         const decoder = new TextDecoder('utf-8');
-
-        let done = false;
-        let text = '';
-        while (!done) {
-          const { value, done: streamDone } = await reader.read();
-          done = streamDone;
+        let answerText = '';
+        const sseParser = createSseParser(({ eventName, payload, dataStr }) => {
+          if (eventName !== 'answer' && eventName !== 'error') {
+            return;
+          }
+          if (!dataStr) {
+            return;
+          }
+          if (eventName === 'answer' && payload.d) {
+            answerText += payload.d;
+            this.$set(this.actionData, 'script', answerText);
+          } else if (eventName === 'error' && payload.message) {
+            this.scriptError = payload.message;
+          }
+        });
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) {
+            break;
+          }
           if (value) {
             const chunk = decoder.decode(value, { stream: true });
-            text += chunk;
-            this.$set(this.actionData, 'script', text);
+            sseParser.consume(chunk);
           }
         }
       }
