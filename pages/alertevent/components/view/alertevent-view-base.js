@@ -6,6 +6,7 @@ export const AlertEventBase = {
     handler: { type: Object },
     event: { type: Object },
     isChild: { type: Boolean, default: false },
+    alertType: { type: Object },
     alertData: { type: Object }
   },
   data() {

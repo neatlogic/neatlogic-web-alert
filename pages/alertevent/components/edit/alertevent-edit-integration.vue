@@ -106,6 +106,7 @@
               :ref="'successPluginConfig_' + hindex"
               :handler="selectedHandler"
               :event="event"
+              :alertType="alertType"
               :isChild="true"
               :level="level + 1"
             ></component>
@@ -177,6 +178,7 @@
               :ref="'failedPluginConfig_' + hindex"
               :handler="selectedHandler"
               :event="event"
+              :alertType="alertType"
               :isChild="true"
               :level="level + 1"
             ></component>

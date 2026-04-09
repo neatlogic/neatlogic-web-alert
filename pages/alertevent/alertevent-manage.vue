@@ -55,7 +55,7 @@
                       <span v-if="eventhandler.isAsync"><Tag color="warning">{{ $t('term.alert.async') }}</Tag></span>
                     </h3>
                   </div>
-                  <div v-if="isShowStep(eventhandler)" class="mt-md"><AlertEventViewer :eventHandlerData="eventhandler"></AlertEventViewer></div>
+                  <div v-if="isShowStep(eventhandler)" class="mt-md"><AlertEventViewer :eventHandlerData="eventhandler" :alertType="alertTypeData"></AlertEventViewer></div>
                 </div>
                 <div style="text-align: right">
                   <Dropdown :transfer="true">

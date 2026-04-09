@@ -6,6 +6,7 @@ import condition_eventhandler from '@/community-module/alert/pages/alertevent/co
 import delete_eventhandler from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-delete.vue';
 import apply_eventhandler from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-apply.vue';
 import interval_eventhandler from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-interval.vue';
+import cancel_interval_eventhandler from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-cancel_interval.vue';
 import close_eventhandler from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-close.vue';
 import open_eventhandler from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-open.vue';
 import integration_eventhandler from '@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-integration.vue';
@@ -25,6 +26,7 @@ const allComponents = {
   delete_eventhandler,
   apply_eventhandler,
   interval_eventhandler,
+  cancel_interval_eventhandler,
   close_eventhandler,
   open_eventhandler,
   integration_eventhandler,

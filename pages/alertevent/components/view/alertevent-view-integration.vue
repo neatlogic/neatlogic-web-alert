@@ -111,6 +111,7 @@
             :mode="mode"
             :isChild="true"
             :level="level + 1"
+            :alertType="alertType"
             :alertData="alertData"
           ></component>
         </div>
@@ -157,6 +158,7 @@
             :mode="mode"
             :isChild="true"
             :alertData="alertData"
+            :alertType="alertType"
             :level="level + 1"
           ></component>
         </div>
@@ -194,6 +196,7 @@
             :isChild="true"
             :level="level + 1"
             :alertData="alertData"
+            :alertType="alertType"
           ></component>
         </div>
       </div>

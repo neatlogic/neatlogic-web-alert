@@ -8,6 +8,7 @@
       :handler="eventHandlerData"
       :level="level"
       :mode="mode"
+      :alertType="alertType"
       :alertData="alertData"
     ></component>
   </div>
@@ -23,6 +24,7 @@ export default {
     mode: { type: String, default: 'edit' }, //edit|audit
     level: { type: Number, default: 0 },
     eventHandlerData: { type: Object },
+    alertType: { type: Object },
     alertData: { type: Object }
   },
   data() {

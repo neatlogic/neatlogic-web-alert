@@ -49,6 +49,7 @@
                   :ref="'pluginConfig_' + index + '_' + hindex"
                   :handler="selectedHandler"
                   :event="event"
+                  :alertType="alertType"
                   :isChild="true"
                   :level="level + 1"
                 ></component>

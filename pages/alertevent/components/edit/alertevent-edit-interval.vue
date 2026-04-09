@@ -89,6 +89,7 @@
             :ref="'pluginConfig' + index"
             :handler="interval.handler"
             :event="event"
+            :alertType="alertType"
             :isChild="true"
             :level="level + 1"
           ></component>

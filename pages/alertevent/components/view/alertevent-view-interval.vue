@@ -44,6 +44,8 @@
             :event="event"
             :isChild="true"
             :level="level + 1"
+            :alertType="alertType"
+            :alertData="alertData"
           ></component>
         </div>
       </div>

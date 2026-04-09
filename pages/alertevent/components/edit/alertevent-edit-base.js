@@ -4,6 +4,7 @@ export const AlertEventBase = {
     level: { type: Number, default: 1 },
     handler: { type: Object },
     event: { type: Object },
+    alertType: { type: Object },
     isChild: { type: Boolean, default: false }
   },
   data() {

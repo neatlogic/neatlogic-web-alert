@@ -24,6 +24,7 @@
           ref="pluginConfig"
           :level="1"
           :event="event"
+          :alertType="alertType"
           :handler="eventHandlerData"
         ></component>
       </div>
