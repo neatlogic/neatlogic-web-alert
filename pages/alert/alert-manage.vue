@@ -20,14 +20,11 @@
             ></TsFormSwitch>
           </div>
           <div v-if="isAutoRefresh" class="action-item">
-            <span>
-              <Progress
-                v-if="countdown > 0"
-                hide-info
-                style="width: 30px"
-                :percent="(countdown / interval) * 100"
-              />
-            </span>
+            <span
+              class="countdown-clock"
+              :style="countdownClockStyle"
+              :title="countdownText"
+            ></span>
           </div>
           <div v-if="COMMERCIAL_MODULES.includes('alert') && topoList && topoList.length > 0" class="action-item">
             <TsFormSwitch
@@ -331,7 +328,7 @@ export default {
       isAutoRefresh: false,
       timmer: null,
       intervaler: null,
-      interval: 3 * 60 * 1000,
+      interval: 1 * 30 * 1000,
       startTime: null,
       countdown: 0,
       topoList: [],
@@ -757,6 +754,17 @@ export default {
         }
       }
       return null;
+    },
+    countdownText() {
+      const second = Math.max(Math.ceil(this.countdown / 1000), 0);
+      return '自动刷新倒计时：' + second + '秒';
+    },
+    countdownClockStyle() {
+      const countdown = this.interval > 0 ? ((this.countdown % this.interval) + this.interval) % this.interval : 0;
+      const ratio = this.interval > 0 ? (this.interval - countdown) / this.interval : 0;
+      return {
+        '--countdown-progress': `${Math.max(ratio, 0) * 100}`
+      };
     },
     finalTheadList() {
       let list = [];
