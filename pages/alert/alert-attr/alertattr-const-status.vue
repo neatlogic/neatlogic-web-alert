@@ -2,6 +2,7 @@
   <div v-if="hasStatus">
     <Badge
       v-if="statusName"
+      class="status-badge"
       style="white-space: nowrap"
       :color="statusColor"
       :text="statusName"
@@ -86,4 +87,14 @@ export default {
   watch: {}
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+@import (reference) '~@/resources/assets/css/variable.less';
+
+.theme-dark {
+  .status-badge {
+    ::v-deep .ivu-badge-status-text {
+      color: @dark-text;
+    }
+  }
+}
+</style>
