@@ -674,8 +674,8 @@ export default {
       }
 
       //提取固定属性
-      const { keyword, level, status, source, updateTimeHour, markNameList, teamIdList, userIdList } = this.searchVal;
-      const param = { keyword, level, status, source, updateTimeHour, markNameList, teamIdList, userIdList };
+      const { keyword, levelList, statusList, sourceList, updateTimeHour, markNameList, teamIdList, userIdList } = this.searchVal;
+      const param = { keyword, updateTimeHour, markNameList, teamIdList, userIdList, levelList, statusList, sourceList };
       //提取扩展属性
       const attrFilterList = [];
       for (let key in this.searchVal) {
@@ -785,8 +785,9 @@ export default {
           },
           {
             type: 'select',
-            name: 'level',
+            name: 'levelList',
             label: '告警级别',
+            multiple: true,
             valueName: 'level',
             textName: 'label',
             url: '/api/rest/alert/level/list',
@@ -794,8 +795,9 @@ export default {
           },
           {
             type: 'select',
-            name: 'status',
+            name: 'statusList',
             label: '告警状态',
+            multiple: true,
             url: '/api/rest/alert/status/list',
             valueName: 'name',
             textName: 'label',
@@ -803,8 +805,9 @@ export default {
           },
           {
             type: 'select',
-            name: 'source',
+            name: 'sourceList',
             label: '告警来源',
+            multiple: true,
             dynamicUrl: '/api/rest/alert/source/search',
             valueName: 'name',
             textName: 'label',
