@@ -1,5 +1,5 @@
 <template>
-  <div v-if="value" v-html="value"></div>
+  <div v-if="value" style="overflow:auto" v-html="value"></div>
   <div v-else class="text-grey">-</div>
 </template>
 <script>
