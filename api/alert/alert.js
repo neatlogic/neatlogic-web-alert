@@ -61,6 +61,9 @@ const alert = {
   },
   rebuildIndex(id) {
     return axios.post('/api/rest/alert/index/rebuild', { id: id });
+  },
+  sendMail(params) {
+    return axios.post('/api/rest/alert/mail/send', params);
   }
 };
 

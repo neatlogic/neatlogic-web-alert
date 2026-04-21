@@ -1,53 +1,71 @@
 <template>
-  <TsContain>
-    <template v-slot:navigation>
-      <span v-if="$hasBack()" class="tsfont-left text-action" @click="$back()">{{ $getFromPage() }}</span>
-    </template>
-    <template v-slot:topLeft>
-      <div v-if="alertData" class="action-group">
-        <div class="action-item overflow" style="max-width: 400px">
-          <h3 class="text-grey">{{ alertData.title }}</h3>
+  <div>
+    <TsContain>
+      <template v-slot:navigation>
+        <span v-if="$hasBack()" class="tsfont-left text-action" @click="$back()">{{ $getFromPage() }}</span>
+      </template>
+      <template v-slot:topLeft>
+        <div v-if="alertData" class="action-group">
+          <div class="action-item overflow" style="max-width: 400px">
+            <h3 class="text-grey">{{ alertData.title }}</h3>
+          </div>
+          <div class="action-item">
+            <AlertAttrViewer
+              v-if="alertData.level"
+              type="const"
+              :attr="getAttr('const_level')"
+              :row="alertData"
+              mode="detail"
+              :value="alertData['level']"
+            ></AlertAttrViewer>
+          </div>
         </div>
-        <div class="action-item">
-          <AlertAttrViewer
-            v-if="alertData.level"
-            type="const"
-            :attr="getAttr('const_level')"
-            :row="alertData"
-            mode="detail"
-            :value="alertData['level']"
-          ></AlertAttrViewer>
+      </template>
+      <template v-slot:topRight>
+        <div class="action-group">
+          <div v-if="$AuthUtils.hasRole('ALERT_INDEX')" class="action-item">
+            <Button type="warning" @click="rebuildIndex()">{{ $t('page.rebuildindex') }}</Button>
+          </div>
+          <div v-if="alertData" class="action-item">
+            <Poptip
+              v-model="isShowSendMail"
+              trigger="click"
+              placement="bottom-end"
+              width="700"
+              transfer
+              title="发送邮件"
+            >
+              <Button type="primary" ghost>发邮件</Button>
+              <div slot="content" class="alert-mail-poptip" @click.stop>
+                <AlertMailSendDialog :alert-id="id" @close="isShowSendMail = false"></AlertMailSendDialog>
+              </div>
+            </Poptip>
+          </div>
+          <div v-if="hasRole" class="action-item">
+            <Button type="primary" @click="confirm()">{{ $t('page.confirm') }}</Button>
+          </div>
         </div>
-      </div>
-    </template>
-    <template v-slot:topRight>
-      <div class="action-group">
-        <div v-if="$AuthUtils.hasRole('ALERT_INDEX')" class="action-item">
-          <Button type="warning" @click="rebuildIndex()">{{ $t('page.rebuildindex') }}</Button>
+      </template>
+      <template v-slot:content>
+        <div class="padding radius-md bg-op">
+          <AlertDetailCore
+            v-if="id && flag"
+            :id="id"
+            ref="alertDetailCore"
+            @ready="isReady()"
+          ></AlertDetailCore>
         </div>
-        <div v-if="hasRole" class="action-item">
-          <Button type="primary" @click="confirm()">{{ $t('page.confirm') }}</Button>
-        </div>
-      </div>
-    </template>
-    <template v-slot:content>
-      <div class="padding radius-md bg-op">
-        <AlertDetailCore
-          v-if="id && flag"
-          :id="id"
-          ref="alertDetailCore"
-          @ready="isReady()"
-        ></AlertDetailCore>
-      </div>
-    </template>
-  </TsContain>
+      </template>
+    </TsContain>
+  </div>
 </template>
 <script>
 export default {
   name: '',
   components: {
     AlertDetailCore: () => import('@/community-module/alert/pages/alert/alert-detail-core.vue'),
-    AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue')
+    AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
+    AlertMailSendDialog: () => import('@/community-module/alert/pages/alert/alert-mail-send-dialog.vue')
   },
   props: {},
   data() {
@@ -55,7 +73,8 @@ export default {
       id: null,
       hasRole: false,
       alertData: null,
-      flag: true
+      flag: true,
+      isShowSendMail: false
     };
   },
   beforeCreate() {},
@@ -117,5 +136,8 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-
+.alert-mail-poptip {
+  max-height: 70vh;
+  overflow: auto;
+}
 </style>
