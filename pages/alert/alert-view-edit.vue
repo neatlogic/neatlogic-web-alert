@@ -34,6 +34,38 @@
         <template v-slot:condition>
           <ConditionGroup v-if="isReady" v-model="alertViewData.config.rule" :attrList="conditionAttrList"></ConditionGroup>
         </template>
+        <template v-slot:sortList>
+          <div>
+            <Tag
+              v-for="(attr, index) in unSelectSortAttrList"
+              :key="index"
+              class="cursor"
+              @click.native="selectSortAttr(attr)"
+            >
+              <span>{{ attr.label }}</span>
+            </Tag>
+            <Divider v-if="alertViewData.config.sortList && alertViewData.config.sortList.length > 0" orientation="left">已选排序</Divider>
+            <draggable
+              v-if="alertViewData.config.sortList && alertViewData.config.sortList.length > 0"
+              handle=".tsfont-option-vertical"
+              :list="alertViewData.config.sortList"
+            >
+              <div
+                v-for="(sort, index) in alertViewData.config.sortList"
+                :key="sort.name"
+                class="sort-item bg-op radius-sm border-color"
+              >
+                <span class="tsfont-option-vertical sort-handler"></span>
+                <span class="sort-label">{{ getAttrByName(sort.name).label }}</span>
+                <RadioGroup v-model="sort.type" type="button" size="small">
+                  <Radio label="asc">正序</Radio>
+                  <Radio label="desc">倒序</Radio>
+                </RadioGroup>
+                <span class="tsfont-close text-action" @click="removeSortAttr(index)"></span>
+              </div>
+            </draggable>
+          </div>
+        </template>
       </TsForm>
     </template>
     <template v-slot:footer>
@@ -57,7 +89,7 @@ export default {
   data() {
     return {
       isReady: false,
-      alertViewData: { isActive: 1, config: { attrList: ['const_title'], rule: {} } }, //默认必须选择标题，而且不能调整位置
+      alertViewData: { isActive: 1, config: { attrList: ['const_title'], rule: {}, sortList: [] } }, //默认必须选择标题，而且不能调整位置
       attrList: [],
       conditionAttrList: [],
       dialogConfig: {
@@ -114,6 +146,10 @@ export default {
         condition: {
           type: 'slot',
           label: '条件'
+        },
+        sortList: {
+          type: 'slot',
+          label: '排序'
         }
       }
     };
@@ -143,11 +179,36 @@ export default {
     getAttrByName(name) {
       return this.attrList.find(item => item.name === name) || {};
     },
+    initConfig() {
+      if (!this.alertViewData.config) {
+        this.$set(this.alertViewData, 'config', {});
+      }
+      if (!this.alertViewData.config.attrList) {
+        this.$set(this.alertViewData.config, 'attrList', ['const_title']);
+      }
+      if (!this.alertViewData.config.rule) {
+        this.$set(this.alertViewData.config, 'rule', {});
+      }
+      if (!this.alertViewData.config.sortList) {
+        this.$set(this.alertViewData.config, 'sortList', []);
+      }
+      for (let i = 0; i < this.alertViewData.config.sortList.length; i++) {
+        const sort = this.alertViewData.config.sortList[i];
+        if (typeof sort === 'string') {
+          this.$set(this.alertViewData.config.sortList, i, { name: sort, type: 'asc' });
+        } else if (!sort.type) {
+          this.$set(sort, 'type', 'asc');
+        }
+      }
+    },
     async getViewById() {
       if (this.id) {
         await this.$api.alert.alert.getAlertViewById(this.id).then(res => {
           this.alertViewData = res.Return;
+          this.initConfig();
         });
+      } else {
+        this.initConfig();
       }
     },
     isAttrSelected(attr) {
@@ -161,6 +222,15 @@ export default {
       if (index > -1) {
         this.alertViewData.config.attrList.splice(index, 1);
       }
+    },
+    isSortAttrSelected(attr) {
+      return this.alertViewData.config.sortList.some(item => item.name === attr.name);
+    },
+    selectSortAttr(attr) {
+      this.alertViewData.config.sortList.push({ name: attr.name, type: 'asc' });
+    },
+    removeSortAttr(index) {
+      this.alertViewData.config.sortList.splice(index, 1);
     },
     async listAlertConditionAttrList() {
       await this.$api.alert.alert.listAlertAttrList({}).then(res => {
@@ -176,6 +246,14 @@ export default {
             const att = this.alertViewData.config.attrList[i];
             if (!this.attrList.find(d => d.name === att)) {
               this.$delete(this.alertViewData.config.attrList, i);
+            }
+          }
+        }
+        if (this.alertViewData.config.sortList && this.alertViewData.config.sortList.length > 0) {
+          for (let i = this.alertViewData.config.sortList.length - 1; i >= 0; i--) {
+            const sort = this.alertViewData.config.sortList[i];
+            if (!this.attrList.find(d => d.name === sort.name && d.isSort)) {
+              this.$delete(this.alertViewData.config.sortList, i);
             }
           }
         }
@@ -200,9 +278,27 @@ export default {
   computed: {
     unSelectAttrList() {
       return this.attrList.filter(item => !this.isAttrSelected(item));
+    },
+    unSelectSortAttrList() {
+      return this.attrList.filter(item => item.isSort && !this.isSortAttrSelected(item));
     }
   },
   watch: {}
 };
 </script>
-<style lang="less"></style>
+<style lang="less" scoped>
+.sort-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  border: 1px solid;
+}
+.sort-handler {
+  cursor: move;
+}
+.sort-label {
+  flex: 1;
+}
+</style>

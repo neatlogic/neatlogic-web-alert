@@ -3,30 +3,48 @@
     <div :class="{ grid: pageCount > 1 }">
       <div>
         <div v-if="$AuthUtils.hasRole(['ALERT_VIEW_MODIFY'])" class="link alert-menu-link">
-          <Dropdown
-            @on-click="
-              name => {
-                if (name === 'view') {
-                  addView();
-                } else if (name === 'catalog') {
-                  addCatalog();
-                } else if (name === 'manage') {
-                  toEditView();
-                }
-              }
-            "
-          >
-            <a class="alert-menu-a">
-              <span class="text-href tsfont-plus"></span>
-              <span class="text-href ml-xs">{{ $t('page.add') }}</span>
-              <span class="text-href tsfont-drop-down"></span>
-            </a>
-            <DropdownMenu slot="list">
-              <DropdownItem name="view"><span class="tsfont-plus">{{ $t('term.cmdb.view') }}</span></DropdownItem>
-              <DropdownItem name="catalog"><span class="tsfont-plus">{{ $t('page.catalogue') }}</span></DropdownItem>
-              <DropdownItem name="manage" divided><span class="tsfont-setting">{{ $t('page.manage') }}</span></DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
+          <div class="menu-grid">
+            <div>
+              <Dropdown
+                @on-click="
+                  name => {
+                    if (name === 'view') {
+                      addView();
+                    } else if (name === 'catalog') {
+                      addCatalog();
+                    } else if (name === 'manage') {
+                      toEditView();
+                    }
+                  }
+                "
+              >
+                <a class="alert-menu-a">
+                  <span class="text-href tsfont-plus"></span>
+                  <span class="text-href ml-xs">{{ $t('page.add') }}</span>
+                  <span class="text-href tsfont-drop-down"></span>
+                </a>
+                <DropdownMenu slot="list">
+                  <DropdownItem name="view">
+                    <span class="tsfont-plus">{{ $t('term.cmdb.view') }}</span>
+                  </DropdownItem>
+                  <DropdownItem name="catalog">
+                    <span class="tsfont-plus">{{ $t('page.catalogue') }}</span>
+                  </DropdownItem>
+                  <DropdownItem name="manage" divided>
+                    <span class="tsfont-setting">{{ $t('page.manage') }}</span>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <div style="line-height: 2.85">
+              <Poptip :wdith="200" :transfer="true" placement="bottom-start">
+                <a><span class="text-href tsfont-search"></span><span class="text-href">搜索</span></a>
+                <div slot="content">
+                  <InputSearcher v-model="keyword" placeholder="请输入视图关键字"></InputSearcher>
+                </div>
+              </Poptip>
+            </div>
+          </div>
         </div>
         <div class="link alert-menu-link" :class="{ active: $isMenuActive('/alert-manage') }" @click="goTo('/alert-manage')">
           <a class="alert-menu-a tsfont-monitor" @click="goTo('/alert-manage')">
@@ -36,11 +54,11 @@
             </span>
           </a>
         </div>
-        <div v-for="catalog in alertCatalogList" :key="catalog.id">
+        <div v-for="catalog in filterAlertCatalogList" :key="catalog.id">
           <div class="link alert-menu-link" style="height: auto">
             <a
               class="alert-menu-a pt-sm pb-sm"
-              style="height: auto;line-height:1;"
+              style="height: auto; line-height: 1"
               :class="{
                 'tsfont-dot': !catalog.viewList || catalog.viewList.length === 0,
                 'tsfont-drop-down': catalog.viewList && catalog.viewList.length > 0 && !catalog._hideview,
@@ -59,7 +77,7 @@
               style="height: auto"
               :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
             >
-              <a class="ml-lg alert-menu-a pt-sm pb-sm" style="height: auto; padding-right: 0px;line-height:1.1;" @click="goTo('/alert-manage/' + view.name)">
+              <a class="ml-lg alert-menu-a pt-sm pb-sm" style="height: auto; padding-right: 0px; line-height: 1.1" @click="goTo('/alert-manage/' + view.name)">
                 <span class="alert-name">{{ view.label }}</span>
                 <span v-if="alertCount > 0" class="text-error ml-xs superscript">
                   <b>{{ view.alertCount }}</b>
@@ -92,7 +110,8 @@ export default {
   components: {
     VerticalPager: () => import('@/resources/plugins/VerticalPager/vertical-pager.vue'),
     AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
-    AlertCatalogEdit: () => import('@/community-module/alert/pages/alert/alert-catalog-edit.vue')
+    AlertCatalogEdit: () => import('@/community-module/alert/pages/alert/alert-catalog-edit.vue'),
+    InputSearcher: () => import('@/resources/components/InputSearcher/InputSearcher.vue')
   },
   extends: LeftMenu,
   data: function() {
@@ -102,7 +121,8 @@ export default {
       pageCount: 0,
       isViewEdit: false,
       isCatalogEdit: false,
-      alertCount: 0
+      alertCount: 0,
+      keyword: ''
     };
   },
   created() {
@@ -160,7 +180,30 @@ export default {
       this.searchAlertCatalogView();
     }
   },
-  computed: {},
+  computed: {
+    filterAlertCatalogList() {
+      const keyword = this.keyword ? this.keyword.trim().toLowerCase() : '';
+      if (!keyword) {
+        return this.alertCatalogList;
+      }
+      const list = [];
+      this.alertCatalogList.forEach(catalog => {
+        const viewList = (catalog.viewList || []).filter(view => {
+          const label = view.label ? view.label.toLowerCase() : '';
+          const name = view.name ? view.name.toLowerCase() : '';
+          return label.includes(keyword) || name.includes(keyword);
+        });
+        if (viewList.length > 0) {
+          list.push({
+            ...catalog,
+            _hideview: false,
+            viewList: viewList
+          });
+        }
+      });
+      return list;
+    }
+  },
   watch: {
     '$store.state.leftMenu.alertViewCount'(val, oldVal) {
       this.searchAlertCatalogView();
@@ -169,6 +212,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.menu-grid {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
 .alert-menu-box {
   .grid {
     display: grid;

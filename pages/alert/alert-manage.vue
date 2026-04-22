@@ -157,6 +157,8 @@
           <TsTable
             v-if="finalTheadList && finalTheadList.length > 0"
             :sortList="sortList"
+            :sortOrder="sortOrder"
+            :sortMapping="sortMapping"
             :multiple="true"
             :value="selectList"
             v-bind="alertData"
@@ -337,6 +339,11 @@ export default {
       childAlertPage: {}, //记录子告警分页信息
       finalSearchParam: null, //最后的搜索参数，用于批量删除
       sortData: {},
+      sortMapping: {
+        down: 'asc',
+        up: 'desc',
+        none: ''
+      },
       isExportShow: false
     };
   },
@@ -352,16 +359,16 @@ export default {
       });
     }
 
+    this.searchParam.viewName = this.$route.params['view'] || '';
+    await this.getViewByName();
     await this.listAlertAttrList();
     /*if (this.$localStore.get('isAutoRefresh')) {
       this.isAutoRefresh = true;
     }*/
-    this.searchParam.viewName = this.$route.params['view'] || '';
     this.searchAlert();
     this.listAllStatus();
     this.listAllLevel();
     //this.listAlertView();
-    this.getViewByName();
   },
   beforeMount() {},
   mounted() {},
@@ -557,13 +564,30 @@ export default {
         }
       }
     },
-    getViewByName() {
+    async getViewByName() {
       if (this.searchParam.viewName) {
-        this.$api.alert.alert.getAlertViewByName(this.searchParam.viewName).then(res => {
+        await this.$api.alert.alert.getAlertViewByName(this.searchParam.viewName).then(res => {
           this.alertViewData = res.Return;
           this.$set(this.searchParam, 'rule', this.alertViewData?.config?.rule);
+          this.setViewSortData(this.alertViewData?.config?.sortList);
+        });
+      } else {
+        this.alertViewData = null;
+        this.sortData = {};
+      }
+    },
+    setViewSortData(sortList) {
+      const sortData = {};
+      if (sortList && sortList.length > 0) {
+        sortList.forEach(sort => {
+          if (typeof sort === 'string') {
+            sortData[sort] = 'asc';
+          } else if (sort && sort.name) {
+            sortData[sort.name] = sort.type || 'asc';
+          }
         });
       }
+      this.sortData = sortData;
     },
     getAttrByName(name) {
       if (this.attrList) {
@@ -777,6 +801,15 @@ export default {
       let list = [];
       if (this.alertData && this.alertData.theadList) {
         list = this.alertData.theadList.filter(d => d.sort).map(d => d.key);
+      }
+      return list;
+    },
+    sortOrder() {
+      const list = [];
+      if (!this.$utils.isEmptyObj(this.sortData)) {
+        Object.keys(this.sortData).forEach(key => {
+          list.push({ [key]: this.sortData[key] });
+        });
       }
       return list;
     },
