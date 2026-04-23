@@ -89,9 +89,10 @@ export default {
   data() {
     return {
       isReady: false,
-      alertViewData: { isActive: 1, config: { attrList: ['const_title'], rule: {}, sortList: [] } }, //默认必须选择标题，而且不能调整位置
+      alertViewData: { isActive: 1, catalogId: null, config: { attrList: ['const_title'], rule: {}, sortList: [] } }, //默认必须选择标题，而且不能调整位置
       attrList: [],
       conditionAttrList: [],
+      catalogList: [],
       dialogConfig: {
         title: this.id
           ? this.$t('dialog.title.edittarget', {
@@ -124,13 +125,12 @@ export default {
           falseValue: 0
         },
         catalogId: {
-          type: 'select',
+          type: 'tree',
+          name: 'catalogId',
           label: '目录',
-          dynamicUrl: '/api/rest/alert/catalog/search',
-          params: { isActive: 1, needView: 0 },
-          rootName: 'tbodyList',
-          valueName: 'id',
-          textName: 'name',
+          transfer: true,
+          search: true,
+          dataList: [],
           validateList: ['required']
         },
         authList: {
@@ -156,6 +156,7 @@ export default {
   },
   beforeCreate() {},
   async created() {
+    await this.listAlertCatalog();
     await this.getViewById();
     await this.listAlertAttrList();
     await this.listAlertConditionAttrList();
@@ -210,6 +211,37 @@ export default {
       } else {
         this.initConfig();
       }
+    },
+    buildCatalogTree(list, parentId = null, pathSet = new Set()) {
+      return (list || [])
+        .filter(item => (item.parentId || null) === parentId)
+        .sort((a, b) => (a.sort || 0) - (b.sort || 0))
+        .map(item => {
+          if (pathSet.has(item.id)) {
+            return {
+              id: item.id,
+              name: item.name,
+              children: []
+            };
+          }
+          const nextPathSet = new Set(pathSet);
+          nextPathSet.add(item.id);
+          const children = this.buildCatalogTree(list, item.id, nextPathSet);
+          const node = {
+            id: item.id,
+            name: item.name
+          };
+          if (children.length > 0) {
+            node.children = children;
+          }
+          return node;
+        });
+    },
+    async listAlertCatalog() {
+      await this.$api.alert.catalog.searchAlertCatalog({ isActive: 1, needView: 0, pageSize: 9999, currentPage: 1 }).then(res => {
+        this.catalogList = res.Return && res.Return.tbodyList ? res.Return.tbodyList : [];
+        this.formConfig.catalogId.dataList = this.buildCatalogTree(this.catalogList);
+      });
     },
     isAttrSelected(attr) {
       return this.alertViewData.config.attrList.some(item => item === attr.name);

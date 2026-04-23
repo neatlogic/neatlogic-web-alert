@@ -3,7 +3,7 @@
     <div :class="{ grid: pageCount > 1 }">
       <div>
         <div v-if="$AuthUtils.hasRole(['ALERT_VIEW_MODIFY'])" class="link alert-menu-link">
-          <div class="menu-grid">
+          <div class="menu-grid-bak">
             <div>
               <Dropdown
                 @on-click="
@@ -36,14 +36,14 @@
                 </DropdownMenu>
               </Dropdown>
             </div>
-            <div style="line-height: 2.85">
+            <!--<div style="line-height: 2.85">
               <Poptip :wdith="200" :transfer="true" placement="bottom-start">
                 <a><span class="text-href tsfont-search"></span><span class="text-href">搜索</span></a>
                 <div slot="content">
                   <InputSearcher v-model="keyword" placeholder="请输入视图关键字"></InputSearcher>
                 </div>
               </Poptip>
-            </div>
+            </div>-->
           </div>
         </div>
         <div class="link alert-menu-link" :class="{ active: $isMenuActive('/alert-manage') }" @click="goTo('/alert-manage')">
@@ -54,38 +54,13 @@
             </span>
           </a>
         </div>
-        <div v-for="catalog in filterAlertCatalogList" :key="catalog.id">
-          <div class="link alert-menu-link" style="height: auto">
-            <a
-              class="alert-menu-a pt-sm pb-sm"
-              style="height: auto; line-height: 1"
-              :class="{
-                'tsfont-dot': !catalog.viewList || catalog.viewList.length === 0,
-                'tsfont-drop-down': catalog.viewList && catalog.viewList.length > 0 && !catalog._hideview,
-                'tsfont-drop-right': catalog.viewList && catalog.viewList.length > 0 && catalog._hideview
-              }"
-              @click="toggleCatalog(catalog)"
-            >
-              <b class="text-grey">{{ catalog.name }}</b>
-            </a>
-          </div>
-          <div v-if="catalog.viewList && catalog.viewList.length > 0 && !catalog._hideview">
-            <div
-              v-for="view in catalog.viewList"
-              :key="view.id"
-              class="link alert-menu-link"
-              style="height: auto"
-              :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
-            >
-              <a class="ml-lg alert-menu-a pt-sm pb-sm" style="height: auto; padding-right: 0px; line-height: 1.1" @click="goTo('/alert-manage/' + view.name)">
-                <span class="alert-name">{{ view.label }}</span>
-                <span v-if="alertCount > 0" class="text-error ml-xs superscript">
-                  <b>{{ view.alertCount }}</b>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
+        <AlertCatalogMenuNode
+          v-for="catalog in filterAlertCatalogTreeList"
+          :key="catalog.id"
+          :catalog="catalog"
+          :level="0"
+          @go-to="goTo"
+        ></AlertCatalogMenuNode>
       </div>
       <div v-if="pageCount > 1" style="margin-top: 44px">
         <VerticalPager
@@ -105,13 +80,15 @@
 </template>
 <script>
 import LeftMenu from '@/views/components/leftmenu/leftmenu';
+
 export default {
   name: 'AlertMenu',
   components: {
     VerticalPager: () => import('@/resources/plugins/VerticalPager/vertical-pager.vue'),
     AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
     AlertCatalogEdit: () => import('@/community-module/alert/pages/alert/alert-catalog-edit.vue'),
-    InputSearcher: () => import('@/resources/components/InputSearcher/InputSearcher.vue')
+    //InputSearcher: () => import('@/resources/components/InputSearcher/InputSearcher.vue'),
+    AlertCatalogMenuNode: () => import('./alert-menu-node.vue')
   },
   extends: LeftMenu,
   data: function() {
@@ -131,13 +108,9 @@ export default {
       this.alertCount = res.Return;
     });
   },
-  mounted() {},
   methods: {
     toEditView() {
       this.$router.push({ path: '/catalog-manage' });
-    },
-    toggleCatalog(catalog) {
-      this.$set(catalog, '_hideview', !catalog._hideview);
     },
     addView() {
       this.isViewEdit = true;
@@ -145,21 +118,47 @@ export default {
     addCatalog() {
       this.isCatalogEdit = true;
     },
+    buildCatalogTree(list, parentId = null, pathSet = new Set()) {
+      return (list || [])
+        .filter(item => (item.parentId || null) === parentId)
+        .sort((a, b) => (a.sort || 0) - (b.sort || 0))
+        .map(item => {
+          if (pathSet.has(item.id)) {
+            return {
+              ...item,
+              _hideview: true,
+              children: []
+            };
+          }
+          const nextPathSet = new Set(pathSet);
+          nextPathSet.add(item.id);
+          const children = this.buildCatalogTree(list, item.id, nextPathSet);
+          return {
+            ...item,
+            _hideview: true,
+            children: children
+          };
+        });
+    },
     searchAlertCatalogView() {
       this.$api.alert.catalog.searchAlertCatalog(this.searchParam).then(res => {
-        this.alertCatalogList = res.Return.tbodyList;
+        const catalogList = res.Return && res.Return.tbodyList ? res.Return.tbodyList : [];
+        this.alertCatalogList = this.buildCatalogTree(catalogList);
         this.pageCount = res.Return.pageCount;
-        if (this.alertCatalogList && this.alertCatalogList.length > 0) {
-          this.alertCatalogList.forEach(catalog => {
-            this.$set(catalog, '_hideview', true);
-            if (catalog.viewList && catalog.viewList.length > 0) {
-              catalog.viewList.forEach(view => {
-                this.$api.alert.alert.searchAlertCount({ viewName: view.name }).then(res => {
-                  this.$set(view, 'alertCount', res.Return);
-                });
-              });
-            }
+        this.setViewAlertCount(this.alertCatalogList);
+      });
+    },
+    setViewAlertCount(catalogList) {
+      (catalogList || []).forEach(catalog => {
+        if (catalog.viewList && catalog.viewList.length > 0) {
+          catalog.viewList.forEach(view => {
+            this.$api.alert.alert.searchAlertCount({ viewName: view.name }).then(res => {
+              this.$set(view, 'alertCount', res.Return);
+            });
           });
+        }
+        if (catalog.children && catalog.children.length > 0) {
+          this.setViewAlertCount(catalog.children);
         }
       });
     },
@@ -181,31 +180,36 @@ export default {
     }
   },
   computed: {
-    filterAlertCatalogList() {
+    filterAlertCatalogTreeList() {
       const keyword = this.keyword ? this.keyword.trim().toLowerCase() : '';
       if (!keyword) {
         return this.alertCatalogList;
       }
-      const list = [];
-      this.alertCatalogList.forEach(catalog => {
-        const viewList = (catalog.viewList || []).filter(view => {
-          const label = view.label ? view.label.toLowerCase() : '';
-          const name = view.name ? view.name.toLowerCase() : '';
-          return label.includes(keyword) || name.includes(keyword);
-        });
-        if (viewList.length > 0) {
-          list.push({
-            ...catalog,
-            _hideview: false,
-            viewList: viewList
+      const filterCatalog = list => {
+        const result = [];
+        (list || []).forEach(catalog => {
+          const children = filterCatalog(catalog.children || []);
+          const viewList = (catalog.viewList || []).filter(view => {
+            const label = view.label ? view.label.toLowerCase() : '';
+            const name = view.name ? view.name.toLowerCase() : '';
+            return label.includes(keyword) || name.includes(keyword);
           });
-        }
-      });
-      return list;
+          if (children.length > 0 || viewList.length > 0) {
+            result.push({
+              ...catalog,
+              _hideview: false,
+              children: children,
+              viewList: viewList
+            });
+          }
+        });
+        return result;
+      };
+      return filterCatalog(this.alertCatalogList);
     }
   },
   watch: {
-    '$store.state.leftMenu.alertViewCount'(val, oldVal) {
+    '$store.state.leftMenu.alertViewCount'() {
       this.searchAlertCatalogView();
     }
   }
@@ -253,8 +257,8 @@ export default {
     grid-template-columns: 15px auto;
   }
   .superscript {
-    font-size: 0.7em; /* 设置字体大小为原字体的70% */
-    vertical-align: super; /* 设置为上标 */
+    font-size: 0.7em;
+    vertical-align: super;
   }
 }
 </style>
