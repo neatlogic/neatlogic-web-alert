@@ -7,6 +7,18 @@
           <div class="action-item tsfont-plus" @click="addView()">视图</div>
         </div>
       </template>
+      <template v-slot:topRight>
+        <div style="text-align: right" :style="{ '--children': 3 }" class="controller-group">
+          <div>
+            <CombineSearcher
+              v-model="searchVal"
+              class="search"
+              v-bind="searchConfig"
+              :width="500"
+            ></CombineSearcher>
+          </div>
+        </div>
+      </template>
       <template v-slot:content>
         <div class="catalog-grid text-grey padding">
           <div></div>
@@ -15,6 +27,7 @@
           <div>操作</div>
         </div>
         <draggable
+          v-if="!hasSearchCondition"
           v-bind="dragOptions"
           tag="div"
           :list="catalogTreeList"
@@ -55,6 +68,30 @@
             @drop-to-catalog="dropToCatalog"
           ></AlertCatalogNode>
         </draggable>
+        <div v-else>
+          <AlertCatalogNode
+            v-for="(catalog, index) in filterCatalogTreeList"
+            :key="catalog.id"
+            :catalog="catalog"
+            :pathIds="[]"
+            :parentId="null"
+            :catalogIndex="index"
+            :catalogCount="filterCatalogTreeList.length"
+            :level="0"
+            :dragOptions="searchDragOptions"
+            :draggingData="null"
+            :activeDropCatalogId="null"
+            @edit-catalog="editCatalog"
+            @delete-catalog="deleteCatalog"
+            @add-child="addChildCatalog"
+            @edit-view="editView"
+            @delete-view="deleteView"
+            @move-catalog-up="moveCatalogUp"
+            @move-catalog-down="moveCatalogDown"
+            @move-view-up="moveViewUp"
+            @move-view-down="moveViewDown"
+          ></AlertCatalogNode>
+        </div>
       </template>
     </TsContain>
     <AlertViewEdit v-if="isViewEdit" :id="currentViewId" @close="closeViewEdit"></AlertViewEdit>
@@ -73,6 +110,7 @@ export default {
   name: 'CatalogManage',
   components: {
     draggable,
+    CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
     AlertCatalogNode: () => import('./alert-catalog-node.vue'),
     AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
     AlertCatalogEdit: () => import('@/community-module/alert/pages/alert/alert-catalog-edit.vue')
@@ -85,6 +123,33 @@ export default {
       currentCatalogId: null,
       currentParentCatalogId: null,
       currentViewId: null,
+      searchVal: {},
+      searchConfig: {
+        labelWidth: 100,
+        searchMode: 'clickBtnSearch',
+        labelPosition: 'left',
+        searchList: [
+          {
+            type: 'radio',
+            name: 'isActive',
+            value: null,
+            label: '是否激活',
+            dataList: [
+              { value: 1, text: this.$t('page.yes') },
+              { value: 0, text: this.$t('page.no') }
+            ],
+            transfer: true,
+            allowToggle: true
+          },
+          {
+            type: 'userselect',
+            name: 'authList',
+            label: '授权',
+            groupList: ['common', 'user', 'role', 'team'],
+            transfer: true
+          }
+        ]
+      },
       draggingData: null,
       activeDropCatalogId: null,
       dragOptions: {
@@ -460,6 +525,71 @@ export default {
       this.$api.alert.catalog.listAlertCatalog().then(res => {
         this.catalogTreeList = this.buildCatalogTree(res.Return || [], null, new Set(), hideStateMap);
       });
+    },
+    getAuthValueList(authList) {
+      return (authList || []).map(item => {
+        if (item && typeof item === 'object') {
+          return item.value || item.id || item.uuid || item.text || '';
+        }
+        return item;
+      }).filter(Boolean);
+    }
+  },
+  computed: {
+    hasSearchCondition() {
+      const { keyword, isActive, authList } = this.searchVal || {};
+      return !!((keyword && keyword.trim()) || isActive === 0 || isActive === 1 || (authList && authList.length > 0));
+    },
+    searchDragOptions() {
+      return {
+        ...this.dragOptions,
+        disabled: true
+      };
+    },
+    filterCatalogTreeList() {
+      const keyword = this.searchVal && this.searchVal.keyword ? this.searchVal.keyword.trim().toLowerCase() : '';
+      const isActive = this.searchVal ? this.searchVal.isActive : null;
+      const selectedAuthList = this.getAuthValueList(this.searchVal && this.searchVal.authList);
+      if (!keyword && isActive !== 0 && isActive !== 1 && selectedAuthList.length === 0) {
+        return this.catalogTreeList;
+      }
+      const filterCatalog = list => {
+        const result = [];
+        (list || []).forEach(catalog => {
+          const catalogName = catalog.name ? catalog.name.toLowerCase() : '';
+          const catalogAuthList = this.getAuthValueList(catalog.authList);
+          const matchCatalogKeyword = !keyword || catalogName.includes(keyword);
+          const matchCatalogActive = isActive === 0 || isActive === 1 ? catalog.isActive === isActive : true;
+          const matchCatalogAuth = selectedAuthList.length > 0 ? selectedAuthList.some(item => catalogAuthList.includes(item)) : true;
+          const children = filterCatalog(catalog.children || []);
+          const viewList = (catalog.viewList || []).filter(view => {
+            const name = view.name ? view.name.toLowerCase() : '';
+            const label = view.label ? view.label.toLowerCase() : '';
+            const viewAuthList = this.getAuthValueList(view.authList);
+            const matchViewKeyword = !keyword || name.includes(keyword) || label.includes(keyword);
+            const matchViewActive = isActive === 0 || isActive === 1 ? view.isActive === isActive : true;
+            const matchViewAuth = selectedAuthList.length > 0 ? selectedAuthList.some(item => viewAuthList.includes(item)) : true;
+            return matchViewKeyword && matchViewActive && matchViewAuth;
+          });
+          if (matchCatalogKeyword && matchCatalogActive && matchCatalogAuth) {
+            result.push({
+              ...catalog,
+              _hideview: false,
+              children: catalog.children || [],
+              viewList: catalog.viewList || []
+            });
+          } else if (children.length > 0 || viewList.length > 0) {
+            result.push({
+              ...catalog,
+              _hideview: false,
+              children: children,
+              viewList: viewList
+            });
+          }
+        });
+        return result;
+      };
+      return filterCatalog(this.catalogTreeList);
     }
   }
 };
