@@ -3,9 +3,21 @@
     <TsContain>
       <template v-slot:navigation>
         <span v-if="alertViewData">
-          {{ alertViewData.label }}
+          <span>{{ alertViewData.label }}</span>
+          <span
+            v-auth="['ALERT_VIEW_MODIFY']"
+            class="cursor tsfont-setting ml-xs"
+            @click="editView"
+          ></span>
         </span>
-        <span v-else>{{ $t('term.alert.allalert') }}</span>
+        <span v-else>
+          <span>{{ $t('term.alert.allalert') }}</span>
+          <span
+            v-auth="['ALERT_ALLALERTCONFIG_MODIFY']"
+            class="cursor tsfont-setting ml-xs"
+            @click="editView"
+          ></span>
+        </span>
       </template>
       <template v-slot:topLeft>
         <div class="action-group">
@@ -280,6 +292,12 @@
       :searchParam="searchParam"
       @close="isExportShow = false"
     ></ExportDialog>
+    <AlertViewEdit
+      v-if="isViewEdit"
+      :id="alertViewData ? alertViewData.id : null"
+      :isDefaultConfig="!searchParam.viewName"
+      @close="closeViewEdit"
+    ></AlertViewEdit>
   </div>
 </template>
 <script>
@@ -289,7 +307,7 @@ export default {
   components: {
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
-    //AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
+    AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
     AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
     AlertDeleteDialog: () => import('@/community-module/alert/pages/alert/alert-delete-dialog.vue'),
@@ -310,6 +328,7 @@ export default {
       searchVal: {},
       deleteMode: 'select', //删除模式:select|match
       alertViewData: null,
+      defaultViewConfig: null,
       isShowFilter: false,
       currentView: null,
       isViewEdit: false,
@@ -573,7 +592,11 @@ export default {
         });
       } else {
         this.alertViewData = null;
-        this.sortData = {};
+        await this.$api.alert.alert.getAllAlertConfig('all').then(res => {
+          this.defaultViewConfig = res.Return && res.Return.config ? res.Return.config : null;
+          this.$set(this.searchParam, 'rule', this.defaultViewConfig?.rule || {});
+          this.setViewSortData(this.defaultViewConfig?.sortList);
+        });
       }
     },
     setViewSortData(sortList) {
@@ -613,6 +636,14 @@ export default {
     },
     editView() {
       this.isViewEdit = true;
+    },
+    async closeViewEdit(needRefresh) {
+      this.isViewEdit = false;
+      if (needRefresh) {
+        await this.getViewByName();
+        await this.listAlertAttrList();
+        this.searchAlert(1);
+      }
     },
     changePageSize(pageSize) {
       if (pageSize) {

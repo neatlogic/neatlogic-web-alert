@@ -1,10 +1,14 @@
 <template>
   <div>
-    <div class="link alert-menu-link" style="height: auto" :style="rowStyle">
-      <a class="alert-menu-a pt-sm pb-sm" style="height: auto; line-height: 1" @click="toggleCatalog(catalog)">
-        <span :class="toggleClass" class="ml-sm">
-          {{ catalog.name }}
-        </span>
+    <div class="link alert-menu-link" style="height: auto">
+      <a
+        class="alert-menu-a pt-sm pb-sm"
+        :class="toggleClass"
+        style="height: auto; line-height: 1"
+        :style="rowStyle"
+        @click="toggleCatalog(catalog)"
+      >
+        <span>{{ catalog.name }}</span>
       </a>
     </div>
     <div v-if="!catalog._hideview">
@@ -20,11 +24,15 @@
         :key="view.id"
         class="link alert-menu-link"
         style="height: auto"
-        :style="viewRowStyle"
         :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
       >
-        <a class="alert-menu-a pt-sm pb-sm" style="height: auto; padding-right: 0px; line-height: 1.1" @click="$emit('go-to', '/alert-manage/' + view.name)">
-          <span class="alert-name">{{ view.label }}</span>
+        <a
+          class="alert-menu-a pt-sm pb-sm tsfont-monitor"
+          :style="viewRowStyle"
+          style="height: auto; line-height: 1.1"
+          @click="$emit('go-to', '/alert-manage/' + view.name)"
+        >
+          <span>{{ view.label }}</span>
           <span v-if="view.alertCount > 0" class="text-error ml-xs superscript">
             <b>{{ view.alertCount }}</b>
           </span>
@@ -52,12 +60,12 @@ export default {
   computed: {
     rowStyle() {
       return {
-        paddingLeft: this.level * 12 + 'px'
+        'margin-left': this.level * 12 + 'px'
       };
     },
     viewRowStyle() {
       return {
-        paddingLeft: (this.level + 1) * 12 + 'px'
+        'margin-left': (this.level + 1) * 12 + 'px'
       };
     },
     toggleClass() {
@@ -69,3 +77,9 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.superscript {
+  font-size: 0.7em;
+  vertical-align: super;
+}
+</style>

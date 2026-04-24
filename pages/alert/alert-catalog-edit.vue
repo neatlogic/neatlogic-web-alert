@@ -102,6 +102,7 @@ export default {
       if (form && form.valid()) {
         this.$api.alert.catalog.saveAlertCatalog(this.alertCatalogData).then(res => {
           if (res.Status === 'OK') {
+            this.$store.commit('leftMenu/setAlertViewCount', 'add');
             this.close(true);
           }
         });

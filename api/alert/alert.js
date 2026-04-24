@@ -11,6 +11,9 @@ const alert = {
   getAlertViewByName(name) {
     return axios.post('/api/rest/alert/view/get', { name: name });
   },
+  getAllAlertConfig(name) {
+    return axios.post('/api/rest/alert/allalert/config/get', { name: name });
+  },
   searchAlert(params) {
     return axios.post('/api/rest/alert/search', params);
   },
@@ -22,6 +25,9 @@ const alert = {
   },
   saveAlertView(params) {
     return axios.post('/api/rest/alert/view/save', params);
+  },
+  saveAllAlertConfig(params) {
+    return axios.post('/api/rest/alert/allalert/config/save', params);
   },
   searchAlertView(params) {
     return axios.post('/api/rest/alert/view/search', params);

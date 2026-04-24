@@ -253,7 +253,7 @@ export default {
       this.currentViewId = null;
       if (needRefresh) {
         this.listAlertCatalog();
-        this.$store.commit('leftMenu/setAlertViewCount', 'add');
+        //this.$store.commit('leftMenu/setAlertViewCount', 'add');
       }
     },
     closeCatalogEdit(needRefresh) {
@@ -262,7 +262,7 @@ export default {
       this.currentParentCatalogId = null;
       if (needRefresh) {
         this.listAlertCatalog();
-        this.$store.commit('leftMenu/setAlertViewCount', 'add');
+        //this.$store.commit('leftMenu/setAlertViewCount', 'add');
       }
     },
     startCatalogDrag(parentId, evt, list) {

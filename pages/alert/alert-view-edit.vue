@@ -45,16 +45,8 @@
               <span>{{ attr.label }}</span>
             </Tag>
             <Divider v-if="alertViewData.config.sortList && alertViewData.config.sortList.length > 0" orientation="left">已选排序</Divider>
-            <draggable
-              v-if="alertViewData.config.sortList && alertViewData.config.sortList.length > 0"
-              handle=".tsfont-option-vertical"
-              :list="alertViewData.config.sortList"
-            >
-              <div
-                v-for="(sort, index) in alertViewData.config.sortList"
-                :key="sort.name"
-                class="sort-item bg-op radius-sm border-color"
-              >
+            <draggable v-if="alertViewData.config.sortList && alertViewData.config.sortList.length > 0" handle=".tsfont-option-vertical" :list="alertViewData.config.sortList">
+              <div v-for="(sort, index) in alertViewData.config.sortList" :key="sort.name" class="sort-item bg-op radius-sm border-color">
                 <span class="tsfont-option-vertical sort-handler"></span>
                 <span class="sort-label">{{ getAttrByName(sort.name).label }}</span>
                 <RadioGroup v-model="sort.type" type="button" size="small">
@@ -84,7 +76,8 @@ export default {
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue')
   },
   props: {
-    id: { type: Number }
+    id: { type: Number },
+    isDefaultConfig: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -93,11 +86,13 @@ export default {
       attrList: [],
       conditionAttrList: [],
       dialogConfig: {
-        title: this.id
-          ? this.$t('dialog.title.edittarget', {
-            target: this.$t('term.cmdb.view')
-          })
-          : this.$t('dialog.title.addtarget', { target: this.$t('term.cmdb.view') }),
+        title: this.isDefaultConfig
+          ? '所有告警设置'
+          : this.id
+            ? this.$t('dialog.title.edittarget', {
+              target: this.$t('term.cmdb.view')
+            })
+            : this.$t('dialog.title.addtarget', { target: this.$t('term.cmdb.view') }),
         type: 'modal',
         isShow: true,
         width: 'medium'
@@ -159,7 +154,8 @@ export default {
   },
   beforeCreate() {},
   async created() {
-    await this.getViewById();
+    this.initFormConfig();
+    await this.getViewData();
     await this.listAlertAttrList();
     await this.listAlertConditionAttrList();
     this.isReady = true;
@@ -181,6 +177,15 @@ export default {
     },
     getAttrByName(name) {
       return this.attrList.find(item => item.name === name) || {};
+    },
+    initFormConfig() {
+      if (this.isDefaultConfig) {
+        this.$delete(this.formConfig, 'name');
+        this.$delete(this.formConfig, 'label');
+        this.$delete(this.formConfig, 'isActive');
+        this.$delete(this.formConfig, 'catalogId');
+        this.$delete(this.formConfig, 'authList');
+      }
     },
     initConfig() {
       if (!this.alertViewData.config) {
@@ -204,8 +209,16 @@ export default {
         }
       }
     },
-    async getViewById() {
-      if (this.id) {
+    async getViewData() {
+      if (this.isDefaultConfig) {
+        await this.$api.alert.alert.getAllAlertConfig('all').then(res => {
+          this.alertViewData = {
+            name: 'all',
+            config: res.Return && res.Return.config ? res.Return.config : { attrList: ['const_title'], rule: {}, sortList: [] }
+          };
+          this.initConfig();
+        });
+      } else if (this.id) {
         await this.$api.alert.alert.getAlertViewById(this.id).then(res => {
           this.alertViewData = res.Return;
           this.$set(this.alertViewData, 'catalogId', res.Return.catalogId || null);
@@ -269,9 +282,11 @@ export default {
     saveAlertView() {
       const form = this.$refs.form;
       if (form && form.valid()) {
-        this.$api.alert.alert.saveAlertView(this.alertViewData).then(res => {
+        const saveHandler = this.isDefaultConfig ? this.$api.alert.alert.saveAllAlertConfig({ name: 'all', config: this.alertViewData.config }) : this.$api.alert.alert.saveAlertView(this.alertViewData);
+        saveHandler.then(res => {
           if (res.Status === 'OK') {
             this.$Message.success(this.$t('message.updatesuccess'));
+            this.$store.commit('leftMenu/setAlertViewCount', 'add');
             this.close(true);
           }
         });
