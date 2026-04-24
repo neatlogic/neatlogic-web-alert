@@ -1,13 +1,13 @@
 <template>
   <div>
     <TsContain>
-      <template v-slot:topLeft></template>
+      <template v-slot:topLeft>
+        <span v-auth="['ALERT_ADMIN']" class="action-item">
+          <AuditConfig auditName="ALERT-TRASH"></AuditConfig>
+        </span>
+      </template>
       <template v-slot:topRight>
-        <div class="action-group">
-          <div class="action-item" style="width: 500px">
-            <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlert(1)"></CombineSearcher>
-          </div>
-        </div>
+        <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlert(1)"></CombineSearcher>
       </template>
       <template v-slot:content>
         <Loading v-if="isLoading" :loadingShow="true" type="fix"></Loading>
@@ -64,7 +64,8 @@ export default {
     CombineSearcher: () => import('@/resources/components/CombineSearcher/CombineSearcher.vue'),
     TsTable: () => import('@/resources/components/TsTable/TsTable.vue'),
     AlertDetail: () => import('@/community-module/alert/pages/alerttrash/alert-trash-detail-dialog.vue'),
-    UserCard: () => import('@/resources/components/UserCard/UserCard.vue')
+    UserCard: () => import('@/resources/components/UserCard/UserCard.vue'),
+    AuditConfig: () => import('@/views/components/auditconfig/auditconfig.vue')
     //AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
   },
   props: {},
