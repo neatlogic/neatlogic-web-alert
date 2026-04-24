@@ -30,15 +30,20 @@
     <TsFormItem v-if="integrationData && paramList.length > 0" :label="$t('term.process.paramsMapping')" labelPosition="left">
       <div>
         <div>
-          <span class="mr-xs text-grey">点击复制属性</span>
-          <Tag
-            v-for="(attr, index) in attrList"
-            :key="index"
-            v-clipboard="attr.freemarkerSnippet || '${DATA.' + attr.name + '}'"
-            v-clipboard:success="clipboardSuc"
-            class="cursor"
-            @click.stop
-          >{{ attr.label }}</Tag>
+          <span class="cursor text-action" @click="isShowAttrList = !isShowAttrList">
+            <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
+            <span class="ml-xs">点击复制属性</span>
+          </span>
+          <div v-if="isShowAttrList" class="mt-sm attr-list">
+            <Tag
+              v-for="(attr, index) in attrList"
+              :key="index"
+              v-clipboard="attr.freemarkerSnippet || '${DATA.' + attr.name + '}'"
+              v-clipboard:success="clipboardSuc"
+              class="cursor"
+              @click.stop
+            >{{ attr.label }}</Tag>
+          </div>
         </div>
         <TsFormItem
           v-for="(param, index) in paramList"
@@ -241,6 +246,7 @@ export default {
     return {
       integrationData: null,
       attrList: [],
+      isShowAttrList: false,
       handlers: [],
       pluginList: []
     };

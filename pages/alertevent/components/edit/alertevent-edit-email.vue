@@ -27,15 +27,20 @@
     </TsFormItem>
     <TsFormItem v-if="configLocal.type === 'custom'" :label="$t('term.cmdb.selectedattr')" labelPosition="left">
       <div>
-        <span class="mr-xs text-grey">{{ $t('term.alert.clickcopyattr') }}</span>
-        <Tag
-          v-for="(attr, index) in attrList"
-          :key="index"
-          v-clipboard="attr.freemarkerSnippet || '${DATA.' + attr.name + '}'"
-          v-clipboard:success="clipboardSuc"
-          class="cursor"
-          @click.stop
-        >{{ attr.label }}</Tag>
+        <span class="cursor text-action" @click="isShowAttrList = !isShowAttrList">
+          <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
+          <span class="ml-xs">{{ $t('term.alert.clickcopyattr') }}</span>
+        </span>
+        <div v-if="isShowAttrList" class="mt-sm">
+          <Tag
+            v-for="(attr, index) in attrList"
+            :key="index"
+            v-clipboard="attr.freemarkerSnippet || '${DATA.' + attr.name + '}'"
+            v-clipboard:success="clipboardSuc"
+            class="cursor"
+            @click.stop
+          >{{ attr.label }}</Tag>
+        </div>
       </div>
     </TsFormItem>
     <TsFormItem
@@ -149,6 +154,7 @@ export default {
   data() {
     return {
       attrList: [],
+      isShowAttrList: false,
       statusList: [
         {
           value: 'new',
