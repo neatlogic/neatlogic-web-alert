@@ -79,19 +79,17 @@
   </div>
 </template>
 <script>
-import LeftMenu from '@/views/components/leftmenu/leftmenu';
-
+import LeftMenuMixin from '@/views/components/leftmenu/leftmenu-mixin';
 export default {
   name: 'AlertMenu',
   components: {
     VerticalPager: () => import('@/resources/plugins/VerticalPager/vertical-pager.vue'),
     AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
     AlertCatalogEdit: () => import('@/community-module/alert/pages/alert/alert-catalog-edit.vue'),
-    //InputSearcher: () => import('@/resources/components/InputSearcher/InputSearcher.vue'),
     AlertCatalogMenuNode: () => import('./alert-menu-node.vue')
   },
-  extends: LeftMenu,
-  data: function() {
+  mixins: [LeftMenuMixin],
+  data() {
     return {
       alertCatalogList: [],
       searchParam: { isActive: 1, needView: 1, pageSize: 20, currentPage: 1 },
