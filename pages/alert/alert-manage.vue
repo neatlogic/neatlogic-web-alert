@@ -618,7 +618,7 @@ export default {
       }
     },
     async listAlertAttrList() {
-      await this.$api.alert.alert.listAlertAttrList(this.searchParam.viewName ? { viewName: this.searchParam.viewName } : {}).then(res => {
+      await this.$api.alert.alert.listAlertAttrList({}).then(res => {
         this.attrList = res.Return;
       });
     },
