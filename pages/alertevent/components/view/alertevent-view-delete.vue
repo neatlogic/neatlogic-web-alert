@@ -6,6 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <div v-if="configLocal.isDeleteChildAlert">
       同时删除父告警和子告警
     </div>
@@ -20,6 +21,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue')
   },
   extends: AlertEventBase,
   props: {},

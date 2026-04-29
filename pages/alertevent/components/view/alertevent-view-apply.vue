@@ -6,6 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <div v-if="handler.config && handler.config.userIdList && handler.config.userIdList.length > 0">
       <Divider orientation="start">处理人</Divider>
       <div>
@@ -26,6 +27,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue'),
     UserCard: () => import('@/resources/components/UserCard/UserCard.vue')
   },
   extends: AlertEventBase,

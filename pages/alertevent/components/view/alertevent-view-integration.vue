@@ -6,12 +6,12 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <TsFormItem
       v-if="integrationData"
       style="margin: 0px !important"
       :label="$t('page.integration')"
       labelPosition="left"
-      :labelWidth="90"
     >
       <span>
         {{ integrationData.name }}
@@ -19,7 +19,6 @@
     </TsFormItem>
     <TsFormItem
       v-if="integrationData && paramList.length > 0"
-      :labelWidth="90"
       :label="$t('term.process.paramsMapping')"
       style="margin: 0px !important"
       labelPosition="left"
@@ -41,7 +40,6 @@
     <TsFormItem
       v-if="handler.error && handler.result && handler.result.sourceParam"
       labelPosition="left"
-      :labelWidth="90"
       style="margin: 0px !important"
       :label="$t('term.alert.alertdata')"
     >
@@ -50,7 +48,6 @@
     <TsFormItem
       v-if="handler.error && handler.result && handler.result.param"
       labelPosition="left"
-      :labelWidth="90"
       style="margin: 0px !important"
       :label="$t('term.framework.sendingparam')"
     >
@@ -61,7 +58,6 @@
       style="margin: 0px !important"
       :label="$t('term.alert.invokeinterval')"
       labelPosition="left"
-      :labelWidth="90"
     >
       <span>
         <span class="mr-xs">
@@ -72,7 +68,6 @@
     </TsFormItem>
     <TsFormItem
       v-if="mode !== 'audit' && configLocal.successCallbackList && configLocal.successCallbackList.length > 0"
-      :labelWidth="90"
       :label="$t('term.alert.successaction')"
       labelPosition="left"
       style="margin: 0px !important"
@@ -119,7 +114,6 @@
     </TsFormItem>
     <TsFormItem
       v-if="mode !== 'audit' && configLocal.failedCallbackList && configLocal.failedCallbackList.length > 0"
-      :labelWidth="90"
       :label="$t('term.alert.failedaction')"
       labelPosition="left"
       style="margin: 0px !important"
@@ -167,7 +161,6 @@
     <!--执行结果-->
     <TsFormItem
       v-if="mode === 'audit' && handler.status && handler.childAuditList && handler.childAuditList.length > 0"
-      :labelWidth="90"
       :label="handler.status === 'succeed' ? $t('term.alert.successaction') : $t('term.alert.failedaction')"
       labelPosition="left"
       style="margin: 0px !important"
@@ -205,7 +198,6 @@
       v-if="handler.result"
       style="margin: 0px !important"
       labelPosition="left"
-      :labelWidth="90"
       :label="$t('term.alert.invokeresult')"
     >
       <span :class="{ 'text-success': handler.status === 'succeed', 'text-error': handler.status === 'failed' }">{{ handler.statusName }}</span>
@@ -214,7 +206,6 @@
       v-if="handler.result && handler.result.response"
       style="margin: 0px !important"
       labelPosition="left"
-      :labelWidth="90"
       :label="$t('term.alert.returnresult')"
     >
       <div>{{ handler.result.response }}</div>
@@ -223,7 +214,6 @@
       v-if="handler.error"
       style="margin: 0px !important"
       labelPosition="left"
-      :labelWidth="90"
       :label="$t('page.exception')"
     >
       <div class="text-error">{{ handler.error }}</div>
@@ -236,6 +226,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },
   extends: AlertEventBase,

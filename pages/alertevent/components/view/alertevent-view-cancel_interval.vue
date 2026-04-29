@@ -6,6 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <TsFormItem label="定时插件" labelPosition="left" style="margin:0px !important">
       <span v-if="intervalHandlerNameList.length > 0">
         <Tag v-for="(name, index) in intervalHandlerNameList" :key="index">{{ name }}</Tag>
@@ -41,6 +42,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },
   extends: AlertEventBase,

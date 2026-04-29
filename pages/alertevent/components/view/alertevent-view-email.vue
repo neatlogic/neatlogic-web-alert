@@ -6,6 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <TsFormItem
       v-if="mailServerData"
       label="邮件服务器"
@@ -102,7 +103,8 @@
         :class="{
           'text-success': handler.status === 'succeed',
           'text-error': handler.status === 'failed',
-          'text-warning': handler.status === 'skipped'
+          'text-warning': handler.status === 'breaked',
+          'text-grey': handler.status === 'skipped'
         }"
       >
         {{ handler.statusName }}
@@ -124,6 +126,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     UserSelect: () => import('@/resources/components/UserSelect/UserSelect.vue')

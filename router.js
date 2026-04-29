@@ -18,6 +18,7 @@ const sourceManage = () => import('@/community-module/alert/pages/alertsource/al
 const alertTrashManage = () => import('@/community-module/alert/pages/alerttrash/alert-trash-manage.vue');
 const alertMarkManage = () => import('@/community-module/alert/pages/alertmark/alertmark-manage.vue');
 const alertActionManage = () => import('@/community-module/alert/pages/alertaction/action-manage.vue');
+const breakerPolicyManage = () => import('@/community-module/alert/pages/breaker/breaker-policy-manage.vue');
 //const alertTrashDetail = () => import('@/community-module/alert/pages/alerttrash/alert-trash-detail.vue');
 
 import { config } from './config.js';
@@ -222,6 +223,18 @@ let routerArr = [
       icon: 'tsfont-plugin',
       type: 'alertmanage',
       authority: 'ALERT_EVENT_PLUGIN_MODIFY'
+    }
+  },
+  {
+    path: '/breaker-policy-manage',
+    name: 'breaker-policy-manage',
+    component: breakerPolicyManage,
+    meta: {
+      title: '熔断策略管理',
+      ismenu: true,
+      icon: 'tsfont-unbind',
+      type: 'alertmanage',
+      authority: 'ALERT_BREAKER_MODIFY'
     }
   },
   {

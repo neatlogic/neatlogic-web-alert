@@ -13,6 +13,7 @@ import alerttrash from './alert/alerttrash.js';
 import alertmark from './alertmark/alertmark.js';
 import alerteventhandlertype from './alertevent/alerteventhandlertype.js';
 import action from './alertaction/alertaction.js';
+import breaker from './breaker/breaker.js';
 
 export default {
   alerttype,
@@ -28,5 +29,6 @@ export default {
   alerttrash,
   alertmark,
   alerteventhandlertype,
-  action
+  action,
+  breaker
 };

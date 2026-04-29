@@ -80,9 +80,11 @@ export default {
         return 'success';
       } else if (audit.status === 'failed') {
         return 'error';
-      } else if (audit.status === 'skipped') {
+      } else if (audit.status === 'breaked') {
         return 'warning';
       } else if (audit.status === 'suppress') {
+        return 'normal';
+      } else if (audit.status === 'skipped') {
         return 'normal';
       } else if (audit.status === 'disabled') {
         return 'normal';

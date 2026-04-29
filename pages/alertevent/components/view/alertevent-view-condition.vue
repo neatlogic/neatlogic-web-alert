@@ -6,6 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <div v-for="(condition, index) in conditionList" :key="index">
       <ConditionGroup
         v-model="condition.rule"
@@ -69,7 +70,6 @@
       v-if="handler.error"
       style="margin: 0px !important"
       labelPosition="left"
-      :labelWidth="90"
       label="异常"
     >
       <div class="text-error">{{ handler.error }}</div>
@@ -82,6 +82,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue')
   },

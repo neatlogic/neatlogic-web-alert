@@ -6,6 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <div v-if="mode === 'edit'">
       <div v-for="(interval, index) in configLocal.intervalList" :key="index" :class="{ 'mt-md': index > 0 }">
         <div class="action-group">
@@ -73,6 +74,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue'),
     TsFormInput: () => import('@/resources/plugins/TsForm/TsFormInput'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },

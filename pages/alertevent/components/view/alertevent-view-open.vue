@@ -6,6 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <TsFormItem label="打开方式" labelPosition="left" style="margin:0px !important">
       <span>{{ configLocal.openType === 'id' ? 'id' : '唯一键' }}</span>
     </TsFormItem>
@@ -48,6 +49,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },
   extends: AlertEventBase,

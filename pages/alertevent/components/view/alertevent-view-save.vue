@@ -6,6 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
+    <ViewBase :mode="mode" :handler="handler"></ViewBase>
     <TsFormItem
       v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0"
       style="margin: 0px !important"
@@ -101,6 +102,7 @@ import { AlertEventBase } from '@/community-module/alert/pages/alertevent/compon
 export default {
   name: '',
   components: {
+    ViewBase: () => import('@/community-module/alert/pages/alertevent/components/view/alertevent-view-base.vue'),
     AlertView: () => import('@/community-module/alert/pages/alert/alert-attr/components/alert-view-dialog.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
