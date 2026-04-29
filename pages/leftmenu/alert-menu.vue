@@ -221,7 +221,10 @@ export default {
 .alert-menu-box {
   .grid {
     display: grid;
-    grid-template-columns: 177px 23px;
+    grid-template-columns: minmax(0, 1fr) 23px;
+    > div:first-child {
+      min-width: 0;
+    }
     .alert-menu-link {
       padding: 0 0 0 6px !important;
     }
