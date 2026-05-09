@@ -44,6 +44,10 @@
               <template v-slot:status="{ row }">
                 <span :class="getAuditStatusClass(row.status)">{{ getAuditStatusText(row.status) }}</span>
               </template>
+              <template v-slot:alertTitle="{ row }">
+                <span v-if="row.alertId" class="text-href" @click="toAlertDetail(row)">{{ row.alertTitle || ('#' + row.alertId) }}</span>
+                <span v-else>-</span>
+              </template>
               <template v-slot:startTime="{ row }">
                 <span>{{ row.startTime | formatDate }}</span>
               </template>
@@ -103,7 +107,7 @@ export default {
       ],
       auditTheadList: [
         { key: 'alertId', title: '告警ID' },
-        { key: 'stateId', title: '状态ID' },
+        { key: 'alertTitle', title: '告警标题' },
         { key: 'status', title: '结果' },
         { key: 'startTime', title: '执行时间' },
         { key: 'timeCost', title: '耗时' },
@@ -150,9 +154,18 @@ export default {
       this.auditSearchParam.pageSize = pageSize;
       this.searchAudit(1);
     },
+    toAlertDetail(row) {
+      if (row && row.alertId) {
+        window.open(HOME + '/alert.html#/alert-detail/' + row.alertId, '_blank');
+      }
+    },
     getStateText(state) {
       if (state === 'OPEN') {
         return '熔断中';
+      } else if (state === 'COLLECTING') {
+        return '熔断收集中';
+      } else if (state === 'FLUSHING') {
+        return '熔断处理中';
       } else if (state === 'CLOSED') {
         return '关闭';
       }
@@ -161,6 +174,10 @@ export default {
     getStateClass(state) {
       if (state === 'OPEN') {
         return 'text-warning';
+      } else if (state === 'COLLECTING') {
+        return 'text-warning';
+      } else if (state === 'FLUSHING') {
+        return 'text-info';
       } else if (state === 'CLOSED') {
         return 'text-success';
       }

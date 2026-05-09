@@ -57,14 +57,13 @@ export default {
   methods: {
     getIntervalHandlerNameList() {
       const intervalHandlerIdList = this.configLocal.intervalHandlerIdList || [];
-      if ((!this.alertType && !this.alertData) || !this.event || !this.event.name || intervalHandlerIdList.length === 0) {
+      if ((!this.alertType && !this.alertData) || intervalHandlerIdList.length === 0) {
         this.intervalHandlerNameList = [];
         return;
       }
       const type = this.alertType ? this.alertType.id : this.alertData.type;
       this.$api.alert.alertevent.listAlertEventHandler({
         alertType: type,
-        event: this.event.name,
         handler: 'INTERVAL'
       }).then(res => {
         const handlerList = res.Return || [];

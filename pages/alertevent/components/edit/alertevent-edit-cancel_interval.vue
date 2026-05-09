@@ -67,7 +67,6 @@ export default {
     handlerSearchParams() {
       return {
         alertType: this.alertType.id,
-        event: this.event.name,
         handler: 'INTERVAL'
       };
     }
