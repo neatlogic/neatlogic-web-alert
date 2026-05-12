@@ -3,12 +3,16 @@
     <template v-slot>
       <TsForm ref="form" v-model="policyData" :item-list="formConfig">
         <template v-slot:config>
-          <component
-            :is="handlerComponent"
-            v-if="handlerComponent"
-            ref="handlerConfig"
-            v-model="policyData.config"
-          ></component>
+          <div>
+            <component
+              :is="handlerComponent"
+              v-if="handlerComponent"
+              ref="handlerConfig"
+              v-model="policyData.config"
+            ></component>
+            <Divider orientation="left">熔断动作</Divider>
+            <BreakerActionEdit ref="actionConfig" v-model="policyData.config"></BreakerActionEdit>
+          </div>
         </template>
       </TsForm>
     </template>
@@ -23,7 +27,8 @@ import handlerComponentMap from './components/edit/index.js';
 export default {
   name: '',
   components: {
-    TsForm: () => import('@/resources/plugins/TsForm/TsForm')
+    TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
+    BreakerActionEdit: () => import('./action/breaker-action-edit.vue')
   },
   props: {
     id: { type: Number }
@@ -66,12 +71,16 @@ export default {
         }
       });
     },
-    save() {
+    async save() {
       const formValid = this.$refs.form && this.$refs.form.valid();
       const configValid = !this.$refs.handlerConfig || this.$refs.handlerConfig.valid();
-      if (formValid && configValid) {
+      const actionValid = !this.$refs.actionConfig || await this.$refs.actionConfig.valid();
+      if (formValid && configValid && actionValid) {
         if (this.$refs.handlerConfig) {
-          this.policyData.config = this.$refs.handlerConfig.getConfig();
+          this.policyData.config = { ...this.policyData.config, ...this.$refs.handlerConfig.getConfig() };
+        }
+        if (this.$refs.actionConfig) {
+          this.policyData.config = { ...this.policyData.config, ...this.$refs.actionConfig.getConfig() };
         }
         this.$api.alert.breaker.savePolicy(this.policyData).then(res => {
           if (res.Status === 'OK') {

@@ -30,18 +30,17 @@
         </div>
       </div>
     </TsFormItem>
-    <TsFormItem v-if="mode === 'audit' && breakerAuditList.length > 0" label="熔断结果" labelPosition="left">
+    <TsFormItem v-if="mode === 'audit' && triggeredBreakerAuditList.length > 0" label="熔断结果" labelPosition="left">
       <div class="breaker-sequence">
         <div
-          v-for="(audit, index) in openBreakerAuditList"
+          v-for="(audit, index) in triggeredBreakerAuditList"
           :key="audit.id || index"
           class="breaker-sequence-item"
-          :class="{ 'is-last': index === openBreakerAuditList.length - 1 }"
+          :class="{ 'is-last': index === triggeredBreakerAuditList.length - 1 }"
         >
           <div class="breaker-sequence-axis">
             <span class="breaker-sequence-dot" :class="getAuditDotClass(audit.status)">
-              <i v-if="audit.status === 'PASS'" class="tsfont-check"></i>
-              <i v-else-if="audit.status === 'FAILED'" class="tsfont-close"></i>
+              <i v-if="audit.status === 'failed'" class="tsfont-close"></i>
               <span v-else>{{ index + 1 }}</span>
             </span>
             <span class="breaker-sequence-line border-color" :class="getAuditLineClass(audit.status)"></span>
@@ -51,7 +50,7 @@
               <Tag>
                 {{ audit.policyName || '-' }}
               </Tag>
-              <span class="ml-xs" :class="getStatusClass(audit.status)">{{ getStatusText(audit.status) }}</span>
+              <span class="ml-xs" :class="getStatusClass(audit.status)">{{ audit.statusText || audit.status || '-' }}</span>
               <span v-if="audit.timeCost || audit.timeCost === 0" class="text-grey ml-xs">{{ audit.timeCost }}ms</span>
             </div>
             <div v-if="audit.policyConfig" class="mt-xs">
@@ -83,42 +82,26 @@ export default {
     handler: { type: Object }
   },
   methods: {
-    getStatusText(status) {
-      if (status === 'OPEN') {
-        return '已熔断';
-      } else if (status === 'PASS') {
-        return '通过';
-      } else if (status === 'FAILED') {
-        return '异常';
-      }
-      return status || '-';
-    },
     getStatusClass(status) {
-      if (status === 'OPEN') {
+      if (status === 'open') {
         return 'text-warning';
-      } else if (status === 'PASS') {
-        return 'text-success';
-      } else if (status === 'FAILED') {
+      } else if (status === 'failed') {
         return 'text-error';
       }
       return 'text-grey';
     },
     getAuditDotClass(status) {
-      if (status === 'PASS') {
-        return 'bg-success border-success text-white';
-      } else if (status === 'OPEN') {
+      if (status === 'open') {
         return 'bg-warning border-warning text-white';
-      } else if (status === 'FAILED') {
+      } else if (status === 'failed') {
         return 'bg-error border-error text-white';
       }
       return 'text-grey border-color';
     },
     getAuditLineClass(status) {
-      if (status === 'PASS') {
-        return 'border-color-success';
-      } else if (status === 'OPEN') {
+      if (status === 'open') {
         return 'border-color-warning';
-      } else if (status === 'FAILED') {
+      } else if (status === 'failed') {
         return 'border-color-error';
       }
       return '';
@@ -134,11 +117,11 @@ export default {
     breakerAuditList() {
       return this.handler && this.handler.breakerAuditList ? this.handler.breakerAuditList : [];
     },
-    openBreakerAuditList() {
-      return this.breakerAuditList.filter(audit => audit.status === 'OPEN');
+    triggeredBreakerAuditList() {
+      return this.breakerAuditList.filter(audit => audit.status === 'open' || audit.status === 'failed');
     },
     isShow() {
-      return (this.mode === 'edit' && this.breakerPolicyList.length > 0) || (this.mode === 'audit' && this.openBreakerAuditList.length > 0);
+      return (this.mode === 'edit' && this.breakerPolicyList.length > 0) || (this.mode === 'audit' && this.triggeredBreakerAuditList.length > 0);
     }
   }
 };

@@ -21,9 +21,27 @@ export default {
         threshold: 100,
         openDuration: 10,
         openDurationUnit: 'minute',
+        enableAggregate: 0,
+        collectLimit: 1000,
         ...(this.value || {})
-      },
-      formConfig: {
+      }
+    };
+  },
+  methods: {
+    valid() {
+      return this.$refs.form && this.$refs.form.valid();
+    },
+    getConfig() {
+      const config = { ...this.currentConfig };
+      if (config.enableAggregate !== 1) {
+        delete config.collectLimit;
+      }
+      return config;
+    }
+  },
+  computed: {
+    formConfig() {
+      return {
         dimensionList: {
           type: 'select',
           label: '统计维度',
@@ -36,7 +54,9 @@ export default {
             { value: 'event', text: '事件' },
             { value: 'handler', text: '插件类型' },
             { value: 'handlerInstance', text: '插件实例' },
-            { value: 'source', text: '告警来源' }
+            { value: 'source', text: '告警来源' },
+            { value: 'worker', text: '处理人' },
+            { value: 'workerTeam', text: '处理组' }
           ],
           desc: '熔断插件会根据所选维度生成熔断标记，并以此标记进行熔断判断。例如：选择“插件实例”维度时，熔断插件会根据每个插件实例的触发次数来判断是否进入熔断状态。'
         },
@@ -78,16 +98,25 @@ export default {
             { value: 'minute', text: '分钟' },
             { value: 'hour', text: '小时' }
           ]
+        },
+        enableAggregate: {
+          type: 'radio',
+          label: '启用聚合触发',
+          dataList: [
+            { value: 1, text: '是' },
+            { value: 0, text: '否' }
+          ],
+          desc: '启用后，熔断期间会收集告警，并在熔断到期后调用事件插件的聚合触发入口。'
+        },
+        collectLimit: {
+          type: 'number',
+          label: '收集上限',
+          min: 1,
+          validateList: ['required'],
+          isHidden: this.currentConfig.enableAggregate !== 1,
+          desc: '熔断收集期间最多收集的告警数量，超过上限后不再收集新的告警，只记录丢弃数量。'
         }
-      }
-    };
-  },
-  methods: {
-    valid() {
-      return this.$refs.form && this.$refs.form.valid();
-    },
-    getConfig() {
-      return this.currentConfig;
+      };
     }
   },
   watch: {

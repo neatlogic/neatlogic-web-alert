@@ -6,7 +6,7 @@
         <div class="mt-md"><Checkbox v-model="isDeleteChildAlert" :true-value="1" :false-value="0">同时删除子告警</Checkbox></div>
       </div>
       <div v-else-if="mode === 'match'">
-        <div>是否确认删除所有匹配条件的告警？</div>
+        <div>当前高级搜索条件匹配到 <span class="text-danger">{{ matchCount }}</span> 条告警，确认后将提交后台删除。</div>
       </div>
     </template>
     <template v-slot:footer>
@@ -23,7 +23,8 @@ export default {
     mode: { type: String, default: 'select' },
     id: { type: Number },
     idList: { type: Array },
-    searchParam: { type: Object } //搜索参数
+    searchParam: { type: Object }, //搜索参数
+    matchCount: { type: Number, default: 0 }
   },
   data() {
     return {

@@ -12,9 +12,6 @@
     <TsFormItem label="收集上限" labelPosition="left" style="margin:0px !important;">
       <span>{{ config.collectLimit || '-' }}</span>
     </TsFormItem>
-    <TsFormItem label="聚合邮件标题" labelPosition="left" style="margin:0px !important;">
-      <span>{{ config.aggregateTitleTemplate || defaultAggregateTitleTemplate }}</span>
-    </TsFormItem>
     <TsFormItem
       v-if="mode === 'audit' && hasStateData"
       label="聚合状态"
@@ -25,16 +22,17 @@
         <span>处理组：{{ stateData.groupName || '-' }}</span>
         <span class="ml-md">告警数：{{ alertCount }}</span>
         <span class="ml-md">超限未收集：{{ stateData.collectDropCount || 0 }}</span>
-        <span class="ml-md">是否已发送：{{ stateData.aggregateSent ? '是' : '否' }}</span>
       </div>
     </TsFormItem>
+    <BreakerActionView :config="config"></BreakerActionView>
   </div>
 </template>
 <script>
 export default {
   name: '',
   components: {
-    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    BreakerActionView: () => import('../../action/breaker-action-view.vue')
   },
   props: {
     policy: { type: Object, default: () => ({}) },
@@ -65,9 +63,6 @@ export default {
         return this.stateData.collectCount;
       }
       return this.stateData.alertIdList ? this.stateData.alertIdList.length : 0;
-    },
-    defaultAggregateTitleTemplate() {
-      return '[告警中心][聚合通知]触发告警通知次数限流条件：${windowSize}${windowUnitText}告警数量大于${threshold}次';
     }
   }
 };

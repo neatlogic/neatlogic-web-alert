@@ -19,7 +19,6 @@ export default {
         windowUnit: 'minute',
         threshold: 10,
         collectLimit: 1000,
-        aggregateTitleTemplate: '[告警中心][聚合通知]触发告警通知次数限流条件：${windowSize}${windowUnitText}告警数量大于${threshold}次',
         ...(this.value || {})
       },
       formConfig: {
@@ -52,12 +51,6 @@ export default {
           min: 1,
           validateList: ['required'],
           desc: '熔断收集期间最多收集的告警数量，超过上限后不再收集新的告警，只记录丢弃数量。'
-        },
-        aggregateTitleTemplate: {
-          type: 'textarea',
-          label: '聚合邮件标题',
-          maxlength: 500,
-          desc: '支持变量：${groupName}处理组，${windowSize}统计窗口，${windowUnitText}窗口单位，${threshold}触发阈值，${collectCount}收集告警数，${collectDropCount}超限未收集数。'
         }
       }
     };

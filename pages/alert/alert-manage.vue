@@ -65,7 +65,7 @@
               </DropdownMenu>
             </Dropdown>
           </div>
-          <div v-if="!isShowTopo && ((selectList && selectList.length > 0) || (finalSearchParam && finalSearchParam.rule && !$utils.isEmpty(finalSearchParam.rule)))" class="action-item">
+          <div v-if="!isShowTopo && ((selectList && selectList.length > 0) || canDeleteMatch)" class="action-item">
             <Dropdown trigger="click" @on-click="dropdownClick">
               <div>
                 {{ $t('page.batchoperation') }}
@@ -76,10 +76,10 @@
                 <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.openselectedalert') }}</DropdownItem>
                 <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">删除选中告警</DropdownItem>
                 <DropdownItem
-                  v-if="$AuthUtils.hasRole('ALERT_ADMIN')"
+                  v-if="canDeleteMatch"
                   divided
                   name="deletematch"
-                  :disabled="!finalSearchParam || !finalSearchParam.rule || $utils.isEmpty(finalSearchParam.rule)"
+                  :disabled="isDeleteMatchCounting"
                 >{{ $t('term.alert.deletematchalert') }}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -268,9 +268,10 @@
     <AlertDeleteDialog
       v-if="isDeleteShow"
       :id="currentAlertId"
-      :searchParam="finalSearchParam"
+      :searchParam="deleteMode === 'match' ? deleteSearchParam : finalSearchParam"
       :mode="deleteMode"
       :idList="selectList"
+      :matchCount="deleteMatchCount"
       @close="closeAlertDelete"
     ></AlertDeleteDialog>
     <AlertCloseDialog
@@ -357,6 +358,9 @@ export default {
       topoAlertSize: 1000, //告警拓扑默认查询数据量
       childAlertPage: {}, //记录子告警分页信息
       finalSearchParam: null, //最后的搜索参数，用于批量删除
+      deleteSearchParam: null, //批量删除时的搜索条件快照
+      deleteMatchCount: 0,
+      isDeleteMatchCounting: false,
       sortData: {},
       sortMapping: {
         down: 'asc',
@@ -476,6 +480,27 @@ export default {
       }
       return false;
     },
+    hasValidRule(rule) {
+      const conditionGroupList = rule && rule.conditionGroupList;
+      if (!conditionGroupList || conditionGroupList.length === 0) {
+        return false;
+      }
+      return conditionGroupList.some(conditionGroup => {
+        const conditionList = conditionGroup && conditionGroup.conditionList;
+        if (!conditionList || conditionList.length === 0) {
+          return false;
+        }
+        return conditionList.some(condition => {
+          if (!condition || !condition.id || !condition.expression) {
+            return false;
+          }
+          if (condition.expression === 'is-null' || condition.expression === 'is-not-null') {
+            return true;
+          }
+          return condition.valueList && condition.valueList.length > 0;
+        });
+      });
+    },
     batchClose() {
       if (this.selectList && this.selectList.length > 0) {
         this.isCloseShow = true;
@@ -485,11 +510,34 @@ export default {
       if (this.selectList && this.selectList.length > 0) {
         this.isDeleteShow = true;
         this.deleteMode = 'select';
+        this.deleteSearchParam = null;
+        this.deleteMatchCount = 0;
       }
     },
-    batchDeleteMatch() {
-      this.isDeleteShow = true;
-      this.deleteMode = 'match';
+    async batchDeleteMatch() {
+      if (!this.canDeleteMatch) {
+        this.$Message.warning('请先设置高级搜索条件');
+        return;
+      }
+      const deleteSearchParam = this.$utils.deepClone(this.finalSearchParam);
+      deleteSearchParam.searchMode = 'flat';
+      this.isDeleteMatchCounting = true;
+      await this.$api.alert.alert
+        .searchAlertCount(deleteSearchParam)
+        .then(res => {
+          const matchCount = res.Return || 0;
+          if (matchCount <= 0) {
+            this.$Message.info('当前条件未匹配到告警');
+            return;
+          }
+          this.deleteSearchParam = deleteSearchParam;
+          this.deleteMatchCount = matchCount;
+          this.isDeleteShow = true;
+          this.deleteMode = 'match';
+        })
+        .finally(() => {
+          this.isDeleteMatchCounting = false;
+        });
     },
     batchOpen() {
       if (this.selectList && this.selectList.length > 0) {
@@ -539,6 +587,8 @@ export default {
     closeAlertDelete(needRefresh) {
       this.isDeleteShow = false;
       this.currentAlertId = null;
+      this.deleteSearchParam = null;
+      this.deleteMatchCount = 0;
       if (needRefresh) {
         this.searchAlert();
       }
@@ -571,7 +621,10 @@ export default {
     },
     deleteAlert(alert) {
       this.isDeleteShow = true;
+      this.deleteMode = 'select';
       this.currentAlertId = alert.id;
+      this.deleteSearchParam = null;
+      this.deleteMatchCount = 0;
     },
     toggleChildAlert(row) {
       if (!row._loading) {
@@ -776,6 +829,9 @@ export default {
   },
   filter: {},
   computed: {
+    canDeleteMatch() {
+      return this.$AuthUtils.hasRole('ALERT_BATCH_DELETE') && this.hasValidRule(this.finalSearchParam && this.finalSearchParam.rule);
+    },
     hasRule() {
       if (this.searchParam.rule && this.searchParam.rule.conditionGroupList && this.searchParam.rule.conditionGroupList.length > 0) {
         return true;

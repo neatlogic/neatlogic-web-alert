@@ -4,6 +4,9 @@ const breaker = {
   listHandler() {
     return axios.post('/api/rest/alert/breaker/handler/list');
   },
+  listActionHandler() {
+    return axios.post('/api/rest/alert/breaker/action/handler/list');
+  },
   searchPolicy(params) {
     return axios.post('/api/rest/alert/breaker/policy/search', params);
   },
@@ -21,6 +24,9 @@ const breaker = {
   },
   searchAudit(params) {
     return axios.post('/api/rest/alert/breaker/audit/search', params);
+  },
+  searchActionAudit(params) {
+    return axios.post('/api/rest/alert/breaker/action/audit/search', params);
   }
 };
 

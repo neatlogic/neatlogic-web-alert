@@ -36,13 +36,15 @@
     >
       <span>{{ stateData.failureCount || 0 }}</span>
     </TsFormItem>
+    <BreakerActionView :config="config"></BreakerActionView>
   </div>
 </template>
 <script>
 export default {
   name: '',
   components: {
-    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    BreakerActionView: () => import('../../action/breaker-action-view.vue')
   },
   props: {
     policy: { type: Object, default: () => ({}) },
