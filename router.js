@@ -233,7 +233,7 @@ let routerArr = [
       title: '熔断策略管理',
       ismenu: true,
       icon: 'tsfont-unbind',
-      type: 'alertmanage',
+      type: 'breakermanage',
       authority: 'ALERT_BREAKER_MODIFY'
     }
   },
