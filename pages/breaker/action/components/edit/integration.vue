@@ -21,7 +21,7 @@
           <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
           <span class="ml-xs">点击复制属性</span>
         </span>
-        <div class="text-grey mt-xs">{{ attrHelp }}</div>
+        <div v-if="attrHelp" class="text-grey mt-xs">{{ attrHelp }}</div>
         <div v-if="isShowAttrList" class="mt-sm attr-list">
           <Tag
             v-for="(attr, index) in attrList"
@@ -135,9 +135,7 @@ export default {
       return this.isAggregateTrigger ? { isAggregate: 1 } : { isExpand: 1 };
     },
     attrHelp() {
-      return this.isAggregateTrigger
-        ? '聚合时可使用聚合变量；若使用单个告警属性变量，默认取alertList中最后一个成员的值。'
-        : '当前触发点不是聚合场景，不提供 ${DATA.alertList}、${DATA.alertCount}、${DATA.alertItemList}。';
+      return this.isAggregateTrigger ? '聚合时可使用聚合变量；若使用单个告警属性变量，默认取alertList中最后一个成员的值。' : '';
     },
     paramList() {
       return (this.integrationData && this.integrationData?.config?.param?.paramList) || [];

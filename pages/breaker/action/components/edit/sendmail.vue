@@ -36,7 +36,7 @@
           <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
           <span class="ml-xs">点击复制属性</span>
         </span>
-        <div class="text-grey mt-xs">{{ attrHelp }}</div>
+        <div v-if="attrHelp" class="text-grey mt-xs">{{ attrHelp }}</div>
         <div v-if="isShowAttrList" class="mt-sm">
           <Tag
             v-for="(attr, index) in attrList"
@@ -142,14 +142,10 @@ export default {
       return '[告警中心][熔断通知]熔断策略已触发';
     },
     attrHelp() {
-      return this.isAggregateTrigger
-        ? '聚合时可使用聚合变量；若使用单个告警属性变量，默认取alertList中最后一个成员的值。'
-        : '当前触发点不是聚合场景，不提供 ${DATA.alertList}、${DATA.alertCount}、${DATA.alertItemList}。';
+      return this.isAggregateTrigger ? '聚合时可使用聚合变量；若使用单个告警属性变量，默认取alertList中最后一个成员的值。' : '';
     },
     contentHelp() {
-      return this.isAggregateTrigger
-        ? '帮助：为空时使用默认告警列表。可用 ${DATA.alertCount}、${DATA.alertList}、${DATA.alertItemList}。'
-        : '帮助：当前触发点只提供单个告警上下文变量，不提供聚合变量。';
+      return this.isAggregateTrigger ? '帮助：为空时使用默认告警列表。可用 ${DATA.alertCount}、${DATA.alertList}、${DATA.alertItemList}。' : '';
     }
   },
   watch: {
