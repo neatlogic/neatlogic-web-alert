@@ -5,7 +5,7 @@
         <div>
           <span class="cursor text-action" @click="isShowAttrList = !isShowAttrList">
             <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
-            <span class="ml-xs">点击复制属性</span>
+            <span class="ml-xs">{{ $t('term.alert.clickcopyattr') }}</span>
           </span>
           <div v-if="isShowAttrList" class="mt-sm">
             <Tag

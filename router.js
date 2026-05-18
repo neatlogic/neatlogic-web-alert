@@ -66,7 +66,7 @@ let routerArr = [
     name: 'alert-manage',
     component: alertManage,
     meta: {
-      title: '告警列表',
+      title: $t('page.alertlist'),
       ismenu: false,
       type: 'alert',
       authority: 'ALERT_BASE'
@@ -77,7 +77,7 @@ let routerArr = [
     name: 'alert-detail',
     component: alertDetail,
     meta: {
-      title: '告警详情',
+      title: $t('term.alert.alertdetail'),
       ismenu: false,
       type: 'alert',
       authority: 'ALERT_BASE'
@@ -88,7 +88,7 @@ let routerArr = [
     name: 'alert-origin-manage',
     component: alertOriginManage,
     meta: {
-      title: '接入记录',
+      title: $t('term.alert.incomerecord'),
       ismenu: true,
       icon: 'tsfont-ipliebiao',
       type: 'alert',
@@ -100,7 +100,7 @@ let routerArr = [
     name: 'alert-trash-manage',
     component: alertTrashManage,
     meta: {
-      title: '已删除告警',
+      title: $t('term.alert.deletedalert'),
       ismenu: true,
       icon: 'tsfont-trash-o',
       type: 'alert',
@@ -123,7 +123,7 @@ let routerArr = [
     name: 'alertevent-manage',
     component: alertEventManage,
     meta: {
-      title: '告警事件管理',
+      title: $t('term.alert.alertcasemanage'),
       ismenu: false,
       type: 'alertmanage',
       authority: 'ALERT_TYPE_MODIFY'
@@ -134,7 +134,7 @@ let routerArr = [
     name: 'alerttype-manage',
     component: alertTypeManage,
     meta: {
-      title: '告警类型管理',
+      title: $t('term.alert.alerttypemanage'),
       ismenu: true,
       icon: 'tsfont-k8s_service',
       type: 'alertmanage',
@@ -146,7 +146,7 @@ let routerArr = [
     name: 'attrtype-manage',
     component: attrTypeManage,
     meta: {
-      title: '扩展属性管理',
+      title: $t('term.alert.extendattrmanage'),
       ismenu: true,
       icon: 'tsfont-formstaticlist',
       type: 'alertmanage',
@@ -158,7 +158,7 @@ let routerArr = [
     name: 'alertlevel-manage',
     component: alertLevelManage,
     meta: {
-      title: '告警级别管理',
+      title: $t('term.alert.alertlevelmanage'),
       ismenu: true,
       icon: 'tsfont-chart-polyline',
       type: 'alertmanage',
@@ -170,7 +170,7 @@ let routerArr = [
     name: 'status-manage',
     component: statusManage,
     meta: {
-      title: '告警状态管理',
+      title: $t('term.alert.alertstatusmanage'),
       ismenu: true,
       icon: 'tsfont-heart-o',
       type: 'alertmanage',
@@ -182,7 +182,7 @@ let routerArr = [
     name: 'alertrule-manage',
     component: ruleManage,
     meta: {
-      title: '告警特征管理',
+      title: $t('term.alert.alertrulemanage'),
       ismenu: true,
       icon: 'tsfont-celve',
       type: 'alertmanage',
@@ -194,7 +194,7 @@ let routerArr = [
     name: 'alertsource-manage',
     component: sourceManage,
     meta: {
-      title: '告警来源管理',
+      title: $t('term.alert.alertsourcemanage'),
       ismenu: true,
       icon: 'tsfont-dataconversion',
       type: 'alertmanage',
@@ -206,7 +206,7 @@ let routerArr = [
     name: 'notify-template-manage',
     component: notifyTemplateManage,
     meta: {
-      title: '通知模板管理',
+      title: $t('term.alert.notifytemplatemanage'),
       ismenu: true,
       icon: 'tsfont-formtextarea',
       type: 'alertmanage',
@@ -218,7 +218,7 @@ let routerArr = [
     name: 'eventplugin-manage',
     component: eventPluginManage,
     meta: {
-      title: '事件插件管理',
+      title: $t('term.alert.alertpluginmanage'),
       ismenu: true,
       icon: 'tsfont-plugin',
       type: 'alertmanage',
@@ -230,7 +230,7 @@ let routerArr = [
     name: 'breaker-policy-manage',
     component: breakerPolicyManage,
     meta: {
-      title: '熔断策略管理',
+      title: $t('term.alert.breakerpolicymanage'),
       ismenu: true,
       icon: 'tsfont-unbind',
       type: 'breakermanage',
@@ -242,7 +242,7 @@ let routerArr = [
     name: 'catalog-manage',
     component: catalogManage,
     meta: {
-      title: '视图目录管理',
+      title: $t('term.alert.viewcatalogmanage'),
       ismenu: false,
       authority: 'ALERT_VIEW_MODIFY'
     }
@@ -252,7 +252,7 @@ let routerArr = [
     name: 'alertmark-manage',
     component: alertMarkManage,
     meta: {
-      title: '告警标签管理',
+      title: $t('term.alert.alerttagmanage'),
       ismenu: true,
       icon: 'tsfont-tags',
       type: 'alertmanage',
@@ -264,7 +264,7 @@ let routerArr = [
     name: 'alertaction-manage',
     component: alertActionManage,
     meta: {
-      title: '自定义操作管理',
+      title: $t('term.alert.customactionmanage'),
       ismenu: true,
       icon: 'tsfont-lightning',
       type: 'alertmanage',

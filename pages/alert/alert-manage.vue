@@ -909,12 +909,12 @@ export default {
           {
             type: 'text',
             name: 'keyword',
-            label: '关键字'
+            label: this.$t('page.keyword')
           },
           {
             type: 'select',
             name: 'levelList',
-            label: '告警级别',
+            label: this.$t('term.cmdb.alertlevel'),
             multiple: true,
             valueName: 'level',
             textName: 'label',
@@ -924,7 +924,7 @@ export default {
           {
             type: 'select',
             name: 'statusList',
-            label: '告警状态',
+            label: this.$t('term.alert.alertstatus'),
             multiple: true,
             url: '/api/rest/alert/status/list',
             valueName: 'name',
@@ -934,7 +934,7 @@ export default {
           {
             type: 'select',
             name: 'sourceList',
-            label: '告警来源',
+            label: this.$t('term.alert.alertsource'),
             multiple: true,
             dynamicUrl: '/api/rest/alert/source/search',
             valueName: 'name',
@@ -945,7 +945,7 @@ export default {
           {
             type: 'select',
             name: 'markNameList',
-            label: '告警标签',
+            label: this.$t('term.alert.alerttag'),
             multiple: true,
             dynamicUrl: '/api/rest/alert/mark/search',
             valueName: 'name',
@@ -955,20 +955,20 @@ export default {
           {
             type: 'select',
             name: 'updateTimeHour',
-            label: '告警时间',
+            label: this.$t('term.alert.alerttime'),
             dataList: [
-              { value: 1, text: '最近1小时' },
-              { value: 3, text: '最近3小时' },
-              { value: 24, text: '最近24小时' },
-              { value: 72, text: '最近3天' },
-              { value: 168, text: '最近7天' }
+              { value: 1, text: this.$t('term.alert.p1hour') },
+              { value: 3, text: this.$t('term.alert.p3hour') },
+              { value: 24, text: this.$t('term.alert.p24hour') },
+              { value: 72, text: this.$t('term.alert.p3day') },
+              { value: 168, text: this.$t('term.alert.p7day') }
             ],
             transfer: true
           },
           {
             type: 'userselect',
             name: 'teamIdList',
-            label: '处理组',
+            label: this.$t('term.alert.workerteam'),
             groupList: ['team'],
             multiple: true,
             transfer: true
@@ -976,7 +976,7 @@ export default {
           {
             type: 'userselect',
             name: 'userIdList',
-            label: '处理人',
+            label: this.$t('page.dealwidthuser'),
             groupList: ['user'],
             multiple: true,
             transfer: true

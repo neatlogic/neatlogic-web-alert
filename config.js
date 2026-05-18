@@ -1,11 +1,12 @@
+import {$t} from '@/resources/init.js';
 export const config = {
   module: 'alert',
   menuType: {
-    alert: '告警管理',
-    alerttopo: '告警拓扑',
-    alertnotify: '告警通知',
-    alertsuppression: '事件屏蔽',
-    breakermanage: '告警熔断',
-    alertmanage: '系统管理'
+    alert: $t('term.alert.alertmanage'),
+    alerttopo: $t('term.alert.alerttopo'),
+    alertnotify: $t('term.alert.alertnotify'),
+    alertsuppression: $t('term.alert.alertban'),
+    breakermanage: $t('term.alert.alertbreaker'),
+    alertmanage: $t('term.alert.systemmanage')
   }
 };

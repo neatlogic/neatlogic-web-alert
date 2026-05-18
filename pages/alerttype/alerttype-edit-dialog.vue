@@ -20,11 +20,11 @@
         <template v-slot:fileId>
           <div>
             <div class="text-grey">
-              <div>帮助：不提供插件代表不转换告警内容，如果告警内容不符合标准规范，会被直接抛弃。每个告警类型都可以使用多个转换插件来满足不同的接入来源，每个接入来源都需要上传对应的转换插件。</div>
+              <div>{{ $t('page.help') }}：{{ $t('term.alert.notransferpluginmessage') }}</div>
               <div>
                 转换插件的接口定义请到
-                <a href="https://gitee.com/neat-logic/neatlogic-alert-plugin-base" target="_blank">这里</a>
-                下载
+                <a href="https://gitee.com/neat-logic/neatlogic-alert-plugin-base" target="_blank">{{ $t('term.alert.here') }}</a>
+                {{ $t('page.download') }}
               </div>
             </div>
             <div v-if="fileError" class="text-error">{{ fileError }}</div>

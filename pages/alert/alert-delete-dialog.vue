@@ -3,7 +3,7 @@
     <template v-slot>
       <div v-if="mode === 'select'">
         <div>{{ $t('dialog.content.deleteconfirm', { target: $t('term.alert.alert') }) }}</div>
-        <div class="mt-md"><Checkbox v-model="isDeleteChildAlert" :true-value="1" :false-value="0">同时删除子告警</Checkbox></div>
+        <div class="mt-md"><Checkbox v-model="isDeleteChildAlert" :true-value="1" :false-value="0">{{ $t('term.alert.deletesubalert') }}</Checkbox></div>
       </div>
       <div v-else-if="mode === 'match'">
         <div>当前高级搜索条件匹配到 <span class="text-danger">{{ matchCount }}</span> 条告警，确认后将提交后台删除。</div>
@@ -29,7 +29,7 @@ export default {
   data() {
     return {
       dialogConfig: {
-        title: '删除确认',
+        title: this.$t('dialog.title.deleteconfirm'),
         isShow: true,
         maskClose: true,
         width: 'mini'

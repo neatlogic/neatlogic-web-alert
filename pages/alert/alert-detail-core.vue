@@ -197,7 +197,7 @@
     <TabPane
       v-if="COMMERCIAL_MODULES.includes('alert')"
       :index="200"
-      label="订阅记录"
+      :label="$t('term.alert.subscribehistory')"
       name="subscribe"
     >
       <component :is="alertSubscribeAudit" v-if="currentTab === 'subscribe'" :alertId="id"></component>
@@ -205,7 +205,7 @@
     <TabPane
       v-if="$AuthUtils.hasRole('ALERT_TITLE_AI')"
       :index="201"
-      label="AI分析"
+      :label="$t('term.alert.ai')"
       name="ai"
     >
       <component :is="alertAiTitle" v-if="currentTab === 'ai' && readonlyAlertData.title" :content="readonlyAlertData.title"></component>
@@ -213,7 +213,7 @@
     <div v-if="alertData.actionList && alertData.actionList.length > 0" slot="extra">
       <Dropdown placement="bottom-end">
         <a href="javascript:void(0)">
-          <span>自定义操作</span>
+          <span>{{ $t('term.alert.customaction') }}</span>
           <span class="tsfont-drop-down"></span>
         </a>
         <DropdownMenu slot="list">
@@ -263,7 +263,7 @@ export default {
       readonlyAlertData: null, //用于显示的只读数据
       //alertTypeData: null,
       dialogConfig: {
-        title: '告警详情',
+        title: this.$t('term.alert.alertdetail'),
         width: 'large',
         isShow: true,
         maskClose: true

@@ -2,8 +2,8 @@
   <TsDialog v-bind="dialogConfig" @on-close="close()">
     <template v-slot>
       <div>
-        <div>是否确认打开当前告警？</div>
-        <div class="mt-md"><Checkbox v-model="isCloseChildAlert" :true-value="1" :false-value="0">同时打开子告警</Checkbox></div>
+        <div>{{ $t('dialog.content.opencomfirm',{'target':$t('term.alert.alert')}) }}</div>
+        <div class="mt-md"><Checkbox v-model="isCloseChildAlert" :true-value="1" :false-value="0">{{ $t('term.alert.opensubalert') }}</Checkbox></div>
       </div>
     </template>
     <template v-slot:footer>
@@ -47,7 +47,7 @@ export default {
     },
     confirm() {
       this.$api.alert.alert.openAlert({ id: this.id, idList: this.idList, isCloseChildAlert: this.isCloseChildAlert }).then(() => {
-        this.$Message.success('打开成功');
+        this.$Message.success(this.$t('message.executesuccess'));
         this.close(true);
       });
     }

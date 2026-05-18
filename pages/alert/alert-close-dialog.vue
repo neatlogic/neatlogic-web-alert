@@ -2,8 +2,8 @@
   <TsDialog v-bind="dialogConfig" @on-close="close()">
     <template v-slot>
       <div>
-        <div>是否确认关闭当前告警？</div>
-        <div class="mt-md"><Checkbox v-model="isCloseChildAlert" :true-value="1" :false-value="0">同时关闭子告警</Checkbox></div>
+        <div>{{ $t('term.alert.isconfirmclosecurrentalert') }}</div>
+        <div class="mt-md"><Checkbox v-model="isCloseChildAlert" :true-value="1" :false-value="0">{{ $t('term.alert.closesubalert') }}</Checkbox></div>
       </div>
     </template>
     <template v-slot:footer>

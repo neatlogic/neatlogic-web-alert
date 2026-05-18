@@ -44,7 +44,7 @@ export default {
         parentId: {
           type: 'tree',
           name: 'parentId',
-          label: '父目录',
+          label: this.$t('term.alert.parentcatalog'),
           value: null,
           url: 'api/rest/alert/catalog/listtree',
           valueName: 'id',
@@ -55,13 +55,13 @@ export default {
         },
         isActive: {
           type: 'switch',
-          label: '是否激活',
+          label: this.$t('term.report.isactive'),
           trueValue: 1,
           falseValue: 0
         },
         authList: {
           type: 'userselect',
-          label: '授权',
+          label: this.$t('page.auth'),
           groupList: ['common', 'user', 'role', 'team'],
           transfer: true
         }

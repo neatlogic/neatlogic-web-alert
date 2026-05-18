@@ -36,13 +36,13 @@
             <template slot-scope="{ row }">
               <div style="height: 120px; overflow: auto" class="cursor mr-sm ml-sm mb-md" @click="editAlertEvent(row)">
                 <div v-if="row.adaptorList && row.adaptorList.length > 0">
-                  <Divider orientation="start" style="margin: 3px 0px !important; padding: 0px !important"><span class="fz10 text-grey">转换插件</span></Divider>
+                  <Divider orientation="start" style="margin: 3px 0px !important; padding: 0px !important"><span class="fz10 text-grey">{{ $t('term.alert.transferplugin') }}</span></Divider>
                 </div>
                 <div v-if="row.adaptorList && row.adaptorList.length > 0" class="mb-sm">
                   <Tag v-for="(adaptor, index) in row.adaptorList" :key="index">{{ adaptor.name }}·{{ adaptor.label }}</Tag>
                 </div>
                 <div v-if="row.alertEventHandlerList && row.alertEventHandlerList.length > 0">
-                  <Divider orientation="start" style="margin: 3px 0px !important; padding: 0px !important"><span class="fz10 text-grey">事件插件</span></Divider>
+                  <Divider orientation="start" style="margin: 3px 0px !important; padding: 0px !important"><span class="fz10 text-grey">{{ $t('term.alert.eventplugin') }}</span></Divider>
                 </div>
                 <div v-if="row.alertEventHandlerList && row.alertEventHandlerList.length > 0">
                   <span v-for="(event, index) in getEventPluginCount(row)" :key="index" class="mb-sm mr-sm overflow">
@@ -128,16 +128,16 @@ export default {
       theadList: [
         {
           key: 'name',
-          title: '唯一标识'
+          title: this.$t('page.uniquekey')
         },
-        { key: 'label', title: '名称' },
-        { key: 'isActive', title: '是否激活' },
-        { key: 'adaptorList', title: '转换插件' },
-        { key: 'eventList', title: '事件插件' },
-        { key: 'fcu', title: '创建人' },
-        { key: 'fcd', title: '创建时间', type: 'time' },
-        { key: 'lcu', title: '修改人' },
-        { key: 'lcd', title: '修改时间', type: 'time' },
+        { key: 'label', title: this.$t('page.name') },
+        { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'adaptorList', title: this.$t('term.alert.transferplugin') },
+        { key: 'eventList', title: this.$t('term.alert.eventplugin') },
+        { key: 'fcu', title: this.$t('page.creator') },
+        { key: 'fcd', title: this.$t('page.createtime'), type: 'time' },
+        { key: 'lcu', title: this.$t('page.fcu') },
+        { key: 'lcd', title: this.$t('page.fcd'), type: 'time' },
         { key: 'action' }
       ]
     };
