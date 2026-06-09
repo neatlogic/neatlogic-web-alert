@@ -209,7 +209,7 @@ export default {
     changeAlertEventHandlerSort() {
       this.$api.alert.alertevent.updateAlertEventHandlerSort({ idList: this.eventHandlerList.map(d => d.id) }).then(res => {
         if (res.Status === 'OK') {
-          this.$Message.success('操作成功');
+          this.$Message.success(this.$t('message.executesuccess'));
           this.listAlertEventHandler(this.currentEventName);
         }
       });

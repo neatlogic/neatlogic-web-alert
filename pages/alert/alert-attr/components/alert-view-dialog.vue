@@ -25,9 +25,9 @@
             placement="top-end"
             width="700"
             transfer
-            title="发送邮件"
+            :title="$t('page.sendanemail')"
           >
-            <Button type="primary" ghost>发邮件</Button>
+            <Button type="primary" ghost>{{ $t('term.alert.sendmail') }}</Button>
             <div slot="content" class="alert-mail-poptip" @click.stop>
               <AlertMailSendDialog :alert-id="id" @close="isShowSendMail = false"></AlertMailSendDialog>
             </div>
