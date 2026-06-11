@@ -6,7 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <ViewBase :mode="mode" :handler="handler"></ViewBase>
+    <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <div v-if="handler.config && handler.config.userIdList && handler.config.userIdList.length > 0">
       <Divider orientation="start">处理人</Divider>
       <div>

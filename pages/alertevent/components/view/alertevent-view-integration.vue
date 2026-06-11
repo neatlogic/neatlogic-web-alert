@@ -6,7 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <ViewBase :mode="mode" :handler="handler"></ViewBase>
+    <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <TsFormItem
       v-if="integrationData"
       style="margin: 0px !important"

@@ -6,7 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <ViewBase :mode="mode" :handler="handler"></ViewBase>
+    <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <TsFormItem label="定时插件" labelPosition="left" style="margin:0px !important">
       <span v-if="intervalHandlerNameList.length > 0">
         <Tag v-for="(name, index) in intervalHandlerNameList" :key="index">{{ name }}</Tag>

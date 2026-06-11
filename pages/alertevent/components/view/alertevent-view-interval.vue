@@ -6,7 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <ViewBase :mode="mode" :handler="handler"></ViewBase>
+    <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <div v-if="mode === 'edit'">
       <div v-for="(interval, index) in configLocal.intervalList" :key="index" :class="{ 'mt-md': index > 0 }">
         <div class="action-group">

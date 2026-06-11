@@ -6,7 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <ViewBase :mode="mode" :handler="handler"></ViewBase>
+    <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <TsFormItem :label="$t('dialog.title.addtarget', { target: $t('page.action') })" labelPosition="left">
       <div>
         <Tag v-for="(action, index) in actionDataList" :key="index">

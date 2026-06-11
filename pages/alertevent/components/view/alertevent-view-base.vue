@@ -24,6 +24,7 @@
                 v-if="getBreakerViewComponent(policy.policyHandler)"
                 :policy="policy"
                 mode="edit"
+                :level="level"
               ></component>
             </div>
           </div>
@@ -59,6 +60,7 @@
                 v-if="getBreakerViewComponent(audit.policyHandler)"
                 :policy="audit"
                 mode="audit"
+                :level="level"
               ></component>
             </div>
             <div v-if="audit.error" class="text-error mt-xs">{{ audit.error }}</div>
@@ -79,6 +81,7 @@ export default {
   },
   props: {
     mode: { type: String, default: 'edit' },
+    level: { type: Number, default: 1 },
     handler: { type: Object }
   },
   methods: {

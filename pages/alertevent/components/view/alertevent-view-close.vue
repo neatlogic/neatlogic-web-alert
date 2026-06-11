@@ -6,7 +6,7 @@
       'bg-op': level % 2 === 0
     }"
   >
-    <ViewBase :mode="mode" :handler="handler"></ViewBase>
+    <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <TsFormItem label="关闭方式" labelPosition="left" style="margin:0px !important">
       <span>{{ configLocal.closeType === 'id' ? 'id' : '唯一键' }}</span>
     </TsFormItem>
