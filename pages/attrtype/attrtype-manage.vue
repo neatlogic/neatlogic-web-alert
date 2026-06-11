@@ -87,7 +87,7 @@ export default {
         { key: 'name', title: this.$t('page.uniquekey') },
         { key: 'label', title: this.$t('page.name') },
         { key: 'typeName', title: this.$t('page.type') },
-        { key: 'enumCount', title: this.$t('term.knowledge.member') },
+        { key: 'enumCount', title: this.$t('term.alert.membercount') },
         { key: 'isActive', title: this.$t('term.report.isactive') },
         { key: 'isShow', title: this.$t('term.alert.isshow') },
         { key: 'isTop', title: this.$t('term.alert.istop'), tooltip: '置顶属性会出现在默认的结果列表和搜索条件中' },
