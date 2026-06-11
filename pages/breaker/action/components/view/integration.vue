@@ -16,6 +16,14 @@
         </div>
       </div>
     </TsFormItem>
+    <TsFormItem
+      v-if="actionError"
+      label="执行异常"
+      labelPosition="left"
+      style="margin:0px !important;"
+    >
+      <div class="text-error action-error">{{ actionError }}</div>
+    </TsFormItem>
   </div>
 </template>
 <script>
@@ -25,12 +33,22 @@ export default {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },
   props: {
-    action: { type: Object, default: () => ({}) }
+    action: { type: Object, default: () => ({}) },
+    actionAudit: { type: Object, default: null }
   },
   computed: {
     config() {
       return this.action.config || {};
+    },
+    actionError() {
+      return this.actionAudit && this.actionAudit.status === 'failed' ? this.actionAudit.error : '';
     }
   }
 };
 </script>
+<style lang="less" scoped>
+.action-error {
+  white-space: normal;
+  word-break: break-all;
+}
+</style>

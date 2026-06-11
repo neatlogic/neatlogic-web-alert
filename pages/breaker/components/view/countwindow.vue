@@ -65,21 +65,15 @@
         <div v-if="stateData.flushError" class="text-error mt-xs">聚合异常：{{ stateData.flushError }}</div>
       </div>
     </TsFormItem>
-    <TsFormItem
-      v-if="actionSummary"
-      label="熔断动作"
-      labelPosition="left"
-      style="margin:0px !important;"
-    >
-      <span>{{ actionSummary }}</span>
-    </TsFormItem>
+    <BreakerActionView :config="config" :actionAuditList="policy.actionAuditList"></BreakerActionView>
   </div>
 </template>
 <script>
 export default {
   name: '',
   components: {
-    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
+    TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
+    BreakerActionView: () => import('../../action/breaker-action-view.vue')
   },
   props: {
     policy: { type: Object, default: () => ({}) },
@@ -123,21 +117,6 @@ export default {
         workerTeam: '处理组'
       };
       return (this.config.dimensionList || []).map(d => dimensionTextMap[d] || d).join('、') || '-';
-    },
-    actionSummary() {
-      const triggerList = [
-        { key: 'openActionList', text: '熔断时' },
-        { key: 'aggregateActionList', text: '聚合时' },
-        { key: 'recoverActionList', text: '恢复时' }
-      ];
-      const summaryList = triggerList.map(trigger => {
-        const activeActionList = (this.config[trigger.key] || []).filter(action => action && action.isActive !== 0);
-        if (activeActionList.length === 0) {
-          return null;
-        }
-        return `${trigger.text}${activeActionList.length}个`;
-      }).filter(Boolean);
-      return summaryList.join('，');
     }
   }
 };

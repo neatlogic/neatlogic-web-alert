@@ -36,7 +36,7 @@
     >
       <span>{{ stateData.failureCount || 0 }}</span>
     </TsFormItem>
-    <BreakerActionView :config="config"></BreakerActionView>
+    <BreakerActionView :config="config" :actionAuditList="policy.actionAuditList"></BreakerActionView>
   </div>
 </template>
 <script>

@@ -24,7 +24,7 @@
         <span class="ml-md">超限未收集：{{ stateData.collectDropCount || 0 }}</span>
       </div>
     </TsFormItem>
-    <BreakerActionView :config="config"></BreakerActionView>
+    <BreakerActionView :config="config" :actionAuditList="policy.actionAuditList"></BreakerActionView>
   </div>
 </template>
 <script>

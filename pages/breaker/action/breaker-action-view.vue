@@ -20,6 +20,7 @@
                 :is="actionComponentMap[action.handler && action.handler.toLowerCase()]"
                 v-if="action.handler && actionComponentMap[action.handler.toLowerCase()]"
                 :action="action"
+                :actionAudit="getActionAudit(action, trigger.value)"
               ></component>
             </div>
           </div>
@@ -37,17 +38,26 @@ export default {
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem')
   },
   props: {
-    config: { type: Object, default: () => ({}) }
+    config: { type: Object, default: () => ({}) },
+    actionAuditList: { type: Array, default: () => [] }
   },
   data() {
     return {
       actionComponentMap,
       triggerList: [
-        { key: 'openActionList', text: '熔断时触发' },
-        { key: 'aggregateActionList', text: '聚合时触发' },
-        { key: 'recoverActionList', text: '熔断恢复时触发' }
+        { key: 'openActionList', value: 'OPEN', text: '熔断时触发' },
+        { key: 'aggregateActionList', value: 'AGGREGATE', text: '聚合时触发' },
+        { key: 'recoverActionList', value: 'RECOVER', text: '熔断恢复时触发' }
       ]
     };
+  },
+  methods: {
+    getActionAudit(action, trigger) {
+      if (!action || !action.uuid || !trigger || !this.actionAuditList || this.actionAuditList.length === 0) {
+        return null;
+      }
+      return this.actionAuditList.find(audit => audit && audit.actionUuid === action.uuid && audit.trigger === trigger) || null;
+    }
   }
 };
 </script>
