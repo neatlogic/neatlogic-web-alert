@@ -1,5 +1,6 @@
 export { default as const_level } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-level.vue';
 export { default as const_isClose } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-isclose.vue';
+export { default as const_closeTime } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-closetime.vue';
 export { default as const_alertTime } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-alerttime.vue';
 export { default as const_updateTime } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-updatetime.vue';
 export { default as const_type } from '@/community-module/alert/pages/alert/alert-attr/alertattr-const-type.vue';

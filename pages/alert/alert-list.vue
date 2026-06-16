@@ -149,7 +149,8 @@ export default {
       currentView: null,
       isViewEdit: false,
       attrPopMap: {},
-      attrList: [],
+      attrList: [], //列表展示字段元数据
+      searchAttrList: [], //搜索条件字段元数据
       statusList: [],
       levelList: [],
       searchParam: {
@@ -301,9 +302,14 @@ export default {
       }
     },
     async listAlertAttrList() {
-      await this.$api.alert.alert.listAlertAttrList(this.searchParam.viewName ? { viewName: this.searchParam.viewName } : {}).then(res => {
-        this.attrList = res.Return;
-      });
+      const searchParam = this.searchParam.viewName ? { viewName: this.searchParam.viewName, isSearch: 1 } : { isSearch: 1 };
+      const columnParam = this.searchParam.viewName ? { viewName: this.searchParam.viewName, isColumn: 1 } : { isColumn: 1 };
+      const [searchAttrRes, columnAttrRes] = await Promise.all([
+        this.$api.alert.alert.listAlertAttrList(searchParam),
+        this.$api.alert.alert.listAlertAttrList(columnParam)
+      ]);
+      this.searchAttrList = searchAttrRes.Return;
+      this.attrList = columnAttrRes.Return;
     },
     switchAlertView(view) {
       if (this.searchParam.viewName !== view.name) {
@@ -529,8 +535,8 @@ export default {
     },
     topAttrList() {
       const attrList = [];
-      this.attrList &&
-        this.attrList.forEach(item => {
+      this.searchAttrList &&
+        this.searchAttrList.forEach(item => {
           if (item.isTop) {
             attrList.push(item);
           }

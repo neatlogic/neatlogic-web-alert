@@ -71,7 +71,7 @@ export default {
       this.$emit('close');
     },
     listAlertAttrList() {
-      this.$api.alert.alert.listAlertAttrList(this?.searchParam?.viewName ? { viewName: this?.searchParam?.viewName } : {}).then(res => {
+      this.$api.alert.alert.listAlertAttrList(this?.searchParam?.viewName ? { viewName: this?.searchParam?.viewName, isColumn: 1 } : { isColumn: 1 }).then(res => {
         this.attrList = res.Return;
       });
     },

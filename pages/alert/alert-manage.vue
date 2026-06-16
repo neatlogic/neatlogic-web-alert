@@ -134,7 +134,7 @@
       </template>
       <template v-slot:content>
         <div v-if="isShowFilter" class="border-base radius-md mb-md padding-md">
-          <ConditionGroup v-model="searchParam.rule" :attrList="attrList"></ConditionGroup>
+          <ConditionGroup v-model="searchParam.rule" :attrList="searchAttrList"></ConditionGroup>
           <div style="text-align: right" class="mt-md">
             <Button
               v-auth="['ALERT_EXPORT']"
@@ -334,7 +334,8 @@ export default {
       currentView: null,
       isViewEdit: false,
       attrPopMap: {},
-      attrList: [],
+      attrList: [], //列表展示字段元数据
+      searchAttrList: [], //搜索条件字段元数据
       statusList: [],
       levelList: [],
       searchParam: { mode: 'simple', rule: {}, attrFilterList: [], searchMode: 'tree' },
@@ -671,9 +672,12 @@ export default {
       }
     },
     async listAlertAttrList() {
-      await this.$api.alert.alert.listAlertAttrList({}).then(res => {
-        this.attrList = res.Return;
-      });
+      const [searchAttrRes, columnAttrRes] = await Promise.all([
+        this.$api.alert.alert.listAlertAttrList({ isSearch: 1 }),
+        this.$api.alert.alert.listAlertAttrList({ isColumn: 1 })
+      ]);
+      this.searchAttrList = searchAttrRes.Return;
+      this.attrList = columnAttrRes.Return;
     },
     switchAlertView(view) {
       if (this.searchParam.viewName !== view.name) {
@@ -996,8 +1000,8 @@ export default {
     },
     topAttrList() {
       const attrList = [];
-      this.attrList &&
-        this.attrList.forEach(item => {
+      this.searchAttrList &&
+        this.searchAttrList.forEach(item => {
           if (item.isTop) {
             attrList.push(item);
           }
