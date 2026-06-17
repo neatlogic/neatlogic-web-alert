@@ -14,7 +14,7 @@
       </div>
       <div class="overflow">
         <a :title="row.title" :style="row.isDelete ? 'text-decoration:line-through' : ''" @click="getAlertDetail(row)">
-          <span v-for="(mark, index) in row.markList" :key="index">
+          <span v-for="(mark, index) in visibleMarkList" :key="index">
             <Tag v-if="mark.style" style="font-size: 0.8em; margin: 0px 3px 0px 0px; padding: 0px 6px" :color="mark.style">{{ mark.name }}</Tag>
             <Tag v-else style="font-size: 0.8em">{{ mark.name }}</Tag>
           </span>
@@ -30,7 +30,7 @@
     ></AlertView>
   </div>
   <div v-else-if="mode === 'detail' && row">
-    <span v-for="(mark, index) in row.markList" :key="index">
+    <span v-for="(mark, index) in visibleMarkList" :key="index">
       <Tag v-if="mark.style" style="font-size: 0.8em; margin: 0px 3px 0px 0px; padding: 0px 6px" :color="mark.style">{{ mark.name }}</Tag>
       <Tag v-else style="font-size: 0.8em">{{ mark.name }}</Tag>
     </span>
@@ -83,6 +83,12 @@ export default {
         return this.row.title.substring(0, 300) + '...';
       }
       return this.row.title;
+    },
+    visibleMarkList() {
+      if (!this.row || !this.row.markList) {
+        return [];
+      }
+      return this.row.markList.filter(mark => mark.isShow !== 0);
     }
   },
   watch: {}

@@ -1,7 +1,7 @@
 <template>
   <div v-if="mode !== 'audit'">
-    <div v-if="row.markList && row.markList.length > 0">
-      <span v-for="(mark, index) in row.markList" :key="index" class="mr-xs">
+    <div v-if="visibleRowMarkList && visibleRowMarkList.length > 0">
+      <span v-for="(mark, index) in visibleRowMarkList" :key="index" class="mr-xs">
         <Tag v-if="mark.style" :color="mark.style">{{ mark.name }}</Tag>
         <Tag v-else>{{ mark.name }}</Tag>
       </span>
@@ -52,7 +52,14 @@ export default {
     }
   },
   filter: {},
-  computed: {},
+  computed: {
+    visibleRowMarkList() {
+      if (!this.row || !this.row.markList) {
+        return [];
+      }
+      return this.row.markList.filter(mark => mark.isShow !== 0);
+    }
+  },
   watch: {}
 };
 </script>

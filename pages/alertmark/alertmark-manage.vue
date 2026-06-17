@@ -39,6 +39,17 @@
                 "
               />
             </div>
+            <div class="ml-xs">
+              <TsFormSwitch
+                v-model="mark.isShow"
+                :trueValue="1"
+                :falseValue="0"
+                :showStatus="true"
+                trueText="显示"
+                falseText="隐藏"
+                @on-change="saveMark(mark)"
+              ></TsFormSwitch>
+            </div>
             <div class="ml-xs tsfont-trash-o cursor" @click="deleteTag(mark)"></div>
           </div>
         </div>
@@ -50,7 +61,8 @@
 export default {
   name: '',
   components: {
-    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect')
+    TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
+    TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch')
   },
   props: {},
   data() {
@@ -74,10 +86,18 @@ export default {
   methods: {
     searchAlertMark() {
       this.$api.alert.alertmark.getMarkByNameList(this.nameList).then(res => {
-        this.markList = res.Return;
+        this.markList = (res.Return || []).map(mark => {
+          if (mark.isShow == null) {
+            this.$set(mark, 'isShow', 1);
+          }
+          return mark;
+        });
       });
     },
     saveMarkStyle(mark) {
+      this.saveMark(mark);
+    },
+    saveMark(mark) {
       this.$api.alert.alertmark.saveMark(mark).then(res => {
         this.$Message.success(this.$t('message.savesuccess'));
       });
@@ -96,7 +116,7 @@ export default {
   .item {
     line-height: 52px;
     display: grid;
-    grid-template-columns: auto 80px 20px;
+    grid-template-columns: auto 80px 100px 20px;
   }
 }
 </style>
