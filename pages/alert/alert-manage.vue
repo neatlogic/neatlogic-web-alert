@@ -65,7 +65,7 @@
               </DropdownMenu>
             </Dropdown>
           </div>
-          <div v-if="!isShowTopo && ((selectList && selectList.length > 0) || canDeleteMatch)" class="action-item">
+          <div v-if="!isShowTopo && ((selectList && selectList.length > 0) || canDeleteMatch || canBatchRebuildIndex)" class="action-item">
             <Dropdown trigger="click" @on-click="dropdownClick">
               <div>
                 {{ $t('page.batchoperation') }}
@@ -74,6 +74,7 @@
               <DropdownMenu slot="list">
                 <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.closeselectedalert') }}</DropdownItem>
                 <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.openselectedalert') }}</DropdownItem>
+                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_INDEX')" name="rebuildindex" :disabled="!selectList || selectList.length == 0 || isRebuildIndexLoading">重建选中告警索引</DropdownItem>
                 <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">删除选中告警</DropdownItem>
                 <DropdownItem
                   v-if="canDeleteMatch"
@@ -362,6 +363,7 @@ export default {
       deleteSearchParam: null, //批量删除时的搜索条件快照
       deleteMatchCount: 0,
       isDeleteMatchCounting: false,
+      isRebuildIndexLoading: false,
       sortData: {},
       sortMapping: {
         down: 'asc',
@@ -437,6 +439,8 @@ export default {
         this.batchOpen();
       } else if (name === 'deleteselect') {
         this.batchDelete();
+      } else if (name === 'rebuildindex') {
+        this.batchRebuildIndex();
       } else if (name === 'deletematch') {
         this.batchDeleteMatch();
       }
@@ -544,6 +548,26 @@ export default {
       if (this.selectList && this.selectList.length > 0) {
         this.isOpenShow = true;
       }
+    },
+    batchRebuildIndex() {
+      if (!this.selectList || this.selectList.length === 0 || this.isRebuildIndexLoading) {
+        return;
+      }
+      const idList = this.selectList.slice();
+      this.$createDialog({
+        title: this.$t('dialog.title.executeconfirm'),
+        content: '确认后将提交后台重建已选告警索引。',
+        'on-ok': async vnode => {
+          this.isRebuildIndexLoading = true;
+          try {
+            await this.$api.alert.alert.batchRebuildIndex(idList);
+            this.$Message.success('已提交后台重建索引');
+            vnode.isShow = false;
+          } finally {
+            this.isRebuildIndexLoading = false;
+          }
+        }
+      });
     },
     getSelected(indexList, itemList) {
       this.selectList = itemList.map(d => d.id);
@@ -833,6 +857,9 @@ export default {
   },
   filter: {},
   computed: {
+    canBatchRebuildIndex() {
+      return this.$AuthUtils.hasRole('ALERT_INDEX') && this.selectList && this.selectList.length > 0;
+    },
     canDeleteMatch() {
       return this.$AuthUtils.hasRole('ALERT_BATCH_DELETE') && this.hasValidRule(this.finalSearchParam && this.finalSearchParam.rule);
     },
