@@ -8,7 +8,7 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem label="邮件服务器" labelPosition="left">
+    <TsFormItem :label="$t('page.mailserver')" labelPosition="left">
       <div>
         <TsFormSelect
           v-model="configLocal.mailServerId"
@@ -19,7 +19,7 @@
           textName="name"
           border="border"
         ></TsFormSelect>
-        <div class="text-grey">帮助：不选择代表使用默认的邮件服务器</div>
+        <div class="text-grey">{{ $t('term.alert.defaultmailserverhelp') }}</div>
       </div>
     </TsFormItem>
     <TsFormItem label="">
@@ -102,7 +102,7 @@
         textName="label"
       ></TsFormSelect>
     </TsFormItem>
-    <TsFormItem :required="true" labelPosition="left" label="收件人">
+    <TsFormItem :required="true" labelPosition="left" :label="$t('page.recipient')">
       <UserSelect
         ref="sltToUser"
         v-model="configLocal.toUserList"
@@ -128,7 +128,7 @@
         :step="1"
         border="border"
       ></TsFormInput>
-      <div class="text-grey">帮助：在通知间隔时间（?分钟）内只会通知一次</div>
+      <div class="text-grey">{{ $t('term.alert.notifyintervalhelp') }}</div>
     </TsFormItem>
   </div>
 </template>
@@ -158,16 +158,16 @@ export default {
       statusList: [
         {
           value: 'new',
-          text: '新告警'
+          text: this.$t('term.alert.newalert')
         },
-        { value: 'confirmed', text: '已确认' },
-        { value: 'proceessing', text: '处理中' },
-        { value: 'resolved', text: '已处理' },
-        { value: 'closed', text: '已关闭' }
+        { value: 'confirmed', text: this.$t('term.alert.confirmed') },
+        { value: 'proceessing', text: this.$t('term.alert.processing') },
+        { value: 'resolved', text: this.$t('term.alert.resolved') },
+        { value: 'closed', text: this.$t('page.closed') }
       ],
       typeList: [
-        { value: 'custom', text: '自定义' },
-        { value: 'template', text: '模板' }
+        { value: 'custom', text: this.$t('page.custom') },
+        { value: 'template', text: this.$t('page.template') }
       ]
     };
   },

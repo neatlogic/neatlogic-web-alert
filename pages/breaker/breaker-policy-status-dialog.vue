@@ -3,12 +3,12 @@
     <template v-slot>
       <div>
         <div class="mb-md">
-          <span class="text-grey">策略：</span>
+          <span class="text-grey">{{ $t('term.alert.breakerpolicy') }}:</span>
           <span>{{ policy.name }}</span>
           <Tag v-if="policy.handlerLabel" class="ml-xs">{{ policy.handlerLabel }}</Tag>
         </div>
         <Tabs v-model="tabName" @on-click="changeTab">
-          <TabPane label="当前状态" name="state">
+          <TabPane :label="$t('term.alert.currentstatus')" name="state">
             <TsTable
               v-bind="stateData"
               :theadList="stateTheadList"
@@ -37,7 +37,7 @@
               <template v-slot:expand="{ row }">
                 <div v-if="row._expand" class="state-expand bg-op radius-md padding">
                   <div class="mb-md">
-                    <div class="text-title mb-xs">命中告警</div>
+                    <div class="text-title mb-xs">{{ $t('term.alert.hitmanyalarms') }}</div>
                     <TsTable
                       v-bind="row.hitAuditData || {}"
                       :theadList="hitAuditTheadList"
@@ -64,7 +64,7 @@
                     </TsTable>
                   </div>
                   <div>
-                    <div class="text-title mb-xs">动作记录</div>
+                    <div class="text-title mb-xs">{{ $t('term.alert.actionrecord') }}</div>
                     <TsTable
                       v-bind="row.actionAuditData || {}"
                       :theadList="actionAuditTheadList"
@@ -93,7 +93,7 @@
               </template>
             </TsTable>
           </TabPane>
-          <TabPane label="执行记录" name="audit">
+          <TabPane :label="$t('term.alert.executionrecord')" name="audit">
             <TsTable
               v-bind="auditData"
               :theadList="auditTheadList"
@@ -149,7 +149,7 @@ export default {
         pageSize: 10
       },
       dialogConfig: {
-        title: '熔断策略执行情况',
+        title: this.$t('term.alert.breakerpolicystatus'),
         type: 'modal',
         width: 'large',
         maskClose: false,
@@ -157,38 +157,38 @@ export default {
       },
       stateTheadList: [
         { key: 'expander', width: 40 },
-        { key: 'uniqueKey', title: '熔断对象' },
-        { key: 'state', title: '状态' },
-        { key: 'triggerCount', title: '窗口触发数' },
-        { key: 'skipCount', title: '跳过数' },
-        { key: 'windowTime', title: '统计窗口' },
-        { key: 'openTime', title: '熔断时间' },
-        { key: 'lastTriggerTime', title: '最后触发时间' }
+        { key: 'uniqueKey', title: this.$t('term.alert.breakerobject') },
+        { key: 'state', title: this.$t('page.status') },
+        { key: 'triggerCount', title: this.$t('term.alert.triggercount') },
+        { key: 'skipCount', title: this.$t('term.alert.skipcount') },
+        { key: 'windowTime', title: this.$t('term.alert.statisticswindow') },
+        { key: 'openTime', title: this.$t('term.alert.circuitbreakingtime') },
+        { key: 'lastTriggerTime', title: this.$t('term.alert.lasttriggertime') }
       ],
       auditTheadList: [
-        { key: 'alertId', title: '告警ID' },
-        { key: 'alertTitle', title: '告警标题' },
-        { key: 'status', title: '结果' },
-        { key: 'startTime', title: '执行时间' },
-        { key: 'timeCost', title: '耗时' },
-        { key: 'error', title: '异常' }
+        { key: 'alertId', title: this.$t('term.alert.alertid') },
+        { key: 'alertTitle', title: this.$t('term.alert.alerttitle') },
+        { key: 'status', title: this.$t('page.result') },
+        { key: 'startTime', title: this.$t('term.alert.executiontime') },
+        { key: 'timeCost', title: this.$t('term.alert.timecost') },
+        { key: 'error', title: this.$t('page.exception') }
       ],
       hitAuditTheadList: [
-        { key: 'alertId', title: '告警ID' },
-        { key: 'alertTitle', title: '告警标题' },
-        { key: 'status', title: '结果' },
-        { key: 'startTime', title: '执行时间' },
-        { key: 'timeCost', title: '耗时' },
-        { key: 'error', title: '异常' }
+        { key: 'alertId', title: this.$t('term.alert.alertid') },
+        { key: 'alertTitle', title: this.$t('term.alert.alerttitle') },
+        { key: 'status', title: this.$t('page.result') },
+        { key: 'startTime', title: this.$t('term.alert.executiontime') },
+        { key: 'timeCost', title: this.$t('term.alert.timecost') },
+        { key: 'error', title: this.$t('page.exception') }
       ],
       actionAuditTheadList: [
-        { key: 'trigger', title: '触发点' },
-        { key: 'actionName', title: '动作名称' },
-        { key: 'actionHandler', title: '动作插件' },
-        { key: 'status', title: '结果' },
-        { key: 'startTime', title: '执行时间' },
-        { key: 'timeCost', title: '耗时' },
-        { key: 'error', title: '异常' }
+        { key: 'trigger', title: this.$t('term.alert.triggerpoint') },
+        { key: 'actionName', title: this.$t('page.actionname') },
+        { key: 'actionHandler', title: this.$t('term.alert.actionplugin') },
+        { key: 'status', title: this.$t('page.result') },
+        { key: 'startTime', title: this.$t('term.alert.executiontime') },
+        { key: 'timeCost', title: this.$t('term.alert.timecost') },
+        { key: 'error', title: this.$t('page.exception') }
       ]
     };
   },
@@ -282,13 +282,13 @@ export default {
     },
     getStateText(state) {
       if (state === 'OPEN') {
-        return '熔断中';
+        return this.$t('term.alert.breakeropen');
       } else if (state === 'COLLECTING') {
-        return '熔断收集中';
+        return this.$t('term.alert.breakercollecting');
       } else if (state === 'FLUSHING') {
-        return '熔断处理中';
+        return this.$t('term.alert.breakerflushing');
       } else if (state === 'CLOSED') {
-        return '关闭';
+        return this.$t('page.close');
       }
       return state || '-';
     },
@@ -316,11 +316,11 @@ export default {
     },
     getTriggerText(trigger) {
       if (trigger === 'OPEN') {
-        return '熔断时';
+        return this.$t('term.alert.breakeropenwhen');
       } else if (trigger === 'AGGREGATE') {
-        return '聚合时';
+        return this.$t('term.alert.breakeraggregatewhen');
       } else if (trigger === 'RECOVER') {
-        return '熔断恢复时';
+        return this.$t('term.alert.breakerrecoverwhen');
       }
       return trigger || '-';
     }

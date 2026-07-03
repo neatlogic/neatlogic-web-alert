@@ -8,9 +8,9 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem :required="true" label="删除子告警" labelPosition="left">
+    <TsFormItem :required="true" :label="$t('term.alert.deletesubalert')" labelPosition="left">
       <TsFormSwitch v-model="configLocal.isDeleteChildAlert" :trueValue="1" :falseValue="0"></TsFormSwitch>
-      <div class="text-grey mt-md">是否同时删除所有子告警？</div>
+      <div class="text-grey mt-md">{{ $t('term.alert.deletesubalerthelp') }}</div>
     </TsFormItem>
   </div>
 </template>

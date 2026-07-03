@@ -8,7 +8,7 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem label="目标状态" labelPosition="left" :required="true">
+    <TsFormItem :label="$t('term.alert.targetstatus')" labelPosition="left" :required="true">
       <TsFormSelect
         ref="status"
         v-model="configLocal.status"

@@ -3,7 +3,7 @@
     <TsContain>
       <template v-slot:topRight>
         <div class="action-group">
-          <div class="action-item tsfont-listsetting" @click="editType()">类型管理</div>
+          <div class="action-item tsfont-listsetting" @click="editType()">{{ $t('term.alert.typemanage') }}</div>
         </div>
       </template>
       <template v-slot:content>
@@ -47,12 +47,12 @@ export default {
       theadList: [
         {
           key: 'name',
-          title: '唯一标识'
+          title: this.$t('page.uniquekey')
         },
-        { key: 'label', title: '名称' },
-        { key: 'isActive', title: '激活' },
-        { key: 'config', title: '配置' },
-        { key: 'description', title: '描述' },
+        { key: 'label', title: this.$t('page.name') },
+        { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'config', title: this.$t('page.config') },
+        { key: 'description', title: this.$t('page.description') },
         { key: 'action' }
       ],
       isEditType: false

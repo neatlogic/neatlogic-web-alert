@@ -10,7 +10,7 @@
               ref="handlerConfig"
               v-model="policyData.config"
             ></component>
-            <Divider orientation="left">熔断动作</Divider>
+            <Divider orientation="left">{{ $t('term.alert.breakeraction') }}</Divider>
             <BreakerActionEdit ref="actionConfig" v-model="policyData.config"></BreakerActionEdit>
           </div>
         </template>
@@ -41,7 +41,7 @@ export default {
       },
       handlerList: [],
       dialogConfig: {
-        title: this.id ? '编辑熔断策略' : '添加熔断策略',
+        title: this.id ? this.$t('term.alert.editbreakerpolicy') : this.$t('term.alert.addbreakerpolicy'),
         type: 'modal',
         width: 'medium',
         maskClose: false,
@@ -108,7 +108,7 @@ export default {
         },
         handler: {
           type: 'select',
-          label: '策略插件',
+          label: this.$t('term.alert.breakerplugin'),
           transfer: true,
           validateList: ['required'],
           valueName: 'name',

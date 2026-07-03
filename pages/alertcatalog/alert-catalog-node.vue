@@ -12,12 +12,12 @@
       <div class="catalog-name">
         <span class="tsfont-bar move"></span>
         <span class="catalog-toggle cursor" :class="toggleClass" @click="toggleCatalog(catalog)"></span>
-        <span class="catalog-type">目录</span>
+        <span class="catalog-type">{{ $t('page.catalogue') }}</span>
         <span>{{ catalog.name }}</span>
       </div>
       <div>
-        <span v-if="catalog.isActive" class="text-success">是</span>
-        <span v-else class="text-grey">否</span>
+        <span v-if="catalog.isActive" class="text-success">{{ $t('page.yes') }}</span>
+        <span v-else class="text-grey">{{ $t('page.no') }}</span>
       </div>
       <div>
         <UserSelect
@@ -28,9 +28,9 @@
         ></UserSelect>
       </div>
       <div class="action-group">
-        <div v-if="catalogIndex > 0" class="action-item tsfont-arrow-up" @click="$emit('move-catalog-up', parentId, catalog.id)">上移</div>
-        <div v-if="catalogIndex < catalogCount - 1" class="action-item tsfont-arrow-down" @click="$emit('move-catalog-down', parentId, catalog.id)">下移</div>
-        <div class="action-item tsfont-plus" @click="$emit('add-child', catalog)">子目录</div>
+        <div v-if="catalogIndex > 0" class="action-item tsfont-arrow-up" @click="$emit('move-catalog-up', parentId, catalog.id)">{{ $t('page.moveup') }}</div>
+        <div v-if="catalogIndex < catalogCount - 1" class="action-item tsfont-arrow-down" @click="$emit('move-catalog-down', parentId, catalog.id)">{{ $t('page.movedown') }}</div>
+        <div class="action-item tsfont-plus" @click="$emit('add-child', catalog)">{{ $t('term.alert.childcatalog') }}</div>
         <div class="action-item tsfont-edit" @click="$emit('edit-catalog', catalog)">{{ $t('page.edit') }}</div>
         <div :class="{ disable: hasChildOrView }" class="action-item tsfont-trash-o" @click="$emit('delete-catalog', catalog)">{{ $t('page.delete') }}</div>
       </div>
@@ -96,14 +96,14 @@
             <div class="catalog-name">
               <span class="tsfont-bar move"></span>
               <span class="catalog-toggle toggle-placeholder"></span>
-              <span class="view-type">视图</span>
+              <span class="view-type">{{ $t('page.view') }}</span>
               <span>{{ view.name }}</span>
               <span>·</span>
               <span>{{ view.label }}</span>
             </div>
             <div>
-              <span v-if="view.isActive" class="text-success">是</span>
-              <span v-else class="text-grey">否</span>
+              <span v-if="view.isActive" class="text-success">{{ $t('page.yes') }}</span>
+              <span v-else class="text-grey">{{ $t('page.no') }}</span>
             </div>
             <div>
               <UserSelect
@@ -114,8 +114,8 @@
               ></UserSelect>
             </div>
             <div class="action-group">
-              <div v-if="viewIndex > 0" class="action-item tsfont-arrow-up" @click="$emit('move-view-up', catalog.id, view.id)">上移</div>
-              <div v-if="viewIndex < catalog.viewList.length - 1" class="action-item tsfont-arrow-down" @click="$emit('move-view-down', catalog.id, view.id)">下移</div>
+              <div v-if="viewIndex > 0" class="action-item tsfont-arrow-up" @click="$emit('move-view-up', catalog.id, view.id)">{{ $t('page.moveup') }}</div>
+              <div v-if="viewIndex < catalog.viewList.length - 1" class="action-item tsfont-arrow-down" @click="$emit('move-view-down', catalog.id, view.id)">{{ $t('page.movedown') }}</div>
               <div class="action-item tsfont-edit" @click="$emit('edit-view', view)">{{ $t('page.edit') }}</div>
               <div class="action-item tsfont-trash-o" @click="$emit('delete-view', view)">{{ $t('page.delete') }}</div>
             </div>

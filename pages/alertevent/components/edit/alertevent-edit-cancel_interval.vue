@@ -8,7 +8,7 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem label="定时插件" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.scheduleplugin')" labelPosition="left">
       <TsFormSelect
         v-model="configLocal.intervalHandlerIdList"
         url="/api/rest/alert/event/handler/list"
@@ -21,7 +21,7 @@
         :validateList="['required']"
         @on-change="changeIntervalHandler"
       ></TsFormSelect>
-      <div class="text-grey">选择当前告警类型下需要取消的一个或多个定时调度插件。</div>
+      <div class="text-grey">{{ $t('term.alert.cancelintervalhelp') }}</div>
     </TsFormItem>
     <Alert v-if="error" type="error">{{ error }}</Alert>
   </div>
@@ -53,7 +53,7 @@ export default {
   methods: {
     async valid() {
       if (!this.configLocal.intervalHandlerIdList || this.configLocal.intervalHandlerIdList.length === 0) {
-        this.error = '请选择定时插件';
+        this.error = this.$t('term.alert.selectscheduleplugin');
         return false;
       }
       return true;

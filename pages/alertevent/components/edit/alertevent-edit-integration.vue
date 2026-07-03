@@ -32,7 +32,7 @@
         <div>
           <span class="cursor text-action" @click="isShowAttrList = !isShowAttrList">
             <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
-            <span class="ml-xs">点击复制属性</span>
+            <span class="ml-xs">{{ $t('term.alert.clickcopyattr') }}</span>
           </span>
           <div v-if="isShowAttrList" class="mt-sm attr-list">
             <Tag
@@ -70,7 +70,7 @@
         </TsFormItem>
       </div>
     </TsFormItem>
-    <TsFormItem label="调用间隔" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.invokeinterval')" labelPosition="left">
       <TsFormInput
         v-model="configLocal.interval"
         type="number"
@@ -78,9 +78,9 @@
         :step="1"
         border="border"
       ></TsFormInput>
-      <div class="text-grey">帮助：在调用间隔时间（?分钟）内只会调用一次</div>
+      <div class="text-grey">{{ $t('term.alert.invokeintervalhelp') }}</div>
     </TsFormItem>
-    <TsFormItem label="成功动作" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.successaction')" labelPosition="left">
       <div>
         <draggable
           v-if="configLocal.successCallbackList && configLocal.successCallbackList.length > 0"
@@ -148,11 +148,11 @@
               </div>
             </Poptip>
           </div>
-          <div v-else class="text-error">没有可用插件</div>
+          <div v-else class="text-error">{{ $t('term.alert.noplugin') }}</div>
         </div>
       </div>
     </TsFormItem>
-    <TsFormItem label="失败动作" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.failedaction')" labelPosition="left">
       <div>
         <draggable
           v-if="configLocal.failedCallbackList && configLocal.failedCallbackList.length > 0"
@@ -220,7 +220,7 @@
               </div>
             </Poptip>
           </div>
-          <div v-else class="text-error">没有可用插件</div>
+          <div v-else class="text-error">{{ $t('term.alert.noplugin') }}</div>
         </div>
       </div>
     </TsFormItem>

@@ -3,8 +3,8 @@
     <TsContain>
       <template v-slot:topLeft>
         <div class="action-group">
-          <div class="action-item tsfont-plus" @click="addCatalog()">目录</div>
-          <div class="action-item tsfont-plus" @click="addView()">视图</div>
+          <div class="action-item tsfont-plus" @click="addCatalog()">{{ $t('page.catalogue') }}</div>
+          <div class="action-item tsfont-plus" @click="addView()">{{ $t('page.view') }}</div>
         </div>
       </template>
       <template v-slot:topRight>
@@ -22,9 +22,9 @@
       <template v-slot:content>
         <div class="catalog-grid text-grey padding">
           <div></div>
-          <div>激活</div>
-          <div>授权</div>
-          <div>操作</div>
+          <div>{{ $t('term.report.isactive') }}</div>
+          <div>{{ $t('page.auth') }}</div>
+          <div>{{ $t('page.action') }}</div>
         </div>
         <draggable
           v-if="!hasSearchCondition"
@@ -133,7 +133,7 @@ export default {
             type: 'radio',
             name: 'isActive',
             value: null,
-            label: '是否激活',
+            label: this.$t('term.report.isactive'),
             dataList: [
               { value: 1, text: this.$t('page.yes') },
               { value: 0, text: this.$t('page.no') }
@@ -144,7 +144,7 @@ export default {
           {
             type: 'userselect',
             name: 'authList',
-            label: '授权',
+            label: this.$t('page.auth'),
             groupList: ['common', 'user', 'role', 'team'],
             transfer: true
           }

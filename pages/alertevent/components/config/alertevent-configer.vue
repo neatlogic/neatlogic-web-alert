@@ -8,7 +8,7 @@
       :pluginData="pluginData"
       :readonly="readonly"
     ></component>
-    <div v-else-if="!readonly">没有任何可配置参数</div>
+    <div v-else-if="!readonly">{{ $t('term.alert.noeventconfig') }}</div>
   </div>
 </template>
 <script>

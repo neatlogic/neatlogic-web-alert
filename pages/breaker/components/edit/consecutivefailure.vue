@@ -24,35 +24,35 @@ export default {
       formConfig: {
         scope: {
           type: 'radio',
-          label: '统计范围',
+          label: this.$t('term.alert.statisticsscope'),
           validateList: ['required'],
           dataList: [
-            { value: 'handlerInstance', text: '插件实例' },
-            { value: 'handler', text: '插件类型' }
+            { value: 'handlerInstance', text: this.$t('term.alert.plugininstance') },
+            { value: 'handler', text: this.$t('term.alert.plugintype') }
           ],
-          desc: '选择“插件实例”时按每个事件插件配置独立统计；选择“插件类型”时同类插件共用连续失败计数。'
+          desc: this.$t('term.alert.scopedesc')
         },
         failureThreshold: {
           type: 'number',
-          label: '连续失败阈值',
+          label: this.$t('term.alert.failurethreshold'),
           min: 1,
           validateList: ['required'],
-          desc: '最近连续失败次数达到该值后进入熔断。由于熔断判断发生在插件执行前，因此达到阈值后的下一次触发会被熔断。'
+          desc: this.$t('term.alert.failurethresholddesc')
         },
         openDuration: {
           type: 'number',
-          label: '熔断时长',
+          label: this.$t('term.alert.breakerduration'),
           min: 1,
           validateList: ['required']
         },
         openDurationUnit: {
           type: 'radio',
-          label: '时长单位',
+          label: this.$t('term.alert.durationunit'),
           validateList: ['required'],
           dataList: [
-            { value: 'second', text: '秒' },
-            { value: 'minute', text: '分钟' },
-            { value: 'hour', text: '小时' }
+            { value: 'second', text: this.$t('term.alert.second') },
+            { value: 'minute', text: this.$t('term.alert.minute') },
+            { value: 'hour', text: this.$t('term.alert.hour') }
           ]
         }
       }

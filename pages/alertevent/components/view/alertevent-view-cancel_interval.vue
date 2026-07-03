@@ -7,7 +7,7 @@
     }"
   >
     <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
-    <TsFormItem label="定时插件" labelPosition="left" style="margin:0px !important">
+    <TsFormItem :label="$t('term.alert.scheduleplugin')" labelPosition="left" style="margin:0px !important">
       <span v-if="intervalHandlerNameList.length > 0">
         <Tag v-for="(name, index) in intervalHandlerNameList" :key="index">{{ name }}</Tag>
       </span>
@@ -18,7 +18,7 @@
     </TsFormItem>
     <TsFormItem
       v-if="handler.status"
-      label="处理结果"
+      :label="$t('term.alert.dealresult')"
       labelPosition="left"
       style="margin:0px !important"
     >
@@ -26,13 +26,11 @@
     </TsFormItem>
     <TsFormItem
       v-if="handler.result"
-      label="取消结果"
+      :label="$t('term.alert.cancelresult')"
       labelPosition="left"
       style="margin:0px !important"
     >
-      <span class="text-grey">停止了</span>
-      <span class="ml-xs mr-xs"><b>{{ handler.result.cancelled || 0 }}</b></span>
-      <span class="text-grey">个作业</span>
+      <span class="text-grey">{{ $t('term.alert.stoppedjobcount', { target: handler.result.cancelled || 0 }) }}</span>
     </TsFormItem>
   </div>
 </template>

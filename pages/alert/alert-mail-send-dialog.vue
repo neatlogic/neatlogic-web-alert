@@ -130,7 +130,7 @@ export default {
         },
         templateId: {
           type: 'select',
-          label: '通知模板',
+          label: this.$t('term.alert.notificationtemplate'),
           dynamicUrl: '/api/rest/alert/notifytemplate/search',
           params: { isActive: 1 },
           rootName: 'tbodyList',
@@ -141,7 +141,7 @@ export default {
         }
       };
       if (!this.formValue.templateId) {
-        config.attr = { type: 'slot', label: '属性列表' };
+        config.attr = { type: 'slot', label: this.$t('term.alert.attributelist') };
         config.title = {
           type: 'text',
           label: this.$t('page.title'),

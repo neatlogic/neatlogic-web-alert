@@ -55,10 +55,10 @@ export default {
       theadList: [
         {
           key: 'name',
-          title: '唯一标识'
+          title: this.$t('page.uniquekey')
         },
-        { key: 'label', title: '名称' },
-        { key: 'isActive', title: '是否激活' },
+        { key: 'label', title: this.$t('page.name') },
+        { key: 'isActive', title: this.$t('term.report.isactive') },
         { key: 'action' }
       ]
     };

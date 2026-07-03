@@ -15,7 +15,7 @@
                 <template slot="action" slot-scope="{ row }">
                   <div class="tstable-action">
                     <ul class="tstable-action-ul">
-                      <li class="tsfont-trash-o" @click="deleteRule(row)">删除</li>
+                      <li class="tsfont-trash-o" @click="deleteRule(row)">{{ $t('page.delete') }}</li>
                     </ul>
                   </div>
                 </template>
@@ -26,13 +26,13 @@
                   ghost
                   type="primary"
                   @click="addRule()"
-                ><span class="tsfont-plus">添加规则</span></Button>
+                ><span class="tsfont-plus">{{ $t('term.alert.addrule') }}</span></Button>
               </div>
             </div>
           </template>
         </TsForm>
         <div v-if="alertRuleData && alertRuleData.config && alertRuleData.config.ruleList && alertRuleData.config.ruleList.length > 0" class="mt-md">
-          <TsFormItem :required="true" label="测试数据">
+          <TsFormItem :required="true" :label="$t('term.alert.testdata')">
             <TsFormInput
               ref="content"
               v-model="testContent"
@@ -42,7 +42,7 @@
               type="textarea"
             ></TsFormInput>
           </TsFormItem>
-          <TsFormItem v-if="result" label="转换结果">
+          <TsFormItem v-if="result" :label="$t('term.alert.conversionresult')">
             <div style="white-space: normal; word-break: break-all">{{ result }}</div>
           </TsFormItem>
         </div>
@@ -77,7 +77,7 @@ export default {
       result: null,
       testContent: null,
       dialogConfig: {
-        title: this.id ? '编辑特征' : '添加特征',
+        title: this.id ? this.$t('dialog.title.edittarget', { target: this.$t('term.alert.alertsign') }) : this.$t('dialog.title.addtarget', { target: this.$t('term.alert.alertsign') }),
         type: 'modal',
         maskClose: false,
         isShow: true,
@@ -86,9 +86,9 @@ export default {
       theadList: [
         {
           key: 'pattern',
-          title: '规则（正则表达式）'
+          title: this.$t('term.alert.regexrule')
         },
-        { key: 'replacement', title: '替换' },
+        { key: 'replacement', title: this.$t('page.replace') },
         { key: 'action' }
       ],
       alertRuleData: { isActive: 1, config: { ruleList: [] } },
@@ -96,38 +96,38 @@ export default {
         name: {
           type: 'text',
           validateList: ['required', 'enchar'],
-          label: '唯一标识',
+          label: this.$t('page.uniquekey'),
           maxlength: 50,
           readonly: !!this.id,
-          desc: '保存后不能修改'
+          desc: this.$t('term.alert.savecannotmodify')
         },
         label: {
           type: 'text',
           validateList: ['required'],
-          label: '名称',
+          label: this.$t('page.name'),
           maxlength: 50
         },
         isActive: {
           type: 'radio',
           dataList: [
-            { value: 1, text: '是' },
-            { value: 0, text: '否' }
+            { value: 1, text: this.$t('page.yes') },
+            { value: 0, text: this.$t('page.no') }
           ],
-          label: '是否激活'
+          label: this.$t('term.report.isactive')
         },
         attrName: {
-          label: '关联属性',
+          label: this.$t('term.alert.relatedattr'),
           type: 'select',
           url: '/api/rest/alert/attr/list',
           valueName: 'name',
           textName: 'label',
           validateList: ['required'],
           transfer: true,
-          desc: '特征规则只作用于关联属性'
+          desc: this.$t('term.alert.alertsigndesc')
         },
         config: {
           type: 'slot',
-          label: '特征规则'
+          label: this.$t('term.alert.alertsignrule')
         }
       }
     };
@@ -149,7 +149,7 @@ export default {
       if (this.$refs.content && this.$refs.content.valid()) {
         const ruleList = this.alertRuleData.config.ruleList;
         if (!ruleList || ruleList.length === 0) {
-          this.$Message.info('请至少添加一条规则');
+          this.$Message.info(this.$t('term.alert.atleastonerule'));
           return;
         }
         this.result = null;
@@ -182,7 +182,7 @@ export default {
       if (form && form.valid()) {
         const ruleList = this.alertRuleData.config.ruleList;
         if (!ruleList || ruleList.length === 0) {
-          this.$Message.info('请至少添加一条规则');
+          this.$Message.info(this.$t('term.alert.atleastonerule'));
           return;
         }
         this.$api.alert.rule.saveAlertRule(this.alertRuleData).then(res => {

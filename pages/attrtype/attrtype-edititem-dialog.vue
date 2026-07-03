@@ -18,8 +18,8 @@
           <template v-slot:action="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
-                <li class="tsfont-trash-o" @click="editRow(row)">编辑</li>
-                <li class="tsfont-trash-o" @click="delRow(row)">删除</li>
+                <li class="tsfont-trash-o" @click="editRow(row)">{{ $t('page.edit') }}</li>
+                <li class="tsfont-trash-o" @click="delRow(row)">{{ $t('page.delete') }}</li>
               </ul>
             </div>
           </template>
@@ -68,9 +68,9 @@ export default {
       theadList: [
         {
           key: 'value',
-          title: '值'
+          title: this.$t('page.value')
         },
-        { key: 'text', title: '文案' },
+        { key: 'text', title: this.$t('page.text') },
         { key: 'action' }
       ],
       enumData: {},
@@ -79,13 +79,13 @@ export default {
           type: 'text',
           maxlength: 50,
           validateList: ['required'],
-          label: '值'
+          label: this.$t('page.value')
         },
         text: {
           type: 'text',
           maxlength: 100,
           validateList: ['required'],
-          label: '文案'
+          label: this.$t('page.text')
         }
       },
       searchParam: { attrType: this.id, pageSize: 10 }

@@ -8,7 +8,7 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <component :is="isChild ? 'div' : 'TsFormItem'" label="条件" labelPosition="left">
+    <component :is="isChild ? 'div' : 'TsFormItem'" :label="$t('page.condition')" labelPosition="left">
       <div>
         <div v-for="(condition, index) in configLocal.conditionList" :key="index">
           <ConditionGroup
@@ -18,7 +18,7 @@
             :attrList="attrList"
           ></ConditionGroup>
           <div class="mt-md">
-            <div class="text-success mb-md">满足以上条件则执行</div>
+            <div class="text-success mb-md">{{ $t('term.alert.abeyrule') }}</div>
             <draggable
               v-if="selectedHandlerList(condition).length > 0"
               tag="div"
@@ -86,7 +86,7 @@
                   </div>
                 </Poptip>
               </div>
-              <div v-else class="text-error">没有可用插件</div>
+              <div v-else class="text-error">{{ $t('term.alert.noplugin') }}</div>
             </div>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default {
           const condition = this.configLocal.conditionList[i];
           if (!condition.handler || condition.handler.length === 0) {
             isValid = false;
-            this.error = '请选择插件';
+            this.error = this.$t('term.alert.selectplugin');
           } else {
             for (let hindex = 0; hindex < condition.handler.length; hindex++) {
               const pluginConfig = this.$refs[`pluginConfig_${i}_${hindex}`];

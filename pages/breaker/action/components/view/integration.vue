@@ -1,11 +1,11 @@
 <template>
   <div>
-    <TsFormItem label="集成" labelPosition="left" style="margin:0px !important;">
+    <TsFormItem :label="$t('page.integration')" labelPosition="left" style="margin:0px !important;">
       <span>{{ integrationName }}</span>
     </TsFormItem>
     <TsFormItem
       v-if="config.paramMapping && config.paramMapping.length > 0"
-      label="参数映射"
+      :label="$t('term.alert.parammapping')"
       labelPosition="left"
       style="margin:0px !important;"
     >
@@ -18,7 +18,7 @@
     </TsFormItem>
     <TsFormItem
       v-if="actionError"
-      label="执行异常"
+      :label="$t('term.alert.actionexecutionexception')"
       labelPosition="left"
       style="margin:0px !important;"
     >

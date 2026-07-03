@@ -40,10 +40,10 @@ export default {
       currentLevelId: null,
       isEditLevel: false,
       theadList: [
-        { key: 'level', title: '级别' },
-        { key: 'name', title: '唯一标识' },
-        { key: 'label', title: '名称' },
-        { key: 'color', title: '颜色' },
+        { key: 'level', title: this.$t('page.level') },
+        { key: 'name', title: this.$t('page.uniquekey') },
+        { key: 'label', title: this.$t('page.name') },
+        { key: 'color', title: this.$t('page.color') },
         { key: 'action', title: '' }
       ]
     };

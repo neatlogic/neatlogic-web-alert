@@ -98,7 +98,7 @@
         <div v-if="!row.isDelete" class="tstable-action">
           <ul class="tstable-action-ul">
             <li class="tsfont-list" @click="toAlertDetail(row)">{{ $t('page.detail') }}</li>
-            <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">打开</li>
+            <li v-if="row.isClose && hasRole(row)" class="tsfont-eye" @click="openAlert(row)">{{ $t('term.alert.open') }}</li>
             <li v-if="!row.isClose && hasRole(row)" class="tsfont-eye-off" @click="closeAlert(row)">{{ $t('page.close') }}</li>
             <li v-if="$AuthUtils.hasRole('ALERT_ADMIN')" class="tsfont-trash-o" @click="deleteAlert(row)">{{ $t('page.delete') }}</li>
           </ul>
@@ -492,7 +492,7 @@ export default {
           {
             type: 'select',
             name: 'level',
-            label: '告警级别',
+            label: this.$t('page.level'),
             valueName: 'level',
             textName: 'label',
             url: '/api/rest/alert/level/list',
@@ -501,7 +501,7 @@ export default {
           {
             type: 'select',
             name: 'status',
-            label: '告警状态',
+            label: this.$t('term.alert.alertstatus'),
             url: '/api/rest/alert/status/list',
             valueName: 'name',
             textName: 'label',
@@ -510,13 +510,13 @@ export default {
           {
             type: 'select',
             name: 'updateTimeHour',
-            label: '告警时间',
+            label: this.$t('term.alert.alerttime'),
             dataList: [
-              { value: 1, text: '最近1小时' },
-              { value: 3, text: '最近3小时' },
-              { value: 24, text: '最近24小时' },
-              { value: 72, text: '最近3天' },
-              { value: 168, text: '最近7天' }
+              { value: 1, text: this.$t('term.alert.p1hour') },
+              { value: 3, text: this.$t('term.alert.p3hour') },
+              { value: 24, text: this.$t('term.alert.p24hour') },
+              { value: 72, text: this.$t('term.alert.p3day') },
+              { value: 168, text: this.$t('term.alert.p7day') }
             ],
             transfer: true
           }

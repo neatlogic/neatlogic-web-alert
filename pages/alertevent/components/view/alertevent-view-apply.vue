@@ -8,13 +8,13 @@
   >
     <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <div v-if="handler.config && handler.config.userIdList && handler.config.userIdList.length > 0">
-      <Divider orientation="start">处理人</Divider>
+      <Divider orientation="start">{{ $t('term.alert.worker') }}</Divider>
       <div>
         <span v-for="(user, index) in handler.config.userIdList" :key="index" class="mr-xs"><UserCard :uuid="user" :hideAvatar="false"></UserCard></span>
       </div>
     </div>
     <div v-if="teamList && teamList.length > 0">
-      <Divider orientation="start">处理组</Divider>
+      <Divider orientation="start">{{ $t('term.alert.workerteam') }}</Divider>
       <div>
         <Tag v-for="(team, index) in teamList" :key="index">{{ team.name }}</Tag>
       </div>

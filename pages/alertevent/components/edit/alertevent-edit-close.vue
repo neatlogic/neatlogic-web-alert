@@ -8,10 +8,10 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem label="关闭方式" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.closemethod')" labelPosition="left">
       <TsFormRadio v-model="configLocal.closeType" :dataList="typeList"></TsFormRadio>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.closeType === 'uniquekey'" label="唯一属性" labelPosition="left">
+    <TsFormItem v-if="configLocal.closeType === 'uniquekey'" :label="$t('term.alert.uniqueattr')" labelPosition="left">
       <TsFormCheckbox
         :dataList="attrList"
         valueName="name"
@@ -19,11 +19,11 @@
         :value="configLocal.uniqueAttrList.map(d => d.name)"
         @on-change="selectAttr"
       ></TsFormCheckbox>
-      <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
+      <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">{{ $t('term.alert.selectedattr') }}</Divider>
       <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
       <div v-if="error" class="text-error">{{ error }}</div>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.closeType === 'uniquekey' && configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" label="告警特征" labelPosition="left">
+    <TsFormItem v-if="configLocal.closeType === 'uniquekey' && configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" :label="$t('term.alert.alertsign')" labelPosition="left">
       <TsFormSelect
         v-model="configLocal.ruleList"
         url="/api/rest/alert/rule/list"
@@ -34,16 +34,16 @@
         textName="label"
         multiple
       ></TsFormSelect>
-      <div class="text-grey">帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。</div>
+      <div class="text-grey">{{ $t('term.alert.alertsignhelp') }}</div>
     </TsFormItem>
-    <TsFormItem label="同时关闭子告警" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.closesubalert')" labelPosition="left">
       <TsFormSwitch
         v-model="configLocal.isCloseChildAlert"
         :showStatus="true"
         :trueValue="1"
         :falseValue="0"
-        trueText="是"
-        falseText="否"
+        :trueText="$t('page.yes')"
+        :falseText="$t('page.no')"
       ></TsFormSwitch>
     </TsFormItem>
   </div>
@@ -66,8 +66,8 @@ export default {
   data() {
     return {
       typeList: [
-        { value: 'id', text: '关闭当前告警' },
-        { value: 'uniquekey', text: '关闭唯一键相同的所有告警' }
+        { value: 'id', text: this.$t('term.alert.closecurrentalert') },
+        { value: 'uniquekey', text: this.$t('term.alert.closesameuniquekeyalert') }
       ],
       attrList: [],
       error: ''
@@ -94,7 +94,7 @@ export default {
   methods: {
     async valid() {
       if (this.configLocal.closeType === 'uniquekey' && this.configLocal.uniqueAttrList.length === 0) {
-        this.error = '请至少选择一个属性';
+        this.error = this.$t('term.alert.selectoneattr');
         return false;
       }
       return true;

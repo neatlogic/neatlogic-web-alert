@@ -15,15 +15,15 @@
       <TsFormRadio
         v-model="handler.isAsync"
         :dataList="[
-          { value: 1, text: '异步动作' },
-          { value: 0, text: '同步动作' }
+          { value: 1, text: $t('term.alert.asyncaction') },
+          { value: 0, text: $t('term.alert.syncaction') }
         ]"
       ></TsFormRadio>
     </TsFormItem>
     <TsFormItem :label="$t('term.report.isactive')" labelPosition="left">
       <TsFormSwitch v-model="handler.isActive" :trueValue="1" :falseValue="0"></TsFormSwitch>
     </TsFormItem>
-    <TsFormItem label="熔断策略" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.breakerpolicy')" labelPosition="left">
       <TsFormSelect
         v-model="breakerPolicyIdList"
         dynamicUrl="/api/rest/alert/breaker/policy/search"

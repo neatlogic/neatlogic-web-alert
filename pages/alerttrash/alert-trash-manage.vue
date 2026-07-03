@@ -108,15 +108,15 @@ export default {
       theadList: [
         {
           key: 'title',
-          title: '标题'
+          title: this.$t('page.title')
         },
-        { key: 'levelLabel', title: '级别' },
-        { key: 'typeName', title: '类型' },
-        { key: 'statusName', title: '状态' },
-        { key: 'sourceName', title: '来源' },
-        { key: 'deleteUser', title: '删除用户' },
-        { key: 'alertTime', title: '告警时间', type: 'time' },
-        { key: 'deleteTime', title: '删除时间', type: 'time' },
+        { key: 'levelLabel', title: this.$t('page.level') },
+        { key: 'typeName', title: this.$t('page.type') },
+        { key: 'statusName', title: this.$t('page.status') },
+        { key: 'sourceName', title: this.$t('page.source') },
+        { key: 'deleteUser', title: this.$t('term.alert.deleteuser') },
+        { key: 'alertTime', title: this.$t('term.alert.alerttime'), type: 'time' },
+        { key: 'deleteTime', title: this.$t('page.deletetime'), type: 'time' },
         { key: 'action' }
       ],
       isShowDetail: false,
@@ -394,9 +394,9 @@ export default {
     updateTimeName() {
       if (this.searchParam.updateTimeHour) {
         if (this.searchParam.updateTimeHour <= 24) {
-          return '最近' + this.searchParam.updateTimeHour + '小时';
+          return this.$t('term.alert.lasthours', { target: this.searchParam.updateTimeHour });
         } else {
-          return '最近' + this.searchParam.updateTimeHour / 24 + '天';
+          return this.$t('term.alert.lastdays', { target: this.searchParam.updateTimeHour / 24 });
         }
       }
       return null;
@@ -417,12 +417,12 @@ export default {
           {
             type: 'text',
             name: 'keyword',
-            label: '关键字'
+            label: this.$t('page.keyword')
           },
           {
             type: 'select',
             name: 'level',
-            label: '告警级别',
+            label: this.$t('page.level'),
             valueName: 'level',
             textName: 'label',
             url: '/api/rest/alert/level/list',
@@ -431,7 +431,7 @@ export default {
           {
             type: 'select',
             name: 'status',
-            label: '告警状态',
+            label: this.$t('term.alert.alertstatus'),
             url: '/api/rest/alert/status/list',
             valueName: 'name',
             textName: 'label',
@@ -440,7 +440,7 @@ export default {
           {
             type: 'select',
             name: 'source',
-            label: '告警来源',
+            label: this.$t('term.alert.alertsource'),
             dynamicUrl: '/api/rest/alert/source/search',
             valueName: 'name',
             textName: 'label',
@@ -450,26 +450,26 @@ export default {
           {
             type: 'select',
             name: 'updateTimeHour',
-            label: '告警时间',
+            label: this.$t('term.alert.alerttime'),
             dataList: [
-              { value: 1, text: '最近1小时' },
-              { value: 3, text: '最近3小时' },
-              { value: 24, text: '最近24小时' },
-              { value: 72, text: '最近3天' },
-              { value: 168, text: '最近7天' }
+              { value: 1, text: this.$t('term.alert.p1hour') },
+              { value: 3, text: this.$t('term.alert.p3hour') },
+              { value: 24, text: this.$t('term.alert.p24hour') },
+              { value: 72, text: this.$t('term.alert.p3day') },
+              { value: 168, text: this.$t('term.alert.p7day') }
             ],
             transfer: true
           },
           {
             type: 'select',
             name: 'deleteTimeHour',
-            label: '删除时间',
+            label: this.$t('page.deletetime'),
             dataList: [
-              { value: 1, text: '最近1小时' },
-              { value: 3, text: '最近3小时' },
-              { value: 24, text: '最近24小时' },
-              { value: 72, text: '最近3天' },
-              { value: 168, text: '最近7天' }
+              { value: 1, text: this.$t('term.alert.p1hour') },
+              { value: 3, text: this.$t('term.alert.p3hour') },
+              { value: 24, text: this.$t('term.alert.p24hour') },
+              { value: 72, text: this.$t('term.alert.p3day') },
+              { value: 168, text: this.$t('term.alert.p7day') }
             ],
             transfer: true
           }

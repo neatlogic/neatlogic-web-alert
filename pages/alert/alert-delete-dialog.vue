@@ -6,7 +6,7 @@
         <div class="mt-md"><Checkbox v-model="isDeleteChildAlert" :true-value="1" :false-value="0">{{ $t('term.alert.deletesubalert') }}</Checkbox></div>
       </div>
       <div v-else-if="mode === 'match'">
-        <div>当前高级搜索条件匹配到 <span class="text-danger">{{ matchCount }}</span> 条告警，确认后将提交后台删除。</div>
+        <div v-html="$t('term.alert.deletematchconfirm', { count: `<span class='text-danger'>${matchCount}</span>` })"></div>
       </div>
     </template>
     <template v-slot:footer>
@@ -66,7 +66,7 @@ export default {
           if (this.mode === 'select') {
             this.$Message.success(this.$t('message.deletesuccess'));
           } else if (this.mode === 'match') {
-            this.$Message.success('已提交后台删除');
+            this.$Message.success(this.$t('term.alert.submittedbackenddelete'));
           }
           this.close(true);
         });

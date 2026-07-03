@@ -5,7 +5,7 @@
         <div>
           <TsForm ref="form" v-model="actionData" :item-list="formConfig">
             <template v-slot:icon>
-              <div class="logo bg-block border-color text-primary radius-sm" @click="isIconDialogShow = true">
+              <div class="logo bg-block border-color text-primary radius-sm" :data-change-text="$t('page.replace')" @click="isIconDialogShow = true">
                 <i class="logo-icon" :class="actionData.icon"></i>
               </div>
             </template>
@@ -29,14 +29,14 @@
                 <TabPane
                   v-if="COMMERCIAL_MODULES.includes('alert')"
                   tab="main"
-                  label="AI助手"
+                  :label="$t('term.ai.agent')"
                   name="aihelper"
                   :index="2"
                 >
                   <div v-if="isAiEnable">
                     <TsFormInput
                       v-model="helpContent"
-                      placeholder="请输入需求，例如：弹出警告框，提示“是否生成事件”。如果同意则调用集成生成工单，提供参数告警内容和级别，成功后提示操作完成"
+                      :placeholder="$t('term.alert.actionhelperplaceholder')"
                       type="textarea"
                       border="border"
                     ></TsFormInput>
@@ -50,7 +50,7 @@
                       >{{ $t('term.alert.generatecode') }}</Button>
                     </div>
                   </div>
-                  <div v-else class="text-grey">请先配置智能体</div>
+                  <div v-else class="text-grey">{{ $t('term.alert.configureaiagentfirst') }}</div>
                 </TabPane>
               </Tabs>
             </template>
@@ -133,7 +133,7 @@ export default {
         {
           type: 'slot',
           name: 'script',
-          label: '点击事件'
+          label: this.$t('term.alert.clickevent')
         },
         {
           type: 'textarea',
@@ -236,7 +236,7 @@ export default {
       } catch (e) {
         return {
           ok: false,
-          msg: e.message || '脚本语法错误'
+          msg: e.message || this.$t('term.alert.scriptsyntaxerror')
         };
       }
     }
@@ -261,7 +261,7 @@ export default {
     font-size: 20px;
   }
   &::after {
-    content: '更换';
+    content: attr(data-change-text);
     left: 44px;
     width: 40px;
     position: absolute;

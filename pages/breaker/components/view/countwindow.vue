@@ -7,52 +7,22 @@
     }"
   >
     <TsFormItem
-      label="熔断策略"
+      :label="$t('term.alert.breakerpolicy')"
       labelPosition="left"
       style="margin:0px !important;"
     >
-      <span>{{ handlerText }}按</span>
-      <span class="text-bold ml-xs mr-xs">{{ dimensionText }}</span>
-      <span>统计，</span>
-      <span class="text-bold ml-xs mr-xs">{{ windowText }}</span>
-      <span>内触发</span>
-      <span class="text-bold ml-xs mr-xs">{{ thresholdText }}</span>
-      <span>次后熔断</span>
-      <span class="text-bold ml-xs mr-xs">{{ openDurationText }}</span>
-      <span>，熔断期间</span>
-      <span>{{ config.enableAggregate === 1 ? '启用' : '不启用' }}</span>
-      <span>聚合触发</span>
-      <template v-if="config.enableAggregate === 1">
-        <span>，最多收集</span>
-        <span class="text-bold ml-xs mr-xs">{{ collectLimitText }}</span>
-        <span>条告警</span>
-      </template>
-      <span>。</span>
+      <span>{{ summaryText }}</span>
     </TsFormItem>
     <TsFormItem
       v-if="mode === 'audit' && hasStateData"
-      label="熔断状态"
+      :label="$t('term.alert.breakerstate')"
       labelPosition="left"
       style="margin:0px !important;"
     >
       <div>
-        <span>已收集</span>
-        <span class="text-bold ml-xs mr-xs">{{ displayValue(stateData.collectCount) }}</span>
-        <span>条告警，超限未收集</span>
-        <span class="text-bold ml-xs mr-xs">{{ displayValue(stateData.collectDropCount) }}</span>
-        <span>条</span>
-        <template v-if="stateData.baselineAlertId">
-          <span>，基线告警ID为</span>
-          <span class="text-bold ml-xs mr-xs">{{ stateData.baselineAlertId }}</span>
-        </template>
-        <template v-if="config.enableAggregate === 1">
-          <span>，收集上限为</span>
-          <span class="text-bold ml-xs mr-xs">{{ collectLimitText }}</span>
-          <span>条</span>
-        </template>
-        <span>。</span>
-        <div v-if="stateData.collectError" class="text-error mt-xs">采集异常：{{ stateData.collectError }}</div>
-        <div v-if="stateData.flushError" class="text-error mt-xs">聚合异常：{{ stateData.flushError }}</div>
+        <span>{{ stateSummaryText }}</span>
+        <div v-if="stateData.collectError" class="text-error mt-xs">{{ $t('term.alert.collectexception', { target: stateData.collectError }) }}</div>
+        <div v-if="stateData.flushError" class="text-error mt-xs">{{ $t('term.alert.aggregateexception', { target: stateData.flushError }) }}</div>
       </div>
     </TsFormItem>
     <BreakerActionView :config="config" :actionAuditList="policy.actionAuditList" :level="level + 1"></BreakerActionView>
@@ -73,9 +43,9 @@ export default {
   methods: {
     getUnitText(unit) {
       const unitTextMap = {
-        second: '秒',
-        minute: '分钟',
-        hour: '小时'
+        second: this.$t('term.alert.second'),
+        minute: this.$t('term.alert.minute'),
+        hour: this.$t('term.alert.hour')
       };
       return unitTextMap[unit] || unit || '';
     },
@@ -97,7 +67,7 @@ export default {
       return Object.keys(this.stateData).length > 0;
     },
     handlerText() {
-      return this.policy.policyHandlerLabel || this.policy.policyHandler || '当前策略';
+      return this.policy.policyHandlerLabel || this.policy.policyHandler || this.$t('term.alert.currentpolicy');
     },
     windowText() {
       return `${this.displayValue(this.config.windowSize)}${this.getUnitText(this.config.windowUnit)}`;
@@ -113,16 +83,35 @@ export default {
     },
     dimensionText() {
       const dimensionTextMap = {
-        alertType: '告警类型',
-        alertLevel: '告警级别',
-        event: '事件',
-        handler: '插件类型',
-        handlerInstance: '插件实例',
-        source: '告警来源',
-        worker: '处理人',
-        workerTeam: '处理组'
+        alertType: this.$t('term.alert.alerttype'),
+        alertLevel: this.$t('term.alert.alertlevel'),
+        event: this.$t('term.alert.event'),
+        handler: this.$t('term.alert.plugintype'),
+        handlerInstance: this.$t('term.alert.plugininstance'),
+        source: this.$t('term.alert.alertsource'),
+        worker: this.$t('term.alert.worker'),
+        workerTeam: this.$t('term.alert.workerteam')
       };
-      return (this.config.dimensionList || []).map(d => dimensionTextMap[d] || d).join('、') || '-';
+      return (this.config.dimensionList || []).map(d => dimensionTextMap[d] || d).join(', ') || '-';
+    },
+    summaryText() {
+      return this.$t('term.alert.countwindowsummary', {
+        handler: this.handlerText,
+        dimension: this.dimensionText,
+        window: this.windowText,
+        threshold: this.thresholdText,
+        duration: this.openDurationText,
+        aggregate: this.config.enableAggregate === 1 ? this.$t('term.alert.aggregateenabled') : this.$t('term.alert.aggregatenotenabled'),
+        collectPart: this.config.enableAggregate === 1 ? this.$t('term.alert.countwindowcollectpart', { collectLimit: this.collectLimitText }) : ''
+      });
+    },
+    stateSummaryText() {
+      return this.$t('term.alert.countwindowstatesummary', {
+        collectCount: this.displayValue(this.stateData.collectCount),
+        dropCount: this.displayValue(this.stateData.collectDropCount),
+        baselinePart: this.stateData.baselineAlertId ? this.$t('term.alert.countwindowbaselinepart', { baselineAlertId: this.stateData.baselineAlertId }) : '',
+        collectLimitPart: this.config.enableAggregate === 1 ? this.$t('term.alert.countwindowcollectlimitpart', { collectLimit: this.collectLimitText }) : ''
+      });
     }
   }
 };

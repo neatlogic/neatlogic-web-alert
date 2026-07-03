@@ -8,7 +8,7 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem :required="true" label="分配给" labelPosition="left">
+    <TsFormItem :required="true" :label="$t('term.alert.assignto')" labelPosition="left">
       <UserSelect
         ref="userSelect"
         :value="userTeamList"
@@ -18,7 +18,7 @@
         :validateList="[{ name: 'required', message: ' ' }]"
         @on-change="setUserTeam"
       ></UserSelect>
-      <div class="text-grey mt-md">帮助：可以同时分配给多个用户或分组，分配到的用户或分组下的用户均可以对告警进行处理</div>
+      <div class="text-grey mt-md">{{ $t('term.alert.assignhelp') }}</div>
     </TsFormItem>
   </div>
 </template>

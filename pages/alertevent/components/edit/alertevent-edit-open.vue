@@ -8,10 +8,10 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem label="打开方式" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.openmethod')" labelPosition="left">
       <TsFormRadio v-model="configLocal.openType" :dataList="typeList"></TsFormRadio>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.openType === 'uniquekey'" label="唯一属性" labelPosition="left">
+    <TsFormItem v-if="configLocal.openType === 'uniquekey'" :label="$t('term.alert.uniqueattr')" labelPosition="left">
       <TsFormCheckbox
         :dataList="attrList"
         valueName="name"
@@ -19,18 +19,18 @@
         :value="configLocal.uniqueAttrList.map(d => d.name)"
         @on-change="selectAttr"
       ></TsFormCheckbox>
-      <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
+      <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">{{ $t('term.alert.selectedattr') }}</Divider>
       <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
       <div v-if="error" class="text-error">{{ error }}</div>
     </TsFormItem>
-    <TsFormItem label="同时打开子告警" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.opensubalert')" labelPosition="left">
       <TsFormSwitch
         v-model="configLocal.isCloseChildAlert"
         :showStatus="true"
         :trueValue="1"
         :falseValue="0"
-        trueText="是"
-        falseText="否"
+        :trueText="$t('page.yes')"
+        :falseText="$t('page.no')"
       ></TsFormSwitch>
     </TsFormItem>
   </div>
@@ -52,8 +52,8 @@ export default {
   data() {
     return {
       typeList: [
-        { value: 'id', text: '打开当前告警' },
-        { value: 'uniquekey', text: '打开唯一键相同的所有告警' }
+        { value: 'id', text: this.$t('term.alert.opencurrentalert') },
+        { value: 'uniquekey', text: this.$t('term.alert.opensameuniquekeyalert') }
       ],
       attrList: [],
       error: ''
@@ -80,7 +80,7 @@ export default {
   methods: {
     async valid() {
       if (this.configLocal.closeType === 'uniquekey' && this.configLocal.uniqueAttrList.length === 0) {
-        this.error = '请至少选择一个属性';
+        this.error = this.$t('term.alert.selectoneattr');
         return false;
       }
       return true;

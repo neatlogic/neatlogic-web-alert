@@ -20,7 +20,7 @@
         <span class="text-grey">
           <b>{{ audit.handlerName }}</b>
         </span>
-        <span v-if="audit.isAsync" class="ml-xs"><Tag color="warning">异步</Tag></span>
+        <span v-if="audit.isAsync" class="ml-xs"><Tag color="warning">{{ $t('term.alert.async') }}</Tag></span>
         <span class="text-grey ml-xs">{{ audit.startTime | formatDate }}</span>
         <span v-if="audit.status !== 'running'" class="text-grey">（{{ getTimeCost(audit.timeCost) }}）</span>
       </div>
@@ -106,10 +106,10 @@ export default {
       ms %= 1000;
 
       const parts = [];
-      if (hours > 0) parts.push(`${hours}小时`);
-      if (minutes > 0) parts.push(`${minutes}分`);
-      if (seconds > 0) parts.push(`${seconds}秒`);
-      if (parts.length === 0) parts.push(`${ms}毫秒`); // 始终显示毫秒
+      if (hours > 0) parts.push(this.$t('term.alert.hours', { target: hours }));
+      if (minutes > 0) parts.push(this.$t('term.alert.minutes', { target: minutes }));
+      if (seconds > 0) parts.push(this.$t('term.alert.seconds', { target: seconds }));
+      if (parts.length === 0) parts.push(this.$t('term.alert.milliseconds', { target: ms }));
 
       return parts.join(' ');
     }

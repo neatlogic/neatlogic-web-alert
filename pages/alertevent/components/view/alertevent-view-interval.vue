@@ -10,17 +10,17 @@
     <div v-if="mode === 'edit'">
       <div v-for="(interval, index) in configLocal.intervalList" :key="index" :class="{ 'mt-md': index > 0 }">
         <div class="action-group">
-          <div class="action-item text-grey">当前步骤开始</div>
+          <div class="action-item text-grey">{{ $t('term.alert.currentstepstart') }}</div>
           <div class="action-item">
             <b>{{ interval.delayMinute }}</b>
           </div>
-          <div class="action-item text-grey">分钟后执行</div>
-          <div class="action-item text-grey">重复</div>
+          <div class="action-item text-grey">{{ $t('term.alert.minuteafterexecute') }}</div>
+          <div class="action-item text-grey">{{ $t('term.alert.repeat') }}</div>
           <div class="action-item"><b>{{ interval.repeatCount }}</b></div>
-          <div class="action-item text-grey">次</div>
-          <div class="action-item text-grey">每次间隔</div>
+          <div class="action-item text-grey">{{ $t('term.alert.times') }}</div>
+          <div class="action-item text-grey">{{ $t('term.alert.everyinterval') }}</div>
           <div class="action-item"><b>{{ interval.intervalMinute }}</b></div>
-          <div class="action-item text-grey">分钟</div>
+          <div class="action-item text-grey">{{ $t('page.minute') }}</div>
         </div>
         <div class="mt-md">
           <Divider orientation="start">
@@ -53,18 +53,18 @@
     </div>
     <div v-else-if="mode === 'audit' && handler.result">
       <div v-if="handler.result.nextStartTime" class="action-group">
-        <div class="action-item text-grey">下次执行时间</div>
+        <div class="action-item text-grey">{{ $t('term.alert.nextstarttime') }}</div>
         <div class="action-item">
           {{ handler.result.nextStartTime | formatDate }}
         </div>
-        <div class="action-item text-grey">需执行</div>
+        <div class="action-item text-grey">{{ $t('term.alert.needexecute') }}</div>
         <div class="action-item">{{ handler.result.leftExecuteCount }}</div>
-        <div class="action-item text-grey">次</div>
-        <div v-if="handler.result.intervalMinute" class="action-item text-grey">每次间隔</div>
+        <div class="action-item text-grey">{{ $t('term.alert.times') }}</div>
+        <div v-if="handler.result.intervalMinute" class="action-item text-grey">{{ $t('term.alert.everyinterval') }}</div>
         <div v-if="handler.result.intervalMinute" class="action-item">{{ handler.result.intervalMinute }}</div>
-        <div v-if="handler.result.intervalMinute" class="action-item text-grey">分钟</div>
+        <div v-if="handler.result.intervalMinute" class="action-item text-grey">{{ $t('page.minute') }}</div>
       </div>
-      <div v-else class="text-grey">定时作业已经全部执行完毕</div>
+      <div v-else class="text-grey">{{ $t('term.alert.schedulefinished') }}</div>
     </div>
   </div>
 </template>

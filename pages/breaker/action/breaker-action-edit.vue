@@ -37,7 +37,7 @@
           placement="top"
           width="400"
         >
-          <a href="javascript:void(0)" class="tsfont-plus">添加动作</a>
+          <a href="javascript:void(0)" class="tsfont-plus">{{ $t('term.alert.addbreakeraction') }}</a>
           <div slot="content" style="max-height: 300px; overflow: auto !important">
             <div
               v-for="(handler, index) in getHandlerList(trigger.value)"
@@ -75,9 +75,9 @@ export default {
       actionHandlerList: [],
       actionComponentMap,
       triggerList: [
-        { value: 'OPEN', key: 'openActionList', text: '熔断时触发' },
-        { value: 'AGGREGATE', key: 'aggregateActionList', text: '聚合时触发' },
-        { value: 'RECOVER', key: 'recoverActionList', text: '熔断恢复时触发' }
+        { value: 'OPEN', key: 'openActionList', text: this.$t('term.alert.breakeropenactiontrigger') },
+        { value: 'AGGREGATE', key: 'aggregateActionList', text: this.$t('term.alert.breakeraggregateactiontrigger') },
+        { value: 'RECOVER', key: 'recoverActionList', text: this.$t('term.alert.breakerrecoveractiontrigger') }
       ]
     };
   },
@@ -124,17 +124,17 @@ export default {
       return {
         name: {
           type: 'text',
-          label: '动作名称',
+          label: this.$t('page.actionname'),
           value: action && action.name,
           validateList: ['required']
         },
         isActive: {
           type: 'radio',
-          label: '是否激活',
+          label: this.$t('term.report.isactive'),
           value: action && action.isActive,
           dataList: [
-            { value: 1, text: '是' },
-            { value: 0, text: '否' }
+            { value: 1, text: this.$t('page.yes') },
+            { value: 0, text: this.$t('page.no') }
           ]
         }
       };

@@ -3,7 +3,7 @@
     <TsContain>
       <template v-slot:topLeft>
         <div class="action-group">
-          <div v-auth="['ALERT_BREAKER_MODIFY']" class="action-item tsfont-plus" @click="editPolicy()">熔断策略</div>
+          <div v-auth="['ALERT_BREAKER_MODIFY']" class="action-item tsfont-plus" @click="editPolicy()">{{ $t('term.alert.breakerpolicy') }}</div>
         </div>
       </template>
       <template v-slot:topRight>
@@ -30,7 +30,7 @@
           <template v-slot:action="{ row }">
             <div class="tstable-action">
               <ul class="tstable-action-ul">
-                <li class="tsfont-eye" @click="viewPolicyStatus(row)">执行情况</li>
+                <li class="tsfont-eye" @click="viewPolicyStatus(row)">{{ $t('term.alert.executionstatus') }}</li>
                 <li v-auth="['ALERT_BREAKER_MODIFY']" class="tsfont-edit" @click="editPolicy(row)">{{ $t('page.edit') }}</li>
                 <li v-auth="['ALERT_BREAKER_MODIFY']" class="tsfont-trash-o" @click="deletePolicy(row)">{{ $t('page.delete') }}</li>
               </ul>
@@ -67,7 +67,7 @@ export default {
       policyData: {},
       theadList: [
         { key: 'name', title: this.$t('page.name') },
-        { key: 'handler', title: '策略插件' },
+        { key: 'handler', title: this.$t('term.alert.breakerplugin') },
         { key: 'isActive', title: this.$t('term.report.isactive') },
         { key: 'description', title: this.$t('page.description') },
         { key: 'action' }
@@ -118,7 +118,7 @@ export default {
     deletePolicy(row) {
       this.$createDialog({
         title: this.$t('dialog.title.deleteconfirm'),
-        content: this.$t('dialog.content.deleteconfirm', { target: '熔断策略' }),
+        content: this.$t('dialog.content.deleteconfirm', { target: this.$t('term.alert.breakerpolicy') }),
         btnType: 'error',
         'on-ok': vnode => {
           this.$api.alert.breaker.deletePolicy(row.id).then(res => {
@@ -141,7 +141,7 @@ export default {
           {
             type: 'select',
             name: 'handler',
-            label: '策略插件',
+            label: this.$t('term.alert.breakerplugin'),
             valueName: 'name',
             textName: 'label',
             dataList: this.handlerList,

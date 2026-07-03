@@ -1,9 +1,9 @@
 <template>
   <div v-if="alertOriginData">
-    <TsFormItem label="上报时间" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.reporttime')" labelPosition="left">
       <span>{{ alertOriginData.time | formatDate }}</span>
     </TsFormItem>
-    <TsFormItem label="原始数据" labelPosition="left">
+    <TsFormItem :label="$t('term.alert.rawdata')" labelPosition="left">
       <JsonViewer
         v-if="isJson(alertOriginData.content)"
         :expanded="true"
@@ -12,7 +12,7 @@
       ></JsonViewer>
       <div v-else class="radius-md bg-op padding-md">{{ alertOriginData.content }}</div>
     </TsFormItem>
-    <TsFormItem v-if="alertOriginData.alertData" label="转换数据" labelPosition="left">
+    <TsFormItem v-if="alertOriginData.alertData" :label="$t('term.alert.converteddata')" labelPosition="left">
       <JsonViewer
         :expanded="true"
         copyable

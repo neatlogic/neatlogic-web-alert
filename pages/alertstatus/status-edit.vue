@@ -46,19 +46,19 @@ export default {
         name: {
           type: 'text',
           maxlength: 50,
-          label: '唯一标识',
+          label: this.$t('page.uniquekey'),
           validateList: ['required'],
           readonly: !!this.status
         },
         label: {
           type: 'text',
           maxlength: 50,
-          label: '名称',
+          label: this.$t('page.name'),
           validateList: ['required']
         },
         color: {
           type: 'slot',
-          label: '颜色'
+          label: this.$t('page.color')
         }
       }
     };

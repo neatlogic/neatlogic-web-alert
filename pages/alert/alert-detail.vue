@@ -33,7 +33,7 @@
               placement="bottom-end"
               width="700"
               transfer
-              title="发送邮件"
+              :title="$t('term.alert.sendmail')"
             >
               <Button type="primary" ghost>{{ $t('term.alert.sendmail') }}</Button>
               <div slot="content" class="alert-mail-poptip" @click.stop>
