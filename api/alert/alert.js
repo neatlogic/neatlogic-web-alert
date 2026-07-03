@@ -68,6 +68,9 @@ const alert = {
   rebuildIndex(id) {
     return axios.post('/api/rest/alert/index/rebuild', { id: id });
   },
+  batchRebuildIndex(idList) {
+    return axios.post('/api/rest/alert/index/rebuild/batch', { idList: idList });
+  },
   sendMail(params) {
     return axios.post('/api/rest/alert/mail/send', params);
   }
