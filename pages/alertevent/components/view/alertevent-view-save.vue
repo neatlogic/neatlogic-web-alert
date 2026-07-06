@@ -70,6 +70,22 @@
       </div>
     </TsFormItem>
     <TsFormItem
+      v-if="handler.result && handler.result.uniqueKeyOriginal"
+      style="margin: 0px !important"
+      labelPosition="left"
+      label="唯一键原值"
+    >
+      <div class="text-word-break">{{ handler.result.uniqueKeyOriginal }}</div>
+    </TsFormItem>
+    <TsFormItem
+      v-if="finalUniqueKey"
+      style="margin: 0px !important"
+      labelPosition="left"
+      :label="$t('term.alert.uniquekey')"
+    >
+      <div class="text-word-break">{{ finalUniqueKey }}</div>
+    </TsFormItem>
+    <TsFormItem
       v-if="handler.result && handler.result.alertId"
       style="margin: 0px !important"
       labelPosition="left"
@@ -142,7 +158,14 @@ export default {
     }
   },
   filter: {},
-  computed: {},
+  computed: {
+    finalUniqueKey() {
+      if (this.handler && this.handler.result && this.handler.result.uniqueKey) {
+        return this.handler.result.uniqueKey;
+      }
+      return this.handler ? this.handler.uniqueKey : null;
+    }
+  },
   watch: {}
 };
 </script>
