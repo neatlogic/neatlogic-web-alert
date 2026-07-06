@@ -7,7 +7,7 @@
             <div>
               <span class="cursor text-action" @click="isShowAttrList = !isShowAttrList">
                 <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
-                <span class="ml-xs">点击复制属性</span>
+                <span class="ml-xs">{{ $t('term.alert.clickcopyattr') }}</span>
               </span>
               <div v-if="isShowAttrList" class="mt-sm">
                 <Tag
@@ -94,11 +94,11 @@ export default {
           trueValue: 1,
           falseValue: 0
         },
-        attr: { type: 'slot', label: '属性列表' },
+        attr: { type: 'slot', label: this.$t('term.alert.attributelist') },
         title: {
           type: 'text',
           label: this.$t('page.title'),
-          desc: '有些应用场景不一定有标题，例如短信等'
+          desc: this.$t('term.alert.titleoptionaldesc')
         },
         content: {
           type: 'slot',

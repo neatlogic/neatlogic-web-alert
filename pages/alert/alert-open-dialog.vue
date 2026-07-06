@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       dialogConfig: {
-        title: '打开确认',
+        title: this.$t('term.alert.openconfirm'),
         isShow: true,
         maskClose: true,
         width: 'mini'

@@ -24,33 +24,33 @@ export default {
       formConfig: {
         windowSize: {
           type: 'number',
-          label: '统计窗口',
+          label: this.$t('term.alert.statisticswindow'),
           min: 1,
           validateList: ['required']
         },
         windowUnit: {
           type: 'radio',
-          label: '窗口单位',
+          label: this.$t('term.alert.windowunit'),
           validateList: ['required'],
           dataList: [
-            { value: 'second', text: '秒' },
-            { value: 'minute', text: '分钟' },
-            { value: 'hour', text: '小时' }
+            { value: 'second', text: this.$t('term.alert.second') },
+            { value: 'minute', text: this.$t('term.alert.minute') },
+            { value: 'hour', text: this.$t('term.alert.hour') }
           ]
         },
         threshold: {
           type: 'number',
-          label: '触发阈值',
+          label: this.$t('term.alert.triggerthreshold'),
           min: 1,
           validateList: ['required'],
-          desc: '同一邮件插件实例、相同实际收件人列表在统计窗口内超过该次数后进入聚合熔断。'
+          desc: this.$t('term.alert.mailreceiverthresholddesc')
         },
         collectLimit: {
           type: 'number',
-          label: '收集上限',
+          label: this.$t('term.alert.collectlimit'),
           min: 1,
           validateList: ['required'],
-          desc: '熔断收集期间最多收集的告警数量，超过上限后不再收集新的告警，只记录丢弃数量。'
+          desc: this.$t('term.alert.collectlimitdesc')
         }
       }
     };

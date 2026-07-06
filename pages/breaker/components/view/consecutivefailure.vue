@@ -7,27 +7,19 @@
     }"
   >
     <TsFormItem
-      label="熔断策略"
+      :label="$t('term.alert.breakerpolicy')"
       labelPosition="left"
       style="margin:0px !important;"
     >
-      <span>{{ handlerText }}按</span>
-      <span class="text-bold ml-xs mr-xs">{{ scopeText }}</span>
-      <span>统计，连续失败</span>
-      <span class="text-bold ml-xs mr-xs">{{ failureThresholdText }}</span>
-      <span>次后熔断</span>
-      <span class="text-bold ml-xs mr-xs">{{ openDurationText }}</span>
-      <span>。</span>
+      <span>{{ summaryText }}</span>
     </TsFormItem>
     <TsFormItem
       v-if="mode === 'audit'"
-      label="熔断状态"
+      :label="$t('term.alert.breakerstate')"
       labelPosition="left"
       style="margin:0px !important;"
     >
-      <span>当前连续失败</span>
-      <span class="text-bold ml-xs mr-xs">{{ displayValue(stateData.failureCount || 0) }}</span>
-      <span>次。</span>
+      <span>{{ $t('term.alert.consecutivefailurestatesummary', { failureCount: displayValue(stateData.failureCount || 0) }) }}</span>
     </TsFormItem>
     <BreakerActionView :config="config" :actionAuditList="policy.actionAuditList" :level="level + 1"></BreakerActionView>
   </div>
@@ -47,9 +39,9 @@ export default {
   methods: {
     getUnitText(unit) {
       const unitTextMap = {
-        second: '秒',
-        minute: '分钟',
-        hour: '小时'
+        second: this.$t('term.alert.second'),
+        minute: this.$t('term.alert.minute'),
+        hour: this.$t('term.alert.hour')
       };
       return unitTextMap[unit] || unit || '';
     },
@@ -68,12 +60,12 @@ export default {
       return this.policy.stateData || {};
     },
     handlerText() {
-      return this.policy.policyHandlerLabel || this.policy.policyHandler || '当前策略';
+      return this.policy.policyHandlerLabel || this.policy.policyHandler || this.$t('term.alert.currentpolicy');
     },
     scopeText() {
       const scopeTextMap = {
-        handlerInstance: '插件实例',
-        handler: '插件类型'
+        handlerInstance: this.$t('term.alert.plugininstance'),
+        handler: this.$t('term.alert.plugintype')
       };
       return scopeTextMap[this.config.scope] || this.config.scope || '-';
     },
@@ -82,6 +74,14 @@ export default {
     },
     openDurationText() {
       return `${this.displayValue(this.config.openDuration)}${this.getUnitText(this.config.openDurationUnit)}`;
+    },
+    summaryText() {
+      return this.$t('term.alert.consecutivefailuresummary', {
+        handler: this.handlerText,
+        scope: this.scopeText,
+        failureThreshold: this.failureThresholdText,
+        duration: this.openDurationText
+      });
     }
   }
 };

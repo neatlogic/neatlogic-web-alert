@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TsFormItem label="熔断动作" labelPosition="left" style="margin: 0px !important">
+    <TsFormItem :label="$t('term.alert.breakeraction')" labelPosition="left" style="margin: 0px !important">
       <div>
         <div v-for="trigger in visibleTriggerList" :key="trigger.key" class="mb-sm">
           <div class="text-grey">{{ trigger.text }}</div>
@@ -16,7 +16,7 @@
             <div style="position: relative">
               <span class="text-grey">{{ index + 1 }}.</span>
               <span class="ml-xs">{{ action.name || action.handlerLabel || action.handler }}</span>
-              <span class="ml-xs" :class="action.isActive === 0 ? 'text-grey' : 'text-success'">{{ action.isActive === 0 ? '已禁用' : '' }}</span>
+              <span class="ml-xs" :class="action.isActive === 0 ? 'text-grey' : 'text-success'">{{ action.isActive === 0 ? $t('term.framework.disabled') : '' }}</span>
               <div style="position: absolute; top: 0px; right: 0px">
                 <Tag class="ml-xs">{{ action.handlerLabel || action.handler }}</Tag>
               </div>
@@ -49,9 +49,9 @@ export default {
     return {
       actionComponentMap,
       triggerList: [
-        { key: 'openActionList', value: 'OPEN', text: '熔断时触发' },
-        { key: 'aggregateActionList', value: 'AGGREGATE', text: '聚合时触发' },
-        { key: 'recoverActionList', value: 'RECOVER', text: '熔断恢复时触发' }
+        { key: 'openActionList', value: 'OPEN', text: this.$t('term.alert.breakeropenactiontrigger') },
+        { key: 'aggregateActionList', value: 'AGGREGATE', text: this.$t('term.alert.breakeraggregateactiontrigger') },
+        { key: 'recoverActionList', value: 'RECOVER', text: this.$t('term.alert.breakerrecoveractiontrigger') }
       ]
     };
   },

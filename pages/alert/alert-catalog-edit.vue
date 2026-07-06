@@ -37,7 +37,7 @@ export default {
       formConfig: {
         name: {
           type: 'text',
-          label: '名称',
+          label: this.$t('page.name'),
           maxlength: 50,
           validateList: ['required']
         },

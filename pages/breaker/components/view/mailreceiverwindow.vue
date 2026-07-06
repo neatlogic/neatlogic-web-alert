@@ -7,32 +7,20 @@
     }"
   >
     <TsFormItem
-      label="熔断策略"
+      :label="$t('term.alert.breakerpolicy')"
       labelPosition="left"
       style="margin:0px !important;"
     >
-      <span>{{ handlerText }}按收件人统计，</span>
-      <span class="text-bold ml-xs mr-xs">{{ windowText }}</span>
-      <span>内同一处理组触发</span>
-      <span class="text-bold ml-xs mr-xs">{{ thresholdText }}</span>
-      <span>次后熔断并聚合，最多收集</span>
-      <span class="text-bold ml-xs mr-xs">{{ collectLimitText }}</span>
-      <span>条告警。</span>
+      <span>{{ summaryText }}</span>
     </TsFormItem>
     <TsFormItem
       v-if="mode === 'audit' && hasStateData"
-      label="熔断状态"
+      :label="$t('term.alert.breakerstate')"
       labelPosition="left"
       style="margin:0px !important;"
     >
       <div>
-        <span>处理组</span>
-        <span class="text-bold ml-xs mr-xs">{{ displayValue(stateData.groupName) }}</span>
-        <span>已收集</span>
-        <span class="text-bold ml-xs mr-xs">{{ displayValue(alertCount) }}</span>
-        <span>条告警，超限未收集</span>
-        <span class="text-bold ml-xs mr-xs">{{ displayValue(stateData.collectDropCount || 0) }}</span>
-        <span>条。</span>
+        <span>{{ stateSummaryText }}</span>
       </div>
     </TsFormItem>
     <BreakerActionView :config="config" :actionAuditList="policy.actionAuditList" :level="level + 1"></BreakerActionView>
@@ -53,9 +41,9 @@ export default {
   methods: {
     getUnitText(unit) {
       const unitTextMap = {
-        second: '秒',
-        minute: '分钟',
-        hour: '小时'
+        second: this.$t('term.alert.second'),
+        minute: this.$t('term.alert.minute'),
+        hour: this.$t('term.alert.hour')
       };
       return unitTextMap[unit] || unit || '';
     },
@@ -77,7 +65,7 @@ export default {
       return Object.keys(this.stateData).length > 0;
     },
     handlerText() {
-      return this.policy.policyHandlerLabel || this.policy.policyHandler || '当前策略';
+      return this.policy.policyHandlerLabel || this.policy.policyHandler || this.$t('term.alert.currentpolicy');
     },
     windowText() {
       return `${this.displayValue(this.config.windowSize)}${this.getUnitText(this.config.windowUnit)}`;
@@ -93,6 +81,21 @@ export default {
         return this.stateData.collectCount;
       }
       return this.stateData.alertIdList ? this.stateData.alertIdList.length : 0;
+    },
+    summaryText() {
+      return this.$t('term.alert.mailreceiverwindowsummary', {
+        handler: this.handlerText,
+        window: this.windowText,
+        threshold: this.thresholdText,
+        collectLimit: this.collectLimitText
+      });
+    },
+    stateSummaryText() {
+      return this.$t('term.alert.mailreceiverwindowstatesummary', {
+        groupName: this.displayValue(this.stateData.groupName),
+        alertCount: this.displayValue(this.alertCount),
+        dropCount: this.displayValue(this.stateData.collectDropCount || 0)
+      });
     }
   }
 };

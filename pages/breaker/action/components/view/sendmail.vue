@@ -1,25 +1,25 @@
 <template>
   <div>
-    <TsFormItem label="收件人" labelPosition="left" style="margin:0px !important;">
+    <TsFormItem :label="$t('page.recipient')" labelPosition="left" style="margin:0px !important;">
       <UserSelect v-model="config.toUserList" readonly multiple></UserSelect>
     </TsFormItem>
     <TsFormItem
       v-if="config.ccUserList && config.ccUserList.length > 0"
-      label="抄送人"
+      :label="$t('page.cc')"
       labelPosition="left"
       style="margin:0px !important;"
     >
       <UserSelect v-model="config.ccUserList" readonly multiple></UserSelect>
     </TsFormItem>
-    <TsFormItem label="邮件标题" labelPosition="left" style="margin:0px !important;">
+    <TsFormItem :label="$t('term.alert.mailtitle')" labelPosition="left" style="margin:0px !important;">
       <span>{{ config.title || '-' }}</span>
     </TsFormItem>
-    <TsFormItem label="邮件内容" labelPosition="left" style="margin:0px !important;">
-      <span>{{ config.content || '默认告警列表' }}</span>
+    <TsFormItem :label="$t('term.alert.mailcontent')" labelPosition="left" style="margin:0px !important;">
+      <span>{{ config.content || $t('term.alert.defaultalarmlist') }}</span>
     </TsFormItem>
     <TsFormItem
       v-if="actionError"
-      label="执行异常"
+      :label="$t('term.alert.actionexecutionexception')"
       labelPosition="left"
       style="margin:0px !important;"
     >

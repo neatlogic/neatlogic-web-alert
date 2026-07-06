@@ -1,6 +1,6 @@
 <template>
   <div v-if="isShow" class="mb-md">
-    <TsFormItem v-if="mode === 'edit' && breakerPolicyList.length > 0" label="熔断策略" labelPosition="left">
+    <TsFormItem v-if="mode === 'edit' && breakerPolicyList.length > 0" :label="$t('term.alert.breakerpolicy')" labelPosition="left">
       <div class="breaker-sequence">
         <div
           v-for="(policy, index) in breakerPolicyList"
@@ -31,7 +31,7 @@
         </div>
       </div>
     </TsFormItem>
-    <TsFormItem v-if="mode === 'audit' && triggeredBreakerAuditList.length > 0" label="熔断结果" labelPosition="left">
+    <TsFormItem v-if="mode === 'audit' && triggeredBreakerAuditList.length > 0" :label="$t('term.alert.breakerresult')" labelPosition="left">
       <div class="breaker-sequence">
         <div
           v-for="(audit, index) in triggeredBreakerAuditList"

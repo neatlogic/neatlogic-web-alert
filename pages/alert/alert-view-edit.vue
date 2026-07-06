@@ -12,7 +12,7 @@
             >
               <span>{{ attr.label }}</span>
             </Tag>
-            <Divider v-if="alertViewData.config.attrList && alertViewData.config.attrList.length > 0" orientation="left">已选属性</Divider>
+            <Divider v-if="alertViewData.config.attrList && alertViewData.config.attrList.length > 0" orientation="left">{{ $t('term.alert.selectedattr') }}</Divider>
             <draggable
               v-if="alertViewData.config.attrList && alertViewData.config.attrList.length > 0"
               handle=".tsfont-option-vertical"
@@ -44,14 +44,14 @@
             >
               <span>{{ attr.label }}</span>
             </Tag>
-            <Divider v-if="alertViewData.config.sortList && alertViewData.config.sortList.length > 0" orientation="left">已选排序</Divider>
+            <Divider v-if="alertViewData.config.sortList && alertViewData.config.sortList.length > 0" orientation="left">{{ $t('term.alert.selectedsort') }}</Divider>
             <draggable v-if="alertViewData.config.sortList && alertViewData.config.sortList.length > 0" handle=".tsfont-option-vertical" :list="alertViewData.config.sortList">
               <div v-for="(sort, index) in alertViewData.config.sortList" :key="sort.name" class="sort-item bg-op radius-sm border-color">
                 <span class="tsfont-option-vertical sort-handler"></span>
                 <span class="sort-label">{{ getAttrByName(sort.name).label }}</span>
                 <RadioGroup v-model="sort.type" type="button" size="small">
-                  <Radio label="asc">正序</Radio>
-                  <Radio label="desc">倒序</Radio>
+                  <Radio label="asc">{{ $t('term.alert.asc') }}</Radio>
+                  <Radio label="desc">{{ $t('term.alert.desc') }}</Radio>
                 </RadioGroup>
                 <span class="tsfont-close text-action" @click="removeSortAttr(index)"></span>
               </div>
@@ -87,7 +87,7 @@ export default {
       conditionAttrList: [],
       dialogConfig: {
         title: this.isDefaultConfig
-          ? '所有告警设置'
+          ? this.$t('term.alert.allalertsetting')
           : this.id
             ? this.$t('dialog.title.edittarget', {
               target: this.$t('term.cmdb.view')
@@ -100,28 +100,28 @@ export default {
       formConfig: {
         name: {
           type: 'text',
-          label: '唯一标识',
+          label: this.$t('page.uniquekey'),
           maxlength: 50,
           readonly: !!this.id,
           validateList: ['required', 'unique_ident'],
-          desc: '保存后不能修改'
+          desc: this.$t('term.alert.savecannotmodify')
         },
         label: {
           type: 'text',
-          label: '名称',
+          label: this.$t('page.name'),
           maxlength: 50,
           validateList: ['required']
         },
         isActive: {
           type: 'switch',
-          label: '是否激活',
+          label: this.$t('term.report.isactive'),
           trueValue: 1,
           falseValue: 0
         },
         catalogId: {
           type: 'tree',
           name: 'catalogId',
-          label: '目录',
+          label: this.$t('page.catalogue'),
           url: 'api/rest/alert/catalog/listtree',
           valueName: 'id',
           textName: 'name',
@@ -133,21 +133,21 @@ export default {
         },
         authList: {
           type: 'userselect',
-          label: '授权',
+          label: this.$t('page.auth'),
           groupList: ['common', 'user', 'role', 'team'],
           transfer: true
         },
         attrList: {
           type: 'slot',
-          label: '显示属性'
+          label: this.$t('term.alert.displayattr')
         },
         condition: {
           type: 'slot',
-          label: '条件'
+          label: this.$t('page.condition')
         },
         sortList: {
           type: 'slot',
-          label: '排序'
+          label: this.$t('page.sort')
         }
       }
     };

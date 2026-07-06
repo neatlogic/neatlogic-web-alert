@@ -9,7 +9,7 @@
     <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <TsFormItem
       v-if="mailServerData"
-      label="邮件服务器"
+      :label="$t('page.mailserver')"
       style="margin: 0px !important"
       labelPosition="left"
     >
@@ -21,7 +21,7 @@
       v-if="configLocal.type === 'template'"
       labelPosition="left"
       style="margin: 0px !important"
-      label="模板"
+      :label="$t('page.template')"
     >
       <TsFormSelect
         :value="configLocal.template"
@@ -37,7 +37,7 @@
     <TsFormItem
       v-if="configLocal.type === 'custom'"
       style="margin: 0px !important"
-      label="标题"
+      :label="$t('page.title')"
       labelPosition="left"
     >
       <span>{{ configLocal.title }}</span>
@@ -45,7 +45,7 @@
     <TsFormItem
       v-if="configLocal.type === 'custom' && configLocal.content"
       style="margin: 0px !important"
-      label="内容"
+      :label="$t('page.content')"
       labelPosition="left"
     >
       <div v-html="configLocal.content"></div>
@@ -53,7 +53,7 @@
     <TsFormItem
       v-if="configLocal.toUserList && configLocal.toUserList.length > 0"
       style="margin: 0px !important"
-      label="收件人"
+      :label="$t('page.recipient')"
       labelPosition="left"
     >
       <UserSelect
@@ -68,7 +68,7 @@
     <TsFormItem
       v-if="configLocal.ccUserList && configLocal.ccUserList.length > 0"
       style="margin: 0px !important"
-      label="抄送"
+      :label="$t('term.alert.cc')"
       labelPosition="left"
     >
       <UserSelect
@@ -83,21 +83,21 @@
     <TsFormItem
       v-if="configLocal.interval"
       style="margin: 0px !important"
-      label="通知间隔"
+      :label="$t('term.alert.alertinterval')"
       labelPosition="left"
     >
       <span>
         <span class="mr-xs">
           <b>{{ configLocal.interval }}</b>
         </span>
-        <span class="text-grey">分钟</span>
+        <span class="text-grey">{{ $t('page.minute') }}</span>
       </span>
     </TsFormItem>
     <TsFormItem
       v-if="handler.status"
       style="margin: 0px !important"
       labelPosition="left"
-      label="发送结果"
+      :label="$t('term.alert.sendresult')"
     >
       <span
         :class="{
@@ -114,7 +114,7 @@
       v-if="handler.error"
       style="margin: 0px !important"
       labelPosition="left"
-      label="异常"
+      :label="$t('page.exception')"
     >
       <span class="text-error">{{ handler.error }}</span>
     </TsFormItem>
@@ -139,12 +139,12 @@ export default {
       statusList: [
         {
           value: 'new',
-          text: '新告警'
+          text: this.$t('term.alert.newalert')
         },
-        { value: 'confirmed', text: '已确认' },
-        { value: 'proceessing', text: '处理中' },
-        { value: 'resolved', text: '已处理' },
-        { value: 'closed', text: '已关闭' }
+        { value: 'confirmed', text: this.$t('term.alert.confirmed') },
+        { value: 'proceessing', text: this.$t('term.alert.processing') },
+        { value: 'resolved', text: this.$t('term.alert.resolved') },
+        { value: 'closed', text: this.$t('page.closed') }
       ]
     };
   },

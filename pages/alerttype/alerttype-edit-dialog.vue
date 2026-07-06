@@ -22,7 +22,7 @@
             <div class="text-grey">
               <div>{{ $t('page.help') }}：{{ $t('term.alert.notransferpluginmessage') }}</div>
               <div>
-                转换插件的接口定义请到
+                {{ $t('term.alert.transferpluginapidocprefix') }}
                 <a href="https://gitee.com/neat-logic/neatlogic-alert-plugin-base" target="_blank">{{ $t('term.alert.here') }}</a>
                 {{ $t('page.download') }}
               </div>
@@ -110,10 +110,10 @@ export default {
       theadList: [
         {
           key: 'name',
-          title: '唯一标识'
+          title: this.$t('page.uniquekey')
         },
-        { key: 'label', title: '名称' },
-        { key: 'fileId', title: '附件', width: 300 },
+        { key: 'label', title: this.$t('page.name') },
+        { key: 'fileId', title: this.$t('term.alert.attachment'), width: 300 },
         { key: 'delete' }
       ],
       formConfig: {
@@ -135,12 +135,8 @@ export default {
           trueValue: 1,
           falseValue: 0
         },
-        // attrTypeList: {
-        //   label: '扩展属性',
-        //   type: 'slot'
-        // },
         fileId: {
-          label: '接入转换插件',
+          label: this.$t('term.alert.accesstransferplugin'),
           type: 'slot'
         }
       }
@@ -184,7 +180,7 @@ export default {
             }
             if (!d.fileId) {
               isValid = false;
-              this.$set(d, '_error', '请上传插件');
+              this.$set(d, '_error', this.$t('term.alert.uploadplugin'));
             }
           });
         }

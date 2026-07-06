@@ -32,12 +32,12 @@ export default {
     return {
       auditData: {},
       auditHeaderList: [
-        { key: 'inputTime', title: '操作时间', type: 'time' },
-        { key: 'inputUser', title: '操作用户' },
-        { key: 'inputFromName', title: '操作来源' },
-        { key: 'attrName', title: '属性' },
-        { key: 'oldValue', title: '操作前' },
-        { key: 'newValue', title: '操作后' }
+        { key: 'inputTime', title: this.$t('term.alert.operationtime'), type: 'time' },
+        { key: 'inputUser', title: this.$t('term.alert.operationuser') },
+        { key: 'inputFromName', title: this.$t('term.alert.operationsource') },
+        { key: 'attrName', title: this.$t('page.attribute') },
+        { key: 'oldValue', title: this.$t('term.alert.oldvalue') },
+        { key: 'newValue', title: this.$t('term.alert.newvalue') }
       ]
     };
   },

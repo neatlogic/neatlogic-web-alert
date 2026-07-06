@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TsFormItem label="集成" labelPosition="right" :required="true">
+    <TsFormItem :label="$t('page.integration')" labelPosition="right" :required="true">
       <TsFormSelect
         ref="integrationUuid"
         v-model="configLocal.integrationUuid"
@@ -15,11 +15,11 @@
         @on-change="getIntegrationByUuid"
       ></TsFormSelect>
     </TsFormItem>
-    <TsFormItem v-if="integrationData && paramList.length > 0" label="参数映射" labelPosition="right">
+    <TsFormItem v-if="integrationData && paramList.length > 0" :label="$t('term.alert.parammapping')" labelPosition="right">
       <div>
         <span class="cursor text-action" @click="isShowAttrList = !isShowAttrList">
           <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
-          <span class="ml-xs">点击复制属性</span>
+          <span class="ml-xs">{{ $t('term.alert.clickcopyattr') }}</span>
         </span>
         <div v-if="attrHelp" class="text-grey mt-xs">{{ attrHelp }}</div>
         <div v-if="isShowAttrList" class="mt-sm attr-list">
@@ -135,7 +135,7 @@ export default {
       return this.isAggregateTrigger ? { isAggregate: 1 } : { isExpand: 1 };
     },
     attrHelp() {
-      return this.isAggregateTrigger ? '聚合时可使用聚合变量；若使用单个告警属性变量，默认取alertList中最后一个成员的值。' : '';
+      return this.isAggregateTrigger ? this.$t('term.alert.aggregateattrhelp') : '';
     },
     paramList() {
       return (this.integrationData && this.integrationData?.config?.param?.paramList) || [];

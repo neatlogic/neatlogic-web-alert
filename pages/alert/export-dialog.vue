@@ -15,7 +15,7 @@
       </div>
     </template>
     <template v-slot:footer>
-      <span class="text-grey mr-lg">最多导出1000条数据</span>
+      <span class="text-grey mr-lg">{{ $t('term.alert.maxexport1000') }}</span>
       <Checkbox v-if="alertIdList && alertIdList.length > 0" v-model="isOnlyExportSelected">
         <span class="fz10 text-grey">{{ $t('term.cmdb.onlyexportselected') }}</span>
       </Checkbox>
@@ -46,7 +46,7 @@ export default {
       attrList: [],
       isOnlyExportSelected: false,
       dialogConfig: {
-        title: '导出设置',
+        title: this.$t('term.alert.exportsetting'),
         width: 'medium',
         isShow: true,
         maskClose: false

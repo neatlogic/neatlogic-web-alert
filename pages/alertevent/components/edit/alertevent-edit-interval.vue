@@ -8,7 +8,7 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <component :is="isChild ? 'div' : 'TsFormItem'" label="调度设置" labelPosition="left">
+    <component :is="isChild ? 'div' : 'TsFormItem'" :label="$t('term.alert.schedulesetting')" labelPosition="left">
       <div
         v-for="(interval, index) in configLocal.intervalList"
         :key="index"
@@ -19,7 +19,7 @@
         }"
       >
         <div class="action-group">
-          <div class="action-item">当前步骤开始</div>
+          <div class="action-item">{{ $t('term.alert.currentstepstart') }}</div>
           <div class="action-item">
             <TsFormInput
               ref="txtDelay"
@@ -30,23 +30,23 @@
               :validateList="[{ name: 'required', message: ' ' }]"
             ></TsFormInput>
           </div>
-          <div class="action-item">分钟后执行</div>
-          <div class="action-item">重复</div>
+          <div class="action-item">{{ $t('term.alert.minuteafterexecute') }}</div>
+          <div class="action-item">{{ $t('term.alert.repeat') }}</div>
           <div class="action-item"><TsFormInput
             v-model="interval.repeatCount"
             :min="0"
             type="number"
             :width="100"
           ></TsFormInput></div>
-          <div class="action-item">次</div>
-          <div class="action-item">每次间隔</div>
+          <div class="action-item">{{ $t('term.alert.times') }}</div>
+          <div class="action-item">{{ $t('term.alert.everyinterval') }}</div>
           <div class="action-item"><TsFormInput
             v-model="interval.intervalMinute"
             type="number"
             :min="0"
             :width="100"
           ></TsFormInput></div>
-          <div class="action-item">分钟</div>
+          <div class="action-item">{{ $t('page.minute') }}</div>
         </div>
         <div v-if="!interval.handler">
           <div v-if="pluginList && pluginList.length > 0" class="mt-md padding-xs bg-info-grey radius-md" style="text-align: center">
@@ -79,7 +79,7 @@
               </div>
             </Poptip>
           </div>
-          <div v-else class="text-error">没有可用插件</div>
+          <div v-else class="text-error">{{ $t('term.alert.noplugin') }}</div>
         </div>
         <div v-else class="handler-container">
           <div class="tsfont-close-s text-grey cursor del-handler" @click="$set(interval, 'handler', null)"></div>
@@ -97,7 +97,7 @@
       </div>
       <div v-if="configLocal.intervalList.length === 0">
         <!--只允许添加一个调度，否则后台要改-->
-        <span class="tsfont-plus cursor text-href" @click="addInterval()">添加调度</span>
+        <span class="tsfont-plus cursor text-href" @click="addInterval()">{{ $t('term.alert.addschedule') }}</span>
       </div>
       <Alert v-if="error" type="error">{{ error }}</Alert>
     </component>
@@ -184,7 +184,7 @@ export default {
           const interval = this.configLocal.intervalList[i];
           if (!interval.handler) {
             isValid = false;
-            this.error = '请选择插件';
+            this.error = this.$t('term.alert.selectplugin');
           }
           const pluginConfig = this.$refs[`pluginConfig${i}`];
           if (pluginConfig && !(await pluginConfig[0].valid())) {
@@ -192,7 +192,7 @@ export default {
           }
         }
       } else {
-        this.error = '至少添加一个调度配置';
+        this.error = this.$t('term.alert.atleastoneschedule');
         isValid = false;
       }
       return isValid;

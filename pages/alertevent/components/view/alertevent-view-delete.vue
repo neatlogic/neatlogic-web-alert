@@ -8,10 +8,10 @@
   >
     <ViewBase :mode="mode" :handler="handler" :level="level"></ViewBase>
     <div v-if="configLocal.isDeleteChildAlert">
-      同时删除父告警和子告警
+      {{ $t('term.alert.deleteparentandsubalert') }}
     </div>
     <div v-else>
-      仅删除父告警，保留子告警
+      {{ $t('term.alert.deleteparentalertonly') }}
     </div>
   </div>
 </template>

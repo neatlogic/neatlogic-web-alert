@@ -43,10 +43,10 @@ export default {
       theadList: [
         {
           key: 'name',
-          title: '唯一标识'
+          title: this.$t('page.uniquekey')
         },
-        { key: 'label', title: '名称' },
-        { key: 'color', title: '颜色' },
+        { key: 'label', title: this.$t('page.name') },
+        { key: 'color', title: this.$t('page.color') },
         { key: 'action' }
       ],
       statusList: [],

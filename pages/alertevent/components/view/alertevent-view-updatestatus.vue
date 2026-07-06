@@ -10,7 +10,7 @@
     <TsFormItem
       v-if="configLocal.status"
       style="margin: 0px !important"
-      label="目标状态"
+      :label="$t('term.alert.targetstatus')"
       labelPosition="left"
     >
       <div v-if="statusData">
@@ -20,7 +20,7 @@
     <TsFormItem
       v-if="handler.status"
       style="margin: 0px !important"
-      label="处理结果"
+      :label="$t('term.alert.dealresult')"
       labelPosition="left"
     ><div>
       <span

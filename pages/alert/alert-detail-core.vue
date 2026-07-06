@@ -314,7 +314,7 @@ export default {
       try {
         fn.call(this, alertData);
       } catch (e) {
-        this.$Notice.error({ title: this.$t('page.exception'), desc: '动作执行异常：' + e.message });
+        this.$Notice.error({ title: this.$t('page.exception'), desc: this.$t('term.alert.actionexecexception', { target: e.message }) });
       }
     },
     getChildAlertTabLabel() {

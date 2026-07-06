@@ -44,77 +44,77 @@ export default {
       return {
         dimensionList: {
           type: 'select',
-          label: '统计维度',
+          label: this.$t('term.alert.statisticsdimension'),
           multiple: true,
           transfer: true,
           validateList: ['required'],
           dataList: [
-            { value: 'alertType', text: '告警类型' },
-            { value: 'alertLevel', text: '告警级别' },
-            { value: 'event', text: '事件' },
-            { value: 'handler', text: '插件类型' },
-            { value: 'handlerInstance', text: '插件实例' },
-            { value: 'source', text: '告警来源' },
-            { value: 'worker', text: '处理人' },
-            { value: 'workerTeam', text: '处理组' }
+            { value: 'alertType', text: this.$t('term.alert.alerttype') },
+            { value: 'alertLevel', text: this.$t('term.alert.alertlevel') },
+            { value: 'event', text: this.$t('term.alert.event') },
+            { value: 'handler', text: this.$t('term.alert.plugintype') },
+            { value: 'handlerInstance', text: this.$t('term.alert.plugininstance') },
+            { value: 'source', text: this.$t('term.alert.alertsource') },
+            { value: 'worker', text: this.$t('term.alert.worker') },
+            { value: 'workerTeam', text: this.$t('term.alert.workerteam') }
           ],
-          desc: '熔断插件会根据所选维度生成熔断标记，并以此标记进行熔断判断。例如：选择“插件实例”维度时，熔断插件会根据每个插件实例的触发次数来判断是否进入熔断状态。'
+          desc: this.$t('term.alert.dimensiondesc')
         },
         windowSize: {
           type: 'number',
-          label: '统计窗口',
+          label: this.$t('term.alert.statisticswindow'),
           min: 1,
           validateList: ['required']
         },
         windowUnit: {
           type: 'radio',
-          label: '窗口单位',
+          label: this.$t('term.alert.windowunit'),
           validateList: ['required'],
           dataList: [
-            { value: 'second', text: '秒' },
-            { value: 'minute', text: '分钟' },
-            { value: 'hour', text: '小时' }
+            { value: 'second', text: this.$t('term.alert.second') },
+            { value: 'minute', text: this.$t('term.alert.minute') },
+            { value: 'hour', text: this.$t('term.alert.hour') }
           ]
         },
         threshold: {
           type: 'number',
-          label: '触发阈值',
+          label: this.$t('term.alert.triggerthreshold'),
           min: 1,
           validateList: ['required'],
-          desc: '统计窗口内触发次数超过该值后进入熔断'
+          desc: this.$t('term.alert.thresholdcountwindowdesc')
         },
         openDuration: {
           type: 'number',
-          label: '熔断时长',
+          label: this.$t('term.alert.breakerduration'),
           min: 1,
           validateList: ['required']
         },
         openDurationUnit: {
           type: 'radio',
-          label: '时长单位',
+          label: this.$t('term.alert.durationunit'),
           validateList: ['required'],
           dataList: [
-            { value: 'second', text: '秒' },
-            { value: 'minute', text: '分钟' },
-            { value: 'hour', text: '小时' }
+            { value: 'second', text: this.$t('term.alert.second') },
+            { value: 'minute', text: this.$t('term.alert.minute') },
+            { value: 'hour', text: this.$t('term.alert.hour') }
           ]
         },
         enableAggregate: {
           type: 'radio',
-          label: '启用聚合触发',
+          label: this.$t('term.alert.enableaggregate'),
           dataList: [
-            { value: 1, text: '是' },
-            { value: 0, text: '否' }
+            { value: 1, text: this.$t('page.yes') },
+            { value: 0, text: this.$t('page.no') }
           ],
-          desc: '启用后，熔断期间会收集告警，并在熔断到期后调用事件插件的聚合触发入口。'
+          desc: this.$t('term.alert.aggregateenabledesc')
         },
         collectLimit: {
           type: 'number',
-          label: '收集上限',
+          label: this.$t('term.alert.collectlimit'),
           min: 1,
           validateList: ['required'],
           isHidden: this.currentConfig.enableAggregate !== 1,
-          desc: '熔断收集期间最多收集的告警数量，超过上限后不再收集新的告警，只记录丢弃数量。'
+          desc: this.$t('term.alert.collectlimitdesc')
         }
       };
     }

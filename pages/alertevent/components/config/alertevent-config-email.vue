@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TsFormItem label="一分钟内最大发送次数" :labelWidth="150" :labelPosition="readonly ? 'left' : 'top'">
+    <TsFormItem :label="$t('term.alert.maxsendperminute')" :labelWidth="150" :labelPosition="readonly ? 'left' : 'top'">
       <TsFormInput
         v-if="!readonly"
         v-model="configLocal.maxSendCount"
@@ -9,8 +9,8 @@
         :min="0"
         :step="1"
       ></TsFormInput>
-      <span v-else><b>{{ configLocal.maxSendCount || '不限制' }}</b></span>
-      <div v-if="!readonly" class="text-grey mt-md">帮助：留空或设为0代表不限制，超出发送限制的邮件将无法发送并返回异常</div>
+      <span v-else><b>{{ configLocal.maxSendCount || $t('term.alert.unlimited') }}</b></span>
+      <div v-if="!readonly" class="text-grey mt-md">{{ $t('term.alert.maxsendhelp') }}</div>
     </TsFormItem>
   </div>
 </template>

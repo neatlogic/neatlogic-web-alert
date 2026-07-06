@@ -95,7 +95,7 @@ export default {
       const form = this.$refs['form'];
       if (form && form.valid()) {
         this.$api.alert.alertlevel.saveAlertLevel(this.alertLevelData).then(res => {
-          this.$Message.success('保存成功');
+          this.$Message.success(this.$t('message.savesuccess'));
           this.close(true);
         });
       }

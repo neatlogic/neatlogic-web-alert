@@ -29,7 +29,7 @@ export default {
           label: this.$t('page.uniquekey'),
           maxlength: 50,
           validateList: ['required', 'unique_ident'],
-          desc: '保存后不能修改'
+          desc: this.$t('term.alert.savecannotmodify')
         },
         label: {
           type: 'text',
@@ -54,14 +54,14 @@ export default {
           label: this.$t('term.alert.istop'),
           trueValue: 1,
           falseValue: 0,
-          desc: '置顶属性可以作为顶层搜索条件出现在告警列表页面里'
+          desc: this.$t('term.alert.topattrdesc')
         },
         isIndex: {
           type: 'switch',
           label: this.$t('term.alert.isindex'),
           trueValue: 1,
           falseValue: 0,
-          desc: '不索引的属性不会保存到ES'
+          desc: this.$t('term.alert.noindexdesc')
         },
         isNormal: {
           label: this.$t('term.alert.isnormalattr'),
@@ -87,7 +87,7 @@ export default {
           validateList: ['required'],
           url: '/api/rest/universal/enum/get',
           transfer: true,
-          desc: '枚举类型会自动保存枚举值',
+          desc: this.$t('term.alert.enumtypedesc'),
           params: {
             enumClass: 'neatlogic.framework.alert.enums.AlertAttrType'
           }

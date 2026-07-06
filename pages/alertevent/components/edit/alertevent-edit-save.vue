@@ -8,8 +8,8 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem label="唯一键" labelPosition="left">
-      <div class="text-grey">帮助：唯一键值相同的告警将会收敛成一条告警</div>
+    <TsFormItem :label="$t('term.alert.uniquekey')" labelPosition="left">
+      <div class="text-grey">{{ $t('term.alert.uniquealertconvergehelp') }}</div>
       <TsFormCheckbox
         :dataList="attrList"
         valueName="name"
@@ -17,10 +17,10 @@
         :value="configLocal.uniqueAttrList.map(d => d.name)"
         @on-change="selectAttr"
       ></TsFormCheckbox>
-      <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">已选属性</Divider>
+      <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">{{ $t('term.alert.selectedattr') }}</Divider>
       <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
     </TsFormItem>
-    <TsFormItem v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" label="告警特征" labelPosition="left">
+    <TsFormItem v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" :label="$t('term.alert.alertsign')" labelPosition="left">
       <TsFormSelect
         v-model="configLocal.ruleList"
         url="/api/rest/alert/rule/list"
@@ -31,7 +31,7 @@
         textName="label"
         multiple
       ></TsFormSelect>
-      <div class="text-grey">帮助：告警特征会对属性值进行正则替换，最后再组合成唯一键。可以选择多个告警特征，每个告警特征只会作用于其关联属性，如果其关联属性不属于唯一键成员，此告警特征将不生效。</div>
+      <div class="text-grey">{{ $t('term.alert.alertsignhelp') }}</div>
     </TsFormItem>
     <TsFormItem :label="$t('term.alert.defaultstatus')" labelPosition="left">
       <TsFormSelect
@@ -41,11 +41,11 @@
         textName="label"
         :transfer="true"
       ></TsFormSelect>
-      <div class="text-grey">帮助：告警事件创建时的默认状态。</div>
+      <div class="text-grey">{{ $t('term.alert.defaultstatushelp') }}</div>
     </TsFormItem>
     <TsFormItem :label="$t('term.alert.serialsave')" labelPosition="left">
       <TsFormSwitch v-model="configLocal.serialSave" :trueValue="true" :falseValue="false"></TsFormSwitch>
-      <div class="text-grey">帮助：唯一键相同的告警串行保存，避免唯一键相同的告警同时保存时，出现父子关系不正常的现象。</div>
+      <div class="text-grey">{{ $t('term.alert.serialsavehelp') }}</div>
     </TsFormItem>
   </div>
 </template>

@@ -70,7 +70,7 @@
       v-if="handler.error"
       style="margin: 0px !important"
       labelPosition="left"
-      label="异常"
+      :label="$t('page.exception')"
     >
       <div class="text-error">{{ handler.error }}</div>
     </TsFormItem>

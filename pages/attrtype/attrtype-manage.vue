@@ -90,10 +90,10 @@ export default {
         { key: 'enumCount', title: this.$t('term.alert.membercount') },
         { key: 'isActive', title: this.$t('term.report.isactive') },
         { key: 'isShow', title: this.$t('term.alert.isshow') },
-        { key: 'isTop', title: this.$t('term.alert.istop'), tooltip: '置顶属性会出现在默认的结果列表和搜索条件中' },
+        { key: 'isTop', title: this.$t('term.alert.istop'), tooltip: this.$t('term.alert.topattrtooltip') },
         { key: 'isRow', title: this.$t('term.alert.iswholerow') },
         { key: 'isTab', title: this.$t('term.alert.istab') },
-        { key: 'isIndex', title: this.$t('term.alert.isindex'), tooltip: '不索引的属性无法检索' },
+        { key: 'isIndex', title: this.$t('term.alert.isindex'), tooltip: this.$t('term.alert.noindextooltip') },
         { key: 'isNormal', title: this.$t('term.alert.isnormalattr') },
         { key: 'action', title: '' }
       ],
@@ -164,7 +164,7 @@ export default {
               { value: 0, text: this.$t('page.no') }
             ],
             name: 'isNormal',
-            label: '作为普通属性展示'
+            label: this.$t('term.alert.isnormalattr')
           }
         ]
       },

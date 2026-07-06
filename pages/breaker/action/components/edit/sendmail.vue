@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TsFormItem label="邮件服务器" labelPosition="right">
+    <TsFormItem :label="$t('term.alert.mailserver')" labelPosition="right">
       <TsFormSelect
         v-model="configLocal.mailServerId"
         url="/api/rest/mailserver/list"
@@ -10,9 +10,9 @@
         textName="name"
         border="border"
       ></TsFormSelect>
-      <div class="text-grey">帮助：不选择代表使用默认的邮件服务器</div>
+      <div class="text-grey">{{ $t('term.alert.defaultmailserverhelp') }}</div>
     </TsFormItem>
-    <TsFormItem :required="true" labelPosition="right" label="收件人">
+    <TsFormItem :required="true" labelPosition="right" :label="$t('page.recipient')">
       <UserSelect
         ref="sltToUser"
         v-model="configLocal.toUserList"
@@ -22,7 +22,7 @@
         :groupList="['alertUserType', 'user', 'team']"
       ></UserSelect>
     </TsFormItem>
-    <TsFormItem labelPosition="right" label="抄送人">
+    <TsFormItem labelPosition="right" :label="$t('page.cc')">
       <UserSelect
         v-model="configLocal.ccUserList"
         :multiple="true"
@@ -30,11 +30,11 @@
         :groupList="['alertUserType', 'user', 'team']"
       ></UserSelect>
     </TsFormItem>
-    <TsFormItem label="可复制属性" labelPosition="right">
+    <TsFormItem :label="$t('term.alert.attributelist')" labelPosition="right">
       <div>
         <span class="cursor text-action" @click="isShowAttrList = !isShowAttrList">
           <span :class="isShowAttrList ? 'tsfont-drop-down' : 'tsfont-drop-right'"></span>
-          <span class="ml-xs">点击复制属性</span>
+          <span class="ml-xs">{{ $t('term.alert.clickcopyattr') }}</span>
         </span>
         <div v-if="attrHelp" class="text-grey mt-xs">{{ attrHelp }}</div>
         <div v-if="isShowAttrList" class="mt-sm">
@@ -49,7 +49,7 @@
         </div>
       </div>
     </TsFormItem>
-    <TsFormItem label="邮件标题" labelPosition="right" :required="true">
+    <TsFormItem :label="$t('term.alert.mailtitle')" labelPosition="right" :required="true">
       <TsFormInput
         ref="txtTitle"
         v-model="configLocal.title"
@@ -59,7 +59,7 @@
         border="border"
       ></TsFormInput>
     </TsFormItem>
-    <TsFormItem label="邮件内容" labelPosition="right">
+    <TsFormItem :label="$t('term.alert.mailcontent')" labelPosition="right">
       <TsCodemirror
         v-model="configLocal.content"
         codeMode="html"
@@ -142,10 +142,10 @@ export default {
       return '[告警中心][熔断通知]熔断策略已触发';
     },
     attrHelp() {
-      return this.isAggregateTrigger ? '聚合时可使用聚合变量；若使用单个告警属性变量，默认取alertList中最后一个成员的值。' : '';
+      return this.isAggregateTrigger ? this.$t('term.alert.aggregateattrhelp') : '';
     },
     contentHelp() {
-      return this.isAggregateTrigger ? '帮助：为空时使用默认告警列表。可用 ${DATA.alertCount}、${DATA.alertList}、${DATA.alertItemList}。' : '';
+      return this.isAggregateTrigger ? this.$t('term.alert.aggregatecontenthelp') : '';
     }
   },
   watch: {

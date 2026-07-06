@@ -2,7 +2,7 @@
   <div>
     <TsContain>
       <template v-slot:topLeft>
-        <div class="action-group"><div class="action-item tsfont-plus" @click="editRule()">特征</div></div>
+        <div class="action-group"><div class="action-item tsfont-plus" @click="editRule()">{{ $t('term.alert.alertsign') }}</div></div>
       </template>
       <template v-slot:content>
         <TsTable :tbodyList="alertRuleList" :theadList="theadList" :canSelectRow="false">
@@ -16,8 +16,8 @@
           <template v-slot:config="{ row }">
             <div>
               <TsRow>
-                <Col :span="12" class="text-grey">规则（正则表达式）</Col>
-                <Col :span="12" class="text-grey">替换</Col>
+                <Col :span="12" class="text-grey">{{ $t('term.alert.regexrule') }}</Col>
+                <Col :span="12" class="text-grey">{{ $t('page.replace') }}</Col>
               </TsRow>
               <TsRow v-for="(rule, index) in row.config.ruleList" :key="index">
                 <Col :span="12">
@@ -61,20 +61,20 @@ export default {
       theadList: [
         {
           key: 'name',
-          title: '唯一标识'
+          title: this.$t('page.uniquekey')
         },
-        { key: 'label', title: '名称' },
-        { key: 'isActive', title: '是否激活' },
-        { key: 'attrName', title: '关联属性' },
-        { key: 'config', title: '配置' },
+        { key: 'label', title: this.$t('page.name') },
+        { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'attrName', title: this.$t('term.alert.relatedattr') },
+        { key: 'config', title: this.$t('page.config') },
         { key: 'action' }
       ],
       ruleTheadList: [
         {
           key: 'pattern',
-          title: '规则（正则表达式）'
+          title: this.$t('term.alert.regexrule')
         },
-        { key: 'replacement', title: '替换' }
+        { key: 'replacement', title: this.$t('page.replace') }
       ]
     };
   },
@@ -129,12 +129,12 @@ export default {
     },
     deleteRule(rule) {
       this.$createDialog({
-        title: '删除确认',
-        content: '是否确认删除当前规则？',
+        title: this.$t('dialog.title.deleteconfirm'),
+        content: this.$t('dialog.content.deleteconfirm', { target: this.$t('page.rule') }),
         btnType: 'error',
         'on-ok': vnode => {
           this.$api.alert.rule.deleteAlertRule(rule.id).then(res => {
-            this.$Message.success('删除成功');
+            this.$Message.success(this.$t('message.deletesuccess'));
             this.listAlertRule();
             vnode.isShow = false;
           });

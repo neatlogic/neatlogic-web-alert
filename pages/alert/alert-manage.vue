@@ -75,7 +75,7 @@
                 <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.closeselectedalert') }}</DropdownItem>
                 <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.openselectedalert') }}</DropdownItem>
                 <DropdownItem v-if="$AuthUtils.hasRole('ALERT_INDEX')" name="rebuildindex" :disabled="!selectList || selectList.length == 0 || isRebuildIndexLoading">重建选中告警索引</DropdownItem>
-                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">删除选中告警</DropdownItem>
+                <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.deleteselectedalert') }}</DropdownItem>
                 <DropdownItem
                   v-if="canDeleteMatch"
                   divided
@@ -422,7 +422,7 @@ export default {
       try {
         fn.call(this, alertData);
       } catch (e) {
-        this.$Notice.error({ title: this.$t('page.exception'), desc: '动作执行异常：' + e.message });
+        this.$Notice.error({ title: this.$t('page.exception'), desc: this.$t('term.alert.actionexecexception', { target: e.message }) });
       }
     },
     exportAlert() {
@@ -521,7 +521,7 @@ export default {
     },
     async batchDeleteMatch() {
       if (!this.canDeleteMatch) {
-        this.$Message.warning('请先设置高级搜索条件');
+        this.$Message.warning(this.$t('term.alert.setadvancedconditionfirst'));
         return;
       }
       const deleteSearchParam = this.$utils.deepClone(this.finalSearchParam);
@@ -532,7 +532,7 @@ export default {
         .then(res => {
           const matchCount = res.Return || 0;
           if (matchCount <= 0) {
-            this.$Message.info('当前条件未匹配到告警');
+            this.$Message.info(this.$t('term.alert.noalertmatched'));
             return;
           }
           this.deleteSearchParam = deleteSearchParam;
@@ -890,16 +890,16 @@ export default {
     updateTimeName() {
       if (this.searchParam.updateTimeHour) {
         if (this.searchParam.updateTimeHour <= 24) {
-          return '最近' + this.searchParam.updateTimeHour + '小时';
+          return this.$t('term.alert.lasthours', { target: this.searchParam.updateTimeHour });
         } else {
-          return '最近' + this.searchParam.updateTimeHour / 24 + '天';
+          return this.$t('term.alert.lastdays', { target: this.searchParam.updateTimeHour / 24 });
         }
       }
       return null;
     },
     countdownText() {
       const second = Math.max(Math.ceil(this.countdown / 1000), 0);
-      return '自动刷新倒计时：' + second + '秒';
+      return this.$t('term.alert.autorefreshcountdown', { target: second });
     },
     countdownClockStyle() {
       const countdown = this.interval > 0 ? ((this.countdown % this.interval) + this.interval) % this.interval : 0;

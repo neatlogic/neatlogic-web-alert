@@ -2,7 +2,7 @@
   <div>
     <TsContain>
       <template v-slot:topLeft>
-        <span v-auth="['ALERT_ADMIN']"><AuditConfig auditName="ALERT-ORIGIN" help="不设置代表不自动清理接入记录。系统只会清理没有生成告警的接入记录，已经生成告警的接入记录只能跟随告警一起删除"></AuditConfig></span>
+        <span v-auth="['ALERT_ADMIN']"><AuditConfig auditName="ALERT-ORIGIN" :help="$t('term.alert.originretentionhelp')"></AuditConfig></span>
       </template>
       <template v-slot:topRight>
         <CombineSearcher v-model="searchVal" v-bind="searchConfig" @change="searchAlertOrigin(1)">
@@ -74,21 +74,21 @@ export default {
         searchList: [
           {
             type: 'text',
-            label: '关键字',
+            label: this.$t('page.keyword'),
             name: 'keyword'
           },
           {
             type: 'radio',
-            label: '状态',
+            label: this.$t('page.status'),
             name: 'status',
             dataList: [
-              { value: 'succeed', text: '成功' },
-              { value: 'failed', text: '失败' }
+              { value: 'succeed', text: this.$t('page.success') },
+              { value: 'failed', text: this.$t('page.fail') }
             ]
           },
           {
             type: 'select',
-            label: '类型',
+            label: this.$t('page.type'),
             name: 'type',
             transfer: true,
             dynamicUrl: '/api/rest/alert/alerttype/search',
@@ -98,23 +98,18 @@ export default {
           },
           {
             type: 'select',
-            label: '适配器',
+            label: this.$t('term.alert.adaptor'),
             name: 'adaptor',
             transfer: true,
             url: '/api/rest/alert/adaptorname/list',
             valueName: 'name',
             textName: 'label'
           },
-          /*{
-            type: 'text',
-            label: '异常',
-            name: 'error'
-          },*/
           {
             type: 'datetimerange',
             name: 'timeRange',
             format: 'yyyy-MM-dd HH:mm',
-            label: '时间',
+            label: this.$t('page.time'),
             transfer: true
           }
         ]
@@ -123,13 +118,13 @@ export default {
       theadList: [
         {
           key: 'type',
-          title: '类型'
+          title: this.$t('page.type')
         },
-        { key: 'adaptor', title: '适配器' },
-        { key: 'sourceName', title: '来源' },
-        { key: 'time', title: '时间', type: 'time' },
-        { key: 'status', title: '处理状态' },
-        { key: 'content', title: '内容' },
+        { key: 'adaptor', title: this.$t('term.alert.adaptor') },
+        { key: 'sourceName', title: this.$t('page.source') },
+        { key: 'time', title: this.$t('page.time'), type: 'time' },
+        { key: 'status', title: this.$t('term.alert.processstatus') },
+        { key: 'content', title: this.$t('page.content') },
         { key: 'action' }
       ]
     };

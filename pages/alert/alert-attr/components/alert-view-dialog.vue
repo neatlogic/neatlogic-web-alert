@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       dialogConfig: {
-        title: '告警详情',
+        title: this.$t('term.alert.alertdetail'),
         width: 'huge',
         isShow: true,
         type: 'slider',

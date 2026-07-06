@@ -197,7 +197,7 @@ export default {
         'on-ok': vnode => {
           this.$api.alert.alertevent.deleteAlertEventHandler(eventhandler.id).then(res => {
             if (res.Status === 'OK') {
-              this.$Message.success('操作成功');
+              this.$Message.success(this.$t('message.executesuccess'));
               this.listAlertEventHandler(this.currentEventName);
               this.getAlertTypeById();
               vnode.isShow = false;
