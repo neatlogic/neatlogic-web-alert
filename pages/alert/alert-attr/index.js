@@ -13,6 +13,7 @@ export { default as const_markList } from '@/community-module/alert/pages/alert/
 //自定义属性是根据类型分类
 export { default as attr_text } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-text.vue';
 export { default as attr_number } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-number.vue';
+export { default as attr_boolean } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-boolean.vue';
 export { default as attr_datetime } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-datetime.vue';
 export { default as attr_html } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-html.vue';
 export { default as attr_json } from '@/community-module/alert/pages/alert/alert-attr/alertattr-attr-json.vue';

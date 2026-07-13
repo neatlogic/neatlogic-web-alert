@@ -190,12 +190,14 @@
               <div v-if="thead.key === 'const_attrObj'" :key="index">
                 <div v-if="thead.attrList && thead.attrList.length > 0">
                   <template v-for="(extendattr, aindex) in thead.attrList">
-                    <div v-if="getAttrByName(extendattr) && row.attrObj && row.attrObj[extendattr.replace('attr_', '')]" :key="aindex">
+                    <div
+                      v-if="getAttrByName(extendattr) && row.attrObj && row.attrObj[extendattr.replace('attr_', '')] !== null && row.attrObj[extendattr.replace('attr_', '')] !== undefined && row.attrObj[extendattr.replace('attr_', '')] !== ''"
+                      :key="aindex"
+                    >
                       <Tag>
                         <span class="text-grey mr-xs">{{ getAttrByName(extendattr).label }}</span>
                         <span class="text-grey">
                           <b><AlertAttrViewer
-                            v-if="row.attrObj[extendattr.replace('attr_', '')]"
                             :view="alertViewData"
                             :attr="getAttrByName(extendattr)"
                             :value="row.attrObj[extendattr.replace('attr_', '')]"
