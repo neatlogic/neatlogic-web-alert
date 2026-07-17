@@ -102,11 +102,17 @@ export default {
   },
   created() {
     this.searchAlertCatalogView();
-    this.$api.alert.alert.searchAlertCount().then(res => {
-      this.alertCount = res.Return;
-    });
+    this.searchAllAlertCount();
   },
   methods: {
+    // 所有告警数量需要应用与列表一致的预设条件。
+    async searchAllAlertCount() {
+      const configRes = await this.$api.alert.alert.getAllAlertConfig('all');
+      const config = configRes.Return && configRes.Return.config;
+      const rule = config && config.rule;
+      const countRes = await this.$api.alert.alert.searchAlertCount({ rule: rule || {} });
+      this.alertCount = countRes.Return;
+    },
     toEditView() {
       this.$router.push({ path: '/catalog-manage' });
     },
