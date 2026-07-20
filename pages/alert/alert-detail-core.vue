@@ -455,9 +455,10 @@ export default {
     },
     tabAttrList() {
       const attrList = [];
-      if (this.attrList && this.attrList.length > 0) {
+      if (this.attrList && this.attrList.length > 0 && this.readonlyAlertData && this.readonlyAlertData.attrObj) {
         this.attrList.forEach(d => {
-          if (d.isTab && this.readonlyAlertData.attrObj[d.name.replace('attr_', '')]) {
+          const attrName = d.name.replace('attr_', '');
+          if (d.isTab && Object.prototype.hasOwnProperty.call(this.readonlyAlertData.attrObj, attrName)) {
             attrList.push(d);
           }
         });
