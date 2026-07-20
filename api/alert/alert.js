@@ -47,6 +47,15 @@ const alert = {
   searchAlertEventAudit(params) {
     return axios.post('/api/rest/alert/event/audit/search', params);
   },
+  searchRootAlertEventAudit(params) {
+    return axios.post('/api/rest/alert/event/audit/root/search', params);
+  },
+  getAlertEventAuditTree(auditId) {
+    return axios.post('/api/rest/alert/event/audit/tree/get', { auditId: auditId });
+  },
+  listAlertEventAuditStatus() {
+    return axios.post('/api/rest/alert/event/audit/status/list');
+  },
   searchAlertComment(params) {
     return axios.post('/api/rest/alert/comment/search', params);
   },

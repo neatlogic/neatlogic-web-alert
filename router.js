@@ -9,6 +9,7 @@ const attrTypeManage = () => import('@/community-module/alert/pages/attrtype/att
 const alertLevelManage = () => import('@/community-module/alert/pages/alertlevel/alertlevel-manage.vue');
 const alertEventManage = () => import('@/community-module/alert/pages/alertevent/alertevent-manage.vue');
 const alertOriginManage = () => import('@/community-module/alert/pages/alert/alert-origin-manage.vue');
+const alertEventAuditManage = () => import('@/community-module/alert/pages/alertaudit/alert-event-audit-manage.vue');
 const notifyTemplateManage = () => import('@/community-module/alert/pages/notifytemplate/notify-template-manage.vue');
 const statusManage = () => import('@/community-module/alert/pages/alertstatus/status-manage.vue');
 const ruleManage = () => import('@/community-module/alert/pages/alertrule/alertrule-manage.vue');
@@ -91,6 +92,18 @@ let routerArr = [
       title: $t('term.alert.incomerecord'),
       ismenu: true,
       icon: 'tsfont-ipliebiao',
+      type: 'alert',
+      authority: 'ALERT_BASE'
+    }
+  },
+  {
+    path: '/alert-event-audit-manage',
+    name: 'alert-event-audit-manage',
+    component: alertEventAuditManage,
+    meta: {
+      title: $t('term.alert.eventexecutionrecord'),
+      ismenu: true,
+      icon: 'tsfont-lightning',
       type: 'alert',
       authority: 'ALERT_BASE'
     }
