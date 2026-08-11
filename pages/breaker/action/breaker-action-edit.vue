@@ -130,7 +130,7 @@ export default {
         },
         isActive: {
           type: 'radio',
-          label: this.$t('term.report.isactive'),
+          label: this.$t('page.isactive'),
           value: action && action.isActive,
           dataList: [
             { value: 1, text: this.$t('page.yes') },

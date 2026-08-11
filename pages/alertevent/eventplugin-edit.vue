@@ -41,7 +41,7 @@ export default {
             { value: 1, text: this.$t('page.yes') },
             { value: 0, text: this.$t('page.no') }
           ],
-          label: this.$t('term.report.isactive'),
+          label: this.$t('page.isactive'),
           trueValue: 1,
           falseValue: 0
         },

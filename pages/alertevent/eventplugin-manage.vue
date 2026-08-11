@@ -50,7 +50,7 @@ export default {
           title: this.$t('page.uniquekey')
         },
         { key: 'label', title: this.$t('page.name') },
-        { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'isActive', title: this.$t('page.isactive') },
         { key: 'config', title: this.$t('page.config') },
         { key: 'description', title: this.$t('page.description') },
         { key: 'action' }
