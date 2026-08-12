@@ -22,7 +22,7 @@
       <template v-slot:content>
         <div class="catalog-grid text-grey padding">
           <div></div>
-          <div>{{ $t('term.report.isactive') }}</div>
+          <div>{{ $t('page.isactive') }}</div>
           <div>{{ $t('page.auth') }}</div>
           <div>{{ $t('page.action') }}</div>
         </div>
@@ -133,7 +133,7 @@ export default {
             type: 'radio',
             name: 'isActive',
             value: null,
-            label: this.$t('term.report.isactive'),
+            label: this.$t('page.isactive'),
             dataList: [
               { value: 1, text: this.$t('page.yes') },
               { value: 0, text: this.$t('page.no') }

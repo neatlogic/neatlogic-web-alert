@@ -88,7 +88,7 @@ export default {
         { key: 'label', title: this.$t('page.name') },
         { key: 'typeName', title: this.$t('page.type') },
         { key: 'enumCount', title: this.$t('term.alert.membercount') },
-        { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'isActive', title: this.$t('page.isactive') },
         { key: 'isShow', title: this.$t('term.alert.isshow') },
         { key: 'isTop', title: this.$t('term.alert.istop'), tooltip: this.$t('term.alert.topattrtooltip') },
         { key: 'isRow', title: this.$t('term.alert.iswholerow') },
@@ -119,7 +119,7 @@ export default {
               { value: 0, text: this.$t('page.no') }
             ],
             name: 'isActive',
-            label: this.$t('term.report.isactive')
+            label: this.$t('page.isactive')
           },
           {
             type: 'radio',

@@ -55,7 +55,7 @@ export default {
         },
         isActive: {
           type: 'switch',
-          label: this.$t('term.report.isactive'),
+          label: this.$t('page.isactive'),
           trueValue: 1,
           falseValue: 0
         },

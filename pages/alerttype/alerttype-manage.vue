@@ -131,7 +131,7 @@ export default {
           title: this.$t('page.uniquekey')
         },
         { key: 'label', title: this.$t('page.name') },
-        { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'isActive', title: this.$t('page.isactive') },
         { key: 'adaptorList', title: this.$t('term.alert.transferplugin') },
         { key: 'eventList', title: this.$t('term.alert.eventplugin') },
         { key: 'fcu', title: this.$t('page.creator') },

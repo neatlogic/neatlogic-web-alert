@@ -130,7 +130,7 @@ export default {
           validateList: ['required']
         },
         isActive: {
-          label: this.$t('term.report.isactive'),
+          label: this.$t('page.isactive'),
           type: 'switch',
           trueValue: 1,
           falseValue: 0

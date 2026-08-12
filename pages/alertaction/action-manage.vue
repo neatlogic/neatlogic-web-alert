@@ -49,7 +49,7 @@ export default {
         },
         { key: 'label', title: this.$t('page.name') },
         { key: 'icon', title: this.$t('page.icon') },
-        { key: 'isActive', title: this.$t('term.report.isactive') },
+        { key: 'isActive', title: this.$t('page.isactive') },
         { key: 'description', title: this.$t('page.explain') },
         { key: 'action' }
       ]

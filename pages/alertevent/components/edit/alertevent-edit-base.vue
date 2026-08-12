@@ -20,7 +20,7 @@
         ]"
       ></TsFormRadio>
     </TsFormItem>
-    <TsFormItem :label="$t('term.report.isactive')" labelPosition="left">
+    <TsFormItem :label="$t('page.isactive')" labelPosition="left">
       <TsFormSwitch v-model="handler.isActive" :trueValue="1" :falseValue="0"></TsFormSwitch>
     </TsFormItem>
     <TsFormItem :label="$t('term.alert.breakerpolicy')" labelPosition="left">
