@@ -135,11 +135,11 @@ export default {
     },
     defaultTitle() {
       if (this.trigger === 'AGGREGATE') {
-        return '[告警中心][聚合通知]共${DATA.alertCount}条告警待处理';
+        return this.$t('term.alert.aggregatealertmailtitle');
       } else if (this.trigger === 'RECOVER') {
-        return '[告警中心][熔断恢复]熔断策略已恢复';
+        return this.$t('term.alert.breakerrecovermailtitle');
       }
-      return '[告警中心][熔断通知]熔断策略已触发';
+      return this.$t('term.alert.breakeropenmailtitle');
     },
     attrHelp() {
       return this.isAggregateTrigger ? this.$t('term.alert.aggregateattrhelp') : '';

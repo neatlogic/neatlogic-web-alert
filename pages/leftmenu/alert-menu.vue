@@ -38,9 +38,9 @@
             </div>
             <!--<div style="line-height: 2.85">
               <Poptip :wdith="200" :transfer="true" placement="bottom-start">
-                <a><span class="text-href tsfont-search"></span><span class="text-href">搜索</span></a>
+                <a><span class="text-href tsfont-search"></span><span class="text-href">{{$t('page.search')}}</span></a>
                 <div slot="content">
-                  <InputSearcher v-model="keyword" placeholder="请输入视图关键字"></InputSearcher>
+                  <InputSearcher v-model="keyword" :placeholder="$t('form.placeholder.pleaseinput', { target: $t('term.alert.viewkeyword') })"></InputSearcher>
                 </div>
               </Poptip>
             </div>-->

@@ -1,4 +1,5 @@
 import alertApi from '@/community-module/alert/api/alert/alert.js';
+import { $t } from '@/resources/init.js';
 async function updateAlertMenu({ commit, state, rootState, forceUpdate = true, hasCustomMenuAuthority } = {}) {
   await state.gettingModuleList;
   const alertModule = state.moduleList.find(item => item.moduleId === 'alert');
@@ -15,7 +16,7 @@ async function updateAlertMenu({ commit, state, rootState, forceUpdate = true, h
   }));
   const newMenuGroup = [
     {
-      menuTypeName: '告警视图',
+      menuTypeName: $t('term.alert.alertview'),
       menuList: alertViewList
     }
   ];

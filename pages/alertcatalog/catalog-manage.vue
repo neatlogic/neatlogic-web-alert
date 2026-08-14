@@ -358,7 +358,7 @@ export default {
         );
       }
       Promise.all(requestList).then(() => {
-        this.$Message.success('目录移动成功');
+        this.$Message.success(this.$t('term.alert.catalogmovesuccess'));
         this.$store.commit('leftMenu/setAlertViewCount', 'add');
         this.clearDraggingData();
       }).catch(() => {
@@ -400,7 +400,7 @@ export default {
         );
       }
       Promise.all(requestList).then(() => {
-        this.$Message.success('视图移动成功');
+        this.$Message.success(this.$t('term.alert.viewmovesuccess'));
         this.$store.commit('leftMenu/setAlertViewCount', 'add');
         this.clearDraggingData();
       }).catch(() => {
@@ -442,7 +442,7 @@ export default {
       const movedItem = catalogList.splice(index, 1)[0];
       catalogList.splice(targetIndex, 0, movedItem);
       this.$api.alert.catalog.updateAlertCatalogSort({ parentId: parentId, idList: idList }).then(() => {
-        this.$Message.success('排序更新成功');
+        this.$Message.success(this.$t('term.alert.sortupdatesuccess'));
         this.$store.commit('leftMenu/setAlertViewCount', 'add');
       }).catch(() => {
         const rollbackItem = catalogList.splice(targetIndex, 1)[0];
@@ -470,7 +470,7 @@ export default {
       const movedItem = viewList.splice(index, 1)[0];
       viewList.splice(targetIndex, 0, movedItem);
       this.$api.alert.catalog.updateAlertViewSort({ catalogId: catalogId, idList: idList }).then(() => {
-        this.$Message.success('排序更新成功');
+        this.$Message.success(this.$t('term.alert.sortupdatesuccess'));
         this.$store.commit('leftMenu/setAlertViewCount', 'add');
       }).catch(() => {
         const rollbackItem = viewList.splice(targetIndex, 1)[0];

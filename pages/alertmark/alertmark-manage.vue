@@ -45,8 +45,8 @@
                 :trueValue="1"
                 :falseValue="0"
                 :showStatus="true"
-                trueText="显示"
-                falseText="隐藏"
+                :trueText="$t('page.display')"
+                :falseText="$t('page.hide')"
                 @on-change="saveMark(mark)"
               ></TsFormSwitch>
             </div>

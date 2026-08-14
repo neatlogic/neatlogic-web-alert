@@ -558,12 +558,12 @@ export default {
       const idList = this.selectList.slice();
       this.$createDialog({
         title: this.$t('dialog.title.executeconfirm'),
-        content: '确认后将提交后台重建已选告警索引。',
+        content: this.$t('term.alert.rebuildselectedalertindexconfirm'),
         'on-ok': async vnode => {
           this.isRebuildIndexLoading = true;
           try {
             await this.$api.alert.alert.batchRebuildIndex(idList);
-            this.$Message.success('已提交后台重建索引');
+            this.$Message.success(this.$t('term.alert.submittedbackendrebuildindex'));
             vnode.isShow = false;
           } finally {
             this.isRebuildIndexLoading = false;
