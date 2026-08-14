@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TsFormItem label="请选择告警类型" :required="true" labelPosition="top">
+    <TsFormItem :label="$t('term.alert.selectalerttype')" :required="true" labelPosition="top">
       <TsFormSelect
         ref="alertType"
         v-model="configLocal.alertType"
@@ -16,7 +16,7 @@
     </TsFormItem>
     <TsFormItem
       v-if="currentAlertType && currentAlertType.adaptorList"
-      label="请选择接入转换"
+      :label="$t('term.alert.selectaccesstransfer')"
       :required="true"
       labelPosition="top"
     >
