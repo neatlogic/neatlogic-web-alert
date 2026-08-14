@@ -36,12 +36,14 @@
                 </div>
               </Poptip>
             </div>
-            <TsCodemirror
+            <TsMonacoEditor
               ref="txtContent"
               v-model="notifyTemplateData.content"
               :validateList="['required']"
-              codeMode="html"
-            ></TsCodemirror>
+              :languageExtension="freemarkerLanguageExtension"
+              codeMode="freemarker"
+              height="300px"
+            ></TsMonacoEditor>
           </template>
         </TsForm>
       </div>
@@ -54,6 +56,7 @@
 </template>
 <script>
 import clipboard from '@/resources/directives/clipboard.js';
+import { createNotifyTemplateFreemarkerExtension } from './notify-template-freemarker-language.js';
 
 export default {
   name: '',
@@ -61,7 +64,7 @@ export default {
   components: {
     TsForm: () => import('@/resources/plugins/TsForm/TsForm'),
     FreemarkerHelp: () => import('@/community-module/alert/pages/alertevent/components/edit/components/freemarker-help.vue'),
-    TsCodemirror: () => import('@/resources/plugins/TsCodemirror/TsCodemirror')
+    TsMonacoEditor: () => import('@/resources/plugins/TsMonacoEditor/TsMonacoEditor')
   },
   props: {
     id: { type: Number },
@@ -160,7 +163,11 @@ export default {
     }
   },
   filter: {},
-  computed: {},
+  computed: {
+    freemarkerLanguageExtension() {
+      return createNotifyTemplateFreemarkerExtension(this.attrList);
+    }
+  },
   watch: {}
 };
 </script>
