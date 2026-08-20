@@ -1,5 +1,5 @@
 <template>
-  <TsDialog v-bind="dialogConfig" @on-close="close">
+  <TsDialog v-bind="dialogConfig" :hasFooter="!isAiTabActive" @on-close="close">
     <template v-slot>
       <div>
         <AlertDetailCore
@@ -7,6 +7,7 @@
           :id="id"
           ref="alertDetailCore"
           @ready="isReady()"
+          @tab-change="handleTabChange"
         ></AlertDetailCore>
       </div>
     </template>
@@ -62,6 +63,7 @@ export default {
       },
       alertData: null,
       hasRole: false,
+      isAiTabActive: false,
       isShowSendMail: false
     };
   },
@@ -76,6 +78,9 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    handleTabChange(tabName) {
+      this.isAiTabActive = tabName === 'ai';
+    },
     rebuildIndex() {
       this.$api.alert.alert.rebuildIndex(this.id).then(res => {
         if (res.Status === 'OK') {

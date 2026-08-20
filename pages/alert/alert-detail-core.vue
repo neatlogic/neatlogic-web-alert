@@ -203,12 +203,17 @@
       <component :is="alertSubscribeAudit" v-if="currentTab === 'subscribe'" :alertId="id"></component>
     </TabPane>
     <TabPane
-      v-if="$AuthUtils.hasRole('ALERT_TITLE_AI')"
+      v-if="$AuthUtils.hasRole('ALERT_TITLE_AI') && $AuthUtils.hasRole('AI_CHAT')"
       :index="201"
       :label="$t('term.alert.ai')"
       name="ai"
+      class="bg-op"
     >
-      <component :is="alertAiTitle" v-if="currentTab === 'ai' && readonlyAlertData.title" :content="readonlyAlertData.title"></component>
+      <component
+        :is="alertAiChat"
+        v-if="isAiTabVisited && readonlyAlertData.id"
+        :alertId="readonlyAlertData.id"
+      ></component>
     </TabPane>
     <div v-if="alertData.actionList && alertData.actionList.length > 0" slot="extra">
       <Dropdown placement="bottom-end">
@@ -255,8 +260,9 @@ export default {
   data() {
     return {
       COMMERCIAL_MODULES: COMMERCIAL_MODULES,
-      alertAiTitle: null,
+      alertAiChat: null,
       alertSubscribeAudit: null,
+      isAiTabVisited: false,
       loading: true,
       currentTab: 'info',
       alertData: null,
@@ -291,7 +297,7 @@ export default {
   },
   async created() {
     if (this.COMMERCIAL_MODULES.includes('alert')) {
-      this.alertAiTitle = ComponentManager.getVueTemplate('alert-ai-title');
+      this.alertAiChat = ComponentManager.getVueTemplate('alert-ai-chat');
       this.alertSubscribeAudit = ComponentManager.getVueTemplate('alert-subscribe-audit');
     }
     this.listAllStatus();
@@ -480,7 +486,14 @@ export default {
       return attrList;
     }
   },
-  watch: {}
+  watch: {
+    currentTab(value) {
+      if (value === 'ai') {
+        this.isAiTabVisited = true;
+      }
+      this.$emit('tab-change', value);
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
