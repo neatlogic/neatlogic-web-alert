@@ -18,7 +18,7 @@
           'bg-op': level % 2 !== 0
         }"
       >
-        <div class="action-group">
+        <div class="action-group flex-start">
           <div class="action-item">{{ $t('term.alert.currentstepstart') }}</div>
           <div class="action-item">
             <TsFormInput
@@ -26,17 +26,30 @@
               v-model="interval.delayMinute"
               :min="0"
               type="number"
-              :width="100"
+              :width="60"
               :validateList="[{ name: 'required', message: ' ' }]"
             ></TsFormInput>
           </div>
-          <div class="action-item">{{ $t('term.alert.minuteafterexecute') }}</div>
+          <div class="action-item">{{ $t('page.minute') }}</div>
+          <div class="action-item">
+            <TsFormInput
+              ref="txtDelaySecond"
+              v-model="interval.delaySecond"
+              :min="0"
+              :max="59"
+              type="number"
+              :width="60"
+              :validateList="[{ name: 'required', message: ' ' }, 'integer_natural']"
+            ></TsFormInput>
+          </div>
+          <div class="action-item">{{ $t('page.second') }}</div>
+          <div class="action-item">{{ $t('term.alert.afterexecute') }}</div>
           <div class="action-item">{{ $t('term.alert.repeat') }}</div>
           <div class="action-item"><TsFormInput
             v-model="interval.repeatCount"
             :min="0"
             type="number"
-            :width="100"
+            :width="60"
           ></TsFormInput></div>
           <div class="action-item">{{ $t('term.alert.times') }}</div>
           <div class="action-item">{{ $t('term.alert.everyinterval') }}</div>
@@ -44,9 +57,19 @@
             v-model="interval.intervalMinute"
             type="number"
             :min="0"
-            :width="100"
+            :width="60"
           ></TsFormInput></div>
           <div class="action-item">{{ $t('page.minute') }}</div>
+          <div class="action-item"><TsFormInput
+            ref="txtIntervalSecond"
+            v-model="interval.intervalSecond"
+            type="number"
+            :min="0"
+            :max="59"
+            :width="60"
+            :validateList="[{ name: 'required', message: ' ' }, 'integer_natural']"
+          ></TsFormInput></div>
+          <div class="action-item">{{ $t('page.second') }}</div>
         </div>
         <div v-if="!interval.handler">
           <div v-if="pluginList && pluginList.length > 0" class="mt-md padding-xs bg-info-grey radius-md" style="text-align: center">
@@ -127,6 +150,14 @@ export default {
     if (this.$utils.isEmpty(this.configLocal)) {
       this.configLocal = { intervalList: [] };
     }
+    this.configLocal.intervalList.forEach(interval => {
+      if (interval.delaySecond == null) {
+        this.$set(interval, 'delaySecond', 0);
+      }
+      if (interval.intervalSecond == null) {
+        this.$set(interval, 'intervalSecond', 0);
+      }
+    });
     const handlers = await import('@/community-module/alert/pages/alertevent/components/edit/index.js');
     this.handlers = handlers.default;
     this.listEventPlugin();
@@ -144,6 +175,8 @@ export default {
     addInterval() {
       this.configLocal.intervalList.push({
         delayMinute: 0,
+        delaySecond: 0,
+        intervalSecond: 0,
         repeatCount: 0
       });
       this.error = '';
@@ -175,6 +208,22 @@ export default {
       if (txtDelays && txtDelays.length > 0) {
         for (let i = 0; i < txtDelays.length; i++) {
           if (!txtDelays[i].valid()) {
+            isValid = false;
+          }
+        }
+      }
+      const txtDelaySeconds = this.$refs.txtDelaySecond;
+      if (txtDelaySeconds && txtDelaySeconds.length > 0) {
+        for (let i = 0; i < txtDelaySeconds.length; i++) {
+          if (!txtDelaySeconds[i].valid()) {
+            isValid = false;
+          }
+        }
+      }
+      const txtIntervalSeconds = this.$refs.txtIntervalSecond;
+      if (txtIntervalSeconds && txtIntervalSeconds.length > 0) {
+        for (let i = 0; i < txtIntervalSeconds.length; i++) {
+          if (!txtIntervalSeconds[i].valid()) {
             isValid = false;
           }
         }

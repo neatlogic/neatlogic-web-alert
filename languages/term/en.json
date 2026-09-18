@@ -25,6 +25,7 @@
     "addschedule": "Add Schedule",
     "addtimequantumtip": "Please Add At Least One Time Quantum",
     "afterconversion": "After Conversion",
+    "afterexecute": "Later",
     "aggregateattrhelp": "Aggregate variables can be used during aggregation. If a single alert attribute variable is used, the value of the last member in alertList is used by default.",
     "aggregatealertmailtitle": "[Alert Center][Aggregate Notification] ${DATA.alertCount} alerts pending processing",
     "aggregatecontenthelp": "Help: If empty, the default alert list is used. Available variables: ${DATA.alertCount}, ${DATA.alertList}, ${DATA.alertItemList}.",
