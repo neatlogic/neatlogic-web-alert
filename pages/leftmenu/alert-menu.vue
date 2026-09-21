@@ -169,6 +169,7 @@ export default {
           catalog.viewList.forEach(view => {
             this.$api.alert.alert.searchAlertCount({ viewName: view.name }).then(res => {
               this.$set(view, 'alertCount', res.Return);
+              this.refreshOverflowTooltips();
             });
           });
         }
