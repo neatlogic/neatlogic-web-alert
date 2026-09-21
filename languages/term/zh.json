@@ -25,6 +25,7 @@
     "addschedule": "添加调度",
     "addtimequantumtip": "请至少添加一个时间段",
     "afterconversion": "转换后",
+    "afterexecute": "后执行",
     "aggregateattrhelp": "聚合时可使用聚合变量；若使用单个告警属性变量，默认取 alertList 中最后一个成员的值。",
     "aggregatealertmailtitle": "[告警中心][聚合通知]共${DATA.alertCount}条告警待处理",
     "aggregatecontenthelp": "帮助：为空时使用默认告警列表。可用 ${DATA.alertCount}、${DATA.alertList}、${DATA.alertItemList}。",
