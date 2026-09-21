@@ -1,12 +1,9 @@
 <template>
   <div>
     <div class="link alert-menu-link" style="height: auto">
-      <Tooltip
-        class="overflow-menu-tooltip"
+      <OverflowTooltip
         :content="catalog.name"
-        :disabled="!isOverflowTooltip('catalog-' + catalog.id)"
         placement="right"
-        transfer
       >
         <a
           class="alert-menu-a pt-sm pb-sm"
@@ -15,9 +12,9 @@
           :style="rowStyle"
           @click="toggleCatalog(catalog)"
         >
-          <span class="node-name overflow" :data-overflow-tooltip-key="'catalog-' + catalog.id">{{ catalog.name }}</span>
+          <span class="node-name overflow">{{ catalog.name }}</span>
         </a>
-      </Tooltip>
+      </OverflowTooltip>
     </div>
     <div v-if="!catalog._hideview">
       <AlertMenuNode
@@ -25,7 +22,6 @@
         :key="child.id"
         :catalog="child"
         :level="level + 1"
-        :overflowTooltipMap="overflowTooltipMap"
         @go-to="$emit('go-to', $event)"
       ></AlertMenuNode>
       <div
@@ -35,12 +31,9 @@
         style="height: auto"
         :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
       >
-        <Tooltip
-          class="overflow-menu-tooltip"
+        <OverflowTooltip
           :content="view.label"
-          :disabled="!isOverflowTooltip('view-' + view.id)"
           placement="right"
-          transfer
         >
           <a
             class="alert-menu-a pt-sm pb-sm tsfont-monitor"
@@ -51,13 +44,12 @@
             <span
               class="node-name overflow"
               :class="{'has-amount': view.alertCount > 0}"
-              :data-overflow-tooltip-key="'view-' + view.id"
             >{{ view.label }}</span>
             <span v-if="view.alertCount > 0" class="text-error ml-xs superscript">
               <b>{{ view.alertCount }}</b>
             </span>
           </a>
-        </Tooltip>
+        </OverflowTooltip>
       </div>
     </div>
   </div>
@@ -71,13 +63,9 @@ export default {
   },
   props: {
     catalog: { type: Object, required: true },
-    level: { type: Number, default: 0 },
-    overflowTooltipMap: { type: Object, default: () => ({}) }
+    level: { type: Number, default: 0 }
   },
   methods: {
-    isOverflowTooltip(key) {
-      return !!this.overflowTooltipMap[key];
-    },
     toggleCatalog(catalog) {
       this.$set(catalog, '_hideview', !catalog._hideview);
     }
