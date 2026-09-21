@@ -47,18 +47,27 @@
           </div>
         </div>
         <div class="link alert-menu-link" :class="{ active: $isMenuActive('/alert-manage') }" @click="goTo('/alert-manage')">
-          <a class="alert-menu-a tsfont-monitor" @click="goTo('/alert-manage')">
-            <span class="alert-name">{{ $t('term.alert.allalert') }}</span>
-            <span v-if="alertCount > 0" class="text-error ml-xs superscript">
-              <b>{{ alertCount }}</b>
-            </span>
-          </a>
+          <Tooltip
+            class="overflow-menu-tooltip"
+            :content="$t('term.alert.allalert')"
+            :disabled="!isOverflowTooltip('all-alert')"
+            placement="right"
+            transfer
+          >
+            <a class="alert-menu-a tsfont-monitor" @click="goTo('/alert-manage')">
+              <span class="alert-name overflow" data-overflow-tooltip-key="all-alert">{{ $t('term.alert.allalert') }}</span>
+              <span v-if="alertCount > 0" class="text-error ml-xs superscript">
+                <b>{{ alertCount }}</b>
+              </span>
+            </a>
+          </Tooltip>
         </div>
         <AlertCatalogMenuNode
           v-for="catalog in filterAlertCatalogTreeList"
           :key="catalog.id"
           :catalog="catalog"
           :level="0"
+          :overflowTooltipMap="overflowTooltipMap"
           @go-to="goTo"
         ></AlertCatalogMenuNode>
       </div>
@@ -80,6 +89,7 @@
 </template>
 <script>
 import LeftMenuMixin from '@/views/components/leftmenu/leftmenu-mixin';
+import OverflowTooltipMixin from '@/views/components/leftmenu/overflow-tooltip-mixin';
 export default {
   name: 'AlertMenu',
   components: {
@@ -88,7 +98,7 @@ export default {
     AlertCatalogEdit: () => import('@/community-module/alert/pages/alert/alert-catalog-edit.vue'),
     AlertCatalogMenuNode: () => import('./alert-menu-node.vue')
   },
-  mixins: [LeftMenuMixin],
+  mixins: [LeftMenuMixin, OverflowTooltipMixin],
   data() {
     return {
       alertCatalogList: [],
@@ -150,6 +160,7 @@ export default {
         this.alertCatalogList = this.buildCatalogTree(catalogList);
         this.pageCount = res.Return.pageCount;
         this.setViewAlertCount(this.alertCatalogList);
+        this.refreshOverflowTooltips();
       });
     },
     setViewAlertCount(catalogList) {
@@ -249,10 +260,8 @@ export default {
   }
   .alert-name {
     display: inline-block;
-    white-space: normal;
-    word-break: break-all;
     max-width: calc(100% - 30px);
-    height: auto;
+    vertical-align: middle;
   }
   .alert-menu-setting-icon {
     position: absolute;

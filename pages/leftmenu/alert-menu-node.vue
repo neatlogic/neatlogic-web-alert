@@ -1,15 +1,23 @@
 <template>
   <div>
     <div class="link alert-menu-link" style="height: auto">
-      <a
-        class="alert-menu-a pt-sm pb-sm"
-        :class="toggleClass"
-        style="height: auto; line-height: 1"
-        :style="rowStyle"
-        @click="toggleCatalog(catalog)"
+      <Tooltip
+        class="overflow-menu-tooltip"
+        :content="catalog.name"
+        :disabled="!isOverflowTooltip('catalog-' + catalog.id)"
+        placement="right"
+        transfer
       >
-        <span>{{ catalog.name }}</span>
-      </a>
+        <a
+          class="alert-menu-a pt-sm pb-sm"
+          :class="toggleClass"
+          style="height: auto; line-height: 1"
+          :style="rowStyle"
+          @click="toggleCatalog(catalog)"
+        >
+          <span class="node-name overflow" :data-overflow-tooltip-key="'catalog-' + catalog.id">{{ catalog.name }}</span>
+        </a>
+      </Tooltip>
     </div>
     <div v-if="!catalog._hideview">
       <AlertMenuNode
@@ -17,6 +25,7 @@
         :key="child.id"
         :catalog="child"
         :level="level + 1"
+        :overflowTooltipMap="overflowTooltipMap"
         @go-to="$emit('go-to', $event)"
       ></AlertMenuNode>
       <div
@@ -26,17 +35,29 @@
         style="height: auto"
         :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
       >
-        <a
-          class="alert-menu-a pt-sm pb-sm tsfont-monitor"
-          :style="viewRowStyle"
-          style="height: auto; line-height: 1.1"
-          @click="$emit('go-to', '/alert-manage/' + view.name)"
+        <Tooltip
+          class="overflow-menu-tooltip"
+          :content="view.label"
+          :disabled="!isOverflowTooltip('view-' + view.id)"
+          placement="right"
+          transfer
         >
-          <span>{{ view.label }}</span>
-          <span v-if="view.alertCount > 0" class="text-error ml-xs superscript">
-            <b>{{ view.alertCount }}</b>
-          </span>
-        </a>
+          <a
+            class="alert-menu-a pt-sm pb-sm tsfont-monitor"
+            :style="viewRowStyle"
+            style="height: auto; line-height: 1.1"
+            @click="$emit('go-to', '/alert-manage/' + view.name)"
+          >
+            <span
+              class="node-name overflow"
+              :class="{'has-amount': view.alertCount > 0}"
+              :data-overflow-tooltip-key="'view-' + view.id"
+            >{{ view.label }}</span>
+            <span v-if="view.alertCount > 0" class="text-error ml-xs superscript">
+              <b>{{ view.alertCount }}</b>
+            </span>
+          </a>
+        </Tooltip>
       </div>
     </div>
   </div>
@@ -50,9 +71,13 @@ export default {
   },
   props: {
     catalog: { type: Object, required: true },
-    level: { type: Number, default: 0 }
+    level: { type: Number, default: 0 },
+    overflowTooltipMap: { type: Object, default: () => ({}) }
   },
   methods: {
+    isOverflowTooltip(key) {
+      return !!this.overflowTooltipMap[key];
+    },
     toggleCatalog(catalog) {
       this.$set(catalog, '_hideview', !catalog._hideview);
     }
@@ -81,5 +106,13 @@ export default {
 .superscript {
   font-size: 0.7em;
   vertical-align: super;
+}
+.node-name {
+  display: inline-block;
+  max-width: calc(100% - 28px);
+  vertical-align: middle;
+  &.has-amount {
+    max-width: calc(100% - 58px);
+  }
 }
 </style>
