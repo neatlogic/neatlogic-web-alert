@@ -47,12 +47,17 @@
           </div>
         </div>
         <div class="link alert-menu-link" :class="{ active: $isMenuActive('/alert-manage') }" @click="goTo('/alert-manage')">
-          <a class="alert-menu-a tsfont-monitor" @click="goTo('/alert-manage')">
-            <span class="alert-name">{{ $t('term.alert.allalert') }}</span>
-            <span v-if="alertCount > 0" class="text-error ml-xs superscript">
-              <b>{{ alertCount }}</b>
-            </span>
-          </a>
+          <OverflowTooltip
+            :content="$t('term.alert.allalert')"
+            placement="right"
+          >
+            <a class="alert-menu-a tsfont-monitor" @click="goTo('/alert-manage')">
+              <span class="alert-name overflow">{{ $t('term.alert.allalert') }}</span>
+              <span v-if="alertCount > 0" class="text-error ml-xs superscript">
+                <b>{{ alertCount }}</b>
+              </span>
+            </a>
+          </OverflowTooltip>
         </div>
         <AlertCatalogMenuNode
           v-for="catalog in filterAlertCatalogTreeList"
@@ -249,10 +254,8 @@ export default {
   }
   .alert-name {
     display: inline-block;
-    white-space: normal;
-    word-break: break-all;
     max-width: calc(100% - 30px);
-    height: auto;
+    vertical-align: middle;
   }
   .alert-menu-setting-icon {
     position: absolute;
