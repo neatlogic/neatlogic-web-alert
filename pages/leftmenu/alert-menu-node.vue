@@ -1,15 +1,20 @@
 <template>
   <div>
     <div class="link alert-menu-link" style="height: auto">
-      <a
-        class="alert-menu-a pt-sm pb-sm"
-        :class="toggleClass"
-        style="height: auto; line-height: 1"
-        :style="rowStyle"
-        @click="toggleCatalog(catalog)"
+      <OverflowTooltip
+        :content="catalog.name"
+        placement="right"
       >
-        <span>{{ catalog.name }}</span>
-      </a>
+        <a
+          class="alert-menu-a pt-sm pb-sm"
+          :class="toggleClass"
+          style="height: auto; line-height: 1"
+          :style="rowStyle"
+          @click="toggleCatalog(catalog)"
+        >
+          <span class="node-name overflow">{{ catalog.name }}</span>
+        </a>
+      </OverflowTooltip>
     </div>
     <div v-if="!catalog._hideview">
       <AlertMenuNode
@@ -26,17 +31,25 @@
         style="height: auto"
         :class="{ active: $isMenuActive('/alert-manage/' + view.name) }"
       >
-        <a
-          class="alert-menu-a pt-sm pb-sm tsfont-monitor"
-          :style="viewRowStyle"
-          style="height: auto; line-height: 1.1"
-          @click="$emit('go-to', '/alert-manage/' + view.name)"
+        <OverflowTooltip
+          :content="view.label"
+          placement="right"
         >
-          <span>{{ view.label }}</span>
-          <span v-if="view.alertCount > 0" class="text-error ml-xs superscript">
-            <b>{{ view.alertCount }}</b>
-          </span>
-        </a>
+          <a
+            class="alert-menu-a pt-sm pb-sm tsfont-monitor"
+            :style="viewRowStyle"
+            style="height: auto; line-height: 1.1"
+            @click="$emit('go-to', '/alert-manage/' + view.name)"
+          >
+            <span
+              class="node-name overflow"
+              :class="{'has-amount': view.alertCount > 0}"
+            >{{ view.label }}</span>
+            <span v-if="view.alertCount > 0" class="text-error ml-xs superscript">
+              <b>{{ view.alertCount }}</b>
+            </span>
+          </a>
+        </OverflowTooltip>
       </div>
     </div>
   </div>
@@ -81,5 +94,13 @@ export default {
 .superscript {
   font-size: 0.7em;
   vertical-align: super;
+}
+.node-name {
+  display: inline-block;
+  max-width: calc(100% - 28px);
+  vertical-align: middle;
+  &.has-amount {
+    max-width: calc(100% - 58px);
+  }
 }
 </style>
