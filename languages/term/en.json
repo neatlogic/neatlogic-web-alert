@@ -1,5 +1,14 @@
 {
   "alert": {
+    "updateselectedalertmark": "Modify selected alert tags",
+    "updatematchedalertmark": "Modify matching alert tags",
+    "batchupdatealertmark": "Batch modify alert tags",
+    "markmatchscope": "Modify {count} alerts matching the current search",
+    "markselectscope": "Modify {count} selected alerts",
+    "markupdatemode": "Update mode",
+    "cleartargetalertmarks": "All tags on the target alerts will be cleared",
+    "submittedbackendmarkupdate": "Submitted for background processing. Refresh later to view tags and audit records.",
+    "batchmarkupdateresult": "Updated: {updated}; unchanged: {unchanged}; unavailable: {skipped}; failed: {failed}",
     "12hour": "12 Hours",
     "1day": "1 Day",
     "1hour": "1 Hour",

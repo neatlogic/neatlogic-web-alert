@@ -1,5 +1,14 @@
 {
   "alert": {
+    "updateselectedalertmark": "修改选中告警标签",
+    "updatematchedalertmark": "修改匹配告警标签",
+    "batchupdatealertmark": "批量修改告警标签",
+    "markmatchscope": "修改当前搜索条件匹配的 {count} 条告警",
+    "markselectscope": "修改选中的 {count} 条告警",
+    "markupdatemode": "修改模式",
+    "cleartargetalertmarks": "将清空目标告警的所有标签",
+    "submittedbackendmarkupdate": "已提交后台处理，请稍后刷新查看标签和修改记录",
+    "batchmarkupdateresult": "已修改 {updated} 条，未变化 {unchanged} 条，已失效 {skipped} 条，失败 {failed} 条",
     "12hour": "12小时",
     "1day": "1天",
     "1hour": "1小时",

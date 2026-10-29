@@ -157,7 +157,7 @@
       <AlertOriginal v-if="currentTab === 'origin'" :alertData="alertData"></AlertOriginal>
     </TabPane>
     <TabPane :label="$t('page.actionaudit')" name="audit" :index="102">
-      <AlertViewAudit v-if="currentTab === 'audit'" :alertData="alertData" :attrList="attrList"></AlertViewAudit>
+      <AlertViewAudit v-if="currentTab === 'audit'" :alertData="alertData"></AlertViewAudit>
     </TabPane>
     <TabPane :label="$t('term.alert.eventaudit')" name="eventaudit" :index="103">
       <AlertViewEventAudit v-if="currentTab === 'eventaudit'" :alertData="alertData"></AlertViewEventAudit>

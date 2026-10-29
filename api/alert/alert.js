@@ -38,6 +38,10 @@ const alert = {
   getAlertOriginById(id) {
     return axios.post('/api/rest/alert/alertorigin/get', { id: id });
   },
+  // 批量修改告警标签，匹配范围由后台异步处理。
+  updateAlertMarkBatch(params) {
+    return axios.post('/api/rest/alert/mark/update/batch', params);
+  },
   handleAlert(params) {
     return axios.post('/api/rest/alert/handle', params);
   },

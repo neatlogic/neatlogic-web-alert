@@ -2,7 +2,7 @@
   <div>
     <TsTable :theadList="auditHeaderList" v-bind="auditData" @changeCurrent="searchAlertAudit">
       <template v-slot:attrName="{ row }">
-        {{ getAttrByName(row.attrName) && getAttrByName(row.attrName).label }}
+        {{ (getAttrByName(row.attrName) || {}).label || row.attrName }}
       </template>
       <template v-slot:inputUser="{ row }">
         <UserCard :uuid="row.inputUser" :hideAvatar="true"></UserCard>
@@ -25,12 +25,12 @@ export default {
     UserCard: () => import('@/resources/components/UserCard/UserCard.vue')
   },
   props: {
-    alertData: { type: Object },
-    attrList: { type: Array }
+    alertData: { type: Object }
   },
   data() {
     return {
       auditData: {},
+      attrList: [], // 审计需要完整元数据，不使用详情页面的列展示属性筛选结果
       auditHeaderList: [
         { key: 'inputTime', title: this.$t('term.alert.operationtime'), type: 'time' },
         { key: 'inputUser', title: this.$t('term.alert.operationuser') },
@@ -43,6 +43,7 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.listAuditAttrList();
     this.searchAlertAudit();
   },
   beforeMount() {},
@@ -54,6 +55,12 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    // 审计属性包含标签等非列表列属性，独立加载以保持详情的属性用途不变。
+    listAuditAttrList() {
+      return this.$api.alert.alert.listAlertAttrList({ isAudit: 1 }).then(res => {
+        this.attrList = res.Return || [];
+      });
+    },
     searchAlertAudit(currentPage) {
       const param = { alertId: this.alertData.id };
       if (currentPage) {

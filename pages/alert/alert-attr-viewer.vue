@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="attr.kind === 'const' && handlers[attr.name]">
+    <div v-if="attr && attr.kind === 'const' && handlers[attr.name]">
       <component
         :is="handlers[attr.name]"
         :row="row"
@@ -12,7 +12,7 @@
         @refresh="refresh"
       ></component>
     </div>
-    <div v-else-if="attr.kind === 'attr' && handlers['attr_' + attr.type]">
+    <div v-else-if="attr && attr.kind === 'attr' && handlers['attr_' + attr.type]">
       <component
         :is="handlers['attr_' + attr.type]"
         :row="row"

@@ -27,13 +27,12 @@ export default {
   props: {},
   data() {
     return {
-      markList: []
+      markList: [],
+      markRequestId: 0
     };
   },
   beforeCreate() {},
-  created() {
-    this.getMarkByNameList();
-  },
+  created() {},
   beforeMount() {},
   mounted() {},
   beforeUpdate() {},
@@ -43,12 +42,27 @@ export default {
   beforeDestroy() {},
   destroyed() {},
   methods: {
+    // 审计保留历史名称；翻页或清空后，旧请求不能覆盖当前记录的标签。
     getMarkByNameList() {
-      if (this.mode === 'audit' && this.value && this.value.length > 0) {
-        this.$api.alert.alertmark.getMarkByNameList(this.value).then(res => {
-          this.markList = res.Return;
-        });
+      const requestId = ++this.markRequestId;
+      this.markList = [];
+      if (this.mode !== 'audit' || !Array.isArray(this.value) || this.value.length === 0) {
+        return;
       }
+      // 兼容旧版手工修改审计保存的嵌套数组，前后端分开更新时也按标签名称显示。
+      const nameList = this.value.flat(Infinity).filter(name => typeof name === 'string');
+      if (nameList.length === 0) {
+        return;
+      }
+      this.markList = nameList.map(name => ({ name }));
+      return this.$api.alert.alertmark.getMarkByNameList(nameList).then(res => {
+        if (requestId !== this.markRequestId) {
+          return;
+        }
+        const markList = res.Return || [];
+        // 标签已删除或设为隐藏时仍展示历史名称，只复用当前可找到的颜色等元数据。
+        this.markList = nameList.map(name => markList.find(mark => mark.name === name) || { name });
+      });
     }
   },
   filter: {},
@@ -60,7 +74,18 @@ export default {
       return this.row.markList.filter(mark => mark.isShow !== 0);
     }
   },
-  watch: {}
+  watch: {
+    value: {
+      handler() {
+        this.getMarkByNameList();
+      },
+      immediate: true,
+      deep: true
+    },
+    mode() {
+      this.getMarkByNameList();
+    }
+  }
 };
 </script>
 <style lang="less"></style>

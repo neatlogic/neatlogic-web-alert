@@ -65,7 +65,7 @@
               </DropdownMenu>
             </Dropdown>
           </div>
-          <div v-if="!isShowTopo && ((selectList && selectList.length > 0) || canDeleteMatch || canBatchRebuildIndex)" class="action-item">
+          <div v-if="!isShowTopo && ((selectList && selectList.length > 0) || canDeleteMatch || canBatchRebuildIndex || canUpdateMatchMark)" class="action-item">
             <Dropdown trigger="click" @on-click="dropdownClick">
               <div>
                 {{ $t('page.batchoperation') }}
@@ -74,11 +74,18 @@
               <DropdownMenu slot="list">
                 <DropdownItem name="close" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.closeselectedalert') }}</DropdownItem>
                 <DropdownItem name="open" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.openselectedalert') }}</DropdownItem>
+                <DropdownItem name="markselect" :disabled="!selectList || selectList.length === 0">{{ $t('term.alert.updateselectedalertmark') }}</DropdownItem>
                 <DropdownItem v-if="$AuthUtils.hasRole('ALERT_INDEX')" name="rebuildindex" :disabled="!selectList || selectList.length == 0 || isRebuildIndexLoading">重建选中告警索引</DropdownItem>
                 <DropdownItem v-if="$AuthUtils.hasRole('ALERT_ADMIN')" name="deleteselect" :disabled="!selectList || selectList.length == 0">{{ $t('term.alert.deleteselectedalert') }}</DropdownItem>
                 <DropdownItem
-                  v-if="canDeleteMatch"
+                  v-if="canUpdateMatchMark"
                   divided
+                  name="markmatch"
+                  :disabled="isMarkMatchCounting"
+                >{{ $t('term.alert.updatematchedalertmark') }}</DropdownItem>
+                <DropdownItem
+                  v-if="canDeleteMatch"
+                  :divided="!canUpdateMatchMark"
                   name="deletematch"
                   :disabled="isDeleteMatchCounting"
                 >{{ $t('term.alert.deletematchalert') }}</DropdownItem>
@@ -268,6 +275,11 @@
         </div>
       </template>
     </TsContain>
+    <AlertMarkDialog
+      v-if="markDialogConfig"
+      v-bind="markDialogConfig"
+      @close="closeAlertMark"
+    ></AlertMarkDialog>
     <AlertDeleteDialog
       v-if="isDeleteShow"
       :id="currentAlertId"
@@ -314,6 +326,7 @@ export default {
     AlertViewEdit: () => import('@/community-module/alert/pages/alert/alert-view-edit.vue'),
     ConditionGroup: () => import('@/resources/components/Condition/condition-group.vue'),
     AlertAttrViewer: () => import('@/community-module/alert/pages/alert/alert-attr-viewer.vue'),
+    AlertMarkDialog: () => import('@/community-module/alert/pages/alert/alert-mark-dialog.vue'),
     AlertDeleteDialog: () => import('@/community-module/alert/pages/alert/alert-delete-dialog.vue'),
     AlertCloseDialog: () => import('@/community-module/alert/pages/alert/alert-close-dialog.vue'),
     AlertOpenDialog: () => import('@/community-module/alert/pages/alert/alert-open-dialog.vue'),
@@ -346,6 +359,8 @@ export default {
       attrFilterMap: {},
       rule: {},
       alertViewList: [],
+      markDialogConfig: null, // 固定本次标签修改的目标范围，避免自动刷新或重新搜索影响弹窗
+      isMarkMatchCounting: false,
       isDeleteShow: false,
       isCloseShow: false,
       isOpenShow: false,
@@ -443,6 +458,10 @@ export default {
         this.batchDelete();
       } else if (name === 'rebuildindex') {
         this.batchRebuildIndex();
+      } else if (name === 'markselect') {
+        this.batchUpdateSelectedMark();
+      } else if (name === 'markmatch') {
+        this.batchUpdateMatchedMark();
       } else if (name === 'deletematch') {
         this.batchDeleteMatch();
       }
@@ -507,6 +526,41 @@ export default {
           return condition.valueList && condition.valueList.length > 0;
         });
       });
+    },
+    // 打开弹窗时保存所选 ID，后续列表变化不改变本次操作范围。
+    batchUpdateSelectedMark() {
+      if (!this.selectList || this.selectList.length === 0) {
+        return;
+      }
+      this.markDialogConfig = { scope: 'select', idList: this.selectList.slice(), matchCount: this.selectList.length };
+    },
+    // 使用完整搜索条件快照统计匹配数量，匹配操作覆盖平铺告警集合。
+    async batchUpdateMatchedMark() {
+      if (!this.canUpdateMatchMark || this.isMarkMatchCounting) {
+        return;
+      }
+      const searchParam = this.$utils.deepClone(this.finalSearchParam);
+      searchParam.searchMode = 'flat';
+      this.isMarkMatchCounting = true;
+      try {
+        const res = await this.$api.alert.alert.searchAlertCount(searchParam);
+        const matchCount = res.Return || 0;
+        if (matchCount <= 0) {
+          this.$Message.info(this.$t('term.alert.noalertmatched'));
+          return;
+        }
+        this.markDialogConfig = { scope: 'match', searchParam, matchCount };
+      } finally {
+        this.isMarkMatchCounting = false;
+      }
+    },
+    // 统一关闭弹窗并在提交后刷新，原有删除及状态操作保持各自流程。
+    closeAlertMark(needRefresh) {
+      this.markDialogConfig = null;
+      if (needRefresh) {
+        this.selectList = [];
+        this.searchAlert();
+      }
     },
     batchClose() {
       if (this.selectList && this.selectList.length > 0) {
@@ -859,6 +913,9 @@ export default {
   },
   filter: {},
   computed: {
+    canUpdateMatchMark() {
+      return this.$AuthUtils.hasRole('ALERT_ADMIN') && this.hasValidRule(this.finalSearchParam && this.finalSearchParam.rule);
+    },
     canBatchRebuildIndex() {
       return this.$AuthUtils.hasRole('ALERT_INDEX') && this.selectList && this.selectList.length > 0;
     },
