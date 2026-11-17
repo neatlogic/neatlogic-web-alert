@@ -1,58 +1,68 @@
 <template>
-  <div class="mb-lg">
-    <TsFormItem :label="$t('page.type')" labelPosition="left">
-      <TsFormSelect
-        v-model="handler.typeId"
-        dynamicUrl="/api/rest/alert/event/handler/type/search"
-        transfer
-        valueName="id"
-        textName="label"
-        border="border"
-        @on-change="changeType"
-      ></TsFormSelect>
-    </TsFormItem>
-    <TsFormItem :label="$t('term.alert.async')" labelPosition="left">
-      <TsFormRadio
-        v-model="handler.isAsync"
-        :dataList="[
-          { value: 1, text: $t('term.alert.asyncaction') },
-          { value: 0, text: $t('term.alert.syncaction') }
-        ]"
-      ></TsFormRadio>
-    </TsFormItem>
-    <TsFormItem :label="$t('page.isactive')" labelPosition="left">
-      <TsFormSwitch v-model="handler.isActive" :trueValue="1" :falseValue="0"></TsFormSwitch>
-    </TsFormItem>
-    <TsFormItem :label="$t('term.alert.breakerpolicy')" labelPosition="left">
-      <TsFormSelect
-        v-model="breakerPolicyIdList"
-        dynamicUrl="/api/rest/alert/breaker/policy/search"
-        :params="{ isActive: 1 }"
-        rootName="tbodyList"
-        valueName="id"
-        textName="name"
-        transfer
-        multiple
-        border="border"
-        @on-change="changeBreakerPolicy"
-      ></TsFormSelect>
-      <div v-if="handler.breakerPolicyList && handler.breakerPolicyList.length > 0" class="mt-sm">
-        <draggable
-          v-model="handler.breakerPolicyList"
-          handle=".tsfont-bar"
-          tag="div"
-        >
-          <div
-            v-for="policy in handler.breakerPolicyList"
-            :key="policy.policyId"
-            class="breaker-policy-item bg-op radius-sm padding-sm mb-xs"
-          >
-            <span class="tsfont-bar move text-grey"></span>
-            <span class="ml-xs">{{ policy.policyName }}</span>
+  <div :class="compact ? 'mb-sm' : 'mb-lg'">
+    <TsRow :gutter="16">
+      <Col :xs="24" :md="compact ? 12 : 24">
+        <TsFormItem :label="$t('page.type')" labelPosition="left">
+          <TsFormSelect
+            v-model="handler.typeId"
+            dynamicUrl="/api/rest/alert/event/handler/type/search"
+            transfer
+            valueName="id"
+            textName="label"
+            border="border"
+            @on-change="changeType"
+          ></TsFormSelect>
+        </TsFormItem>
+      </Col>
+      <Col :xs="24" :md="compact ? 12 : 24">
+        <TsFormItem :label="$t('term.alert.async')" labelPosition="left">
+          <TsFormRadio
+            v-model="handler.isAsync"
+            :dataList="[
+              { value: 1, text: $t('term.alert.asyncaction') },
+              { value: 0, text: $t('term.alert.syncaction') }
+            ]"
+          ></TsFormRadio>
+        </TsFormItem>
+      </Col>
+      <Col :xs="24" :md="compact ? 12 : 24">
+        <TsFormItem :label="$t('page.isactive')" labelPosition="left">
+          <TsFormSwitch v-model="handler.isActive" :trueValue="1" :falseValue="0"></TsFormSwitch>
+        </TsFormItem>
+      </Col>
+      <Col :xs="24" :md="compact ? 12 : 24">
+        <TsFormItem :label="$t('term.alert.breakerpolicy')" labelPosition="left">
+          <TsFormSelect
+            v-model="breakerPolicyIdList"
+            dynamicUrl="/api/rest/alert/breaker/policy/search"
+            :params="{ isActive: 1 }"
+            rootName="tbodyList"
+            valueName="id"
+            textName="name"
+            transfer
+            multiple
+            border="border"
+            @on-change="changeBreakerPolicy"
+          ></TsFormSelect>
+          <div v-if="handler.breakerPolicyList && handler.breakerPolicyList.length > 0" class="mt-sm">
+            <draggable
+              v-model="handler.breakerPolicyList"
+              handle=".tsfont-bar"
+              tag="div"
+            >
+              <div
+                v-for="policy in handler.breakerPolicyList"
+                :key="policy.policyId"
+                class="breaker-policy-item bg-op radius-sm padding-sm mb-xs"
+              >
+                <span class="tsfont-bar move text-grey"></span>
+                <span class="ml-xs">{{ policy.policyName }}</span>
+              </div>
+            </draggable>
           </div>
-        </draggable>
-      </div>
-    </TsFormItem>
+        </TsFormItem>
+      </Col>
+    </TsRow>
   </div>
 </template>
 <script>
@@ -67,7 +77,8 @@ export default {
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch')
   },
   props: {
-    handler: { type: Object }
+    handler: { type: Object },
+    compact: {type: Boolean, default: false}
   },
   data() {
     return {
