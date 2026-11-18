@@ -40,7 +40,8 @@ export default {
     attr: { type: Object },
     view: { type: Object }, //视图
     mode: { type: String }, //detail|list
-    value: { type: [Boolean, String, Number, Object, Array] }
+    // 字符串优先，避免 Vue 将空字符串属性值自动转换为 true。
+    value: { type: [String, Boolean, Number, Object, Array] }
   },
   data() {
     return {

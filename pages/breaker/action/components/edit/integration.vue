@@ -138,7 +138,8 @@ export default {
       return this.isAggregateTrigger ? this.$t('term.alert.aggregateattrhelp') : '';
     },
     paramList() {
-      return (this.integrationData && this.integrationData?.config?.param?.paramList) || [];
+      // 参数映射仅接收输入参数，输出参数不参与请求配置。
+      return ((this.integrationData && this.integrationData?.config?.param?.paramList) || []).filter(param => param.mode === 'input');
     }
   },
   watch: {
