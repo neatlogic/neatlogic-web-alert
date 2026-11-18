@@ -1,23 +1,31 @@
 <template>
-  <TsDialog v-bind="dialogConfig" @on-close="close()">
+  <TsDialog v-bind="dialogConfig" :width="compactLayout ? 'min(1000px, calc(100vw - 32px))' : dialogConfig.width" @on-close="close()">
     <template v-slot>
       <div>
-        <TsFormItem :required="true" :label="$t('page.name')" labelPosition="left">
-          <TsFormInput
-            ref="txtName"
-            v-model="eventHandlerData.name"
-            border="border"
-            :maxlength="50"
-            :validateList="[{ name: 'required', message: ' ' }]"
-          ></TsFormInput>
-        </TsFormItem>
-        <TsFormItem :label="$t('page.event')" labelPosition="left">
-          <span>{{ event.label }}·{{ event.name }}</span>
-        </TsFormItem>
-        <TsFormItem :label="$t('page.plugins')" labelPosition="left">
-          <span v-if="plugin">{{ plugin.label }}·{{ plugin.name }}</span>
-          <span v-else-if="eventHandlerData">{{ eventHandlerData.handlerName }}·{{ eventHandlerData.handler }}</span>
-        </TsFormItem>
+        <TsRow :gutter="16">
+          <Col :xs="24" :md="compactLayout ? 12 : 24">
+            <TsFormItem :required="true" :label="$t('page.name')" labelPosition="left">
+              <TsFormInput
+                ref="txtName"
+                v-model="eventHandlerData.name"
+                border="border"
+                :maxlength="50"
+                :validateList="[{ name: 'required', message: ' ' }]"
+              ></TsFormInput>
+            </TsFormItem>
+          </Col>
+          <Col :xs="24" :md="compactLayout ? 12 : 24">
+            <TsFormItem :label="$t('page.event')" labelPosition="left">
+              <span>{{ event.label }}·{{ event.name }}</span>
+            </TsFormItem>
+          </Col>
+          <Col :xs="24" :md="compactLayout ? 12 : 24">
+            <TsFormItem :label="$t('page.plugins')" labelPosition="left">
+              <span v-if="plugin">{{ plugin.label }}·{{ plugin.name }}</span>
+              <span v-else-if="eventHandlerData">{{ eventHandlerData.handlerName }}·{{ eventHandlerData.handler }}</span>
+            </TsFormItem>
+          </Col>
+        </TsRow>
         <component
           :is="handlers[handlerName.toLowerCase() + '_eventhandler']"
           v-if="handlerName && handlers[handlerName.toLowerCase() + '_eventhandler']"
@@ -31,7 +39,7 @@
     </template>
     <template v-slot:footer>
       <Button @click="close()">{{ $t('page.cancel') }}</Button>
-      <Button type="primary" @click="save()">{{ $t('page.confirm') }}</Button>
+      <Button type="primary" :loading="saving" @click="save()">{{ $t('page.confirm') }}</Button>
     </template>
   </TsDialog>
 </template>
@@ -55,6 +63,7 @@ export default {
   },
   data() {
     return {
+      saving: false,
       handlers: handlers,
       eventHandlerData: {},
       dialogConfig: {
@@ -99,29 +108,26 @@ export default {
         };
       }
     },
+    // 配置校验和保存共用等待状态，阻止重复提交。
     async save() {
-      let isValid = true;
-      const txtName = this.$refs.txtName;
-      const pluginConfig = this.$refs.pluginConfig;
-      if (txtName && !txtName.valid()) {
-        isValid = false;
-      }
-      if (pluginConfig && !(await pluginConfig.valid())) {
-        isValid = false;
-      }
-      if (isValid) {
-        if (pluginConfig) {
-          this.eventHandlerData.config = pluginConfig.getConfig();
-        }
-        this.$api.alert.alertevent.saveAlertEventHandler(this.eventHandlerData).then(() => {
-          this.$Message.success(this.$t('message.savesuccess'));
-          this.close(true);
-        });
+      if (this.saving) return;
+      this.saving = true;
+      try {
+        const { txtName, pluginConfig } = this.$refs;
+        if (txtName && !txtName.valid()) return;
+        if (pluginConfig && !(await pluginConfig.valid())) return;
+        if (pluginConfig) this.eventHandlerData.config = pluginConfig.getConfig();
+        await this.$api.alert.alertevent.saveAlertEventHandler(this.eventHandlerData);
+        this.$Message.success(this.$t('message.savesuccess'));
+        this.close(true);
+      } finally {
+        this.saving = false;
       }
     }
   },
   filter: {},
   computed: {
+    compactLayout() { return this.handlerName === 'REPORT_TASK'; },
     handlerName() {
       if (this.plugin) {
         return this.plugin.name;

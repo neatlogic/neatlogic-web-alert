@@ -213,6 +213,7 @@
         :is="alertAiChat"
         v-if="isAiTabVisited && readonlyAlertData.id"
         :alertId="readonlyAlertData.id"
+        :alertData="readonlyAlertData"
       ></component>
     </TabPane>
     <div v-if="alertData.actionList && alertData.actionList.length > 0" slot="extra">
