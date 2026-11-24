@@ -18,7 +18,7 @@
         :row="row"
         :mode="mode"
         :view="view"
-        :value="value"
+        :value="extendedAttrValue"
         :attr="attr"
         @toggleChildren="toggleChildren"
         @refresh="refresh"
@@ -67,7 +67,29 @@ export default {
     }
   },
   filter: {},
-  computed: {},
+  computed: {
+    // 操作记录用外层数组存储前后值。扩展属性渲染器需要属性值本身。
+    extendedAttrValue() {
+      if (this.mode !== 'audit' || !Array.isArray(this.value)) {
+        return this.value;
+      }
+      const value = this.value.length > 1 ? this.value : this.value[0];
+      if (this.attr.type === 'boolean') {
+        if (value === 'true') return true;
+        if (value === 'false') return false;
+      }
+      // 旧脚本审计把枚举和数字数组写成一个 JSON 字符串。
+      if (['enum', 'number'].includes(this.attr.type) && typeof value === 'string' && value.trim().startsWith('[')) {
+        try {
+          const values = JSON.parse(value);
+          if (Array.isArray(values)) return values;
+        } catch (e) {
+          return value;
+        }
+      }
+      return value;
+    }
+  },
   watch: {}
 };
 </script>
