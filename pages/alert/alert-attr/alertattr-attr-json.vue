@@ -1,6 +1,6 @@
 <template>
-  <div v-if="jsonValue">
-    <div v-if="Array.isArray(jsonValue)">
+  <div v-if="jsonValue != null && jsonValue !== ''">
+    <div v-if="isTableData">
       <TsTable :theadList="theadList" :tbodyList="jsonValue"></TsTable>
     </div>
     <div v-else-if="typeof jsonValue === 'object' && jsonValue !== null">
@@ -41,22 +41,26 @@ export default {
   computed: {
     theadList() {
       const theadList = [];
-      if (Array.isArray(this.jsonValue) && this.jsonValue.length > 0) {
+      if (this.isTableData) {
         for (let key in this.jsonValue[0]) {
           theadList.push({ key: key, title: key });
         }
       }
       return theadList;
     },
+    isTableData() {
+      return Array.isArray(this.jsonValue) && this.jsonValue.length > 0 &&
+        this.jsonValue.every(row => row && typeof row === 'object' && !Array.isArray(row));
+    },
     jsonValue() {
-      if (this.value) {
+      if (typeof this.value === 'string' && this.value !== '') {
         try {
           return JSON.parse(this.value);
         } catch (e) {
           return this.value;
         }
       }
-      return null;
+      return this.value;
     }
   },
   watch: {}
