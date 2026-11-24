@@ -1,31 +1,23 @@
 <template>
-  <TsDialog v-bind="dialogConfig" :width="compactLayout ? 'min(1000px, calc(100vw - 32px))' : dialogConfig.width" @on-close="close()">
+  <TsDialog v-bind="dialogConfig" @on-close="close()">
     <template v-slot>
       <div>
-        <TsRow :gutter="16">
-          <Col :xs="24" :md="compactLayout ? 12 : 24">
-            <TsFormItem :required="true" :label="$t('page.name')" labelPosition="left">
-              <TsFormInput
-                ref="txtName"
-                v-model="eventHandlerData.name"
-                border="border"
-                :maxlength="50"
-                :validateList="[{ name: 'required', message: ' ' }]"
-              ></TsFormInput>
-            </TsFormItem>
-          </Col>
-          <Col :xs="24" :md="compactLayout ? 12 : 24">
-            <TsFormItem :label="$t('page.event')" labelPosition="left">
-              <span>{{ event.label }}·{{ event.name }}</span>
-            </TsFormItem>
-          </Col>
-          <Col :xs="24" :md="compactLayout ? 12 : 24">
-            <TsFormItem :label="$t('page.plugins')" labelPosition="left">
-              <span v-if="plugin">{{ plugin.label }}·{{ plugin.name }}</span>
-              <span v-else-if="eventHandlerData">{{ eventHandlerData.handlerName }}·{{ eventHandlerData.handler }}</span>
-            </TsFormItem>
-          </Col>
-        </TsRow>
+        <TsFormItem :required="true" :label="$t('page.name')" labelPosition="left">
+          <TsFormInput
+            ref="txtName"
+            v-model="eventHandlerData.name"
+            border="border"
+            :maxlength="50"
+            :validateList="[{ name: 'required', message: ' ' }]"
+          ></TsFormInput>
+        </TsFormItem>
+        <TsFormItem :label="$t('page.event')" labelPosition="left">
+          <span>{{ event.label }}·{{ event.name }}</span>
+        </TsFormItem>
+        <TsFormItem :label="$t('page.plugins')" labelPosition="left">
+          <span v-if="plugin">{{ plugin.label }}·{{ plugin.name }}</span>
+          <span v-else-if="eventHandlerData">{{ eventHandlerData.handlerName }}·{{ eventHandlerData.handler }}</span>
+        </TsFormItem>
         <component
           :is="pluginComponent"
           v-if="pluginComponent"
