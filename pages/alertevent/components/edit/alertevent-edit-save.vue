@@ -8,31 +8,16 @@
     }"
   >
     <EditBase :handler="handler"></EditBase>
-    <TsFormItem :label="$t('term.alert.uniquekey')" labelPosition="left">
-      <div class="text-grey">{{ $t('term.alert.uniquealertconvergehelp') }}</div>
-      <TsFormCheckbox
-        :dataList="attrList"
-        valueName="name"
-        textName="label"
-        :value="configLocal.uniqueAttrList.map(d => d.name)"
-        @on-change="selectAttr"
-      ></TsFormCheckbox>
-      <Divider v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" orientation="left">{{ $t('term.alert.selectedattr') }}</Divider>
-      <Tag v-for="(attr, index) in configLocal.uniqueAttrList" :key="index">{{ attr.label }}</Tag>
-    </TsFormItem>
-    <TsFormItem v-if="configLocal.uniqueAttrList && configLocal.uniqueAttrList.length > 0" :label="$t('term.alert.alertsign')" labelPosition="left">
-      <TsFormSelect
-        v-model="configLocal.ruleList"
-        url="/api/rest/alert/rule/list"
-        :params="{ isActive: 1 }"
-        transfer
-        border="border"
-        valueName="id"
-        textName="label"
-        multiple
-      ></TsFormSelect>
-      <div class="text-grey">{{ $t('term.alert.alertsignhelp') }}</div>
-    </TsFormItem>
+    <AlertConvergenceConfig
+      :attribute-help="$t('term.alert.uniquealertconvergehelp')"
+      :attributes="attrList"
+      :selected-attributes="configLocal.uniqueAttrList || []"
+      :show-signatures="!!configLocal.uniqueAttrList?.length"
+      :signature-ids="configLocal.ruleList || []"
+      :signature-select="signatureSelect"
+      @change-attributes="selectAttr"
+      @change-signatures="$set(configLocal, 'ruleList', $event)"
+    ></AlertConvergenceConfig>
     <TsFormItem :label="$t('term.alert.defaultstatus')" labelPosition="left">
       <TsFormSelect
         v-model="configLocal.defaultStatus"
@@ -57,7 +42,7 @@ export default {
   components: {
     EditBase: () => import('@/community-module/alert/pages/alertevent/components/edit/alertevent-edit-base.vue'),
     TsFormItem: () => import('@/resources/plugins/TsForm/TsFormItem'),
-    TsFormCheckbox: () => import('@/resources/plugins/TsForm/TsFormCheckbox'),
+    AlertConvergenceConfig: () => import('./components/alert-convergence-config.vue'),
     TsFormSelect: () => import('@/resources/plugins/TsForm/TsFormSelect'),
     TsFormSwitch: () => import('@/resources/plugins/TsForm/TsFormSwitch')
   },
@@ -66,6 +51,7 @@ export default {
   data() {
     return {
       attrList: [],
+      signatureSelect: { url: '/api/rest/alert/rule/list', params: { isActive: 1 } },
       statusList: []
     };
   },
