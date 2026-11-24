@@ -27,8 +27,8 @@
           </Col>
         </TsRow>
         <component
-          :is="handlers[handlerName.toLowerCase() + '_eventhandler']"
-          v-if="handlerName && handlers[handlerName.toLowerCase() + '_eventhandler']"
+          :is="pluginComponent"
+          v-if="pluginComponent"
           ref="pluginConfig"
           :level="1"
           :event="event"
@@ -110,10 +110,11 @@ export default {
     },
     // 配置校验和保存共用等待状态，阻止重复提交。
     async save() {
-      if (this.saving) return;
+      const { txtName, pluginConfig } = this.$refs;
+      // 插件详情和异步配置组件就绪后才能校验并提交。
+      if (this.saving || !this.handlerName || (this.pluginComponent && !pluginConfig)) return;
       this.saving = true;
       try {
-        const { txtName, pluginConfig } = this.$refs;
         if (txtName && !txtName.valid()) return;
         if (pluginConfig && !(await pluginConfig.valid())) return;
         if (pluginConfig) this.eventHandlerData.config = pluginConfig.getConfig();
@@ -128,6 +129,10 @@ export default {
   filter: {},
   computed: {
     compactLayout() { return this.handlerName === 'REPORT_TASK'; },
+    // 根据事件插件标识查找已注册的配置组件。
+    pluginComponent() {
+      return this.handlerName && this.handlers[this.handlerName.toLowerCase() + '_eventhandler'];
+    },
     handlerName() {
       if (this.plugin) {
         return this.plugin.name;
